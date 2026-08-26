@@ -42,12 +42,17 @@ jobs:
 
       - name: Verify previews on pull requests
         if: github.event_name == 'pull_request'
-        run: git diff --exit-code -- previews
+        run: |
+          if [ -n "$(git status --porcelain -- previews)" ]; then
+            git status --short -- previews
+            echo "Generated review previews are missing or stale."
+            exit 1
+          fi
 
       - name: Commit synced previews on main
         if: github.event_name == 'push'
         run: |
-          if git diff --quiet -- previews; then
+          if [ -z "$(git status --porcelain -- previews)" ]; then
             echo "Review previews already current."
             exit 0
           fi
