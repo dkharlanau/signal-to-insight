@@ -91,6 +91,38 @@
       "mechanism": "Define a task contract and put authority and verification around execution.",
       "result": "Different executors can perform the same controlled work."
     },
+    "coherence_review": {
+      "central_chain": [
+        "Executor capability is mistaken for system reliability.",
+        "A task contract plus authority and verification controls execution.",
+        "Different executors can then perform the same controlled work."
+      ],
+      "prerequisites_complete": true,
+      "source_vs_enrichment_clear": true,
+      "open_gaps": [],
+      "scores": {
+        "coherence": 5,
+        "prerequisite_completeness": 5,
+        "evidence_confidence": 4,
+        "practical_leverage": 4
+      }
+    },
+    "visual_plan": {
+      "dominant": {
+        "type": "causal_chain",
+        "title": "Capability to controlled execution",
+        "nodes": [
+          {"label": "01 · Problem", "title": "Capability mistaken for reliability", "text": "Executor capability is mistaken for system reliability."},
+          {"label": "02 · Mechanism", "title": "Task contract and controls", "text": "Define a task contract and put authority and verification around execution."},
+          {"label": "03 · Result", "title": "Executor-independent work", "text": "Different executors can perform the same controlled work."}
+        ]
+      },
+      "supporting": ["concept_grid", "examples", "limitations", "action_map", "source_map"],
+      "image": {
+        "needed": false,
+        "reason": "A causal diagram is sufficient for the synthetic architecture fixture."
+      }
+    },
     "concepts": [
       {"name": "Task contract", "depth": "learn", "why_needed": "It defines work independently from the executor."}
     ],
