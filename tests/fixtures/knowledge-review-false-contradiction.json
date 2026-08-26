@@ -1,0 +1,13 @@
+{
+  "id": "fixture-false-contradiction",
+  "candidate_type": "contradiction",
+  "scope_check": {
+    "same_subject": true,
+    "same_layer": false,
+    "same_conditions": false,
+    "assessment": "different_layer",
+    "explanation": "One statement describes model-level action selection; the other describes production authorization and durable execution."
+  },
+  "attempted_resolution": "contradiction",
+  "expected": "reject_as_false_contradiction"
+}
