@@ -9,6 +9,7 @@ on:
       - "schemas/knowledge-graph.schema.json"
       - "scripts/validate_graph.py"
       - "scripts/build_graph.py"
+      - "scripts/graph_context.py"
       - ".github/workflows/knowledge-graph.yml"
   pull_request:
     branches: [main]
@@ -18,6 +19,7 @@ on:
       - "schemas/knowledge-graph.schema.json"
       - "scripts/validate_graph.py"
       - "scripts/build_graph.py"
+      - "scripts/graph_context.py"
       - ".github/workflows/knowledge-graph.yml"
 
 permissions:
@@ -42,6 +44,9 @@ jobs:
         run: |
           python scripts/validate.py
           python scripts/validate_graph.py
+
+      - name: Test prior-knowledge retrieval
+        run: python scripts/graph_context.py --self-test
 
       - name: Rebuild public knowledge graph
         run: python scripts/build_graph.py
