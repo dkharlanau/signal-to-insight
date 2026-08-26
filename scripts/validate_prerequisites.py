@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Validate compact prerequisite maps and publication blockers."""
+"""Validate compact prerequisite maps and publication blockers.
+
+`prior_coverage` is evaluated against the research bundle's captured prior-knowledge
+snapshot, not the current cumulative graph. This preserves temporal truth: knowledge
+added after an insight was researched must not be retroactively treated as prior knowledge.
+"""
 
 from __future__ import annotations
 
@@ -11,10 +16,21 @@ ROOT = Path(__file__).resolve().parents[1]
 MAPS = ROOT / "data" / "prerequisite-maps.json"
 GRAPH = ROOT / "data" / "knowledge-graph.json"
 INSIGHTS = ROOT / "data" / "insights.json"
+INBOX = ROOT / "data" / "inbox.json"
+BUNDLES = ROOT / "data" / "research-bundles"
 
 
 def load(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def snapshot_coverage(match: dict | None) -> str:
+    if match is None:
+        return "absent"
+    coverage = match.get("coverage")
+    if coverage in {"explained", "mastered"}:
+        return "established"
+    return "partial"
 
 
 def main() -> int:
@@ -22,9 +38,15 @@ def main() -> int:
     maps_data = load(MAPS)
     graph_data = load(GRAPH)
     insights_data = load(INSIGHTS)
+    inbox_data = load(INBOX)
 
     concepts = {item["id"]: item for item in graph_data.get("concepts", []) if item.get("id")}
     insights = {item["id"]: item for item in insights_data.get("insights", []) if item.get("id")}
+    intake_by_insight = {
+        item.get("insight_id"): item
+        for item in inbox_data.get("items", [])
+        if item.get("insight_id")
+    }
     records: dict[str, dict] = {}
     item_ids: set[str] = set()
 
@@ -40,6 +62,23 @@ def main() -> int:
         if insight_id in records:
             errors.append(f"{where}: duplicate map for '{insight_id}'")
         records[insight_id] = record
+
+        intake = intake_by_insight.get(insight_id)
+        prior_matches: dict[str, dict] = {}
+        if intake is None:
+            errors.append(f"{where}: insight has no linked intake, so prior coverage cannot be reconstructed")
+        else:
+            bundle_path = BUNDLES / f"{intake['id']}.json"
+            if not bundle_path.exists():
+                errors.append(f"{where}: missing research bundle {bundle_path.relative_to(ROOT)}")
+            else:
+                bundle = load(bundle_path)
+                prior = bundle.get("prior_knowledge") or {}
+                prior_matches = {
+                    item.get("concept_id"): item
+                    for item in prior.get("matches", [])
+                    if isinstance(item, dict) and item.get("concept_id")
+                }
 
         summary = record.get("summary")
         if not isinstance(summary, str) or len(summary.split()) < 8:
@@ -86,13 +125,24 @@ def main() -> int:
                 seen_concepts.add(concept_id)
 
             support_ids = set(concept.get("insight_ids", [])) if concept else set()
-            prior_support = support_ids - {insight_id}
-            if prior_coverage == "absent" and prior_support:
-                errors.append(f"{i_where}: prior_coverage=absent but concept has prior/other support {sorted(prior_support)}")
-            if prior_coverage == "established" and not prior_support:
-                errors.append(f"{i_where}: prior_coverage=established requires support outside the current insight")
-            if state == "known_in_graph" and not prior_support:
-                errors.append(f"{i_where}: known_in_graph requires another supporting insight")
+            snapshot_match = prior_matches.get(concept_id) if concept_id else None
+            actual_prior_coverage = snapshot_coverage(snapshot_match)
+            if prior_coverage in {"absent", "partial", "established"} and prior_coverage != actual_prior_coverage:
+                errors.append(
+                    f"{i_where}: prior_coverage={prior_coverage} but research snapshot implies "
+                    f"{actual_prior_coverage}"
+                )
+
+            if state == "known_in_graph":
+                if snapshot_match is None:
+                    errors.append(f"{i_where}: known_in_graph requires the concept in the captured prior-knowledge snapshot")
+                elif snapshot_match.get("relationship_to_source") in {"not_relevant", "unclassified"}:
+                    errors.append(
+                        f"{i_where}: known_in_graph prerequisite cannot rely on prior match classified "
+                        f"{snapshot_match.get('relationship_to_source')!r}"
+                    )
+                elif not snapshot_match.get("evidence_insights"):
+                    errors.append(f"{i_where}: known_in_graph requires prior evidence insights in the snapshot")
             if state == "explained_here" and insight_id not in support_ids:
                 errors.append(f"{i_where}: explained_here concept is not evidenced by the current insight")
 
@@ -121,6 +171,10 @@ def main() -> int:
                     c["id"] for c in concepts.values() if target_insight_id in c.get("insight_ids", [])
                 }:
                     errors.append(f"{i_where}: target explainer does not evidence concept '{concept_id}'")
+                elif snapshot_match is not None and target_insight_id not in {
+                    evidence.get("id") for evidence in snapshot_match.get("evidence_insights", [])
+                }:
+                    errors.append(f"{i_where}: target explainer was not present in the captured prior-knowledge evidence")
             elif kind == "learning_target":
                 if state != "gap" or not isinstance(target, str) or not target.strip() or target_insight_id is not None:
                     errors.append(f"{i_where}: learning_target must describe an unresolved gap")
