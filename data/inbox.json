@@ -11,6 +11,17 @@
       "source_id": "src-ai-engineer-enterprise-stack-agents-2026",
       "insight_id": "enterprise-agents-production-substrate",
       "notes": "Reference case used to prove the source-to-understanding pipeline."
+    },
+    {
+      "id": "intake-2026-08-26-temporal-docs",
+      "source_url": "https://docs.temporal.io/",
+      "source_type": "documentation",
+      "submitted_at": "2026-08-26",
+      "requested_focus": "Understand durable execution, the minimum Temporal mental model, why Event History and Workers enable recovery, what belongs in Workflows versus Activities, and the smallest experiment worth trying.",
+      "status": "review",
+      "source_id": "src-temporal-docs-2026",
+      "insight_id": "temporal-durable-execution-mental-model",
+      "notes": "Second real-source acceptance case. Official Temporal documentation; documentation/tool adapter."
     }
   ]
 }
