@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dkharlanau.github.io/signal-to-insight/schemas/insight.schema.json",
+  "title": "Signal to Insight insight collection",
+  "type": "object",
+  "required": ["project", "insights"],
+  "properties": {
+    "project": {"type": "object"},
+    "insights": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "source_id", "slug", "status", "title", "one_liner", "why_this_matters", "whole_source_map", "derived_model", "concepts", "tool_map", "examples", "limitations", "action_map", "supporting_sources", "provenance"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+          "source_id": {"type": "string", "pattern": "^src-[a-z0-9-]+$"},
+          "slug": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+          "status": {"type": "string", "enum": ["draft", "review", "published", "archived"]},
+          "title": {"type": "string", "minLength": 1},
+          "one_liner": {"type": "string", "minLength": 1},
+          "source": {"type": "object"},
+          "why_this_matters": {"type": "string"},
+          "whole_source_map": {
+            "type": "object",
+            "required": ["problem", "thesis", "core_topics"]
+          },
+          "derived_model": {
+            "type": "object",
+            "required": ["problem", "mechanism", "result"]
+          },
+          "concepts": {"type": "array"},
+          "patterns": {"type": "array"},
+          "tool_map": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["name", "category", "why_explore", "url", "relationship", "status"],
+              "properties": {
+                "name": {"type": "string"},
+                "category": {"type": "string"},
+                "why_explore": {"type": "string"},
+                "url": {"type": "string", "format": "uri"},
+                "relationship": {"type": "string"},
+                "status": {"type": "string", "enum": ["use_now", "try", "learn", "build", "watch", "ignore_for_now"]}
+              }
+            }
+          },
+          "examples": {"type": "array"},
+          "limitations": {"type": "array", "items": {"type": "string"}},
+          "action_map": {
+            "type": "object",
+            "required": ["use_now", "try", "learn", "build", "watch", "ignore_for_now"],
+            "properties": {
+              "use_now": {"type": "array", "items": {"type": "string"}},
+              "try": {"type": "array", "items": {"type": "string"}},
+              "learn": {"type": "array", "items": {"type": "string"}},
+              "build": {"type": "array", "items": {"type": "string"}},
+              "watch": {"type": "array", "items": {"type": "string"}},
+              "ignore_for_now": {"type": "array", "items": {"type": "string"}}
+            },
+            "additionalProperties": false
+          },
+          "connections": {"type": "array"},
+          "supporting_sources": {"type": "array"},
+          "tags": {"type": "array"},
+          "provenance": {
+            "type": "object",
+            "required": ["source_linked", "source_dates_recorded", "full_transcript_stored", "analysis_type", "reviewed_at"]
+          }
+        }
+      }
+    }
+  }
+}
