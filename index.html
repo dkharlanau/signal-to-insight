@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Signal to Insight — Applied AI & Enterprise Explanations</title>
+  <meta name="description" content="High-signal AI and enterprise sources turned into practical explanations, reusable patterns, and applications.">
+  <meta name="theme-color" content="#f1f0e9">
+  <meta property="og:title" content="Signal to Insight">
+  <meta property="og:description" content="From source material to durable, practical insight.">
+  <meta property="og:type" content="website">
+  <link rel="stylesheet" href="styles.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Signal to Insight",
+    "description": "Applied explanations of AI and enterprise ideas.",
+    "author": {
+      "@type": "Person",
+      "name": "Dzmitryi Kharlanau",
+      "url": "https://github.com/dkharlanau"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+
+  <header class="site-header wrap">
+    <a class="brand" href="#top" aria-label="Signal to Insight home">
+      <span class="brand-mark">S→I</span>
+      <span>Signal to Insight</span>
+    </a>
+    <nav aria-label="Primary navigation">
+      <a href="#method">Method</a>
+      <a href="#explainer">Explainer 001</a>
+      <a href="#principles">Principles</a>
+      <a href="data/insights.json">Data</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero wrap">
+      <p class="eyebrow">APPLIED INTELLIGENCE / 001</p>
+      <h1>Don't collect more information.<br><em>Compress it into useful models.</em></h1>
+      <div class="hero-grid">
+        <p class="lede">A public knowledge system for turning talks, papers, documentation and repositories into practical explanations that survive the news cycle.</p>
+        <div class="signal-chain" aria-label="Signal to insight process">
+          <span>signal</span><b>→</b><span>insight</span><b>→</b><span>application</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="method" class="method section wrap">
+      <div class="section-number">00</div>
+      <div>
+        <p class="kicker">THE METHOD</p>
+        <h2>Every source has to earn its place.</h2>
+      </div>
+      <ol class="method-grid">
+        <li><span>01</span><strong>Extract</strong><p>Find the actual claim, mechanism and evidence. Ignore the decorative language.</p></li>
+        <li><span>02</span><strong>Challenge</strong><p>Separate useful architecture from confident overstatement and missing constraints.</p></li>
+        <li><span>03</span><strong>Connect</strong><p>Link the idea to enterprise patterns, adjacent research and previous insights.</p></li>
+        <li><span>04</span><strong>Apply</strong><p>Translate the concept into a concrete operating, product or SAP scenario.</p></li>
+        <li><span>05</span><strong>Explain</strong><p>Publish a compact model that another person can understand and reuse.</p></li>
+      </ol>
+    </section>
+
+    <article id="explainer" class="explainer section wrap">
+      <header class="explainer-head">
+        <div>
+          <p class="eyebrow">EXPLAINER / 001</p>
+          <h2>Why enterprise AI agents fail <em>after</em> the POC</h2>
+        </div>
+        <a class="source-link" href="https://www.youtube.com/watch?v=mav15aW9lLM" target="_blank" rel="noreferrer">Source ↗</a>
+      </header>
+
+      <div class="thesis-grid">
+        <p class="thesis">The hard part is not getting an agent to produce the right answer once. The hard part is making every action <strong>authorized, observable, reversible and reviewable</strong> inside a real organization.</p>
+        <div class="meta-card">
+          <span>Source</span><strong>AI Engineer talk</strong>
+          <span>Speakers</span><strong>Christopher Lovejoy<br>Saul Howard</strong>
+          <span>Focus</span><strong>Production architecture</strong>
+        </div>
+      </div>
+
+      <section class="contrast" aria-labelledby="contrastTitle">
+        <p class="kicker" id="contrastTitle">THE FALSE FINISH LINE</p>
+        <div class="contrast-grid">
+          <div class="contrast-card pale">
+            <span>POC</span>
+            <h3>Model → Data → API</h3>
+            <p>Accuracy is high. Latency is acceptable. The demo works.</p>
+          </div>
+          <div class="arrow-block" aria-hidden="true">≠</div>
+          <div class="contrast-card dark">
+            <span>PRODUCTION</span>
+            <h3>Identity + Policy + Audit + Human + Replay</h3>
+            <p>The organization must be able to explain and control the work.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="principles" class="primitives" aria-labelledby="primitivesTitle">
+        <p class="kicker" id="primitivesTitle">FOUR PRIMITIVES</p>
+
+        <div class="primitive">
+          <div class="primitive-id">01</div>
+          <div class="primitive-copy">
+            <h3>Execution history, not developer logs</h3>
+            <p>Use an append-only event history as the system's source of truth. The goal is to reconstruct what the agent knew, what it accessed, what it decided and what happened next.</p>
+          </div>
+          <div class="mini-diagram ledger" aria-label="Execution ledger diagram">
+            <span>request</span><span>identity</span><span>read</span><span>decision</span><span>approval</span><span>action</span>
+          </div>
+        </div>
+
+        <div class="primitive">
+          <div class="primitive-id">02</div>
+          <div class="primitive-copy">
+            <h3>Separate orchestration from sensitive data</h3>
+            <p>Observability should not require unrestricted access to business data. Keep event references and protected objects separate, then authorize access at the point of use.</p>
+          </div>
+          <div class="plane-diagram" aria-label="Separated data planes diagram">
+            <div><small>EXECUTION PLANE</small><strong>event → object:v4</strong></div>
+            <i>↕ authorized reference</i>
+            <div><small>DATA PLANE</small><strong>protected object:v4</strong></div>
+          </div>
+        </div>
+
+        <div class="primitive">
+          <div class="primitive-id">03</div>
+          <div class="primitive-copy">
+            <h3>Human and AI are executors of the same task</h3>
+            <p>Model the task independently from its executor. Then an uncertain or policy-sensitive step can move to a human without creating a separate exception workflow.</p>
+          </div>
+          <div class="task-diagram" aria-label="Human and AI task equivalence">
+            <strong>approve_change(context)</strong>
+            <div><span>AI agent</span><span>Human steward</span></div>
+          </div>
+        </div>
+
+        <div class="primitive">
+          <div class="primitive-id">04</div>
+          <div class="primitive-copy">
+            <h3>Replay turns production history into evals</h3>
+            <p>If system state is reconstructable, a new model, prompt, policy or tool can be tested against historical cases while changing one component at a time.</p>
+          </div>
+          <div class="replay-diagram" aria-label="Replay evaluation diagram">
+            <span>case t₀</span><b>→</b><span>old model / A</span>
+            <span>case t₀</span><b>→</b><span>new model / B</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="application" aria-labelledby="applicationTitle">
+        <div>
+          <p class="kicker">APPLICATION</p>
+          <h3 id="applicationTitle">SAP customer-master change</h3>
+          <p>A useful test is whether the architecture can answer a question months later: <strong>Why was this customer changed, under whose authority, using which context, and with which approval?</strong></p>
+        </div>
+        <div class="flow" aria-label="SAP customer change flow">
+          <span>Change request</span><b>↓</b>
+          <span>Identity + authority</span><b>↓</b>
+          <span>Agent proposal</span><b>↓</b>
+          <span class="split">Policy → AI / Human</span><b>↓</b>
+          <span>SAP / MDG action</span><b>↓</b>
+          <span>Verification + ledger</span>
+        </div>
+      </section>
+
+      <section class="critique" aria-labelledby="critiqueTitle">
+        <p class="kicker">WHERE THE TALK OVERSIMPLIFIES</p>
+        <h3 id="critiqueTitle">The primitives help. They do not remove the hard engineering.</h3>
+        <div class="critique-grid">
+          <p><strong>Auditability</strong><br>An immutable log still needs identity, policy versions, retention, tamper protection and meaningful event semantics.</p>
+          <p><strong>Zero trust</strong><br>Separating data and orchestration reduces exposure; it does not automatically eliminate prompt injection or data exfiltration.</p>
+          <p><strong>Human handoff</strong><br>Executor equivalence still needs ownership, locking, idempotency, approval authority, timeout and recovery rules.</p>
+        </div>
+      </section>
+
+      <footer class="takeaway">
+        <p class="kicker">THE DURABLE INSIGHT</p>
+        <blockquote>Don't bolt enterprise controls onto an AI demo. Build an execution substrate where both humans and agents can perform controlled work.</blockquote>
+      </footer>
+    </article>
+
+    <section class="knowledge section wrap">
+      <div>
+        <p class="eyebrow">KNOWLEDGE LAYER</p>
+        <h2>Human-readable outside.<br>Machine-readable underneath.</h2>
+      </div>
+      <p>Each explainer is paired with structured data: concepts, claims, applications, limitations and provenance. That makes the same knowledge reusable later in search, feeds, APIs and agent tools.</p>
+      <a class="button" href="data/insights.json">Open insights.json →</a>
+    </section>
+  </main>
+
+  <footer class="site-footer wrap">
+    <span>Signal to Insight</span>
+    <span>Built by <a href="https://github.com/dkharlanau">Dzmitryi Kharlanau</a></span>
+    <span>Sources are linked. Analysis is original.</span>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
