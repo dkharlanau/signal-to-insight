@@ -1,0 +1,28 @@
+name: Verify insight library
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  library:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Rebuild library
+        run: python scripts/build_library.py
+
+      - name: Generated library must be committed
+        run: git diff --exit-code -- library/index.html
