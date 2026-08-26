@@ -1,0 +1,162 @@
+/* Local-first delayed recall layer for generated explainers. */
+
+.retention-section {
+  position: relative;
+  background: var(--panel);
+}
+.retention-intro {
+  display: grid;
+  grid-template-columns: .7fr 1.3fr;
+  gap: 70px;
+  align-items: end;
+  margin-bottom: 42px;
+}
+.retention-intro h2 { margin: 0; }
+.retention-intro p {
+  max-width: 680px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.55;
+}
+.retention-card {
+  display: grid;
+  grid-template-columns: 1.12fr .88fr;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+}
+.retention-practice,
+.retention-answer {
+  min-height: 430px;
+  padding: 28px;
+}
+.retention-practice {
+  border-right: 1px solid var(--ink);
+}
+.retention-label,
+.retention-status,
+.retention-note,
+.retention-answer summary,
+.retention-answer strong {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+.retention-label {
+  display: block;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+}
+.retention-practice h3 {
+  max-width: 720px;
+  margin: 76px 0 18px;
+  font-size: clamp(27px, 3.4vw, 48px);
+  line-height: 1;
+  letter-spacing: -.035em;
+}
+.retention-practice > p {
+  max-width: 640px;
+  color: var(--muted);
+}
+.retention-draft {
+  width: 100%;
+  min-height: 130px;
+  margin: 24px 0 18px;
+  padding: 16px;
+  border: 1px solid var(--ink);
+  border-radius: 0;
+  resize: vertical;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  line-height: 1.5;
+}
+.retention-draft:focus { outline: 3px solid var(--acid); outline-offset: 2px; }
+.retention-controls,
+.retention-results {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.retention-button {
+  min-height: 42px;
+  padding: 10px 13px;
+  border: 1px solid var(--ink);
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+  font: 700 11px ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.retention-button:hover,
+.retention-button:focus-visible { background: var(--acid); }
+.retention-button.is-secondary { border-color: var(--line); color: var(--muted); }
+.retention-status {
+  min-height: 20px;
+  margin: 14px 0 0;
+  font-size: 11px;
+  color: var(--muted);
+}
+.retention-section.is-due .retention-status { color: var(--ink); font-weight: 800; }
+.retention-answer {
+  display: flex;
+  flex-direction: column;
+}
+.retention-answer summary {
+  cursor: pointer;
+  list-style: none;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.retention-answer summary::-webkit-details-marker { display: none; }
+.retention-answer summary::after { content: " +"; }
+.retention-answer[open] summary::after { content: " −"; }
+.retention-answer ol {
+  margin: 62px 0 34px;
+  padding: 0;
+  list-style: none;
+  counter-reset: recall-answer;
+}
+.retention-answer li {
+  counter-increment: recall-answer;
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+  line-height: 1.45;
+}
+.retention-answer li::before {
+  content: "0" counter(recall-answer);
+  font: 700 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+  color: var(--muted);
+}
+.retention-results { margin-top: auto; }
+.retention-note {
+  margin: 18px 0 0;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+@media (max-width: 900px) {
+  .retention-intro,
+  .retention-card { grid-template-columns: 1fr; }
+  .retention-intro { gap: 24px; }
+  .retention-practice { border-right: 0; border-bottom: 1px solid var(--ink); }
+  .retention-practice,
+  .retention-answer { min-height: auto; }
+}
+
+@media (max-width: 600px) {
+  .retention-practice,
+  .retention-answer { padding: 20px; }
+  .retention-practice h3 { margin-top: 52px; }
+  .retention-controls,
+  .retention-results { display: grid; grid-template-columns: 1fr; }
+  .retention-button { width: 100%; }
+}
