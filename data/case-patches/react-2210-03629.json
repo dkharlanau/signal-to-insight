@@ -1,0 +1,382 @@
+{
+  "patch_version": "1.0.0",
+  "intake_id": "intake-2026-08-26-arxiv-2210-03629",
+  "intake_status": "review",
+  "updated_at": "2026-08-26",
+  "graph_version": "0.3.0",
+  "source": {
+    "id": "src-react-paper-2210-03629",
+    "type": "paper",
+    "title": "ReAct: Synergizing Reasoning and Acting in Language Models",
+    "canonical_url": "https://arxiv.org/abs/2210.03629",
+    "creators": [
+      "Shunyu Yao",
+      "Jeffrey Zhao",
+      "Dian Yu",
+      "Nan Du",
+      "Izhak Shafran",
+      "Karthik Narasimhan",
+      "Yuan Cao"
+    ],
+    "publisher": "ICLR 2023 / arXiv",
+    "event": null,
+    "published_at": "2022-10-06",
+    "event_date": null,
+    "captured_at": "2026-08-26",
+    "analyzed_at": "2026-08-26",
+    "date_note": "First submitted to arXiv on 2022-10-06; arXiv v3 was revised on 2023-03-10 and identified as the ICLR 2023 camera-ready version.",
+    "verification": [
+      {
+        "title": "arXiv record for ReAct",
+        "url": "https://arxiv.org/abs/2210.03629",
+        "accessed_at": "2026-08-26"
+      },
+      {
+        "title": "ReAct ICLR 2023 camera-ready PDF",
+        "url": "https://arxiv.org/pdf/2210.03629",
+        "accessed_at": "2026-08-26"
+      }
+    ],
+    "derived_records": [
+      "react-reason-act-observe-loop"
+    ]
+  },
+  "insight": {
+    "id": "react-reason-act-observe-loop",
+    "source_id": "src-react-paper-2210-03629",
+    "slug": "react-reason-act-observe",
+    "status": "review",
+    "title": "ReAct: reason, act, observe — then update the plan",
+    "one_liner": "ReAct interleaves model reasoning with external actions and observations so each can update the next step; it improves grounding but is not a production control layer.",
+    "why_this_matters": "ReAct is a useful mental model for the inside of an agent loop. It explains how a model can alternate between thinking and interacting with an environment, while making clear why a separate execution layer is still required for authorization, reliable side effects, recovery and audit.",
+    "whole_source_map": {
+      "problem": "Reason-only trajectories can remain ungrounded and propagate hallucinated facts, while action-only trajectories can interact with an environment without enough high-level reasoning to plan, interpret observations or recover from mistakes.",
+      "thesis": "Interleave language reasoning traces with task-specific actions and environment observations so reasoning guides acting while external feedback grounds and updates subsequent reasoning.",
+      "core_topics": [
+        "Thought → Action → Observation loop",
+        "language reasoning as an augmented action space",
+        "internal knowledge versus external evidence",
+        "reason-only versus act-only trade-offs",
+        "loop, retrieval and context-length failure modes",
+        "action selection versus production execution control"
+      ]
+    },
+    "derived_model": {
+      "problem": "A model that only reasons can drift away from external facts, while a model that only acts can lack an explicit mechanism for planning and interpreting feedback.",
+      "mechanism": "Let the model emit a reasoning step, choose an environment action, receive an observation, and fold that observation back into the next reasoning/action decision; reasoning can be dense or sparse depending on the task.",
+      "result": "The trajectory can become more grounded and diagnosable, but the loop still needs an external production layer to authorize and safely execute consequential actions."
+    },
+    "coherence_review": {
+      "central_chain": [
+        "Reason-only methods have no built-in external feedback loop, while act-only methods can lack enough high-level planning context.",
+        "ReAct adds language thoughts to the agent trajectory and interleaves them with environment actions and observations.",
+        "Reasoning helps choose and reformulate actions; observations inject external evidence that can change subsequent reasoning.",
+        "The feedback loop improves grounding in the paper's tasks but can still repeat bad reasoning or be derailed by poor retrieval.",
+        "Therefore ReAct is best understood as an action-selection/cognitive loop, not as the authorization, durability or audit substrate around real production actions."
+      ],
+      "prerequisites_complete": true,
+      "source_vs_enrichment_clear": true,
+      "open_gaps": [
+        "The experiments use 2022-era PaLM/GPT-3 models, so benchmark numbers are historical evidence for the method rather than current model rankings.",
+        "Modern native tool-calling systems may implement the same feedback principle without exposing free-form reasoning traces; that is a useful follow-up source rather than a claim made by this paper."
+      ],
+      "scores": {
+        "coherence": 5,
+        "prerequisite_completeness": 5,
+        "evidence_confidence": 5,
+        "practical_leverage": 4
+      }
+    },
+    "visual_plan": {
+      "dominant": {
+        "type": "sequence",
+        "title": "The ReAct feedback loop",
+        "nodes": [
+          {
+            "label": "01 · Reason",
+            "title": "Thought",
+            "text": "Compose useful context: decompose the goal, track progress, interpret evidence or reformulate the plan."
+          },
+          {
+            "label": "02 · Act",
+            "title": "Environment action",
+            "text": "Search, look up, navigate or perform another task-specific action that can change or query the environment."
+          },
+          {
+            "label": "03 · Observe",
+            "title": "External feedback",
+            "text": "The environment returns evidence or state that becomes new context rather than leaving reasoning closed over internal knowledge."
+          },
+          {
+            "label": "04 · Update",
+            "title": "Next decision",
+            "text": "The model uses the expanded trajectory to continue, reformulate, finish or choose another action."
+          }
+        ]
+      },
+      "supporting": [
+        "comparison",
+        "concept_grid",
+        "tool_map",
+        "examples",
+        "limitations",
+        "action_map",
+        "source_map"
+      ],
+      "image": {
+        "needed": false,
+        "reason": "The teaching value is in a feedback sequence and the boundary between action selection and execution control; a diagram is more precise than a generated illustration."
+      }
+    },
+    "concepts": [
+      {
+        "name": "ReAct loop",
+        "depth": "learn",
+        "why_needed": "The core unit is not a single prompt but a trajectory where reasoning, action and observation repeatedly update one another."
+      },
+      {
+        "name": "Reasoning trace",
+        "depth": "learn",
+        "why_needed": "In the paper a thought is a language-space step that updates the model's context without itself changing the external environment."
+      },
+      {
+        "name": "Observation grounding",
+        "depth": "learn",
+        "why_needed": "Actions are valuable partly because the returned observation can inject external evidence and alter the next decision."
+      },
+      {
+        "name": "Action selection versus execution",
+        "depth": "learn",
+        "why_needed": "ReAct can propose the next action; production systems still need separate authority, enforcement, recovery and verification around consequential execution."
+      }
+    ],
+    "tool_map": [
+      {
+        "name": "ReAct project / code",
+        "category": "reference implementation and prompts",
+        "why_explore": "Useful for inspecting the original prompt/trajectory format after the mental model is clear.",
+        "url": "https://react-lm.github.io/",
+        "relationship": "Source-native project site linked by the paper.",
+        "status": "try"
+      },
+      {
+        "name": "Wikipedia Search / Lookup API pattern",
+        "category": "read-only retrieval tool",
+        "why_explore": "The paper's knowledge tasks make the action-observation feedback loop concrete using constrained external retrieval.",
+        "url": "https://arxiv.org/pdf/2210.03629",
+        "relationship": "Source-native action interface used in the reported HotpotQA/Fever experiments.",
+        "status": "learn"
+      },
+      {
+        "name": "ALFWorld",
+        "category": "interactive decision-making benchmark",
+        "why_explore": "Shows why sparse reasoning can help track goals during longer action trajectories.",
+        "url": "https://alfworld.github.io/",
+        "relationship": "Benchmark environment used by the source.",
+        "status": "learn"
+      },
+      {
+        "name": "WebShop",
+        "category": "web interaction benchmark",
+        "why_explore": "A second source benchmark for testing reason/action interaction in a constrained web environment.",
+        "url": "https://webshop-pnlp.github.io/",
+        "relationship": "Benchmark environment used by the source; its action space is not equivalent to unrestricted real e-commerce access.",
+        "status": "learn"
+      }
+    ],
+    "examples": [
+      {
+        "domain": "knowledge retrieval",
+        "scenario": "A question requires facts that are uncertain or absent from the model's internal context.",
+        "question": "Can the model explicitly decide what to retrieve, use the returned observation, and revise the next step instead of completing a closed reasoning chain?"
+      },
+      {
+        "domain": "interactive task",
+        "scenario": "An agent searches an environment for an object and then must switch from exploration to completing the goal.",
+        "question": "Can sparse reasoning track progress and update the plan after observations rather than blindly emitting the next action?"
+      },
+      {
+        "domain": "production agent architecture",
+        "scenario": "A ReAct-style loop proposes a consequential tool call such as changing business data.",
+        "question": "What separate layer checks authority, executes idempotently, records evidence and verifies the outcome after the model selects the action?"
+      }
+    ],
+    "limitations": [
+      "ReAct can enter repetitive thought/action loops; an observation does not guarantee the model will reason its way out of a bad trajectory.",
+      "Non-informative retrieval can derail subsequent reasoning, making tool quality and observation design part of agent quality.",
+      "Complex tasks with large action spaces need more demonstrations and can hit in-context length limits under the paper's prompting setup.",
+      "The paper's benchmark action spaces are constrained and intentionally safe; connecting an LLM to real external actions introduces risks the paper does not solve.",
+      "Visible reasoning traces improve diagnosability in this setup but should not be treated as a durable, complete or trustworthy audit record of production execution."
+    ],
+    "action_map": {
+      "use_now": [
+        "Separate two design questions when reviewing an agent: how does the model choose the next action, and how does the system control execution of that action?",
+        "Treat observations as first-class inputs to the next decision rather than simply tool outputs to display."
+      ],
+      "try": [
+        "Build a tiny read-only ReAct loop with one search/lookup tool, a strict maximum step count and an explicit repeated-state breaker.",
+        "Log Thought/Action/Observation as diagnostic development data, then compare it with the separate execution evidence you would need for a consequential tool call."
+      ],
+      "learn": [
+        "feedback-loop agent design",
+        "reason-only versus act-only trade-offs",
+        "observation/tool-result grounding",
+        "stagnation and loop detection",
+        "the boundary between model trajectory and controlled execution"
+      ],
+      "build": [
+        "A minimal agent-loop demo where read-only retrieval is allowed directly but a simulated write action is handed to a separate policy/execution boundary."
+      ],
+      "watch": [
+        "How modern native tool-calling agents preserve the ReAct feedback principle while hiding or restructuring free-form reasoning traces."
+      ],
+      "ignore_for_now": [
+        "The paper's absolute 2022-era PaLM benchmark scores as a ranking of current agent systems."
+      ]
+    },
+    "connections": [
+      "controlled execution: ReAct selects or proposes actions; the existing controlled-execution concept governs consequential execution after selection",
+      "execution history: a reasoning trace can explain a model trajectory but is not the same as durable evidence of authority, versions, external side effects and verification",
+      "retrieval quality: bad observations can become a direct failure input to later reasoning",
+      "agent evaluation: trajectory failures can be classified as reasoning loops, retrieval failures, hallucination or task/label mismatch"
+    ],
+    "supporting_sources": [
+      {
+        "title": "arXiv record for ReAct",
+        "url": "https://arxiv.org/abs/2210.03629",
+        "publisher": "arXiv",
+        "purpose": "authors, submission history, v3 camera-ready note and canonical identifier",
+        "accessed_at": "2026-08-26"
+      },
+      {
+        "title": "ReAct ICLR 2023 camera-ready PDF",
+        "url": "https://arxiv.org/pdf/2210.03629",
+        "publisher": "ICLR / arXiv",
+        "purpose": "direct method, Figure 1, benchmark tables, failure analysis, conclusion and ethics evidence",
+        "accessed_at": "2026-08-26"
+      },
+      {
+        "title": "ReAct project site",
+        "url": "https://react-lm.github.io/",
+        "publisher": "ReAct authors",
+        "purpose": "source-linked project/code entry point",
+        "accessed_at": "2026-08-26"
+      }
+    ],
+    "tags": [
+      "react",
+      "ai-agents",
+      "reasoning",
+      "tool-use",
+      "feedback-loops",
+      "agent-architecture"
+    ],
+    "provenance": {
+      "source_linked": true,
+      "source_dates_recorded": true,
+      "full_transcript_stored": false,
+      "analysis_type": "direct research-paper/PDF analysis with architectural comparison to existing project knowledge",
+      "reviewed_at": "2026-08-26"
+    }
+  },
+  "graph": {
+    "concepts": [
+      {
+        "id": "controlled-execution",
+        "insight_ids": [
+          "react-reason-act-observe-loop"
+        ]
+      },
+      {
+        "id": "react-loop",
+        "label": "ReAct loop",
+        "summary": "An agent trajectory that interleaves language reasoning, environment actions and returned observations so each step can update the next decision.",
+        "domain": "agent reasoning",
+        "coverage": "explained",
+        "insight_ids": [
+          "react-reason-act-observe-loop"
+        ],
+        "aliases": [
+          "reason act observe loop",
+          "Thought Action Observation loop"
+        ],
+        "tags": [
+          "react",
+          "agents",
+          "reasoning",
+          "tool-use"
+        ]
+      },
+      {
+        "id": "reasoning-trace",
+        "label": "Reasoning trace",
+        "summary": "A language-space step used to compose task context, plans or interpretations without itself changing the external environment.",
+        "domain": "agent reasoning",
+        "coverage": "explained",
+        "insight_ids": [
+          "react-reason-act-observe-loop"
+        ],
+        "aliases": [
+          "Thought",
+          "verbal reasoning trace"
+        ],
+        "tags": [
+          "reasoning",
+          "trajectory",
+          "agents"
+        ]
+      },
+      {
+        "id": "observation-grounding",
+        "label": "Observation grounding",
+        "summary": "Using evidence returned by an external action or environment to update the context for subsequent reasoning and action selection.",
+        "domain": "agent interaction",
+        "coverage": "explained",
+        "insight_ids": [
+          "react-reason-act-observe-loop"
+        ],
+        "aliases": [
+          "external feedback grounding"
+        ],
+        "tags": [
+          "observations",
+          "feedback",
+          "retrieval",
+          "agents"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "id": "rel-react-loop-depends-on-reasoning-trace",
+        "from": "react-loop",
+        "to": "reasoning-trace",
+        "type": "depends_on",
+        "rationale": "ReAct adds explicit language reasoning steps that maintain plans, interpret observations and support later action choices.",
+        "evidence_insights": [
+          "react-reason-act-observe-loop"
+        ]
+      },
+      {
+        "id": "rel-react-loop-depends-on-observation-grounding",
+        "from": "react-loop",
+        "to": "observation-grounding",
+        "type": "depends_on",
+        "rationale": "The loop is grounded by observations returned from environment actions; without useful feedback it can continue or reformulate poorly.",
+        "evidence_insights": [
+          "react-reason-act-observe-loop"
+        ]
+      },
+      {
+        "id": "rel-react-loop-related-to-controlled-execution",
+        "from": "react-loop",
+        "to": "controlled-execution",
+        "type": "related_to",
+        "rationale": "ReAct explains how a model selects and updates actions, while controlled execution governs whether consequential actions are authorized, safely executed, reconstructed and verified.",
+        "evidence_insights": [
+          "react-reason-act-observe-loop"
+        ]
+      }
+    ]
+  }
+}
