@@ -38,6 +38,12 @@ jobs:
           python scripts/graph_context.py --self-test
           python scripts/scaffold_bundle.py --self-test
 
+      - name: Test explicit publication boundary
+        run: python scripts/publish_reviewed.py --self-test
+
+      - name: Verify sitemap matches published records
+        run: python scripts/build_sitemap.py --check
+
       - name: Validate browser JavaScript
         run: |
           node --check app.js
