@@ -39,7 +39,6 @@ def merge_concept(existing: dict, patch: dict) -> None:
         if insight_id not in existing_ids:
             existing_ids.append(insight_id)
 
-    # A reference-only patch intentionally contains only id + insight_ids.
     if set(patch) <= {"id", "insight_ids"}:
         return
 
@@ -82,6 +81,17 @@ def main() -> int:
 
     source = patch.get("source") or {}
     insight = patch.get("insight") or {}
+    current_insight = next(
+        (item for item in insights.get("insights", []) if item.get("id") == insight.get("id")),
+        None,
+    )
+
+    # A case patch is a review snapshot. Explicit publication is terminal for this snapshot:
+    # materialization must never silently downgrade it back to review.
+    if current_insight is not None and current_insight.get("status") == "published":
+        raise SystemExit(
+            f"refusing to overwrite published insight '{insight.get('id')}' with a review case patch"
+        )
 
     # Defense in depth: researched case patches can prepare review artifacts, never publish them.
     if patch.get("intake_status") != "review" or insight.get("status") != "review":
