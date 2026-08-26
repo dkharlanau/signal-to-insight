@@ -116,6 +116,43 @@
       "derived_records": [
         "open-policy-agent-decision-enforcement-model"
       ]
+    },
+    {
+      "id": "src-react-paper-2210-03629",
+      "type": "paper",
+      "title": "ReAct: Synergizing Reasoning and Acting in Language Models",
+      "canonical_url": "https://arxiv.org/abs/2210.03629",
+      "creators": [
+        "Shunyu Yao",
+        "Jeffrey Zhao",
+        "Dian Yu",
+        "Nan Du",
+        "Izhak Shafran",
+        "Karthik Narasimhan",
+        "Yuan Cao"
+      ],
+      "publisher": "ICLR 2023 / arXiv",
+      "event": null,
+      "published_at": "2022-10-06",
+      "event_date": null,
+      "captured_at": "2026-08-26",
+      "analyzed_at": "2026-08-26",
+      "date_note": "First submitted to arXiv on 2022-10-06; arXiv v3 was revised on 2023-03-10 and identified as the ICLR 2023 camera-ready version.",
+      "verification": [
+        {
+          "title": "arXiv record for ReAct",
+          "url": "https://arxiv.org/abs/2210.03629",
+          "accessed_at": "2026-08-26"
+        },
+        {
+          "title": "ReAct ICLR 2023 camera-ready PDF",
+          "url": "https://arxiv.org/pdf/2210.03629",
+          "accessed_at": "2026-08-26"
+        }
+      ],
+      "derived_records": [
+        "react-reason-act-observe-loop"
+      ]
     }
   ]
 }

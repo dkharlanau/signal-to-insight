@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>[PREVIEW] ReAct: reason, act, observe — then update the plan — Signal to Insight</title>
+  <meta name="description" content="ReAct interleaves model reasoning with external actions and observations so each can update the next step; it improves grounding but is not a production control layer.">
+  <meta property="og:title" content="ReAct: reason, act, observe — then update the plan">
+  <meta property="og:description" content="ReAct interleaves model reasoning with external actions and observations so each can update the next step; it improves grounding but is not a production control layer.">
+  <meta property="og:type" content="article">
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="generated-page preview-page">
+  <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+  <header class="site-header wrap">
+    <a class="brand" href="../../"><span class="brand-mark">S→I</span><span>Signal to Insight</span></a>
+    <nav aria-label="Explainer navigation">
+      <a href="#model">Model</a><a href="#concepts">Concepts</a><a href="#tools">Tools</a><a href="#actions">Actions</a><a href="#sources">Sources</a>
+    </nav>
+  </header>
+
+  <div class="preview-banner">REVIEW PREVIEW · NOT INDEXED · NOT PUBLISHED</div>
+  <main>
+    <section class="detail-hero wrap">
+      <a class="back-link" href="../../">← Research engine</a>
+      <p class="eyebrow">EXPLAINER · review</p>
+      <h1>ReAct: reason, act, observe — then update the plan</h1>
+      <div class="detail-lede">
+        <p>ReAct interleaves model reasoning with external actions and observations so each can update the next step; it improves grounding but is not a production control layer.</p>
+        <dl class="detail-meta">
+          <div><dt>Original source</dt><dd><a href="https://arxiv.org/abs/2210.03629" target="_blank" rel="noreferrer">ReAct: Synergizing Reasoning and Acting in Language Models ↗</a></dd></div>
+          <div><dt>Creator</dt><dd>Shunyu Yao, Jeffrey Zhao, Dian Yu, Nan Du, Izhak Shafran, Karthik Narasimhan, Yuan Cao</dd></div>
+          <div><dt>Published</dt><dd>2022-10-06</dd></div>
+          <div><dt>Captured</dt><dd>2026-08-26</dd></div>
+          <div><dt>Analyzed</dt><dd>2026-08-26</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="detail-section wrap">
+      <p class="kicker">WHY THIS MATTERS</p>
+      <p class="big-statement">ReAct is a useful mental model for the inside of an agent loop. It explains how a model can alternate between thinking and interacting with an environment, while making clear why a separate execution layer is still required for authorization, reliable side effects, recovery and audit.</p>
+    </section>
+
+    <section id="model" class="detail-section wrap">
+      <p class="kicker">MENTAL MODEL</p>
+      <div class="visual-sequence" aria-label="The ReAct feedback loop"><article>
+          <span>01 · Reason</span>
+          <h3>Thought</h3>
+          <p>Compose useful context: decompose the goal, track progress, interpret evidence or reformulate the plan.</p>
+        </article><article>
+          <span>02 · Act</span>
+          <h3>Environment action</h3>
+          <p>Search, look up, navigate or perform another task-specific action that can change or query the environment.</p>
+        </article><article>
+          <span>03 · Observe</span>
+          <h3>External feedback</h3>
+          <p>The environment returns evidence or state that becomes new context rather than leaving reasoning closed over internal knowledge.</p>
+        </article><article>
+          <span>04 · Update</span>
+          <h3>Next decision</h3>
+          <p>The model uses the expanded trajectory to continue, reformulate, finish or choose another action.</p>
+        </article></div>
+      <div class="core-map">
+        <div><span>Source problem</span><p>Reason-only trajectories can remain ungrounded and propagate hallucinated facts, while action-only trajectories can interact with an environment without enough high-level reasoning to plan, interpret observations or recover from mistakes.</p></div>
+        <div><span>Source thesis</span><p>Interleave language reasoning traces with task-specific actions and environment observations so reasoning guides acting while external feedback grounds and updates subsequent reasoning.</p></div>
+        <div><span>Core topics</span><ul><li>Thought → Action → Observation loop</li><li>language reasoning as an augmented action space</li><li>internal knowledge versus external evidence</li><li>reason-only versus act-only trade-offs</li><li>loop, retrieval and context-length failure modes</li><li>action selection versus production execution control</li></ul></div>
+      </div>
+    </section>
+
+    <section id="concepts" class="detail-section wrap">
+      <p class="kicker">CONCEPTS TO KNOW</p>
+      <h2>Learn only the prerequisites that preserve the model.</h2>
+      <div class="concept-grid"><article class="concept-card">
+          <span>learn</span>
+          <h3>ReAct loop</h3>
+          <p>The core unit is not a single prompt but a trajectory where reasoning, action and observation repeatedly update one another.</p>
+        </article><article class="concept-card">
+          <span>learn</span>
+          <h3>Reasoning trace</h3>
+          <p>In the paper a thought is a language-space step that updates the model&#x27;s context without itself changing the external environment.</p>
+        </article><article class="concept-card">
+          <span>learn</span>
+          <h3>Observation grounding</h3>
+          <p>Actions are valuable partly because the returned observation can inject external evidence and alter the next decision.</p>
+        </article><article class="concept-card">
+          <span>learn</span>
+          <h3>Action selection versus execution</h3>
+          <p>ReAct can propose the next action; production systems still need separate authority, enforcement, recovery and verification around consequential execution.</p>
+        </article></div>
+    </section>
+
+    <section id="tools" class="detail-section wrap">
+      <p class="kicker">TOOLS / SYSTEMS</p>
+      <h2>Concrete systems worth knowing.</h2>
+      <p class="section-note">Tool connections may be project enrichment rather than recommendations from the original source. Each card states the relationship.</p>
+      <div class="tool-grid"><a class="tool-card" href="https://react-lm.github.io/" target="_blank" rel="noreferrer">
+          <span>try</span>
+          <strong>ReAct project / code</strong>
+          <p>Useful for inspecting the original prompt/trajectory format after the mental model is clear.</p>
+          <small>reference implementation and prompts · Source-native project site linked by the paper.</small>
+        </a><a class="tool-card" href="https://arxiv.org/pdf/2210.03629" target="_blank" rel="noreferrer">
+          <span>learn</span>
+          <strong>Wikipedia Search / Lookup API pattern</strong>
+          <p>The paper&#x27;s knowledge tasks make the action-observation feedback loop concrete using constrained external retrieval.</p>
+          <small>read-only retrieval tool · Source-native action interface used in the reported HotpotQA/Fever experiments.</small>
+        </a><a class="tool-card" href="https://alfworld.github.io/" target="_blank" rel="noreferrer">
+          <span>learn</span>
+          <strong>ALFWorld</strong>
+          <p>Shows why sparse reasoning can help track goals during longer action trajectories.</p>
+          <small>interactive decision-making benchmark · Benchmark environment used by the source.</small>
+        </a><a class="tool-card" href="https://webshop-pnlp.github.io/" target="_blank" rel="noreferrer">
+          <span>learn</span>
+          <strong>WebShop</strong>
+          <p>A second source benchmark for testing reason/action interaction in a constrained web environment.</p>
+          <small>web interaction benchmark · Benchmark environment used by the source; its action space is not equivalent to unrestricted real e-commerce access.</small>
+        </a></div>
+    </section>
+
+    <section class="detail-section wrap">
+      <p class="kicker">EXAMPLES</p>
+      <div class="example-grid"><article class="example-card">
+          <span>knowledge retrieval</span>
+          <h3>A question requires facts that are uncertain or absent from the model&#x27;s internal context.</h3>
+          <p>Can the model explicitly decide what to retrieve, use the returned observation, and revise the next step instead of completing a closed reasoning chain?</p>
+        </article><article class="example-card">
+          <span>interactive task</span>
+          <h3>An agent searches an environment for an object and then must switch from exploration to completing the goal.</h3>
+          <p>Can sparse reasoning track progress and update the plan after observations rather than blindly emitting the next action?</p>
+        </article><article class="example-card">
+          <span>production agent architecture</span>
+          <h3>A ReAct-style loop proposes a consequential tool call such as changing business data.</h3>
+          <p>What separate layer checks authority, executes idempotently, records evidence and verifies the outcome after the model selects the action?</p>
+        </article></div>
+    </section>
+
+    <section class="detail-section wrap limitation-section">
+      <p class="kicker">WHERE THE MODEL BREAKS</p>
+      <h2>Useful does not mean sufficient.</h2>
+      <ol class="limitation-list"><li>ReAct can enter repetitive thought/action loops; an observation does not guarantee the model will reason its way out of a bad trajectory.</li><li>Non-informative retrieval can derail subsequent reasoning, making tool quality and observation design part of agent quality.</li><li>Complex tasks with large action spaces need more demonstrations and can hit in-context length limits under the paper&#x27;s prompting setup.</li><li>The paper&#x27;s benchmark action spaces are constrained and intentionally safe; connecting an LLM to real external actions introduces risks the paper does not solve.</li><li>Visible reasoning traces improve diagnosability in this setup but should not be treated as a durable, complete or trustworthy audit record of production execution.</li></ol>
+    </section>
+
+    <section id="actions" class="detail-section wrap">
+      <p class="kicker">PERSONAL ACTION MAP</p>
+      <h2>Convert understanding into a decision.</h2>
+      <div class="action-grid"><article class="action-card action-use_now">
+          <span>Use now</span>
+          <ul><li>Separate two design questions when reviewing an agent: how does the model choose the next action, and how does the system control execution of that action?</li><li>Treat observations as first-class inputs to the next decision rather than simply tool outputs to display.</li></ul>
+        </article><article class="action-card action-try">
+          <span>Try</span>
+          <ul><li>Build a tiny read-only ReAct loop with one search/lookup tool, a strict maximum step count and an explicit repeated-state breaker.</li><li>Log Thought/Action/Observation as diagnostic development data, then compare it with the separate execution evidence you would need for a consequential tool call.</li></ul>
+        </article><article class="action-card action-learn">
+          <span>Learn</span>
+          <ul><li>feedback-loop agent design</li><li>reason-only versus act-only trade-offs</li><li>observation/tool-result grounding</li><li>stagnation and loop detection</li><li>the boundary between model trajectory and controlled execution</li></ul>
+        </article><article class="action-card action-build">
+          <span>Build</span>
+          <ul><li>A minimal agent-loop demo where read-only retrieval is allowed directly but a simulated write action is handed to a separate policy/execution boundary.</li></ul>
+        </article><article class="action-card action-watch">
+          <span>Watch</span>
+          <ul><li>How modern native tool-calling agents preserve the ReAct feedback principle while hiding or restructuring free-form reasoning traces.</li></ul>
+        </article><article class="action-card action-ignore_for_now">
+          <span>Ignore for now</span>
+          <ul><li>The paper&#x27;s absolute 2022-era PaLM benchmark scores as a ranking of current agent systems.</li></ul>
+        </article></div>
+    </section>
+
+    <section id="sources" class="detail-section wrap source-section">
+      <p class="kicker">SOURCES + DATES</p>
+      <div class="source-grid">
+        <div>
+          <h3>Primary source</h3>
+          <a href="https://arxiv.org/abs/2210.03629" target="_blank" rel="noreferrer">ReAct: Synergizing Reasoning and Acting in Language Models ↗</a>
+          <p>Shunyu Yao, Jeffrey Zhao, Dian Yu, Nan Du, Izhak Shafran, Karthik Narasimhan, Yuan Cao · Published: 2022-10-06</p>
+          <p>First submitted to arXiv on 2022-10-06; arXiv v3 was revised on 2023-03-10 and identified as the ICLR 2023 camera-ready version.</p>
+        </div>
+        <div>
+          <h3>Verification / enrichment</h3>
+          <ul class="supporting-sources"><li>
+          <a href="https://arxiv.org/abs/2210.03629" target="_blank" rel="noreferrer">arXiv record for ReAct</a>
+          <span>authors, submission history, v3 camera-ready note and canonical identifier · accessed 2026-08-26</span>
+        </li><li>
+          <a href="https://arxiv.org/pdf/2210.03629" target="_blank" rel="noreferrer">ReAct ICLR 2023 camera-ready PDF</a>
+          <span>direct method, Figure 1, benchmark tables, failure analysis, conclusion and ethics evidence · accessed 2026-08-26</span>
+        </li><li>
+          <a href="https://react-lm.github.io/" target="_blank" rel="noreferrer">ReAct project site</a>
+          <span>source-linked project/code entry point · accessed 2026-08-26</span>
+        </li></ul>
+        </div>
+      </div>
+      <p class="provenance-note">Analyzed 2026-08-26. Full third-party transcript is not stored. Source claims and project enrichment are kept distinguishable.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer wrap">
+    <span>Signal to Insight</span><span>Explainer: react-reason-act-observe-loop</span><span>Reviewed 2026-08-26</span>
+  </footer>
+  <script src="../../app.js"></script>
+</body>
+</html>

@@ -1,5 +1,5 @@
 {
-  "graph_version": "0.2.1",
+  "graph_version": "0.3.0",
   "updated_at": "2026-08-26",
   "concepts": [
     {
@@ -10,7 +10,8 @@
       "coverage": "explained",
       "insight_ids": [
         "enterprise-agents-production-substrate",
-        "open-policy-agent-decision-enforcement-model"
+        "open-policy-agent-decision-enforcement-model",
+        "react-reason-act-observe-loop"
       ],
       "aliases": [
         "production execution substrate"
@@ -335,6 +336,64 @@
         "rollout",
         "operations"
       ]
+    },
+    {
+      "id": "react-loop",
+      "label": "ReAct loop",
+      "summary": "An agent trajectory that interleaves language reasoning, environment actions and returned observations so each step can update the next decision.",
+      "domain": "agent reasoning",
+      "coverage": "explained",
+      "insight_ids": [
+        "react-reason-act-observe-loop"
+      ],
+      "aliases": [
+        "reason act observe loop",
+        "Thought Action Observation loop"
+      ],
+      "tags": [
+        "react",
+        "agents",
+        "reasoning",
+        "tool-use"
+      ]
+    },
+    {
+      "id": "reasoning-trace",
+      "label": "Reasoning trace",
+      "summary": "A language-space step used to compose task context, plans or interpretations without itself changing the external environment.",
+      "domain": "agent reasoning",
+      "coverage": "explained",
+      "insight_ids": [
+        "react-reason-act-observe-loop"
+      ],
+      "aliases": [
+        "Thought",
+        "verbal reasoning trace"
+      ],
+      "tags": [
+        "reasoning",
+        "trajectory",
+        "agents"
+      ]
+    },
+    {
+      "id": "observation-grounding",
+      "label": "Observation grounding",
+      "summary": "Using evidence returned by an external action or environment to update the context for subsequent reasoning and action selection.",
+      "domain": "agent interaction",
+      "coverage": "explained",
+      "insight_ids": [
+        "react-reason-act-observe-loop"
+      ],
+      "aliases": [
+        "external feedback grounding"
+      ],
+      "tags": [
+        "observations",
+        "feedback",
+        "retrieval",
+        "agents"
+      ]
     }
   ],
   "relations": [
@@ -534,6 +593,36 @@
       "rationale": "OPA bundles show how distributed decision points can receive policy and data on a lifecycle separate from the application binaries that enforce decisions.",
       "evidence_insights": [
         "open-policy-agent-decision-enforcement-model"
+      ]
+    },
+    {
+      "id": "rel-react-loop-depends-on-reasoning-trace",
+      "from": "react-loop",
+      "to": "reasoning-trace",
+      "type": "depends_on",
+      "rationale": "ReAct adds explicit language reasoning steps that maintain plans, interpret observations and support later action choices.",
+      "evidence_insights": [
+        "react-reason-act-observe-loop"
+      ]
+    },
+    {
+      "id": "rel-react-loop-depends-on-observation-grounding",
+      "from": "react-loop",
+      "to": "observation-grounding",
+      "type": "depends_on",
+      "rationale": "The loop is grounded by observations returned from environment actions; without useful feedback it can continue or reformulate poorly.",
+      "evidence_insights": [
+        "react-reason-act-observe-loop"
+      ]
+    },
+    {
+      "id": "rel-react-loop-related-to-controlled-execution",
+      "from": "react-loop",
+      "to": "controlled-execution",
+      "type": "related_to",
+      "rationale": "ReAct explains how a model selects and updates actions, while controlled execution governs whether consequential actions are authorized, safely executed, reconstructed and verified.",
+      "evidence_insights": [
+        "react-reason-act-observe-loop"
       ]
     }
   ]

@@ -40,9 +40,9 @@
       "source_type": "paper",
       "submitted_at": "2026-08-26",
       "requested_focus": "Understand the ReAct reasoning/action/observation loop, why interleaving reasoning with external actions can outperform reason-only or act-only approaches, where the method fails, and how this model relates to the existing production controlled-execution layer.",
-      "status": "researching",
-      "source_id": null,
-      "insight_id": null,
+      "status": "review",
+      "source_id": "src-react-paper-2210-03629",
+      "insight_id": "react-reason-act-observe-loop",
       "notes": "GitHub source intake issue #13. Fourth real acceptance case; research paper/PDF adapter. Queued manually after the Issue event did not produce an intake workflow run."
     }
   ]
