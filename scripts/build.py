@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import html
 import json
+import shutil
 import sys
 from pathlib import Path
 
@@ -271,10 +272,17 @@ def build(check: bool = False) -> int:
     sources = {item["id"]: item for item in source_data.get("sources", [])}
     failures: list[str] = []
     generated = 0
+    known_slugs = {
+        item.get("slug")
+        for item in insight_data.get("insights", [])
+        if isinstance(item.get("slug"), str) and item.get("slug")
+    }
+    published_slugs: set[str] = set()
 
     for insight in insight_data.get("insights", []):
         if insight.get("status") != "published":
             continue
+        published_slugs.add(insight["slug"])
         source = sources.get(insight.get("source_id"))
         if source is None:
             failures.append(f"{insight.get('id')}: source_id not found")
@@ -293,6 +301,16 @@ def build(check: bool = False) -> int:
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_text(content, encoding="utf-8")
             print(f"generated {target.relative_to(ROOT)}")
+
+    for slug in sorted(known_slugs - published_slugs):
+        stale_dir = OUTPUT / slug
+        if not stale_dir.exists():
+            continue
+        if check:
+            failures.append(f"non-published insight still has public explainer: {stale_dir.relative_to(ROOT)}")
+        else:
+            shutil.rmtree(stale_dir)
+            print(f"removed {stale_dir.relative_to(ROOT)}")
 
     if failures:
         print("Explainer build check failed:")
