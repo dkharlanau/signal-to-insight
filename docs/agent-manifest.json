@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "product": "signal-to-insight",
+  "purpose": "Turn a selected source into a verified, personalized, coherent mental model and merge reusable concepts into cumulative knowledge memory.",
+  "human_url": "https://dkharlanau.github.io/signal-to-insight/",
+  "product_doc": "https://dkharlanau.github.io/signal-to-insight/docs/product.html",
+  "repository": "https://github.com/dkharlanau/signal-to-insight",
+  "boundaries": ["not a generic summarizer", "map the whole source before selecting insights", "check prior knowledge before creating new concepts", "never guess missing source dates", "do not commit full third-party transcripts/articles/PDF dumps", "public projection requires review"],
+  "capabilities": ["queue normalized sources", "scaffold graph-aware research bundles", "retrieve prior concept context", "validate normalized research/insight records", "merge stable concepts and typed relations", "generate review previews", "publish reviewed visual explainers", "generate searchable library and public knowledge graph"],
+  "entrypoints": [
+    {"type":"cli","command":"python scripts/new_source.py <url> --type <type> --focus <question>"},
+    {"type":"cli","command":"python scripts/scaffold_bundle.py <intake-id>"},
+    {"type":"cli","command":"python scripts/graph_context.py <query>"}
+  ],
+  "required_agent_loop": ["read AGENTS.md and research profile", "normalize source/provenance", "retrieve prior knowledge", "map whole source", "classify overlap as reinforcement/refinement/contradiction/new/not-relevant", "research and verify coherent core", "write normalized artifacts", "merge reusable concepts/relations", "build review preview", "publish only after review"],
+  "related": [
+    {"product":"visual-workbench","relationship":"semantic visual explanation"},
+    {"product":"sap-agentic-operations","relationship":"operational/agent concepts worth researching or testing"},
+    {"product":"enterprise-transformation-toolkit","relationship":"broader product family and cross-project knowledge"}
+  ]
+}
