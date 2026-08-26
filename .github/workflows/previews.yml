@@ -1,0 +1,31 @@
+name: Verify review previews
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  previews:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Test preview safety boundary
+        run: python scripts/build_previews.py --self-test
+
+      - name: Rebuild review previews
+        run: python scripts/build_previews.py
+
+      - name: Generated previews must be committed
+        run: git diff --exit-code -- previews
