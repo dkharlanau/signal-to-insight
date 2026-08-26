@@ -1,0 +1,89 @@
+/* Data-driven dominant visual overrides. Loaded after explainer.css. */
+
+.model-flow {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+}
+
+.model-flow > article {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.model-flow > b {
+  flex: 0 0 52px;
+  display: grid;
+  place-items: center;
+}
+
+.model-flow > article:nth-of-type(3n + 1) {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.model-flow > article:nth-of-type(3n + 2) {
+  background: var(--acid);
+  color: var(--ink);
+}
+
+.model-flow > article:nth-of-type(3n) {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.visual-sequence,
+.visual-layers,
+.visual-compare,
+.visual-decision {
+  overflow: hidden;
+}
+
+.visual-sequence article,
+.visual-layers article,
+.visual-compare article,
+.visual-decision article {
+  min-width: 0;
+}
+
+.visual-sequence article span,
+.visual-layers article span,
+.visual-compare article span,
+.visual-decision article span {
+  display: block;
+  margin-bottom: 36px;
+  font: 800 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+}
+
+.visual-sequence article h3,
+.visual-layers article h3,
+.visual-compare article h3,
+.visual-decision article h3 {
+  margin-bottom: 14px;
+  font-size: clamp(23px, 2.7vw, 38px);
+  line-height: 1;
+  letter-spacing: -.035em;
+}
+
+.visual-sequence article p,
+.visual-layers article p,
+.visual-compare article p,
+.visual-decision article p {
+  margin: 0;
+  color: var(--muted);
+}
+
+@media (max-width: 900px) {
+  .model-flow {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .model-flow > b {
+    min-height: 34px;
+    transform: rotate(90deg);
+  }
+}
