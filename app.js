@@ -5,6 +5,11 @@ if (document.body.classList.contains('generated-page')) {
   explainerStyles.rel = 'stylesheet';
   explainerStyles.href = '../../explainer.css';
   document.head.appendChild(explainerStyles);
+
+  const visualPlanStyles = document.createElement('link');
+  visualPlanStyles.rel = 'stylesheet';
+  visualPlanStyles.href = '../../visual-plan.css';
+  document.head.appendChild(visualPlanStyles);
 }
 
 if (document.body.classList.contains('preview-page')) {
