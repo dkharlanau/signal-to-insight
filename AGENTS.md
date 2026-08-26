@@ -29,15 +29,19 @@ capture source metadata
   ↓
 create normalized research bundle
   ↓
+retrieve prior knowledge
+  ↓
 map the whole source
   ↓
 apply research profile
   ↓
 verify + enrich where useful
   ↓
+classify what changed vs prior knowledge
+  ↓
 create / update source registry
   ↓
-create structured insight record
+create structured insight + curated Knowledge Delta
   ↓
 generate explainer
   ↓
@@ -70,6 +74,29 @@ Prefer primary sources for technical facts: official docs, papers, repositories,
 
 Distinguish every external addition from the original source. A tool discovered by project research must not be presented as if the source author recommended it.
 
+## Knowledge Delta
+
+Every insight that reaches `review` must answer a second question beyond “what does the source say?”: **what does this source change in the existing model?**
+
+Use the prior-knowledge snapshot in the research bundle and curate only meaningful changes into `data/knowledge-deltas.json`.
+
+Allowed surfaced relationships are:
+
+- `new` — a reusable concept or boundary that was not already represented;
+- `reinforces` — independent evidence strengthens an existing model without materially changing it;
+- `refines` — the source narrows, concretizes or changes the boundary of an existing model;
+- `contradicts` — evidence is genuinely inconsistent within comparable scope and needs explicit review.
+
+For every surfaced delta, keep three layers visibly separate:
+
+1. **source basis** — what the current source establishes;
+2. **prior basis** — what the project already represented and which prior insights support it;
+3. **project interpretation** — why this difference matters to the cumulative model.
+
+Do not surface a connection merely because retrieval found overlapping words. Candidates classified `not_relevant` should remain suppressed and may be recorded in `suppressed_prior_matches` as evidence that noise was deliberately rejected.
+
+Never reinterpret a bundle `reinforcement`, `refinement` or `contradiction` as another relationship without revisiting the source evidence and changing the underlying classification too.
+
 ## Personalization
 
 Use `config/research-profile.json` as a filter, not as a topic prison.
@@ -97,8 +124,9 @@ A finished explainer must let the reader answer:
 5. Which tools/systems are actually worth knowing?
 6. Where does the model break or become incomplete?
 7. What is source content vs project enrichment?
-8. What should I do with this knowledge?
-9. Where did it come from and when?
+8. What changed relative to prior knowledge, and why?
+9. What should I do with this knowledge?
+10. Where did it come from and when?
 
 If the reader still needs to consume the original source to understand the main model, the explainer is not ready.
 
@@ -110,11 +138,14 @@ A processed source may update:
 - `data/sources.json`
 - `data/research-bundles/<intake-id>.json`
 - `data/insights.json`
+- `data/knowledge-deltas.json`
+- `data/knowledge-graph.json`
 - `content/explainers/*.md`
 - generated `explainers/<slug>/index.html`
+- generated `previews/<slug>/index.html`
 - `sitemap.xml`
 
-Do not edit generated explainer HTML by hand. Change the structured source/insight record or generator and rebuild.
+Do not edit generated explainer HTML by hand. Change the structured source/insight/delta record or generator and rebuild.
 
 ## Required checks
 
@@ -122,13 +153,21 @@ Before considering a change complete:
 
 ```bash
 python scripts/validate.py
+python scripts/validate_knowledge_deltas.py
+python scripts/validate_graph.py
+python scripts/validate_bundles.py
 python scripts/build.py
 python scripts/build.py --check
-python -m compileall -q scripts
+python scripts/build_previews.py
+python scripts/build_previews.py --check
+python -m unittest discover -s tests -p "test_*.py" -v
+python -m compileall -q scripts tests
 ```
 
-Generated files must be committed. CI must be green.
+Generated files must be committed or synchronized by their dedicated workflows. CI must be green.
 
 ## Publication boundary
 
 The agent may autonomously prepare research and a review-ready explainer. `published` is a reviewed state. Do not silently publish newly ingested third-party-derived content.
+
+Publication requires the explicit owner workflow and exact `PUBLISH:<insight-id>` confirmation. A published insight may be explicitly returned to `review` or `archived`; retraction keeps provenance and removes the item from public generated surfaces after rebuild.
