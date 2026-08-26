@@ -240,8 +240,15 @@ def self_test() -> int:
         limit=5,
     )
     learning_ids = [item["concept_id"] for item in learning.get("matches", [])]
-    if learning_ids:
-        print(f"graph context self-test failed; unrelated learning-science query returned prior concepts: {learning_ids}")
+    expected_learning = {"retrieval-practice", "performance-retention-gap", "metacognitive-confidence-gap"}
+    missing_learning = expected_learning - set(learning_ids)
+    if missing_learning:
+        print(f"graph context self-test failed; learning query missed concepts {sorted(missing_learning)}: {learning_ids}")
+        return 1
+    forbidden_learning = {"open-policy-agent", "controlled-execution", "policy-as-code", "observation-grounding"}
+    leaked_learning = forbidden_learning & set(learning_ids)
+    if leaked_learning:
+        print(f"graph context self-test failed; cross-domain noise leaked into learning query: {sorted(leaked_learning)}")
         return 1
 
     print("Graph context self-test passed.")
