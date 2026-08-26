@@ -47,6 +47,9 @@ jobs:
       - name: Benchmark prior-knowledge retrieval quality
         run: python scripts/benchmark_retrieval.py
 
+      - name: Test one-command source orchestration
+        run: python scripts/run_source.py --self-test
+
       - name: Test learning utility local loop
         run: python scripts/learning_utility.py self-test
 
