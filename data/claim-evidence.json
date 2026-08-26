@@ -126,8 +126,8 @@
             {
               "kind": "primary_source",
               "source_id": "src-open-policy-agent-opa-2026",
-              "url": "https://github.com/open-policy-agent/opa#how-does-opa-work",
-              "locator": "Repository README: How does OPA work?"
+              "url": "https://github.com/open-policy-agent/opa",
+              "locator": "Repository README section: How does OPA work?"
             }
           ],
           "note": null
