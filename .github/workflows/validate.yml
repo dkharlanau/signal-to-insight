@@ -27,6 +27,9 @@ jobs:
       - name: Validate cumulative knowledge graph
         run: python scripts/validate_graph.py
 
+      - name: Validate curated Knowledge Delta
+        run: python scripts/validate_knowledge_deltas.py
+
       - name: Validate research bundles
         run: python scripts/validate_bundles.py
 
