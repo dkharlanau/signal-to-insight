@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dkharlanau.github.io/signal-to-insight/schemas/research-bundle.schema.json",
+  "title": "Signal to Insight normalized research bundle",
+  "type": "object",
+  "required": [
+    "bundle_version",
+    "intake_id",
+    "source",
+    "inspection",
+    "content_map",
+    "selection",
+    "verification_candidates",
+    "created_at"
+  ],
+  "properties": {
+    "bundle_version": {"type": "string"},
+    "intake_id": {"type": "string", "pattern": "^intake-[a-z0-9-]+$"},
+    "source_id": {"type": ["string", "null"]},
+    "source": {
+      "type": "object",
+      "required": ["type", "canonical_url", "title", "creators", "published_at", "event_date"],
+      "properties": {
+        "type": {"type": "string"},
+        "canonical_url": {"type": "string", "format": "uri"},
+        "title": {"type": ["string", "null"]},
+        "creators": {"type": "array", "items": {"type": "string"}},
+        "publisher": {"type": ["string", "null"]},
+        "published_at": {"type": ["string", "null"]},
+        "event_date": {"type": ["string", "null"]},
+        "version": {"type": ["string", "null"]},
+        "language": {"type": ["string", "null"]},
+        "duration": {"type": ["string", "null"]},
+        "date_note": {"type": ["string", "null"]}
+      },
+      "additionalProperties": false
+    },
+    "inspection": {
+      "type": "object",
+      "required": ["method", "full_content_used_ephemerally", "full_content_committed", "confidence", "gaps"],
+      "properties": {
+        "method": {"type": "string"},
+        "full_content_used_ephemerally": {"type": "boolean"},
+        "full_content_committed": {"const": false},
+        "confidence": {"type": "string", "enum": ["direct", "metadata_only", "secondary", "mixed"]},
+        "gaps": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    },
+    "content_map": {
+      "type": "object",
+      "required": ["problem", "thesis", "sections", "concepts", "mechanisms", "tools", "examples", "claims", "evidence", "assumptions", "limitations", "open_questions"],
+      "properties": {
+        "problem": {"type": ["string", "null"]},
+        "thesis": {"type": ["string", "null"]},
+        "sections": {"type": "array", "items": {"type": "string"}},
+        "concepts": {"type": "array", "items": {"type": "string"}},
+        "mechanisms": {"type": "array", "items": {"type": "string"}},
+        "tools": {"type": "array", "items": {"type": "string"}},
+        "examples": {"type": "array", "items": {"type": "string"}},
+        "claims": {"type": "array", "items": {"type": "string"}},
+        "evidence": {"type": "array", "items": {"type": "string"}},
+        "assumptions": {"type": "array", "items": {"type": "string"}},
+        "limitations": {"type": "array", "items": {"type": "string"}},
+        "open_questions": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    },
+    "selection": {
+      "type": "object",
+      "required": ["requested_focus", "coherent_core", "prerequisites", "drop_notes", "connections"],
+      "properties": {
+        "requested_focus": {"type": ["string", "null"]},
+        "coherent_core": {"type": "array", "items": {"type": "string"}},
+        "prerequisites": {"type": "array", "items": {"type": "string"}},
+        "drop_notes": {"type": "array", "items": {"type": "string"}},
+        "connections": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    },
+    "verification_candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["question", "reason", "priority"],
+        "properties": {
+          "question": {"type": "string"},
+          "reason": {"type": "string"},
+          "priority": {"type": "string", "enum": ["high", "medium", "low"]}
+        },
+        "additionalProperties": false
+      }
+    },
+    "source_locators": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["label", "locator"],
+        "properties": {
+          "label": {"type": "string"},
+          "locator": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "created_at": {"type": "string", "format": "date"}
+  },
+  "additionalProperties": false
+}
