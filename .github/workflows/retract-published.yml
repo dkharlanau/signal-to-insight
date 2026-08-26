@@ -1,0 +1,102 @@
+name: Retract published insight
+
+on:
+  workflow_dispatch:
+    inputs:
+      insight_id:
+        description: "Existing insight ID currently published"
+        required: true
+        type: string
+      target_status:
+        description: "Return to review or archive"
+        required: true
+        type: choice
+        options:
+          - review
+          - archived
+      confirmation:
+        description: "Type REVIEW:<insight-id> or ARCHIVE:<insight-id> exactly"
+        required: true
+        type: string
+      note:
+        description: "Human note explaining why public state is changing"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  retract:
+    if: github.actor == github.repository_owner
+    runs-on: ubuntu-latest
+    concurrency:
+      group: publish-reviewed
+      cancel-in-progress: false
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Retract published data transition
+        env:
+          INSIGHT_ID: ${{ inputs.insight_id }}
+          TARGET_STATUS: ${{ inputs.target_status }}
+          CONFIRMATION: ${{ inputs.confirmation }}
+          NOTE: ${{ inputs.note }}
+          CHANGED_BY: ${{ github.actor }}
+        run: |
+          python scripts/retract_published.py \
+            --insight "$INSIGHT_ID" \
+            --target "$TARGET_STATUS" \
+            --confirm "$CONFIRMATION" \
+            --changed-by "$CHANGED_BY" \
+            --note "$NOTE"
+
+      - name: Validate retracted state
+        run: |
+          python scripts/validate.py
+          python scripts/validate_bundles.py
+          python scripts/validate_case_patches.py
+          python scripts/validate_graph.py
+          python scripts/public_projection.py
+          python scripts/pending_case_patches.py
+
+      - name: Rebuild public and review surfaces
+        run: |
+          python scripts/build.py
+          python scripts/build_previews.py
+          python scripts/build_library.py
+          python scripts/build_public_graph.py
+          python scripts/build_sitemap.py
+
+      - name: Verify generated state
+        run: |
+          python scripts/build.py --check
+          python scripts/build_previews.py --check
+          python scripts/build_library.py --check
+          python scripts/build_sitemap.py --check
+          node --check app.js
+          node --check library.js
+
+      - name: Commit retraction atomically
+        env:
+          INSIGHT_ID: ${{ inputs.insight_id }}
+          TARGET_STATUS: ${{ inputs.target_status }}
+        run: |
+          if [ -z "$(git status --porcelain -- data/inbox.json data/insights.json data/knowledge-graph.json explainers previews library knowledge sitemap.xml)" ]; then
+            echo "No retraction changes found."
+            exit 1
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/inbox.json data/insights.json data/knowledge-graph.json explainers previews library knowledge sitemap.xml
+          git commit -m "lifecycle: ${INSIGHT_ID} -> ${TARGET_STATUS}"
+          git push origin HEAD:main
