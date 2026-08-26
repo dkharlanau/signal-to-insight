@@ -6,6 +6,7 @@ on:
     paths:
       - "data/insights.json"
       - "data/sources.json"
+      - "data/knowledge-deltas.json"
       - "scripts/build.py"
       - "scripts/build_previews.py"
       - "styles.css"
