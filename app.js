@@ -15,6 +15,16 @@ if (document.body.classList.contains('generated-page')) {
   retentionStyles.rel = 'stylesheet';
   retentionStyles.href = '../../retention.css';
   document.head.appendChild(retentionStyles);
+
+  const evidenceStyles = document.createElement('link');
+  evidenceStyles.rel = 'stylesheet';
+  evidenceStyles.href = '../../evidence.css';
+  document.head.appendChild(evidenceStyles);
+
+  const evidenceScript = document.createElement('script');
+  evidenceScript.src = '../../evidence.js';
+  evidenceScript.async = true;
+  document.head.appendChild(evidenceScript);
 }
 
 if (document.body.classList.contains('preview-page')) {
