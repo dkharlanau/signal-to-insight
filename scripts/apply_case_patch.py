@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Atomically materialize one researched case into the shared knowledge registries."""
+"""Atomically materialize one researched review case into the shared knowledge registries."""
 
 from __future__ import annotations
 
@@ -56,9 +56,7 @@ def merge_relation(existing: dict, patch: dict) -> None:
         if key == "public":
             continue
         existing[key] = value
-    if "public" in patch:
-        existing["public"] = patch["public"]
-    elif public is not None:
+    if public is not None:
         existing["public"] = public
 
 
@@ -77,22 +75,43 @@ def main() -> int:
     insights = load(INSIGHTS)
     graph = load(GRAPH)
 
-    intake_id = patch["intake_id"]
+    intake_id = patch.get("intake_id")
     intake = next((item for item in inbox.get("items", []) if item.get("id") == intake_id), None)
     if intake is None:
         raise SystemExit(f"intake not found: {intake_id}")
 
-    source = patch["source"]
-    insight = patch["insight"]
+    source = patch.get("source") or {}
+    insight = patch.get("insight") or {}
+
+    # Defense in depth: researched case patches can prepare review artifacts, never publish them.
+    if patch.get("intake_status") != "review" or insight.get("status") != "review":
+        raise SystemExit("case patches are review-only; publication requires a separate reviewed transition")
+    if source.get("canonical_url") != intake.get("source_url"):
+        raise SystemExit("case patch canonical URL differs from intake source_url")
+    if source.get("type") != intake.get("source_type"):
+        raise SystemExit("case patch source type differs from intake source_type")
+    if insight.get("source_id") != source.get("id"):
+        raise SystemExit("insight.source_id must equal source.id")
+    if insight.get("id") not in source.get("derived_records", []):
+        raise SystemExit("source.derived_records must contain the current insight id")
+
+    graph_patch = patch.get("graph") or {}
+    for concept in graph_patch.get("concepts", []):
+        if "public" in concept:
+            raise SystemExit("review case patches may not mutate public concept projection")
+    for relation in graph_patch.get("relations", []):
+        if "public" in relation:
+            raise SystemExit("review case patches may not mutate public relation projection")
+
     upsert(sources.setdefault("sources", []), "id", source)
     upsert(insights.setdefault("insights", []), "id", insight)
 
-    intake["status"] = patch.get("intake_status", insight.get("status", "review"))
+    intake["status"] = "review"
     intake["source_id"] = source["id"]
     intake["insight_id"] = insight["id"]
 
     concept_map = {item["id"]: item for item in graph.setdefault("concepts", [])}
-    for concept_patch in patch.get("graph", {}).get("concepts", []):
+    for concept_patch in graph_patch.get("concepts", []):
         concept_id = concept_patch["id"]
         existing = concept_map.get(concept_id)
         if existing is None:
@@ -102,7 +121,7 @@ def main() -> int:
         merge_concept(existing, concept_patch)
 
     relation_map = {item["id"]: item for item in graph.setdefault("relations", [])}
-    for relation_patch in patch.get("graph", {}).get("relations", []):
+    for relation_patch in graph_patch.get("relations", []):
         relation_id = relation_patch["id"]
         existing = relation_map.get(relation_id)
         if existing is None:
@@ -121,7 +140,7 @@ def main() -> int:
     dump(GRAPH, graph)
     print(
         f"materialized {insight['id']} from {patch_path.relative_to(ROOT)} -> "
-        f"{intake['status']} / {source['id']}"
+        f"review / {source['id']}"
     )
     return 0
 
