@@ -34,8 +34,18 @@ review
 published
 ```
 
+A published insight can later be explicitly retracted:
+
+```text
+published → review
+published → archived
+```
+
+Both transitions require a human note and exact confirmation. Retraction removes the insight from public generated surfaces after the same transaction rebuilds explainers, library, public knowledge and sitemap. Publication history remains in provenance.
+
 Alternative terminal/interruption states:
 
+- `archived` — previously processed material intentionally removed from active/public use while provenance is retained;
 - `blocked` — source cannot currently be processed or verified;
 - `rejected` — not worth converting into an explainer.
 
@@ -76,4 +86,4 @@ Before a new queue item is added:
 
 `queued` through `review` are working states. Only `published` content is intended for the public explainer library.
 
-The agent may prepare a draft autonomously. Publication remains an explicit review decision.
+The agent may prepare a draft autonomously. Publication remains an explicit review decision. The owner workflow requires `PUBLISH:<insight-id>` plus a human review note. Retraction requires `REVIEW:<insight-id>` or `ARCHIVE:<insight-id>` plus a reason.
