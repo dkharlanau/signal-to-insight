@@ -9,6 +9,7 @@
   "insights": [
     {
       "id": "enterprise-agents-production-substrate",
+      "source_id": "src-ai-engineer-enterprise-stack-agents-2026",
       "slug": "why-enterprise-ai-agents-fail-after-the-poc",
       "status": "published",
       "title": "Why enterprise AI agents fail after the POC",
@@ -17,10 +18,7 @@
         "type": "video",
         "title": "Why Your Enterprise Tech Stack Isn't Ready for AI Agents - And What to Build Instead",
         "url": "https://www.youtube.com/watch?v=mav15aW9lLM",
-        "speakers": [
-          "Christopher Lovejoy",
-          "Saul Howard"
-        ],
+        "speakers": ["Christopher Lovejoy", "Saul Howard"],
         "publisher": "AI Engineer",
         "event": "AI Engineer World's Fair 2026",
         "published_at": null,
@@ -69,22 +67,10 @@
         }
       ],
       "patterns": [
-        {
-          "name": "Immutable execution history",
-          "purpose": "Make execution reconstructable."
-        },
-        {
-          "name": "Separated execution and data planes",
-          "purpose": "Reduce unnecessary exposure of protected data while keeping orchestration observable."
-        },
-        {
-          "name": "Executor-independent task model",
-          "purpose": "Allow human and AI execution to share the same workflow contract."
-        },
-        {
-          "name": "Replay as an evaluation primitive",
-          "purpose": "Compare changes against reconstructable historical cases."
-        }
+        {"name": "Immutable execution history", "purpose": "Make execution reconstructable."},
+        {"name": "Separated execution and data planes", "purpose": "Reduce unnecessary exposure of protected data while keeping orchestration observable."},
+        {"name": "Executor-independent task model", "purpose": "Allow human and AI execution to share the same workflow contract."},
+        {"name": "Replay as an evaluation primitive", "purpose": "Compare changes against reconstructable historical cases."}
       ],
       "tool_map": [
         {
@@ -131,9 +117,7 @@
         "Replay is only useful when reconstructed context and evaluation criteria are trustworthy."
       ],
       "action_map": {
-        "use_now": [
-          "Evaluate agent architectures by asking whether consequential work can be reconstructed and explained later."
-        ],
+        "use_now": ["Evaluate agent architectures by asking whether consequential work can be reconstructed and explained later."],
         "try": [
           "Model one real workflow as an executor-independent task with explicit authority and verification.",
           "Experiment with a small policy-as-code rule using Open Policy Agent."
@@ -144,12 +128,8 @@
           "OpenTelemetry tracing concepts",
           "policy-as-code"
         ],
-        "build": [
-          "A minimal execution-ledger prototype for an agent workflow."
-        ],
-        "watch": [
-          "How production agent platforms standardize identity, policy, handoff and replay."
-        ],
+        "build": ["A minimal execution-ledger prototype for an agent workflow."],
+        "watch": ["How production agent platforms standardize identity, policy, handoff and replay."],
         "ignore_for_now": []
       },
       "connections": [
@@ -191,14 +171,7 @@
           "accessed_at": "2026-08-26"
         }
       ],
-      "tags": [
-        "ai-agents",
-        "architecture",
-        "durable-execution",
-        "governance",
-        "evals",
-        "tools"
-      ],
+      "tags": ["ai-agents", "architecture", "durable-execution", "governance", "evals", "tools"],
       "provenance": {
         "source_linked": true,
         "source_dates_recorded": true,
