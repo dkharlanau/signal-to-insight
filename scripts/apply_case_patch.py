@@ -31,6 +31,37 @@ def upsert(items: list[dict], key: str, value: dict) -> None:
     items.append(value)
 
 
+def merge_concept(existing: dict, patch: dict) -> None:
+    """Merge a concept patch without deleting evidence/public projection owned by other cases."""
+    patch_ids = list(patch.get("insight_ids", []))
+    existing_ids = existing.setdefault("insight_ids", [])
+    for insight_id in patch_ids:
+        if insight_id not in existing_ids:
+            existing_ids.append(insight_id)
+
+    # A reference-only patch intentionally contains only id + insight_ids.
+    if set(patch) <= {"id", "insight_ids"}:
+        return
+
+    for key, value in patch.items():
+        if key in {"id", "insight_ids"}:
+            continue
+        existing[key] = value
+
+
+def merge_relation(existing: dict, patch: dict) -> None:
+    """Allow a researched case to revise its relation while preserving an unrelated public override."""
+    public = existing.get("public")
+    for key, value in patch.items():
+        if key == "public":
+            continue
+        existing[key] = value
+    if "public" in patch:
+        existing["public"] = patch["public"]
+    elif public is not None:
+        existing["public"] = public
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("patch", help="Path to a case-patch JSON file")
@@ -68,15 +99,17 @@ def main() -> int:
             graph["concepts"].append(concept_patch)
             concept_map[concept_id] = concept_patch
             continue
-        for insight_id in concept_patch.get("insight_ids", []):
-            if insight_id not in existing.setdefault("insight_ids", []):
-                existing["insight_ids"].append(insight_id)
+        merge_concept(existing, concept_patch)
 
     relation_map = {item["id"]: item for item in graph.setdefault("relations", [])}
-    for relation in patch.get("graph", {}).get("relations", []):
-        if relation["id"] not in relation_map:
-            graph["relations"].append(relation)
-            relation_map[relation["id"]] = relation
+    for relation_patch in patch.get("graph", {}).get("relations", []):
+        relation_id = relation_patch["id"]
+        existing = relation_map.get(relation_id)
+        if existing is None:
+            graph["relations"].append(relation_patch)
+            relation_map[relation_id] = relation_patch
+        else:
+            merge_relation(existing, relation_patch)
 
     if patch.get("graph_version"):
         graph["graph_version"] = patch["graph_version"]
