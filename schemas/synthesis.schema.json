@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dkharlanau.github.io/signal-to-insight/schemas/synthesis.schema.json",
+  "title": "Signal to Insight multi-source synthesis records",
+  "type": "object",
+  "required": ["version", "records"],
+  "properties": {
+    "version": {"type": "string"},
+    "records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "slug", "status", "evidence_mode", "question", "title", "one_liner", "thesis", "source_insight_ids", "consensus", "layers", "reviewed_disagreements", "unresolved_gaps", "visual_plan", "provenance"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "slug": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+          "status": {"enum": ["review", "published", "archived"]},
+          "evidence_mode": {"enum": ["review_allowed", "published_only"]},
+          "question": {"type": "string", "minLength": 1},
+          "title": {"type": "string", "minLength": 1},
+          "one_liner": {"type": "string", "minLength": 1},
+          "thesis": {"type": "string", "minLength": 1},
+          "source_insight_ids": {"type": "array", "minItems": 2, "uniqueItems": true, "items": {"type": "string"}},
+          "consensus": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/claim_group"}},
+          "layers": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "object",
+              "required": ["order", "name", "role", "source_insight_id", "does", "does_not", "claim_refs"],
+              "properties": {
+                "order": {"type": "integer", "minimum": 1},
+                "name": {"type": "string", "minLength": 1},
+                "role": {"type": "string", "minLength": 1},
+                "source_insight_id": {"type": "string", "minLength": 1},
+                "does": {"type": "string", "minLength": 1},
+                "does_not": {"type": "string", "minLength": 1},
+                "claim_refs": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+              },
+              "additionalProperties": false
+            }
+          },
+          "reviewed_disagreements": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["review_id", "why_it_matters"],
+              "properties": {
+                "review_id": {"type": "string"},
+                "why_it_matters": {"type": "string", "minLength": 1}
+              },
+              "additionalProperties": false
+            }
+          },
+          "unresolved_gaps": {"type": "array", "items": {"$ref": "#/$defs/claim_group"}},
+          "visual_plan": {
+            "type": "object",
+            "required": ["type", "title", "caption"],
+            "properties": {
+              "type": {"const": "layers"},
+              "title": {"type": "string", "minLength": 1},
+              "caption": {"type": "string", "minLength": 1}
+            },
+            "additionalProperties": false
+          },
+          "provenance": {
+            "type": "object",
+            "required": ["created_at", "reviewed_at", "reviewed_by", "review_note", "source_claims_preserved", "project_synthesis_explicit"],
+            "properties": {
+              "created_at": {"type": "string", "format": "date"},
+              "reviewed_at": {"type": ["string", "null"], "format": "date"},
+              "reviewed_by": {"type": ["string", "null"]},
+              "review_note": {"type": ["string", "null"]},
+              "source_claims_preserved": {"const": true},
+              "project_synthesis_explicit": {"const": true}
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "$defs": {
+    "claim_group": {
+      "type": "object",
+      "required": ["id", "statement", "claim_refs"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "statement": {"type": "string", "minLength": 1},
+        "claim_refs": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
