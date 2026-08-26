@@ -1,20 +1,35 @@
-name: Verify insight library
+name: Sync insight library
 
 on:
   push:
     branches: [main]
+    paths:
+      - "data/insights.json"
+      - "data/sources.json"
+      - "scripts/build_library.py"
+      - "library/**"
+      - ".github/workflows/library.yml"
   pull_request:
     branches: [main]
+    paths:
+      - "data/insights.json"
+      - "data/sources.json"
+      - "scripts/build_library.py"
+      - "library/**"
+      - ".github/workflows/library.yml"
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   library:
+    if: github.actor != 'github-actions[bot]' || github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || 'main' }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -24,10 +39,24 @@ jobs:
       - name: Rebuild library
         run: python scripts/build_library.py
 
-      - name: Generated library must be committed
+      - name: Verify generated library on pull requests
+        if: github.event_name == 'pull_request'
         run: |
           if [ -n "$(git status --porcelain -- library)" ]; then
             git status --short -- library
             echo "Generated library files are missing or stale."
             exit 1
           fi
+
+      - name: Commit synced library on main
+        if: github.event_name == 'push'
+        run: |
+          if [ -z "$(git status --porcelain -- library)" ]; then
+            echo "Library already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A library
+          git commit -m "build: sync insight library"
+          git push origin HEAD:main
