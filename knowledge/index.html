@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Knowledge Graph — Signal to Insight</title>
+  <meta name="description" content="A cumulative concept graph showing how published Signal to Insight explainers connect and deepen one another.">
+  <link rel="canonical" href="https://dkharlanau.github.io/signal-to-insight/knowledge/">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .kg-page { background:#f3f0e9; color:#111; }
+    .kg-wrap { width:min(1180px,calc(100% - 40px)); margin-inline:auto; }
+    .kg-hero { padding:96px 0 44px; border-bottom:1px solid rgba(0,0,0,.18); }
+    .kg-hero h1 { font-size:clamp(3.4rem,9vw,8.4rem); line-height:.82; letter-spacing:-.07em; margin:.14em 0 .24em; max-width:9ch; }
+    .kg-hero h1 em { font-family:Georgia,serif; font-weight:400; }
+    .kg-hero>p:last-child { max-width:720px; font-size:1.12rem; line-height:1.6; }
+    .kg-stats { display:flex; flex-wrap:wrap; gap:10px; margin-top:24px; }
+    .kg-stats span { border:1px solid #111; padding:9px 12px; font:700 .72rem/1 monospace; text-transform:uppercase; letter-spacing:.06em; }
+    .graph-panel { margin:44px auto 0; background:#111; color:#f7f4ee; border-radius:28px; padding:18px; overflow:hidden; }
+    .graph-panel header { display:flex; justify-content:space-between; gap:16px; align-items:end; padding:12px 14px 4px; }
+    .graph-panel header p { max-width:620px; margin:0; color:#b9b7b1; }
+    .graph-panel svg { width:100%; height:auto; min-height:600px; display:block; }
+    .edge line { stroke:#74716a; stroke-width:1.5; } .edge text { fill:#aaa69d; font:600 12px/1 monospace; }
+    .node rect { fill:#f3f0e9; stroke:#f3f0e9; transition:.15s ease; }
+    .node-title { fill:#111; font:700 14px/1.1 Arial,sans-serif; } .node-domain,.node-count { fill:#66635d; font:600 10px/1 monospace; }
+    .node-link:hover rect,.node-link:focus rect { fill:#fff; stroke:#fff; transform:scale(1.03); transform-box:fill-box; transform-origin:center; }
+    .kg-section { padding:70px 0; } .kg-section-head { display:flex; justify-content:space-between; gap:30px; align-items:end; margin-bottom:26px; }
+    .kg-section-head h2 { font-size:clamp(2rem,5vw,4rem); letter-spacing:-.05em; margin:0; } .kg-section-head p { max-width:560px; margin:0; }
+    .concept-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+    .concept-card { border:1px solid #111; padding:24px; min-height:260px; display:flex; flex-direction:column; }
+    .concept-domain { font:700 .7rem/1 monospace; text-transform:uppercase; letter-spacing:.08em; } .concept-card h2 { font-size:1.8rem; margin:.45em 0 .35em; }
+    .concept-card>p:not(.concept-domain) { line-height:1.55; max-width:58ch; }
+    .concept-tags { display:flex; flex-wrap:wrap; gap:6px; margin-top:auto; padding-top:20px; } .concept-tags span { background:#111; color:#f7f4ee; padding:6px 8px; font:600 .68rem/1 monospace; }
+    .concept-evidence { border-top:1px solid rgba(0,0,0,.18); margin-top:18px; padding-top:14px; display:grid; gap:6px; } .concept-evidence strong { font:700 .7rem/1 monospace; text-transform:uppercase; }
+    .concept-evidence a { color:inherit; text-decoration-thickness:1px; text-underline-offset:3px; }
+    .relation-table-wrap { overflow:auto; border:1px solid #111; } table { border-collapse:collapse; width:100%; min-width:820px; } th,td { padding:14px; border-bottom:1px solid rgba(0,0,0,.18); text-align:left; vertical-align:top; } th { font:700 .7rem/1 monospace; text-transform:uppercase; } td:nth-child(2) { font:700 .75rem/1.3 monospace; white-space:nowrap; } td a { color:inherit; }
+    .kg-note { margin-top:18px; max-width:760px; font-size:.88rem; color:#5d5a54; }
+    @media(max-width:760px) { .concept-grid { grid-template-columns:1fr; } .graph-panel { padding:8px; border-radius:18px; } .graph-panel svg { min-height:440px; } .edge text { display:none; } .node-domain,.node-count { display:none; } .node rect { height:70px; y:-35px; } .kg-section-head { display:block; } .kg-section-head p { margin-top:12px; } }
+  </style>
+</head>
+<body class="kg-page">
+  <header class="site-header kg-wrap">
+    <a class="brand" href="../"><span class="brand-mark">S→I</span><span>Signal to Insight</span></a>
+    <nav aria-label="Knowledge navigation"><a href="../library/">Library</a><a href="../data/knowledge-graph.json">Graph data</a><a href="../data/insights.json">Insights</a></nav>
+  </header>
+  <main>
+    <section class="kg-hero kg-wrap">
+      <p class="eyebrow">CUMULATIVE KNOWLEDGE / GRAPH 0.1.0</p>
+      <h1>Ideas that <em>connect.</em></h1>
+      <p>Each published explainer should change what the system already knows. This graph records reusable concepts and explicit relationships instead of treating every source as an isolated page.</p>
+      <div class="kg-stats"><span>8 public concepts</span><span>7 public relations</span><span>6 review-only concepts withheld</span></div>
+    </section>
+
+    <section class="graph-panel kg-wrap" aria-labelledby="graph-title">
+      <header><div><p class="eyebrow">PUBLIC GRAPH</p><h2 id="graph-title">Current mental model</h2></div><p>Only concepts backed by at least one published insight are rendered here. Review-only knowledge remains in the structured graph but is withheld from this public view.</p></header>
+      <svg viewBox="0 0 1200 760" role="img" aria-label="Concept relationship graph">
+        <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#74716a"/></marker></defs>
+        <g class="edge"><line x1="600.0" y1="330.0" x2="600.0" y2="160.0" marker-end="url(#arrow)"/><text x="600.0" y="238.0" text-anchor="middle">depends on</text></g><g class="edge"><line x1="503.0" y1="387.1" x2="277.8" y2="433.0" marker-end="url(#arrow)"/><text x="390.4" y="403.0" text-anchor="middle">depends on</text></g><g class="edge"><line x1="697.0" y1="387.1" x2="922.2" y2="433.0" marker-end="url(#arrow)"/><text x="809.6" y="403.0" text-anchor="middle">depends on</text></g><g class="edge"><line x1="540.4" y1="419.7" x2="473.1" y2="583.6" marker-end="url(#arrow)"/><text x="506.7" y="494.6" text-anchor="middle">depends on</text></g><g class="edge"><line x1="659.6" y1="419.7" x2="726.9" y2="583.6" marker-end="url(#arrow)"/><text x="693.3" y="494.6" text-anchor="middle">depends on</text></g><g class="edge"><line x1="506.2" y1="124.5" x2="357.6" y2="197.2" marker-end="url(#arrow)"/><text x="431.9" y="153.8" text-anchor="middle">enables</text></g><g class="edge"><line x1="848.6" y1="234.0" x2="687.6" y2="357.6" marker-end="url(#arrow)"/><text x="768.1" y="288.8" text-anchor="middle">related to</text></g>
+        <a class="node-link" href="../explainers/why-enterprise-ai-agents-fail-after-the-poc/" aria-label="Controlled execution — open supporting explainer">
+          <g class="node" transform="translate(600.0 380.0)">
+            <rect x="-112" y="-49" width="224" height="98" rx="18"/>
+            <text class="node-title" x="0" y="-7" text-anchor="middle">Controlled execution</text>
+            <text class="node-domain" x="0" y="18" text-anchor="middle">agent architecture</text>
+            <text class="node-count" x="0" y="36" text-anchor="middle">1 public insight</text>
+          </g>
+        </a><a class="node-link" href="../explainers/why-enterprise-ai-agents-fail-after-the-poc/" aria-label="Execution history — open supporting explainer">
+          <g class="node" transform="translate(600.0 110.0)">
+            <rect x="-112" y="-49" width="224" height="98" rx="18"/>
+            <text class="node-title" x="0" y="-7" text-anchor="middle">Execution history</text>
+            <text class="node-domain" x="0" y="18" text-anchor="middle">execution architecture</text>
+            <text class="node-count" x="0" y="36" text-anchor="middle">1 public insight</text>
+          </g>
+        </a><a class="node-link" href="../explainers/why-enterprise-ai-agents-fail-after-the-poc/" aria-label="Protected data separation — open supporting explainer">
+          <g class="node" transform="translate(180.8 440.1)">
+            <rect x="-112" y="-49" width="224" height="98" rx="18"/>
+            <text class="node-title" x="0" y="-7" text-anchor="middle">Protected data separation</text>
+            <text class="node-domain" x="0" y="18" text-anchor="middle">security architecture</text>
+            <text class="node-count" x="0" y="36" text-anchor="middle">1 public insight</text>
+          </g>
+        </a><a class="node-link" href="../explainers/why-enterprise-ai-agents-fail-after-the-poc/" aria-label="Human-agent task equivalence — open supporting explainer">
+          <g class="node" transform="translate(1019.2 440.1)">
+            <rect x="-112" y="-49" width="224" height="98" rx="18"/>
+            <text class="node-title" x="0" y="-7" text-anchor="middle">Human-agent task equiv…</text>
+            <text class="node-domain" x="0" y="18" text-anchor="middle">work orchestration</text>
+            <text class="node-count" x="0" y="36" text-anchor="middle">1 public insight</text>
+          </g>
+        </a><a class="node-link" href="../explainers/why-enterprise-ai-agents-fail-after-the-poc/" aria-label="Replayable evaluation — open supporting explainer">
+          <g class="node" transform="translate(263.8 211.7)">
+            <rect x="-112" y="-49" width="224" height="98" rx="18"/>
+            <text class="node-title" x="0" y="-7" text-anchor="middle">Replayable evaluation</text>
+            <text class="node-domain" x="0" y="18" text-anchor="middle">agent evaluation</text>
+            <text class="node-count" x="0" y="36" text-anchor="middle">1 public insight</text>
+          </g>
+        </a><a class="node-link" href="../explainers/why-enterprise-ai-agents-fail-after-the-poc/" aria-label="Policy as code — open supporting explainer">
+          <g class="node" transform="translate(413.4 623.3)">
+            <rect x="-112" y="-49" width="224" height="98" rx="18"/>
+            <text class="node-title" x="0" y="-7" text-anchor="middle">Policy as code</text>
+            <text class="node-domain" x="0" y="18" text-anchor="middle">governance</text>
+            <text class="node-count" x="0" y="36" text-anchor="middle">1 public insight</text>
+          </g>
+        </a><a class="node-link" href="../explainers/why-enterprise-ai-agents-fail-after-the-poc/" aria-label="Observability — open supporting explainer">
+          <g class="node" transform="translate(786.6 623.3)">
+            <rect x="-112" y="-49" width="224" height="98" rx="18"/>
+            <text class="node-title" x="0" y="-7" text-anchor="middle">Observability</text>
+            <text class="node-domain" x="0" y="18" text-anchor="middle">operations</text>
+            <text class="node-count" x="0" y="36" text-anchor="middle">1 public insight</text>
+          </g>
+        </a><a class="node-link" href="../explainers/why-enterprise-ai-agents-fail-after-the-poc/" aria-label="Durable execution — open supporting explainer">
+          <g class="node" transform="translate(936.2 211.7)">
+            <rect x="-112" y="-49" width="224" height="98" rx="18"/>
+            <text class="node-title" x="0" y="-7" text-anchor="middle">Durable execution</text>
+            <text class="node-domain" x="0" y="18" text-anchor="middle">workflow systems</text>
+            <text class="node-count" x="0" y="36" text-anchor="middle">1 public insight</text>
+          </g>
+        </a>
+      </svg>
+    </section>
+
+    <section class="kg-section kg-wrap">
+      <div class="kg-section-head"><h2>Concept registry</h2><p>The registry is the durable memory layer: stable concept IDs, short definitions, tags and the published explainers that currently support each concept.</p></div>
+      <div class="concept-grid"><article class="concept-card" id="concept-controlled-execution">
+          <p class="concept-domain">agent architecture</p>
+          <h2>Controlled execution</h2>
+          <p>A production work substrate that makes consequential execution authorized, observable, interruptible, reconstructable and testable.</p>
+          <div class="concept-tags"><span>agents</span><span>governance</span><span>execution</span></div>
+          <div class="concept-evidence"><strong>Public evidence</strong><a href="../explainers/why-enterprise-ai-agents-fail-after-the-poc/">Why enterprise AI agents fail after the POC</a></div>
+        </article><article class="concept-card" id="concept-durable-execution">
+          <p class="concept-domain">workflow systems</p>
+          <h2>Durable execution</h2>
+          <p>Execution whose workflow progress survives process failure, waits and restarts because durable state exists outside any one Worker process.</p>
+          <div class="concept-tags"><span>workflow</span><span>recovery</span><span>state</span></div>
+          <div class="concept-evidence"><strong>Public evidence</strong><a href="../explainers/why-enterprise-ai-agents-fail-after-the-poc/">Why enterprise AI agents fail after the POC</a></div>
+        </article><article class="concept-card" id="concept-execution-history">
+          <p class="concept-domain">execution architecture</p>
+          <h2>Execution history</h2>
+          <p>A durable record of what happened during work so state, decisions and actions can be reconstructed later.</p>
+          <div class="concept-tags"><span>history</span><span>audit</span><span>replay</span></div>
+          <div class="concept-evidence"><strong>Public evidence</strong><a href="../explainers/why-enterprise-ai-agents-fail-after-the-poc/">Why enterprise AI agents fail after the POC</a></div>
+        </article><article class="concept-card" id="concept-human-agent-task-equivalence">
+          <p class="concept-domain">work orchestration</p>
+          <h2>Human-agent task equivalence</h2>
+          <p>Modeling work so the executor can move between an AI agent and a person without creating a separate exception process.</p>
+          <div class="concept-tags"><span>agents</span><span>human-in-the-loop</span><span>workflow</span></div>
+          <div class="concept-evidence"><strong>Public evidence</strong><a href="../explainers/why-enterprise-ai-agents-fail-after-the-poc/">Why enterprise AI agents fail after the POC</a></div>
+        </article><article class="concept-card" id="concept-observability">
+          <p class="concept-domain">operations</p>
+          <h2>Observability</h2>
+          <p>Structured traces, metrics and logs that make distributed execution inspectable without becoming the source of business truth itself.</p>
+          <div class="concept-tags"><span>telemetry</span><span>operations</span><span>execution</span></div>
+          <div class="concept-evidence"><strong>Public evidence</strong><a href="../explainers/why-enterprise-ai-agents-fail-after-the-poc/">Why enterprise AI agents fail after the POC</a></div>
+        </article><article class="concept-card" id="concept-policy-as-code">
+          <p class="concept-domain">governance</p>
+          <h2>Policy as code</h2>
+          <p>Representing authorization and policy decisions as explicit, reviewable rules rather than scattered application logic.</p>
+          <div class="concept-tags"><span>policy</span><span>authorization</span><span>governance</span></div>
+          <div class="concept-evidence"><strong>Public evidence</strong><a href="../explainers/why-enterprise-ai-agents-fail-after-the-poc/">Why enterprise AI agents fail after the POC</a></div>
+        </article><article class="concept-card" id="concept-protected-data-separation">
+          <p class="concept-domain">security architecture</p>
+          <h2>Protected data separation</h2>
+          <p>Separating orchestration visibility from broad access to protected business data and secrets.</p>
+          <div class="concept-tags"><span>security</span><span>data</span><span>governance</span></div>
+          <div class="concept-evidence"><strong>Public evidence</strong><a href="../explainers/why-enterprise-ai-agents-fail-after-the-poc/">Why enterprise AI agents fail after the POC</a></div>
+        </article><article class="concept-card" id="concept-replayable-evaluation">
+          <p class="concept-domain">agent evaluation</p>
+          <h2>Replayable evaluation</h2>
+          <p>Using reconstructed historical execution state to evaluate models, prompts, policies and tools against past work.</p>
+          <div class="concept-tags"><span>evals</span><span>replay</span><span>agents</span></div>
+          <div class="concept-evidence"><strong>Public evidence</strong><a href="../explainers/why-enterprise-ai-agents-fail-after-the-poc/">Why enterprise AI agents fail after the POC</a></div>
+        </article></div>
+    </section>
+
+    <section class="kg-section kg-wrap">
+      <div class="kg-section-head"><h2>Why the edges exist</h2><p>Relations are typed and evidence-linked. The graph validator rejects dangling concepts, dangling insights, duplicate semantic edges and relations without shared evidence.</p></div>
+      <div class="relation-table-wrap"><table><thead><tr><th>From</th><th>Relation</th><th>To</th><th>Rationale</th></tr></thead><tbody><tr>
+          <td><a href="#concept-controlled-execution">Controlled execution</a></td>
+          <td>depends on</td>
+          <td><a href="#concept-execution-history">Execution history</a></td>
+          <td>Consequential work cannot be reconstructed or evaluated later without a durable history of execution.</td>
+        </tr><tr>
+          <td><a href="#concept-controlled-execution">Controlled execution</a></td>
+          <td>depends on</td>
+          <td><a href="#concept-protected-data-separation">Protected data separation</a></td>
+          <td>Governed orchestration should not require broad access to protected data simply to observe or control work.</td>
+        </tr><tr>
+          <td><a href="#concept-controlled-execution">Controlled execution</a></td>
+          <td>depends on</td>
+          <td><a href="#concept-human-agent-task-equivalence">Human-agent task equivalence</a></td>
+          <td>Production work needs a stable task model when execution moves between an agent and a human reviewer.</td>
+        </tr><tr>
+          <td><a href="#concept-controlled-execution">Controlled execution</a></td>
+          <td>depends on</td>
+          <td><a href="#concept-policy-as-code">Policy as code</a></td>
+          <td>Explicit policy decisions make authorization boundaries reviewable and testable instead of implicit in application code.</td>
+        </tr><tr>
+          <td><a href="#concept-controlled-execution">Controlled execution</a></td>
+          <td>depends on</td>
+          <td><a href="#concept-observability">Observability</a></td>
+          <td>Operators need structured telemetry to inspect execution health even when business evidence lives in a separate durable record.</td>
+        </tr><tr>
+          <td><a href="#concept-execution-history">Execution history</a></td>
+          <td>enables</td>
+          <td><a href="#concept-replayable-evaluation">Replayable evaluation</a></td>
+          <td>Historical execution state becomes reusable evaluation material only when enough context can be reconstructed reliably.</td>
+        </tr><tr>
+          <td><a href="#concept-durable-execution">Durable execution</a></td>
+          <td>related to</td>
+          <td><a href="#concept-controlled-execution">Controlled execution</a></td>
+          <td>Durability solves continuity of execution while controlled execution adds governance, authority, evidence and intervention around that work.</td>
+        </tr></tbody></table></div>
+      <p class="kg-note">The complete machine-readable graph also contains concepts supported only by material still in review. Those nodes become public automatically when at least one linked insight is published.</p>
+    </section>
+  </main>
+  <footer class="site-footer kg-wrap"><span>Signal to Insight</span><span>Cumulative concept memory</span><span>8 public / 6 withheld</span></footer>
+</body>
+</html>
