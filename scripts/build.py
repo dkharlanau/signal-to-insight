@@ -13,6 +13,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 INSIGHTS = ROOT / "data" / "insights.json"
 SOURCES = ROOT / "data" / "sources.json"
+KNOWLEDGE_DELTAS = ROOT / "data" / "knowledge-deltas.json"
 OUTPUT = ROOT / "explainers"
 SITE_BASE = "https://dkharlanau.github.io/signal-to-insight"
 
@@ -23,6 +24,13 @@ ACTION_LABELS = {
     "build": "Build",
     "watch": "Watch",
     "ignore_for_now": "Ignore for now",
+}
+
+DELTA_LABELS = {
+    "new": "New",
+    "reinforces": "Reinforces",
+    "refines": "Refines",
+    "contradicts": "Contradicts",
 }
 
 LIVING_SOURCE_TYPES = {"documentation", "repository", "tool", "product", "system"}
@@ -103,6 +111,66 @@ def render_dominant_visual(insight: dict) -> str:
     return f'<div class="{css_class}" aria-label="{e(dominant["title"])}">{node_markup}</div>'
 
 
+def delta_record(insight_id: str) -> dict | None:
+    if not KNOWLEDGE_DELTAS.exists():
+        return None
+    data = load(KNOWLEDGE_DELTAS)
+    return next((item for item in data.get("records", []) if item.get("insight_id") == insight_id), None)
+
+
+def render_delta_evidence(evidence_ids: list[str], current_status: str) -> str:
+    if not evidence_ids:
+        return '<span class="delta-baseline">No prior project evidence — baseline/new knowledge.</span>'
+
+    insight_index = {item["id"]: item for item in load(INSIGHTS).get("insights", [])}
+    parts: list[str] = []
+    for evidence_id in evidence_ids:
+        prior = insight_index.get(evidence_id)
+        if prior is None:
+            continue
+        if prior.get("status") == "published":
+            parts.append(f'<a href="../../explainers/{e(prior["slug"])}/">{e(prior["title"])}</a>')
+        elif current_status != "published" and prior.get("status") == "review":
+            parts.append(f'<a href="../../previews/{e(prior["slug"])}/">{e(prior["title"])}</a>')
+        else:
+            parts.append(e(prior["title"]))
+    return ", ".join(parts) or '<span class="delta-baseline">Prior evidence is not publicly linked.</span>'
+
+
+def render_knowledge_delta(insight: dict) -> str:
+    record = delta_record(insight["id"])
+    if record is None:
+        return ""
+
+    cards = "".join(
+        f'''<article class="concept-card delta-card">
+          <span>{e(DELTA_LABELS.get(item.get("relationship"), item.get("relationship")))}</span>
+          <h3>{e(item.get("label"))}</h3>
+          <p><strong>Source says:</strong> {e(item.get("source_basis"))}</p>
+          <p><strong>Previously:</strong> {e(item.get("prior_basis"))}</p>
+          <p><strong>Project interpretation:</strong> {e(item.get("interpretation"))}</p>
+          <small>Prior evidence: {render_delta_evidence(item.get("evidence_insights", []), insight.get("status", "review"))}</small>
+        </article>'''
+        for item in record.get("items", [])
+    )
+    suppressed = record.get("suppressed_prior_matches", [])
+    suppressed_note = ""
+    if suppressed:
+        suppressed_note = (
+            '<p class="section-note"><strong>Noise rejected:</strong> prior concepts retrieved but deliberately classified as not relevant: '
+            + e(", ".join(suppressed))
+            + ".</p>"
+        )
+
+    return f'''<section id="delta" class="detail-section wrap knowledge-delta-section">
+      <p class="kicker">KNOWLEDGE DELTA</p>
+      <h2>What this source changes in the existing model.</h2>
+      <p class="big-statement">{e(record.get("summary"))}</p>
+      <div class="concept-grid">{cards}</div>
+      {suppressed_note}
+    </section>'''
+
+
 def render_page(insight: dict, source: dict) -> str:
     date_label, date_value = source_date(source)
     creators = ", ".join(source.get("creators", [])) or "Unknown creator"
@@ -153,6 +221,7 @@ def render_page(insight: dict, source: dict) -> str:
     )
 
     dominant_visual = render_dominant_visual(insight)
+    knowledge_delta = render_knowledge_delta(insight)
     core_topics = "".join(f"<li>{e(topic)}</li>" for topic in insight.get("whole_source_map", {}).get("core_topics", []))
 
     return f'''<!doctype html>
@@ -174,7 +243,7 @@ def render_page(insight: dict, source: dict) -> str:
   <header class="site-header wrap">
     <a class="brand" href="../../"><span class="brand-mark">S→I</span><span>Signal to Insight</span></a>
     <nav aria-label="Explainer navigation">
-      <a href="#model">Model</a><a href="#concepts">Concepts</a><a href="#tools">Tools</a><a href="#actions">Actions</a><a href="#sources">Sources</a>
+      <a href="#delta">Delta</a><a href="#model">Model</a><a href="#concepts">Concepts</a><a href="#tools">Tools</a><a href="#actions">Actions</a><a href="#sources">Sources</a>
     </nav>
   </header>
 
@@ -199,6 +268,8 @@ def render_page(insight: dict, source: dict) -> str:
       <p class="kicker">WHY THIS MATTERS</p>
       <p class="big-statement">{e(insight['why_this_matters'])}</p>
     </section>
+
+    {knowledge_delta}
 
     <section id="model" class="detail-section wrap">
       <p class="kicker">MENTAL MODEL</p>
