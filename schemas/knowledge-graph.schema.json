@@ -22,7 +22,17 @@
           "coverage": {"enum": ["introduced", "explained", "applied"]},
           "insight_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
           "aliases": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
-          "tags": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}}
+          "tags": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+          "public": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["summary", "coverage", "evidence_insights"],
+            "properties": {
+              "summary": {"type": "string", "minLength": 10},
+              "coverage": {"enum": ["introduced", "explained", "applied"]},
+              "evidence_insights": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}}
+            }
+          }
         }
       }
     },
@@ -38,7 +48,16 @@
           "to": {"type": "string"},
           "type": {"enum": ["depends_on", "enables", "realized_by", "refines", "related_to"]},
           "rationale": {"type": "string", "minLength": 10},
-          "evidence_insights": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}}
+          "evidence_insights": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+          "public": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["rationale", "evidence_insights"],
+            "properties": {
+              "rationale": {"type": "string", "minLength": 10},
+              "evidence_insights": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}}
+            }
+          }
         }
       }
     }
