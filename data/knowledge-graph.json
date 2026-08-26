@@ -1,5 +1,5 @@
 {
-  "graph_version": "0.2.0",
+  "graph_version": "0.2.1",
   "updated_at": "2026-08-26",
   "concepts": [
     {
@@ -8,9 +8,25 @@
       "summary": "A production work substrate that makes consequential execution authorized, observable, interruptible, reconstructable and testable.",
       "domain": "agent architecture",
       "coverage": "explained",
-      "insight_ids": ["enterprise-agents-production-substrate", "open-policy-agent-decision-enforcement-model"],
-      "aliases": ["production execution substrate"],
-      "tags": ["agents", "governance", "execution"]
+      "insight_ids": [
+        "enterprise-agents-production-substrate",
+        "open-policy-agent-decision-enforcement-model"
+      ],
+      "aliases": [
+        "production execution substrate"
+      ],
+      "tags": [
+        "agents",
+        "governance",
+        "execution"
+      ],
+      "public": {
+        "summary": "A production work substrate that makes consequential execution authorized, observable, interruptible, reconstructable and testable.",
+        "coverage": "explained",
+        "evidence_insights": [
+          "enterprise-agents-production-substrate"
+        ]
+      }
     },
     {
       "id": "execution-history",
@@ -18,9 +34,26 @@
       "summary": "A durable record of what happened during work so state, decisions and actions can be reconstructed later.",
       "domain": "execution architecture",
       "coverage": "explained",
-      "insight_ids": ["enterprise-agents-production-substrate", "temporal-durable-execution-mental-model"],
-      "aliases": ["append-only execution history", "execution ledger"],
-      "tags": ["history", "audit", "replay"]
+      "insight_ids": [
+        "enterprise-agents-production-substrate",
+        "temporal-durable-execution-mental-model"
+      ],
+      "aliases": [
+        "append-only execution history",
+        "execution ledger"
+      ],
+      "tags": [
+        "history",
+        "audit",
+        "replay"
+      ],
+      "public": {
+        "summary": "A durable record of what happened during work so state, decisions and actions can be reconstructed later.",
+        "coverage": "explained",
+        "evidence_insights": [
+          "enterprise-agents-production-substrate"
+        ]
+      }
     },
     {
       "id": "protected-data-separation",
@@ -28,9 +61,17 @@
       "summary": "Separating orchestration visibility from broad access to protected business data and secrets.",
       "domain": "security architecture",
       "coverage": "introduced",
-      "insight_ids": ["enterprise-agents-production-substrate"],
-      "aliases": ["data execution plane separation"],
-      "tags": ["security", "data", "governance"]
+      "insight_ids": [
+        "enterprise-agents-production-substrate"
+      ],
+      "aliases": [
+        "data execution plane separation"
+      ],
+      "tags": [
+        "security",
+        "data",
+        "governance"
+      ]
     },
     {
       "id": "human-agent-task-equivalence",
@@ -38,9 +79,17 @@
       "summary": "Modeling work so the executor can move between an AI agent and a person without creating a separate exception process.",
       "domain": "work orchestration",
       "coverage": "explained",
-      "insight_ids": ["enterprise-agents-production-substrate"],
-      "aliases": ["executor-independent task"],
-      "tags": ["agents", "human-in-the-loop", "workflow"]
+      "insight_ids": [
+        "enterprise-agents-production-substrate"
+      ],
+      "aliases": [
+        "executor-independent task"
+      ],
+      "tags": [
+        "agents",
+        "human-in-the-loop",
+        "workflow"
+      ]
     },
     {
       "id": "replayable-evaluation",
@@ -48,9 +97,17 @@
       "summary": "Using reconstructed historical execution state to evaluate models, prompts, policies and tools against past work.",
       "domain": "agent evaluation",
       "coverage": "explained",
-      "insight_ids": ["enterprise-agents-production-substrate"],
-      "aliases": ["historical replay evaluation"],
-      "tags": ["evals", "replay", "agents"]
+      "insight_ids": [
+        "enterprise-agents-production-substrate"
+      ],
+      "aliases": [
+        "historical replay evaluation"
+      ],
+      "tags": [
+        "evals",
+        "replay",
+        "agents"
+      ]
     },
     {
       "id": "policy-as-code",
@@ -58,9 +115,23 @@
       "summary": "Representing authorization and policy decisions as explicit, reviewable rules rather than scattered application logic.",
       "domain": "governance",
       "coverage": "introduced",
-      "insight_ids": ["enterprise-agents-production-substrate", "open-policy-agent-decision-enforcement-model"],
+      "insight_ids": [
+        "enterprise-agents-production-substrate",
+        "open-policy-agent-decision-enforcement-model"
+      ],
       "aliases": [],
-      "tags": ["policy", "authorization", "governance"]
+      "tags": [
+        "policy",
+        "authorization",
+        "governance"
+      ],
+      "public": {
+        "summary": "Representing authorization and policy decisions as explicit, reviewable rules rather than scattered application logic.",
+        "coverage": "introduced",
+        "evidence_insights": [
+          "enterprise-agents-production-substrate"
+        ]
+      }
     },
     {
       "id": "observability",
@@ -68,9 +139,15 @@
       "summary": "Structured traces, metrics and logs that make distributed execution inspectable without becoming the source of business truth itself.",
       "domain": "operations",
       "coverage": "introduced",
-      "insight_ids": ["enterprise-agents-production-substrate"],
+      "insight_ids": [
+        "enterprise-agents-production-substrate"
+      ],
       "aliases": [],
-      "tags": ["telemetry", "operations", "execution"]
+      "tags": [
+        "telemetry",
+        "operations",
+        "execution"
+      ]
     },
     {
       "id": "durable-execution",
@@ -78,9 +155,25 @@
       "summary": "Execution whose workflow progress survives process failure, waits and restarts because durable state exists outside any one Worker process.",
       "domain": "workflow systems",
       "coverage": "explained",
-      "insight_ids": ["enterprise-agents-production-substrate", "temporal-durable-execution-mental-model"],
-      "aliases": ["durable workflow execution"],
-      "tags": ["workflow", "recovery", "state"]
+      "insight_ids": [
+        "enterprise-agents-production-substrate",
+        "temporal-durable-execution-mental-model"
+      ],
+      "aliases": [
+        "durable workflow execution"
+      ],
+      "tags": [
+        "workflow",
+        "recovery",
+        "state"
+      ],
+      "public": {
+        "summary": "A reliability pattern for long-running work where progress can survive interruptions instead of depending only on one running process.",
+        "coverage": "introduced",
+        "evidence_insights": [
+          "enterprise-agents-production-substrate"
+        ]
+      }
     },
     {
       "id": "workflow-execution",
@@ -88,9 +181,15 @@
       "summary": "The durable Temporal unit representing one running workflow identity and its persisted progress over time.",
       "domain": "Temporal",
       "coverage": "explained",
-      "insight_ids": ["temporal-durable-execution-mental-model"],
+      "insight_ids": [
+        "temporal-durable-execution-mental-model"
+      ],
       "aliases": [],
-      "tags": ["temporal", "workflow", "state"]
+      "tags": [
+        "temporal",
+        "workflow",
+        "state"
+      ]
     },
     {
       "id": "event-history",
@@ -98,9 +197,17 @@
       "summary": "Temporal's append-only event record that represents Workflow Execution progress and supports state reconstruction.",
       "domain": "Temporal",
       "coverage": "explained",
-      "insight_ids": ["temporal-durable-execution-mental-model"],
-      "aliases": ["workflow event history"],
-      "tags": ["temporal", "history", "replay"]
+      "insight_ids": [
+        "temporal-durable-execution-mental-model"
+      ],
+      "aliases": [
+        "workflow event history"
+      ],
+      "tags": [
+        "temporal",
+        "history",
+        "replay"
+      ]
     },
     {
       "id": "task-queue",
@@ -108,9 +215,15 @@
       "summary": "The Temporal dispatch boundary from which Worker Processes poll Workflow and Activity tasks for execution.",
       "domain": "Temporal",
       "coverage": "explained",
-      "insight_ids": ["temporal-durable-execution-mental-model"],
+      "insight_ids": [
+        "temporal-durable-execution-mental-model"
+      ],
       "aliases": [],
-      "tags": ["temporal", "queue", "dispatch"]
+      "tags": [
+        "temporal",
+        "queue",
+        "dispatch"
+      ]
     },
     {
       "id": "worker-process",
@@ -118,9 +231,17 @@
       "summary": "A replaceable process that polls Temporal Task Queues and runs Workflow or Activity application code.",
       "domain": "Temporal",
       "coverage": "explained",
-      "insight_ids": ["temporal-durable-execution-mental-model"],
-      "aliases": ["Temporal Worker"],
-      "tags": ["temporal", "worker", "execution"]
+      "insight_ids": [
+        "temporal-durable-execution-mental-model"
+      ],
+      "aliases": [
+        "Temporal Worker"
+      ],
+      "tags": [
+        "temporal",
+        "worker",
+        "execution"
+      ]
     },
     {
       "id": "activity-execution",
@@ -128,9 +249,17 @@
       "summary": "The Temporal boundary for side-effecting work that can interact with external systems and may be retried after failure.",
       "domain": "Temporal",
       "coverage": "explained",
-      "insight_ids": ["temporal-durable-execution-mental-model"],
-      "aliases": ["Temporal Activity"],
-      "tags": ["temporal", "side-effects", "retry"]
+      "insight_ids": [
+        "temporal-durable-execution-mental-model"
+      ],
+      "aliases": [
+        "Temporal Activity"
+      ],
+      "tags": [
+        "temporal",
+        "side-effects",
+        "retry"
+      ]
     },
     {
       "id": "idempotency-under-retry",
@@ -138,9 +267,17 @@
       "summary": "Designing external effects so repeating a failed operation does not create unintended duplicate outcomes.",
       "domain": "reliability engineering",
       "coverage": "explained",
-      "insight_ids": ["temporal-durable-execution-mental-model"],
-      "aliases": ["idempotent activity design"],
-      "tags": ["reliability", "retry", "side-effects"]
+      "insight_ids": [
+        "temporal-durable-execution-mental-model"
+      ],
+      "aliases": [
+        "idempotent activity design"
+      ],
+      "tags": [
+        "reliability",
+        "retry",
+        "side-effects"
+      ]
     },
     {
       "id": "policy-decision-enforcement-separation",
@@ -148,9 +285,18 @@
       "summary": "Separating the component that computes a policy decision from the component that owns and enforces the protected action.",
       "domain": "authorization architecture",
       "coverage": "explained",
-      "insight_ids": ["open-policy-agent-decision-enforcement-model"],
-      "aliases": ["PDP PEP separation", "decision enforcement separation"],
-      "tags": ["authorization", "policy", "enforcement"]
+      "insight_ids": [
+        "open-policy-agent-decision-enforcement-model"
+      ],
+      "aliases": [
+        "PDP PEP separation",
+        "decision enforcement separation"
+      ],
+      "tags": [
+        "authorization",
+        "policy",
+        "enforcement"
+      ]
     },
     {
       "id": "open-policy-agent",
@@ -158,9 +304,18 @@
       "summary": "A general-purpose policy engine that evaluates declarative Rego policy and data against structured input and returns policy decisions to integrating applications.",
       "domain": "policy engine",
       "coverage": "explained",
-      "insight_ids": ["open-policy-agent-decision-enforcement-model"],
-      "aliases": ["OPA"],
-      "tags": ["opa", "rego", "authorization", "policy-engine"]
+      "insight_ids": [
+        "open-policy-agent-decision-enforcement-model"
+      ],
+      "aliases": [
+        "OPA"
+      ],
+      "tags": [
+        "opa",
+        "rego",
+        "authorization",
+        "policy-engine"
+      ]
     },
     {
       "id": "policy-distribution",
@@ -168,9 +323,18 @@
       "summary": "Distributing versioned policy and supporting data to decision points on a lifecycle separate from application deployment.",
       "domain": "policy operations",
       "coverage": "explained",
-      "insight_ids": ["open-policy-agent-decision-enforcement-model"],
-      "aliases": ["policy bundle distribution"],
-      "tags": ["policy", "bundles", "rollout", "operations"]
+      "insight_ids": [
+        "open-policy-agent-decision-enforcement-model"
+      ],
+      "aliases": [
+        "policy bundle distribution"
+      ],
+      "tags": [
+        "policy",
+        "bundles",
+        "rollout",
+        "operations"
+      ]
     }
   ],
   "relations": [
@@ -180,7 +344,9 @@
       "to": "execution-history",
       "type": "depends_on",
       "rationale": "Consequential work cannot be reconstructed or evaluated later without a durable history of execution.",
-      "evidence_insights": ["enterprise-agents-production-substrate"]
+      "evidence_insights": [
+        "enterprise-agents-production-substrate"
+      ]
     },
     {
       "id": "rel-controlled-execution-depends-on-protected-data-separation",
@@ -188,7 +354,9 @@
       "to": "protected-data-separation",
       "type": "depends_on",
       "rationale": "Governed orchestration should not require broad access to protected data simply to observe or control work.",
-      "evidence_insights": ["enterprise-agents-production-substrate"]
+      "evidence_insights": [
+        "enterprise-agents-production-substrate"
+      ]
     },
     {
       "id": "rel-controlled-execution-depends-on-human-agent-task-equivalence",
@@ -196,7 +364,9 @@
       "to": "human-agent-task-equivalence",
       "type": "depends_on",
       "rationale": "Production work needs a stable task model when execution moves between an agent and a human reviewer.",
-      "evidence_insights": ["enterprise-agents-production-substrate"]
+      "evidence_insights": [
+        "enterprise-agents-production-substrate"
+      ]
     },
     {
       "id": "rel-controlled-execution-depends-on-policy-as-code",
@@ -204,7 +374,9 @@
       "to": "policy-as-code",
       "type": "depends_on",
       "rationale": "Explicit policy decisions make authorization boundaries reviewable and testable instead of implicit in application code.",
-      "evidence_insights": ["enterprise-agents-production-substrate"]
+      "evidence_insights": [
+        "enterprise-agents-production-substrate"
+      ]
     },
     {
       "id": "rel-controlled-execution-depends-on-observability",
@@ -212,7 +384,9 @@
       "to": "observability",
       "type": "depends_on",
       "rationale": "Operators need structured telemetry to inspect execution health even when business evidence lives in a separate durable record.",
-      "evidence_insights": ["enterprise-agents-production-substrate"]
+      "evidence_insights": [
+        "enterprise-agents-production-substrate"
+      ]
     },
     {
       "id": "rel-execution-history-enables-replayable-evaluation",
@@ -220,7 +394,9 @@
       "to": "replayable-evaluation",
       "type": "enables",
       "rationale": "Historical execution state becomes reusable evaluation material only when enough context can be reconstructed reliably.",
-      "evidence_insights": ["enterprise-agents-production-substrate"]
+      "evidence_insights": [
+        "enterprise-agents-production-substrate"
+      ]
     },
     {
       "id": "rel-durable-execution-related-to-controlled-execution",
@@ -228,7 +404,16 @@
       "to": "controlled-execution",
       "type": "related_to",
       "rationale": "Durability solves continuity of execution while controlled execution adds governance, authority, evidence and intervention around that work.",
-      "evidence_insights": ["enterprise-agents-production-substrate", "temporal-durable-execution-mental-model"]
+      "evidence_insights": [
+        "enterprise-agents-production-substrate",
+        "temporal-durable-execution-mental-model"
+      ],
+      "public": {
+        "rationale": "Durability addresses continuity of work; controlled execution additionally requires authority, evidence, intervention and other governance controls.",
+        "evidence_insights": [
+          "enterprise-agents-production-substrate"
+        ]
+      }
     },
     {
       "id": "rel-durable-execution-realized-by-workflow-execution",
@@ -236,7 +421,9 @@
       "to": "workflow-execution",
       "type": "realized_by",
       "rationale": "Temporal realizes durable work as a persisted Workflow Execution rather than tying workflow state to one running process.",
-      "evidence_insights": ["temporal-durable-execution-mental-model"]
+      "evidence_insights": [
+        "temporal-durable-execution-mental-model"
+      ]
     },
     {
       "id": "rel-workflow-execution-depends-on-event-history",
@@ -244,7 +431,9 @@
       "to": "event-history",
       "type": "depends_on",
       "rationale": "Persisted Event History is the record from which Workflow Execution progress can be reconstructed after Worker failure.",
-      "evidence_insights": ["temporal-durable-execution-mental-model"]
+      "evidence_insights": [
+        "temporal-durable-execution-mental-model"
+      ]
     },
     {
       "id": "rel-workflow-execution-realized-by-worker-process",
@@ -252,7 +441,9 @@
       "to": "worker-process",
       "type": "realized_by",
       "rationale": "Worker Processes execute application code for the durable Workflow Execution while remaining replaceable executors.",
-      "evidence_insights": ["temporal-durable-execution-mental-model"]
+      "evidence_insights": [
+        "temporal-durable-execution-mental-model"
+      ]
     },
     {
       "id": "rel-worker-process-depends-on-task-queue",
@@ -260,7 +451,9 @@
       "to": "task-queue",
       "type": "depends_on",
       "rationale": "Workers receive executable Workflow and Activity tasks by polling the configured Temporal Task Queue.",
-      "evidence_insights": ["temporal-durable-execution-mental-model"]
+      "evidence_insights": [
+        "temporal-durable-execution-mental-model"
+      ]
     },
     {
       "id": "rel-worker-process-realized-by-activity-execution",
@@ -268,7 +461,9 @@
       "to": "activity-execution",
       "type": "related_to",
       "rationale": "Workers execute Activity code as one of the main boundaries where Temporal applications interact with external systems.",
-      "evidence_insights": ["temporal-durable-execution-mental-model"]
+      "evidence_insights": [
+        "temporal-durable-execution-mental-model"
+      ]
     },
     {
       "id": "rel-activity-execution-depends-on-idempotency-under-retry",
@@ -276,7 +471,9 @@
       "to": "idempotency-under-retry",
       "type": "depends_on",
       "rationale": "Activity retries can repeat external work, so safe side effects require idempotent or otherwise duplicate-safe design.",
-      "evidence_insights": ["temporal-durable-execution-mental-model"]
+      "evidence_insights": [
+        "temporal-durable-execution-mental-model"
+      ]
     },
     {
       "id": "rel-event-history-refines-execution-history",
@@ -284,7 +481,10 @@
       "to": "execution-history",
       "type": "refines",
       "rationale": "Temporal Event History is a concrete implementation-level example of the broader execution-history concept used in production architecture.",
-      "evidence_insights": ["enterprise-agents-production-substrate", "temporal-durable-execution-mental-model"]
+      "evidence_insights": [
+        "enterprise-agents-production-substrate",
+        "temporal-durable-execution-mental-model"
+      ]
     },
     {
       "id": "rel-policy-decision-enforcement-separation-refines-policy-as-code",
@@ -292,7 +492,9 @@
       "to": "policy-as-code",
       "type": "refines",
       "rationale": "Policy-as-code becomes operationally precise when the decision engine and the application that enforces the result are modeled as separate trust boundaries.",
-      "evidence_insights": ["open-policy-agent-decision-enforcement-model"]
+      "evidence_insights": [
+        "open-policy-agent-decision-enforcement-model"
+      ]
     },
     {
       "id": "rel-policy-as-code-realized-by-open-policy-agent",
@@ -300,7 +502,9 @@
       "to": "open-policy-agent",
       "type": "realized_by",
       "rationale": "OPA is a concrete implementation of policy-as-code: Rego and policy data are evaluated outside scattered application conditionals to produce explicit decisions.",
-      "evidence_insights": ["open-policy-agent-decision-enforcement-model"]
+      "evidence_insights": [
+        "open-policy-agent-decision-enforcement-model"
+      ]
     },
     {
       "id": "rel-open-policy-agent-depends-on-policy-decision-enforcement-separation",
@@ -308,7 +512,9 @@
       "to": "policy-decision-enforcement-separation",
       "type": "depends_on",
       "rationale": "Using OPA correctly depends on understanding that OPA computes policy decisions while the integrating application remains responsible for enforcing them.",
-      "evidence_insights": ["open-policy-agent-decision-enforcement-model"]
+      "evidence_insights": [
+        "open-policy-agent-decision-enforcement-model"
+      ]
     },
     {
       "id": "rel-open-policy-agent-related-to-controlled-execution",
@@ -316,7 +522,9 @@
       "to": "controlled-execution",
       "type": "related_to",
       "rationale": "OPA can provide an explicit authorization/policy-decision primitive inside a broader controlled-execution substrate, but it is not the complete substrate by itself.",
-      "evidence_insights": ["open-policy-agent-decision-enforcement-model"]
+      "evidence_insights": [
+        "open-policy-agent-decision-enforcement-model"
+      ]
     },
     {
       "id": "rel-open-policy-agent-related-to-policy-distribution",
@@ -324,7 +532,9 @@
       "to": "policy-distribution",
       "type": "related_to",
       "rationale": "OPA bundles show how distributed decision points can receive policy and data on a lifecycle separate from the application binaries that enforce decisions.",
-      "evidence_insights": ["open-policy-agent-decision-enforcement-model"]
+      "evidence_insights": [
+        "open-policy-agent-decision-enforcement-model"
+      ]
     }
   ]
 }
