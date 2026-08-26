@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dkharlanau.github.io/signal-to-insight/schemas/source-decision.schema.json",
+  "title": "Signal to Insight source consumption decisions",
+  "type": "object",
+  "required": ["version", "records"],
+  "properties": {
+    "version": {"type": "string"},
+    "records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["insight_id", "decision", "rationale", "novelty", "source_quality", "relevance", "practical_leverage", "compression_loss", "selected_parts"],
+        "properties": {
+          "insight_id": {"type": "string", "minLength": 1},
+          "decision": {"enum": ["consume", "skim_selected_parts", "explainer_is_enough", "skip_for_now"]},
+          "rationale": {"type": "string", "minLength": 1},
+          "novelty": {"$ref": "#/$defs/factor"},
+          "source_quality": {"$ref": "#/$defs/factor"},
+          "relevance": {"$ref": "#/$defs/factor"},
+          "practical_leverage": {"$ref": "#/$defs/factor"},
+          "compression_loss": {"$ref": "#/$defs/factor"},
+          "selected_parts": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["label", "locator", "why", "claim_refs"],
+              "properties": {
+                "label": {"type": "string", "minLength": 1},
+                "locator": {"type": "string", "minLength": 1},
+                "why": {"type": "string", "minLength": 1},
+                "claim_refs": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "$defs": {
+    "factor": {
+      "type": "object",
+      "required": ["level", "reason"],
+      "properties": {
+        "level": {"enum": ["high", "medium", "low"]},
+        "reason": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
