@@ -25,4 +25,9 @@ jobs:
         run: python scripts/build_library.py
 
       - name: Generated library must be committed
-        run: git diff --exit-code -- library/index.html
+        run: |
+          if [ -n "$(git status --porcelain -- library)" ]; then
+            git status --short -- library
+            echo "Generated library files are missing or stale."
+            exit 1
+          fi
