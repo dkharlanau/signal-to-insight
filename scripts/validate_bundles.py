@@ -12,7 +12,10 @@ from urllib.parse import urlparse
 ROOT = Path(__file__).resolve().parents[1]
 BUNDLES = ROOT / "data" / "research-bundles"
 INBOX = ROOT / "data" / "inbox.json"
+GRAPH = ROOT / "data" / "knowledge-graph.json"
+INSIGHTS = ROOT / "data" / "insights.json"
 ALLOWED_CONFIDENCE = {"direct", "metadata_only", "secondary", "mixed"}
+ALLOWED_KNOWLEDGE_RELATIONSHIPS = {"unclassified", "reinforcement", "refinement", "contradiction", "new_knowledge", "not_relevant"}
 errors: list[str] = []
 
 
@@ -35,9 +38,56 @@ def valid_date(value: object, where: str) -> None:
         errors.append(f"{where}: invalid ISO date '{value}'")
 
 
+def validate_prior_knowledge(bundle: dict, rel: Path, graph_ids: set[str], insight_ids: set[str]) -> None:
+    prior = bundle.get("prior_knowledge")
+    if prior is None:
+        return  # Bundles created before graph-aware scaffolding remain historically valid.
+    if not isinstance(prior, dict):
+        errors.append(f"{rel}.prior_knowledge: expected object")
+        return
+    valid_date(prior.get("captured_at"), f"{rel}.prior_knowledge.captured_at")
+    if prior.get("classification_required") is not True:
+        errors.append(f"{rel}.prior_knowledge.classification_required: must be true")
+    if not isinstance(prior.get("query"), str):
+        errors.append(f"{rel}.prior_knowledge.query: expected string")
+    matches = prior.get("matches")
+    if not isinstance(matches, list):
+        errors.append(f"{rel}.prior_knowledge.matches: expected list")
+        return
+    seen: set[str] = set()
+    for index, match in enumerate(matches):
+        where = f"{rel}.prior_knowledge.matches[{index}]"
+        if not isinstance(match, dict):
+            errors.append(f"{where}: expected object")
+            continue
+        concept_id = match.get("concept_id")
+        if concept_id not in graph_ids:
+            errors.append(f"{where}.concept_id: dangling graph concept '{concept_id}'")
+        if concept_id in seen:
+            errors.append(f"{where}.concept_id: duplicate prior-knowledge concept '{concept_id}'")
+        seen.add(concept_id)
+        if match.get("relationship_to_source") not in ALLOWED_KNOWLEDGE_RELATIONSHIPS:
+            errors.append(f"{where}.relationship_to_source: invalid classification '{match.get('relationship_to_source')}'")
+        if match.get("coverage") not in {"introduced", "explained", "applied"}:
+            errors.append(f"{where}.coverage: invalid value '{match.get('coverage')}'")
+        evidence = match.get("evidence_insights")
+        if not isinstance(evidence, list):
+            errors.append(f"{where}.evidence_insights: expected list")
+            continue
+        for evidence_index, item in enumerate(evidence):
+            evidence_where = f"{where}.evidence_insights[{evidence_index}]"
+            if not isinstance(item, dict) or item.get("id") not in insight_ids:
+                evidence_id = item.get("id") if isinstance(item, dict) else None
+                errors.append(f"{evidence_where}: dangling insight '{evidence_id}'")
+
+
 def main() -> int:
     inbox = json.loads(INBOX.read_text(encoding="utf-8"))
     intake = {item["id"]: item for item in inbox.get("items", [])}
+    graph = json.loads(GRAPH.read_text(encoding="utf-8")) if GRAPH.exists() else {"concepts": []}
+    graph_ids = {item.get("id") for item in graph.get("concepts", []) if isinstance(item, dict)}
+    insight_data = json.loads(INSIGHTS.read_text(encoding="utf-8"))
+    insight_ids = {item.get("id") for item in insight_data.get("insights", []) if isinstance(item, dict)}
 
     if not BUNDLES.exists():
         print("No research bundles committed yet.")
@@ -71,6 +121,8 @@ def main() -> int:
             errors.append(f"{rel}: full_content_committed must be false")
         if inspection.get("confidence") not in ALLOWED_CONFIDENCE:
             errors.append(f"{rel}: invalid inspection confidence '{inspection.get('confidence')}'")
+
+        validate_prior_knowledge(bundle, rel, graph_ids, insight_ids)
 
         content_map = bundle.get("content_map", {})
         expected_map = {"problem", "thesis", "sections", "concepts", "mechanisms", "tools", "examples", "claims", "evidence", "assumptions", "limitations", "open_questions"}
