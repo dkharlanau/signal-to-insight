@@ -6,6 +6,12 @@
     prior_knowledge: 'Prior knowledge',
   };
 
+  const PRIORITY_LABELS = {
+    must_know_now: 'Must know now',
+    learn_next: 'Learn next',
+    optional_depth: 'Optional depth',
+  };
+
   function root() {
     return '../../';
   }
@@ -50,6 +56,17 @@
     else nav.appendChild(link);
   }
 
+  function addPrerequisiteNavLink() {
+    const nav = document.querySelector('.site-header nav');
+    if (!nav || nav.querySelector('a[href="#prerequisites"]')) return;
+    const link = document.createElement('a');
+    link.href = '#prerequisites';
+    link.textContent = 'Prereqs';
+    const model = nav.querySelector('a[href="#model"]');
+    if (model) nav.insertBefore(link, model);
+    else nav.prepend(link);
+  }
+
   function makeEvidenceItem(item, insights, sources) {
     const li = document.createElement('li');
     const href = evidenceHref(item, insights);
@@ -73,6 +90,75 @@
     locator.textContent = item.locator;
     li.appendChild(locator);
     return li;
+  }
+
+  function appendPrerequisites(prerequisiteData, id, insights) {
+    const record = (prerequisiteData.records || []).find((item) => item.insight_id === id);
+    const modelSection = document.getElementById('model');
+    if (!record || !modelSection || document.getElementById('prerequisites')) return;
+
+    const section = document.createElement('section');
+    section.id = 'prerequisites';
+    section.className = 'detail-section wrap prerequisite-section';
+
+    const intro = document.createElement('div');
+    intro.className = 'prerequisite-intro';
+    const heading = document.createElement('div');
+    heading.innerHTML = '<p class="kicker">PREREQUISITES</p><h2>Only what the model actually depends on.</h2>';
+    const summary = document.createElement('p');
+    summary.textContent = record.summary;
+    intro.append(heading, summary);
+    section.appendChild(intro);
+
+    const path = document.createElement('div');
+    path.className = 'prerequisite-path';
+    record.items.forEach((item, index) => {
+      const card = document.createElement('article');
+      card.className = `prerequisite-card state-${item.state}`;
+      const order = document.createElement('span');
+      order.className = 'prerequisite-order';
+      order.textContent = String(index + 1).padStart(2, '0');
+      const meta = document.createElement('div');
+      meta.className = 'evidence-meta';
+      const priority = document.createElement('span');
+      priority.className = 'evidence-badge';
+      priority.textContent = PRIORITY_LABELS[item.priority] || item.priority;
+      const state = document.createElement('span');
+      state.className = 'evidence-badge is-status';
+      state.textContent = item.state.replaceAll('_', ' ');
+      meta.append(priority, state);
+      const title = document.createElement('h3');
+      title.textContent = item.label;
+      const reason = document.createElement('p');
+      reason.textContent = item.reason;
+      card.append(order, meta, title, reason);
+
+      const resolution = item.resolution || {};
+      if (resolution.kind === 'existing_explainer' && resolution.insight_id) {
+        const target = insights.get(resolution.insight_id);
+        if (target?.status === 'published') {
+          const link = document.createElement('a');
+          link.className = 'prerequisite-link';
+          link.href = `${root()}explainers/${target.slug}/`;
+          link.textContent = `Open prior explainer: ${target.title}`;
+          card.appendChild(link);
+        }
+      } else if (resolution.kind === 'existing_concept' && resolution.target) {
+        const label = document.createElement('span');
+        label.className = 'prerequisite-link is-static';
+        label.textContent = `Existing concept: ${resolution.target}`;
+        card.appendChild(label);
+      } else if (resolution.kind === 'learning_target' && resolution.target) {
+        const label = document.createElement('span');
+        label.className = 'prerequisite-link is-static';
+        label.textContent = `Unresolved learning target: ${resolution.target}`;
+        card.appendChild(label);
+      }
+      path.appendChild(card);
+    });
+    section.appendChild(path);
+    modelSection.parentNode.insertBefore(section, modelSection);
+    addPrerequisiteNavLink();
   }
 
   function appendKnowledgeReviews(section, reviewData, id) {
@@ -142,17 +228,19 @@
     if (!id || !sourcesSection) return;
 
     try {
-      const [claimsData, insightsData, sourcesData, reviewData] = await Promise.all([
+      const [claimsData, insightsData, sourcesData, reviewData, prerequisiteData] = await Promise.all([
         fetchJson('data/claim-evidence.json'),
         fetchJson('data/insights.json'),
         fetchJson('data/sources.json'),
         fetchJson('data/knowledge-reviews.json'),
+        fetchJson('data/prerequisite-maps.json'),
       ]);
       const record = (claimsData.records || []).find((item) => item.insight_id === id);
       if (!record || !(record.claims || []).length) return;
 
       const insights = new Map((insightsData.insights || []).map((item) => [item.id, item]));
       const sources = new Map((sourcesData.sources || []).map((item) => [item.id, item]));
+      appendPrerequisites(prerequisiteData, id, insights);
 
       const section = document.createElement('section');
       section.id = 'evidence';
@@ -204,7 +292,7 @@
       sourcesSection.parentNode.insertBefore(section, sourcesSection);
       addNavLink();
     } catch (_) {
-      // Evidence/review UI is supplemental; validated structured data remains canonical.
+      // Evidence/review/prerequisite UI is supplemental; validated structured data remains canonical.
     }
   }
 
