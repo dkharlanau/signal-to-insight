@@ -41,6 +41,9 @@ jobs:
           python scripts/graph_context.py --self-test
           python scripts/scaffold_bundle.py --self-test
 
+      - name: Test learning utility local loop
+        run: python scripts/learning_utility.py self-test
+
       - name: Test explicit publication lifecycle boundaries
         run: |
           python scripts/publish_reviewed.py --self-test
