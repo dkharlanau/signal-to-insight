@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Validate committed research bundles for structure and source-safety."""
+"""Validate committed research bundles for structure, source-safety and prior-knowledge resolution."""
 
 from __future__ import annotations
 
 import json
 import sys
+from collections import defaultdict
 from datetime import date
 from pathlib import Path
 from urllib.parse import urlparse
@@ -14,8 +15,10 @@ BUNDLES = ROOT / "data" / "research-bundles"
 INBOX = ROOT / "data" / "inbox.json"
 GRAPH = ROOT / "data" / "knowledge-graph.json"
 INSIGHTS = ROOT / "data" / "insights.json"
+SOURCES = ROOT / "data" / "sources.json"
 ALLOWED_CONFIDENCE = {"direct", "metadata_only", "secondary", "mixed"}
 ALLOWED_KNOWLEDGE_RELATIONSHIPS = {"unclassified", "reinforcement", "refinement", "contradiction", "new_knowledge", "not_relevant"}
+PUBLICATION_STATES = {"review", "published"}
 errors: list[str] = []
 
 
@@ -38,7 +41,14 @@ def valid_date(value: object, where: str) -> None:
         errors.append(f"{where}: invalid ISO date '{value}'")
 
 
-def validate_prior_knowledge(bundle: dict, rel: Path, graph_ids: set[str], insight_ids: set[str]) -> None:
+def validate_prior_knowledge(
+    bundle: dict,
+    rel: Path,
+    graph_ids: set[str],
+    insight_ids: set[str],
+    insight_status_by_source: dict[str, set[str]],
+    source_id_by_url: dict[str, str],
+) -> None:
     prior = bundle.get("prior_knowledge")
     if prior is None:
         return  # Bundles created before graph-aware scaffolding remain historically valid.
@@ -54,7 +64,9 @@ def validate_prior_knowledge(bundle: dict, rel: Path, graph_ids: set[str], insig
     if not isinstance(matches, list):
         errors.append(f"{rel}.prior_knowledge.matches: expected list")
         return
+
     seen: set[str] = set()
+    unresolved: list[str] = []
     for index, match in enumerate(matches):
         where = f"{rel}.prior_knowledge.matches[{index}]"
         if not isinstance(match, dict):
@@ -66,8 +78,11 @@ def validate_prior_knowledge(bundle: dict, rel: Path, graph_ids: set[str], insig
         if concept_id in seen:
             errors.append(f"{where}.concept_id: duplicate prior-knowledge concept '{concept_id}'")
         seen.add(concept_id)
-        if match.get("relationship_to_source") not in ALLOWED_KNOWLEDGE_RELATIONSHIPS:
-            errors.append(f"{where}.relationship_to_source: invalid classification '{match.get('relationship_to_source')}'")
+        classification = match.get("relationship_to_source")
+        if classification not in ALLOWED_KNOWLEDGE_RELATIONSHIPS:
+            errors.append(f"{where}.relationship_to_source: invalid classification '{classification}'")
+        elif classification == "unclassified":
+            unresolved.append(str(concept_id))
         if match.get("coverage") not in {"introduced", "explained", "applied"}:
             errors.append(f"{where}.coverage: invalid value '{match.get('coverage')}'")
         evidence = match.get("evidence_insights")
@@ -80,6 +95,16 @@ def validate_prior_knowledge(bundle: dict, rel: Path, graph_ids: set[str], insig
                 evidence_id = item.get("id") if isinstance(item, dict) else None
                 errors.append(f"{evidence_where}: dangling insight '{evidence_id}'")
 
+    source = bundle.get("source", {})
+    linked_source_id = bundle.get("source_id") or source_id_by_url.get(source.get("canonical_url"))
+    linked_statuses = insight_status_by_source.get(linked_source_id, set()) if linked_source_id else set()
+    if unresolved and linked_statuses & PUBLICATION_STATES:
+        states = ", ".join(sorted(linked_statuses & PUBLICATION_STATES))
+        errors.append(
+            f"{rel}.prior_knowledge: unresolved classifications {sorted(unresolved)} block insight state(s) {states}; "
+            "classify each match before review/publication"
+        )
+
 
 def main() -> int:
     inbox = json.loads(INBOX.read_text(encoding="utf-8"))
@@ -87,7 +112,18 @@ def main() -> int:
     graph = json.loads(GRAPH.read_text(encoding="utf-8")) if GRAPH.exists() else {"concepts": []}
     graph_ids = {item.get("id") for item in graph.get("concepts", []) if isinstance(item, dict)}
     insight_data = json.loads(INSIGHTS.read_text(encoding="utf-8"))
-    insight_ids = {item.get("id") for item in insight_data.get("insights", []) if isinstance(item, dict)}
+    insight_records = [item for item in insight_data.get("insights", []) if isinstance(item, dict)]
+    insight_ids = {item.get("id") for item in insight_records}
+    insight_status_by_source: dict[str, set[str]] = defaultdict(set)
+    for item in insight_records:
+        if item.get("source_id"):
+            insight_status_by_source[item["source_id"]].add(item.get("status"))
+    source_data = json.loads(SOURCES.read_text(encoding="utf-8"))
+    source_id_by_url = {
+        item.get("canonical_url"): item.get("id")
+        for item in source_data.get("sources", [])
+        if isinstance(item, dict) and item.get("canonical_url") and item.get("id")
+    }
 
     if not BUNDLES.exists():
         print("No research bundles committed yet.")
@@ -122,7 +158,14 @@ def main() -> int:
         if inspection.get("confidence") not in ALLOWED_CONFIDENCE:
             errors.append(f"{rel}: invalid inspection confidence '{inspection.get('confidence')}'")
 
-        validate_prior_knowledge(bundle, rel, graph_ids, insight_ids)
+        validate_prior_knowledge(
+            bundle,
+            rel,
+            graph_ids,
+            insight_ids,
+            insight_status_by_source,
+            source_id_by_url,
+        )
 
         content_map = bundle.get("content_map", {})
         expected_map = {"problem", "thesis", "sections", "concepts", "mechanisms", "tools", "examples", "claims", "evidence", "assumptions", "limitations", "open_questions"}
