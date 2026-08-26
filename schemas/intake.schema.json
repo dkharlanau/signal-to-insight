@@ -17,7 +17,7 @@
           "source_type": {"type": "string", "enum": ["video", "article", "paper", "podcast", "documentation", "repository", "tool", "product", "course", "presentation", "notes", "system"]},
           "submitted_at": {"type": "string", "format": "date"},
           "requested_focus": {"type": ["string", "null"]},
-          "status": {"type": "string", "enum": ["queued", "capturing", "mapping", "researching", "drafting", "review", "published", "blocked", "rejected"]},
+          "status": {"type": "string", "enum": ["queued", "capturing", "mapping", "researching", "drafting", "review", "published", "archived", "blocked", "rejected"]},
           "source_id": {"type": ["string", "null"]},
           "insight_id": {"type": ["string", "null"]},
           "notes": {"type": ["string", "null"]}
