@@ -1,65 +1,143 @@
 # Roadmap
 
-## Phase 1 — Prove the format
+## Product goal
 
-Goal: make the knowledge unit genuinely useful before automating ingestion.
+Turn one supplied source into a personalized, coherent learning artifact that is faster to consume than the source but preserves the mental model needed to understand and use it.
 
-- Publish 5–10 high-quality explainers.
-- Establish a consistent visual grammar for mechanisms, contrasts, flows and limitations.
-- Keep structured JSON aligned with every published explainer.
-- Add related-insight navigation and tags.
-- Measure which topics and page structures are actually worth continuing.
+The product is source-driven, not domain-driven.
 
-## Phase 2 — Personal intake loop
+## Phase 1 — Prove the learning format
 
-Goal: reduce the cost of turning an interesting source into a reviewable draft.
+Goal: make each explainer genuinely useful before automating ingestion.
+
+- Publish 5–10 explainers across different source types and domains.
+- Include at least one tool/repository explainer, one research source, one video and one custom/system architecture.
+- Test whether a reader can understand the subject without first consuming the source.
+- Establish visual patterns for architecture, sequence, comparison, state, decision and tool maps.
+- Keep `data/insights.json` aligned with every published explainer.
+- Record canonical source metadata and dates for every item.
+- Add explicit `use / try / learn / build / watch / ignore` outcomes.
+
+## Phase 2 — Personalized intake agent
+
+Goal: reduce a supplied URL/source to a high-quality reviewable draft.
 
 ```text
-URL / paper / repo
+URL / file / repo / tool
         ↓
-source metadata
+source + date capture
         ↓
-claim + concept extraction
+whole-source content map
         ↓
-challenge / connections
+research profile scoring
         ↓
-personal application
+coherent-core selection
         ↓
-draft explainer
+verification + prerequisite research
+        ↓
+mental model
+        ↓
+action map
+        ↓
+visual explainer draft
         ↓
 human review
 ```
 
-Important constraint: ingestion should create a draft, never silently publish source-derived content.
+Capabilities:
 
-## Phase 3 — Knowledge graph
+- YouTube transcript/subtitle extraction when legally and technically available;
+- webpage/article parsing;
+- PDF/paper analysis;
+- GitHub repository inspection;
+- documentation/tool research;
+- source metadata capture;
+- supporting-source search;
+- automatic prerequisite detection;
+- relevance and novelty scoring against `config/research-profile.json`.
 
-Goal: make insights accumulate instead of becoming isolated pages.
+Important constraint: intake creates a draft, never silently publishes third-party-derived content.
+
+## Phase 3 — Coherence and quality engine
+
+Goal: prevent the common failure mode of producing disconnected bullet points.
+
+- Build a concept dependency graph for each source.
+- Detect missing prerequisites.
+- Identify the source's main causal/mechanical chain.
+- Remove repeated or non-contributing detail.
+- Check that selected concepts remain understandable together.
+- Add a completeness score: can the reader explain the topic end-to-end?
+- Add a visual-utility gate: every diagram/image must teach something.
+
+## Phase 4 — Accumulating knowledge graph
+
+Goal: make every new source improve future analysis.
 
 - concepts and aliases;
-- source → insight relationships;
+- concept → prerequisite relationships;
+- source → concept relationships;
 - insight → pattern relationships;
-- related applications;
-- contradictory evidence;
-- confidence and review status;
-- reusable visual models.
+- tool → concept relationships;
+- tool → alternative/category relationships;
+- supporting and contradictory evidence;
+- confidence and review state;
+- dates and freshness;
+- reusable visual models;
+- `already_known` vs `new_to_learn` signals.
 
-## Phase 4 — Services
+Future agents should use this graph to avoid re-explaining familiar basics while detecting genuinely new connections.
 
-Only after the content model is stable:
+## Phase 5 — Visual explainer generator
 
-- `/insights.json` or versioned JSON feed;
+Goal: generate a polished landing page from the semantic model rather than directly from raw transcript text.
+
+- choose page narrative based on source type;
+- select diagram type from the mental model;
+- create meaningful visual assets when diagrams are insufficient;
+- create tool/system cards with primary documentation links;
+- show source + date visibly;
+- add mobile-first reading mode;
+- keep pages static and GitHub Pages-friendly where possible.
+
+## Phase 6 — Services
+
+Only after the content and quality models are stable:
+
+- versioned JSON feed;
+- source intake endpoint;
 - search endpoint;
 - RSS / Atom;
-- `get_insight(slug)` API;
-- `search_insights(query)` API;
+- `get_insight(slug)`;
+- `search_insights(query)`;
+- `get_concept(name)`;
+- `get_tools_for_concept(name)`;
 - MCP wrapper for agent access;
-- optional private intake service for URLs and notes.
+- optional private profile/context service;
+- optional GitHub Action that opens generated explainers as PRs for review.
+
+## Phase 7 — Evaluation
+
+Measure the product on learning utility rather than output volume.
+
+Potential metrics:
+
+- time saved vs source duration/read time;
+- concept recall after reading;
+- percentage of explainers that produce a useful action/learning decision;
+- number of useful cross-source connections discovered;
+- percentage of generated drafts requiring major restructuring;
+- source/date completeness;
+- stale-tool detection rate;
+- user rating: `I understand this now`.
 
 ## Non-goals
 
-- becoming an AI-news aggregator;
-- mass-producing generic summaries;
+- AI-news aggregation;
+- mass production of generic summaries;
+- forcing every idea into SAP or enterprise context;
+- collecting isolated quotes or “top 10 takeaways”;
 - storing full third-party transcripts;
-- publishing automatically without review;
-- building backend infrastructure before the explanation format proves valuable.
+- decorative image generation without explanatory value;
+- automatic publication without review;
+- backend infrastructure before the learning format proves valuable.
