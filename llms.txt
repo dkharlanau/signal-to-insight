@@ -1,29 +1,64 @@
 # Signal to Insight
 
-> A public knowledge system that turns high-signal AI and enterprise sources into practical explanations, reusable patterns, limitations, and applications.
+> A personalized source-to-understanding engine that turns videos, papers, articles, repositories, tools, documentation and other useful sources into coherent visual explanations, concept/tool maps and practical learning decisions.
 
 Canonical project: https://github.com/dkharlanau/signal-to-insight
-Planned site: https://dkharlanau.github.io/signal-to-insight/
+Site: https://dkharlanau.github.io/signal-to-insight/
+Research profile: https://dkharlanau.github.io/signal-to-insight/config/research-profile.json
 Machine-readable insights: https://dkharlanau.github.io/signal-to-insight/data/insights.json
+Source registry: https://dkharlanau.github.io/signal-to-insight/data/sources.json
+Schema: https://dkharlanau.github.io/signal-to-insight/data/insight.schema.json
+
+## Core behavior
+
+The project does not optimize for generic summarization. The intended transformation is:
+
+source → whole-source map → personalized selection → verification/enrichment → coherent mental model → tools/concepts → action map → visual explainer
+
+Selection should retain all prerequisites and relationships required for coherent understanding, even when some parts are not individually exciting.
+
+The project is not domain-locked. SAP/enterprise can be an application when appropriate, but AI tools, developer systems, custom architectures, research and other high-leverage topics are equally valid.
+
+## Required provenance
+
+Every published record should include:
+
+- canonical source;
+- creator/publisher when known;
+- publication date when verifiable;
+- event date when relevant;
+- capture/access date;
+- analysis/review date;
+- supporting sources used for verification or enrichment.
+
+Unknown dates must not be guessed.
 
 ## Content principles
 
-- Prefer durable insight over news summaries.
-- Distinguish source claims from derived analysis.
+- Prefer coherent mental models over disconnected takeaways.
+- Explain prerequisites that the source assumes but the reader needs.
+- Distinguish source claims from project-added research and interpretation.
+- Prefer official/primary sources for tool and technical verification.
 - Include limitations and counterpoints.
-- Translate concepts into concrete enterprise applications.
+- End in explicit learning/action decisions: use, try, learn, build, watch or ignore for now.
+- Use visuals to explain mechanisms, relationships, comparisons or sequences; decorative visuals are secondary.
 - Link to original sources rather than reproducing them.
-- Do not treat third-party source material as original project content.
+- Do not store full third-party transcripts in the public repository.
 
-## Published insights
+## Published case 001
 
 ### Why enterprise AI agents fail after the POC
 
-Source: https://www.youtube.com/watch?v=mav15aW9lLM
+Primary source: https://www.youtube.com/watch?v=mav15aW9lLM
+Event: AI Engineer World's Fair 2026
+Event date: 2026-07-02
+Captured/analyzed: 2026-08-26
+YouTube publication date: not independently verified
 
-Core derived idea: production readiness depends on the controlled execution environment around an AI agent — including authority, execution history, protected data access, human intervention, and replay — rather than model capability alone.
+Core model: production readiness depends on the controlled execution environment around an AI agent — including authority, durable/reconstructable history, protected data access, human intervention and replay — rather than model capability alone.
 
-Application: controlled SAP / master-data changes.
+Adjacent learning tools added by this project: Temporal, OpenTelemetry and Open Policy Agent.
 
 Structured record: /data/insights.json
-Human-readable source: /content/explainers/001-enterprise-agent-production-substrate.md
+Source record: /data/sources.json
+Human-readable explainer: /content/explainers/001-enterprise-agent-production-substrate.md
