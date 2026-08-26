@@ -1,0 +1,29 @@
+# Signal to Insight
+
+> A public knowledge system that turns high-signal AI and enterprise sources into practical explanations, reusable patterns, limitations, and applications.
+
+Canonical project: https://github.com/dkharlanau/signal-to-insight
+Planned site: https://dkharlanau.github.io/signal-to-insight/
+Machine-readable insights: https://dkharlanau.github.io/signal-to-insight/data/insights.json
+
+## Content principles
+
+- Prefer durable insight over news summaries.
+- Distinguish source claims from derived analysis.
+- Include limitations and counterpoints.
+- Translate concepts into concrete enterprise applications.
+- Link to original sources rather than reproducing them.
+- Do not treat third-party source material as original project content.
+
+## Published insights
+
+### Why enterprise AI agents fail after the POC
+
+Source: https://www.youtube.com/watch?v=mav15aW9lLM
+
+Core derived idea: production readiness depends on the controlled execution environment around an AI agent — including authority, execution history, protected data access, human intervention, and replay — rather than model capability alone.
+
+Application: controlled SAP / master-data changes.
+
+Structured record: /data/insights.json
+Human-readable source: /content/explainers/001-enterprise-agent-production-substrate.md
