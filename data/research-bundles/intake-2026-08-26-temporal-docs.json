@@ -1,0 +1,160 @@
+{
+  "bundle_version": "1.0.0",
+  "intake_id": "intake-2026-08-26-temporal-docs",
+  "source_id": "src-temporal-docs-2026",
+  "source": {
+    "type": "documentation",
+    "canonical_url": "https://docs.temporal.io/",
+    "title": "Temporal Platform Documentation",
+    "creators": [],
+    "publisher": "Temporal Technologies Inc.",
+    "published_at": null,
+    "event_date": null,
+    "version": null,
+    "language": "en",
+    "duration": null,
+    "date_note": "Living official documentation with no single publication date; inspected 2026-08-26."
+  },
+  "inspection": {
+    "method": "Direct inspection of official Temporal documentation, glossary, CLI and quickstart pages.",
+    "full_content_used_ephemerally": true,
+    "full_content_committed": false,
+    "confidence": "direct",
+    "gaps": [
+      "The documentation is continuously updated, so this explainer should be re-verified before relying on version-specific operational details.",
+      "This first-pass model intentionally omits advanced features such as Nexus, replication, Continue-As-New and SDK-specific deployment/versioning details."
+    ]
+  },
+  "content_map": {
+    "problem": "Long-running or multi-step application processes become difficult to make reliable when processes, workers, networks or infrastructure can fail between steps.",
+    "thesis": "Temporal provides durable execution by persisting Workflow Execution progress as Event History and letting Worker Processes continue the application logic from persisted state rather than rebuilding recovery logic ad hoc.",
+    "sections": [
+      "Temporal as a durable application platform",
+      "Workflow Execution as the main durable unit",
+      "Event History as append-only workflow state",
+      "Worker Processes and Task Queues",
+      "Activities for task execution and external effects",
+      "Retry policies, timeouts and idempotency",
+      "local CLI and language SDK quickstarts"
+    ],
+    "concepts": [
+      "Durable Execution",
+      "Workflow Definition",
+      "Workflow Execution",
+      "Event History",
+      "Worker Process",
+      "Task Queue",
+      "Activity Execution",
+      "Retry Policy",
+      "idempotency"
+    ],
+    "mechanisms": [
+      "The Temporal Service persists Workflow Execution state and progress.",
+      "Event History is an append-only log of Events representing the full state of a Workflow Execution.",
+      "Worker Processes poll Task Queues, execute application code for tasks, and respond to the Temporal Service with results.",
+      "Workflow execution state can be reconstructed from Event History when a Worker no longer has the state cached.",
+      "Activity work is executed by Workers and can use retries, timeouts and heartbeats; repeated external effects still need idempotent design."
+    ],
+    "tools": [
+      "Temporal Service",
+      "Temporal SDK",
+      "Temporal CLI",
+      "Temporal Web UI",
+      "Temporal Cloud"
+    ],
+    "examples": [
+      "order fulfillment",
+      "customer onboarding",
+      "payment processing",
+      "long-running AI-agent or automation workflows"
+    ],
+    "claims": [
+      "Temporal describes Durable Execution as maintaining Workflow Execution state and progress through failures, crashes or server outages.",
+      "Temporal defines Event History as an append-only log representing the full state of a Workflow Execution.",
+      "A Worker Process polls a Task Queue, executes application code for a Task, and responds to the Temporal Server with results.",
+      "Retry Policies instruct Temporal how to retry Workflow or Activity failures.",
+      "Temporal documentation recommends idempotent Activity design to avoid duplicated external effects."
+    ],
+    "evidence": [
+      "Official Temporal documentation and glossary definitions inspected directly on 2026-08-26.",
+      "The official CLI documentation exposes an embedded local development service through `temporal server start-dev`.",
+      "Official quickstarts are available for Go, Java, .NET, PHP, Python, Ruby, Rust and TypeScript."
+    ],
+    "assumptions": [
+      "The process is important enough that losing in-memory progress or manually rebuilding retry/recovery logic is costly.",
+      "Application code can be structured around Temporal Workflow and Activity abstractions.",
+      "External side effects may be retried and therefore need careful idempotency semantics."
+    ],
+    "limitations": [
+      "Temporal adds a workflow runtime, SDK model and operational/service dependency; simple stateless request-response work may not justify that complexity.",
+      "Durable execution does not make external side effects exactly-once by magic; Activity retry behavior still requires idempotent or otherwise safe external operations.",
+      "Workflow code must respect Temporal's execution/replay model; arbitrary non-deterministic behavior needs deliberate handling rather than ordinary in-process assumptions.",
+      "Large or very long-running histories introduce additional lifecycle considerations such as history management that are outside this first mental model."
+    ],
+    "open_questions": [
+      "Which of the user's agent or automation workflows are long-lived enough to benefit from durable execution rather than a lighter queue/job model?",
+      "What is the smallest useful Temporal experiment that demonstrates recovery rather than only Hello World?",
+      "How should human approval or an external agent result be modeled in a later hands-on example?"
+    ]
+  },
+  "selection": {
+    "requested_focus": "Understand durable execution, the minimum Temporal mental model, why Event History and Workers enable recovery, what belongs in Workflows versus Activities, and the smallest experiment worth trying.",
+    "coherent_core": [
+      "A Workflow Execution is durable application state, not just a function call running inside one process.",
+      "The Temporal Service persists Event History; Workers can come and go while progress remains represented outside the Worker process.",
+      "Workers execute Workflow/Activity tasks from Task Queues, while external-effect work must remain safe under retry behavior.",
+      "The practical value appears when a process spans time, failures, waits or multiple external operations and should continue rather than disappear."
+    ],
+    "prerequisites": [
+      "difference between process memory and persisted workflow state",
+      "basic retry semantics",
+      "idempotency for repeated external operations",
+      "difference between orchestration logic and side-effecting work"
+    ],
+    "drop_notes": [
+      "Advanced cluster, replication, pricing and Cloud administration features are excluded from the first mental model.",
+      "SDK-version details are source metadata rather than central learning content.",
+      "Nexus and advanced cross-service patterns are deferred until the core Workflow/Activity/Event History model is understood."
+    ],
+    "connections": [
+      "durable execution",
+      "workflow orchestration",
+      "event history / replay",
+      "retry semantics",
+      "idempotency",
+      "long-running agent workflows"
+    ]
+  },
+  "verification_candidates": [
+    {
+      "question": "What exact replay/determinism constraints should a hands-on Workflow example teach for a chosen SDK?",
+      "reason": "The generic glossary establishes Event History/replay mechanics, but coding constraints are SDK-specific and should be checked before implementation guidance.",
+      "priority": "high"
+    },
+    {
+      "question": "What minimal failure/restart experiment best demonstrates durable recovery beyond Hello World?",
+      "reason": "The product goal is practical understanding, so the eventual exercise should visibly survive a Worker restart or Activity retry.",
+      "priority": "medium"
+    },
+    {
+      "question": "When is Temporal excessive compared with a simpler job queue or scheduler?",
+      "reason": "A useful explainer needs a clear non-use boundary rather than treating durable workflow infrastructure as universally necessary.",
+      "priority": "medium"
+    }
+  ],
+  "source_locators": [
+    {
+      "label": "Durable Execution and Event History definitions",
+      "locator": "https://docs.temporal.io/glossary"
+    },
+    {
+      "label": "Temporal CLI local development service",
+      "locator": "https://docs.temporal.io/cli"
+    },
+    {
+      "label": "Language quickstarts",
+      "locator": "https://docs.temporal.io/quickstarts"
+    }
+  ],
+  "created_at": "2026-08-26"
+}
