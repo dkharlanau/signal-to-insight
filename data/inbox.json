@@ -29,9 +29,9 @@
       "source_type": "repository",
       "submitted_at": "2026-08-26",
       "requested_focus": "How does OPA separate policy decision-making from enforcement, and what should I learn or try from that architecture?",
-      "status": "queued",
-      "source_id": null,
-      "insight_id": null,
+      "status": "review",
+      "source_id": "src-open-policy-agent-opa-2026",
+      "insight_id": "open-policy-agent-decision-enforcement-model",
       "notes": "GitHub source intake issue #12. Third real acceptance case. Exercise the GitHub repository/tool adapter and connect the result to existing policy-as-code and controlled-execution concepts."
     }
   ]
