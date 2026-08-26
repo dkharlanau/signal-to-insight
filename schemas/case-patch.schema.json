@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dkharlanau.github.io/signal-to-insight/schemas/case-patch.schema.json",
+  "title": "Signal to Insight researched case patch",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["patch_version", "intake_id", "intake_status", "updated_at", "graph_version", "source", "insight", "graph"],
+  "properties": {
+    "patch_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "intake_id": {"type": "string", "pattern": "^intake-[a-z0-9-]+$"},
+    "intake_status": {"const": "review"},
+    "updated_at": {"type": "string", "format": "date"},
+    "graph_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "source": {"type": "object"},
+    "insight": {
+      "type": "object",
+      "required": ["id", "source_id", "slug", "status"],
+      "properties": {
+        "status": {"const": "review"}
+      }
+    },
+    "graph": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["concepts", "relations"],
+      "properties": {
+        "concepts": {"type": "array"},
+        "relations": {"type": "array"}
+      }
+    }
+  }
+}
