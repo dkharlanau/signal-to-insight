@@ -1,0 +1,69 @@
+name: Validate knowledge graph
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "data/knowledge-graph.json"
+      - "data/insights.json"
+      - "schemas/knowledge-graph.schema.json"
+      - "scripts/validate_graph.py"
+      - "scripts/build_graph.py"
+      - ".github/workflows/knowledge-graph.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "data/knowledge-graph.json"
+      - "data/insights.json"
+      - "schemas/knowledge-graph.schema.json"
+      - "scripts/validate_graph.py"
+      - "scripts/build_graph.py"
+      - ".github/workflows/knowledge-graph.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  graph:
+    if: github.actor != 'github-actions[bot]' || github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || 'main' }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate graph contracts
+        run: |
+          python scripts/validate.py
+          python scripts/validate_graph.py
+
+      - name: Rebuild public knowledge graph
+        run: python scripts/build_graph.py
+
+      - name: Verify graph on pull requests
+        if: github.event_name == 'pull_request'
+        run: |
+          if [ -n "$(git status --porcelain -- knowledge)" ]; then
+            git status --short -- knowledge
+            echo "Generated public knowledge graph is missing or stale."
+            exit 1
+          fi
+
+      - name: Commit synced graph on main
+        if: github.event_name == 'push'
+        run: |
+          if [ -z "$(git status --porcelain -- knowledge)" ]; then
+            echo "Knowledge graph already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A knowledge
+          git commit -m "build: sync public knowledge graph"
+          git push origin HEAD:main
