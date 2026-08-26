@@ -1,0 +1,166 @@
+{
+  "version": "1.0.0",
+  "records": [
+    {
+      "insight_id": "enterprise-agents-production-substrate",
+      "summary": "This first case establishes the baseline mental model that later sources can refine rather than creating disconnected summaries.",
+      "items": [
+        {
+          "relationship": "new",
+          "concept_id": "controlled-execution",
+          "label": "Controlled execution",
+          "source_basis": "The talk argues that production agent work needs authority, durable history, protected data access, intervention and replay around model execution.",
+          "prior_basis": "No earlier Signal to Insight evidence existed; this is the baseline case.",
+          "interpretation": "The source creates the project's initial controlled-execution model rather than merely adding another agent implementation detail.",
+          "evidence_insights": []
+        },
+        {
+          "relationship": "new",
+          "concept_id": "execution-history",
+          "label": "Execution history",
+          "source_basis": "A durable record of consequential work is presented as necessary for reconstruction, governance and later evaluation.",
+          "prior_basis": "No earlier project concept covered reconstructable execution history.",
+          "interpretation": "Execution history becomes a reusable concept that later workflow and policy sources can make more concrete.",
+          "evidence_insights": []
+        }
+      ],
+      "suppressed_prior_matches": []
+    },
+    {
+      "insight_id": "temporal-durable-execution-mental-model",
+      "summary": "Temporal turns the earlier generic idea of durable, reconstructable execution into a concrete workflow-runtime model.",
+      "items": [
+        {
+          "relationship": "refines",
+          "concept_id": "durable-execution",
+          "label": "Durable execution",
+          "source_basis": "Temporal persists Workflow Execution progress as Event History while replaceable Workers execute tasks from Task Queues.",
+          "prior_basis": "The enterprise-agent case introduced durable execution as a desirable production property but did not explain a concrete runtime mechanism.",
+          "interpretation": "Temporal narrows the abstract property into a specific mechanism: state survives outside any one Worker process and can be reconstructed from history.",
+          "evidence_insights": ["enterprise-agents-production-substrate"]
+        },
+        {
+          "relationship": "refines",
+          "concept_id": "execution-history",
+          "label": "Execution history",
+          "source_basis": "Temporal defines Event History as an append-only record representing Workflow Execution state and progress.",
+          "prior_basis": "Execution history was already present as a general governance and replay concept.",
+          "interpretation": "The source makes the concept operational by showing one system where history is also the mechanism for workflow-state reconstruction.",
+          "evidence_insights": ["enterprise-agents-production-substrate"]
+        },
+        {
+          "relationship": "new",
+          "concept_id": "idempotency-under-retry",
+          "label": "Idempotency under retry",
+          "source_basis": "Activity work can be retried, so external effects still need safe or idempotent semantics.",
+          "prior_basis": "The earlier agent architecture did not yet model repeated side effects under workflow retry.",
+          "interpretation": "This adds an important boundary: durable orchestration does not make external side effects exactly-once by itself.",
+          "evidence_insights": []
+        }
+      ],
+      "suppressed_prior_matches": []
+    },
+    {
+      "insight_id": "open-policy-agent-decision-enforcement-model",
+      "summary": "OPA makes two previously broad governance ideas more precise: policy can be explicit code, and deciding permission is different from enforcing the action.",
+      "items": [
+        {
+          "relationship": "refines",
+          "concept_id": "policy-as-code",
+          "label": "Policy as code",
+          "source_basis": "OPA evaluates declarative Rego policy and data against structured input and returns a decision to the integrating application.",
+          "prior_basis": "Policy as code was previously introduced only as one useful control around agent execution.",
+          "interpretation": "OPA turns the broad idea into a concrete architecture with a policy engine, policy/data lifecycle and an explicit decision interface.",
+          "evidence_insights": ["enterprise-agents-production-substrate"]
+        },
+        {
+          "relationship": "reinforces",
+          "concept_id": "controlled-execution",
+          "label": "Controlled execution",
+          "source_basis": "The application keeps ownership of the protected action while OPA computes a policy decision from explicit input, policy and data.",
+          "prior_basis": "Controlled execution already required explicit authority around consequential work.",
+          "interpretation": "OPA supplies a concrete authorization component compatible with that model without pretending the policy engine itself executes or verifies the business action.",
+          "evidence_insights": ["enterprise-agents-production-substrate"]
+        },
+        {
+          "relationship": "new",
+          "concept_id": "policy-decision-enforcement-separation",
+          "label": "Policy decision / enforcement separation",
+          "source_basis": "OPA returns decisions; the integrating service remains responsible for enforcement and the protected operation.",
+          "prior_basis": "The project had policy and control concepts but not this explicit architectural boundary.",
+          "interpretation": "This becomes a reusable design test: identify who decides, who enforces and who owns the side effect.",
+          "evidence_insights": []
+        }
+      ],
+      "suppressed_prior_matches": ["execution-history", "protected-data-separation"]
+    },
+    {
+      "insight_id": "react-reason-act-observe-loop",
+      "summary": "ReAct does not replace the production control model; it clarifies a different layer: how a model updates its next action using reasoning and external observations.",
+      "items": [
+        {
+          "relationship": "refines",
+          "concept_id": "controlled-execution",
+          "label": "Controlled execution",
+          "source_basis": "ReAct interleaves reasoning, environment actions and observations inside the model's task trajectory.",
+          "prior_basis": "Controlled execution describes authorization, safe execution, reconstruction and verification around consequential work.",
+          "interpretation": "The source refines the boundary by separating a cognitive/action-selection loop from the production substrate that governs whether and how selected actions may execute.",
+          "evidence_insights": ["enterprise-agents-production-substrate"]
+        },
+        {
+          "relationship": "new",
+          "concept_id": "react-loop",
+          "label": "ReAct loop",
+          "source_basis": "Thought, action and returned observation are interleaved so each observation can change the next reasoning/action choice.",
+          "prior_basis": "No existing concept described this model-level feedback loop.",
+          "interpretation": "The loop becomes a reusable mental model for agent reasoning, distinct from orchestration durability and authorization.",
+          "evidence_insights": []
+        },
+        {
+          "relationship": "new",
+          "concept_id": "observation-grounding",
+          "label": "Observation grounding",
+          "source_basis": "External actions return observations that provide new evidence and can correct or redirect subsequent reasoning.",
+          "prior_basis": "Earlier project knowledge emphasized control and replay rather than environment feedback inside a reasoning trajectory.",
+          "interpretation": "This adds the idea that tool use is valuable not only for action but also for grounding the next internal decision.",
+          "evidence_insights": []
+        }
+      ],
+      "suppressed_prior_matches": ["execution-history"]
+    },
+    {
+      "insight_id": "retrieval-practice-delayed-retention",
+      "summary": "This source opens a genuinely new learning-science branch; the agent correctly rejected attractive but irrelevant links to the existing agent/policy graph.",
+      "items": [
+        {
+          "relationship": "new",
+          "concept_id": "retrieval-practice",
+          "label": "Retrieval practice",
+          "source_basis": "Attempting to retrieve learned material can improve delayed retention compared with additional study, even when repeated study looks better immediately.",
+          "prior_basis": "The existing graph contained architecture, policy and agent concepts but no learning-science model of retrieval as a learning event.",
+          "interpretation": "This creates a new branch that changes the product itself: an explainer should later test whether the central model can be reconstructed, not only whether it was easy to read.",
+          "evidence_insights": []
+        },
+        {
+          "relationship": "new",
+          "concept_id": "performance-retention-gap",
+          "label": "Immediate performance / delayed retention gap",
+          "source_basis": "The study shows that a method can rank better on an immediate test yet worse after a meaningful delay.",
+          "prior_basis": "No prior project concept distinguished immediate comprehension/performance from retained understanding.",
+          "interpretation": "This becomes a product metric boundary: immediate clarity is insufficient evidence that Signal to Insight improved learning.",
+          "evidence_insights": []
+        },
+        {
+          "relationship": "new",
+          "concept_id": "metacognitive-confidence-gap",
+          "label": "Metacognitive confidence gap",
+          "source_basis": "Learners' predictions of future remembering can diverge from what they actually recall later.",
+          "prior_basis": "The project previously had no explicit model for confidence being a weak proxy for retention.",
+          "interpretation": "The product should measure delayed reconstruction rather than relying on a user's immediate feeling that an explainer was clear.",
+          "evidence_insights": []
+        }
+      ],
+      "suppressed_prior_matches": ["open-policy-agent", "observation-grounding", "controlled-execution", "policy-as-code", "policy-decision-enforcement-separation"]
+    }
+  ]
+}
