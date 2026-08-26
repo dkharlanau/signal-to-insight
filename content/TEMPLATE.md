@@ -1,38 +1,140 @@
-# NNN — Insight title
+# NNN — Explainer title
 
-Source: [Title](URL) — author / speaker / publisher.
+## Source record
 
-## Signal
+- **Source title:**
+- **Canonical URL / identifier:**
+- **Type:** video / article / paper / podcast / docs / repository / tool / product / other
+- **Author / speaker / organization:**
+- **Published:** YYYY-MM-DD or unknown
+- **Event date:** YYYY-MM-DD or n/a
+- **Captured:** YYYY-MM-DD
+- **Analyzed:** YYYY-MM-DD
+- **Duration / version:** when useful
+- **Date note:** explain any uncertainty
 
-What made this source worth examining? Capture the concrete idea, observation or tension — not a generic summary.
+## Why this matters
 
-## Insight
+One compact paragraph: why this source deserves attention and what understanding it can create.
 
-What follows from the signal that is reusable beyond this source?
+## One-sentence model
 
-## Mechanism
+State the central idea in a way that remains useful outside this source.
 
-Explain how the idea works. Prefer a model, sequence, dependency or causal chain.
+## Whole-source map
 
-## Challenge
+Before compression, list the important structure of the material:
 
-Where is the source incomplete, overstated or dependent on hidden assumptions?
+- problem;
+- thesis;
+- concepts;
+- mechanisms;
+- tools/systems;
+- evidence/examples;
+- assumptions;
+- limitations;
+- open questions.
 
-## Application
+## Coherent core
 
-Translate the idea into a concrete enterprise, SAP, product, architecture or operating scenario.
+What must remain so the reader gets an end-to-end model? Include necessary prerequisites even if they are not individually exciting.
+
+## Mental model
+
+Explain the causal chain, architecture, sequence, state model, comparison or dependency structure.
+
+```text
+problem
+  ↓
+mechanism
+  ↓
+components
+  ↓
+interaction
+  ↓
+outcome / trade-off
+```
+
+## Concepts to understand
+
+For each required concept:
+
+### Concept
+
+- **Plain definition:**
+- **Why it is needed here:**
+- **What it connects to:**
+- **Depth:** know / learn / deep dive
+
+## Tools and systems
+
+Include tools only when they help understand or apply the concept.
+
+### Tool / system
+
+- **Category:**
+- **What it does:**
+- **Why it matters here:**
+- **Official source:**
+- **Status:** use / try / learn / watch / not needed now
+
+## How it works
+
+Explain the mechanism step by step. Prefer one coherent sequence over disconnected facts.
+
+## Examples
+
+Use the domain that best demonstrates the idea. SAP/enterprise is optional, not required.
+
+## What the source gets right
+
+Which claims or models are especially useful?
+
+## What the source misses or oversimplifies
+
+What needs additional engineering, evidence, context or counterexamples?
+
+## Verification and enrichment
+
+Supporting or contrasting research used beyond the original source:
+
+- [Source](URL) — purpose — accessed YYYY-MM-DD
+
+## What this changes for me
+
+### Use now
+
+### Try
+
+### Learn
+
+### Build
+
+### Watch
+
+### Ignore for now
+
+Leave buckets empty when there is no justified item.
 
 ## Durable takeaway
 
-What should still be useful after the source itself stops being timely?
+What should remain useful after the source itself becomes old?
 
-## Related concepts
+## Related knowledge
 
-- concept
-- concept
+- prerequisite → concept
+- concept → tool
+- concept → related pattern
+- insight → prior insight
 
-## Follow-up
+## Visual plan
 
-- evidence to verify
-- adjacent source to inspect
-- experiment or project seed
+List only visuals that teach something:
+
+- visual type;
+- what relationship/mechanism it explains;
+- whether it should be diagram, screenshot, sourced image or generated illustration.
+
+## Sources & dates
+
+Repeat the original source plus supporting sources in a compact final provenance block.
