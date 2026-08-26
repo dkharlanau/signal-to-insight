@@ -43,6 +43,10 @@ create / update source registry
   ↓
 create structured insight + curated Knowledge Delta
   ↓
+trace important claims to evidence
+  ↓
+author reconstruction / transfer prompts
+  ↓
 generate explainer
   ↓
 validate + review
@@ -73,6 +77,36 @@ Research beyond the supplied source when it materially improves understanding. T
 Prefer primary sources for technical facts: official docs, papers, repositories, standards, vendor documentation and original talks.
 
 Distinguish every external addition from the original source. A tool discovered by project research must not be presented as if the source author recommended it.
+
+## Claim-level evidence
+
+Every insight that reaches `review` must have a compact evidence trace in `data/claim-evidence.json` for its important claims.
+
+A claim must state its epistemic origin explicitly:
+
+- `source` — paraphrase of what the supplied source establishes;
+- `verification` — fact established by a separate verification source;
+- `project_interpretation` — synthesis or boundary inferred by this project;
+- `prior_knowledge` — claim carried from an earlier evidenced insight.
+
+Each claim also has a support status:
+
+- `supported`;
+- `uncertain`;
+- `unresolved`.
+
+Rules:
+
+1. High-impact supported claims require evidence.
+2. Source-origin claims must point to the current registered source plus a meaningful locator.
+3. Verification claims must point to a registered verification URL.
+4. Prior-knowledge claims must identify the earlier insight.
+5. Project interpretations must remain visibly labeled as interpretation and explain that boundary in `note`.
+6. `uncertain` / `unresolved` claims must explain why confidence is limited.
+7. Never invent timestamps, page numbers or sections. Use the best verified locator available; a structural source section is preferable to a fabricated precision marker.
+8. Do not store copied paragraphs, transcript fragments or full source text in the evidence record. Store paraphrased claims, URLs and locators.
+
+For a published insight, public claim evidence must not depend on review-only/private prior knowledge.
 
 ## Knowledge Delta
 
@@ -125,8 +159,9 @@ A finished explainer must let the reader answer:
 6. Where does the model break or become incomplete?
 7. What is source content vs project enrichment?
 8. What changed relative to prior knowledge, and why?
-9. What should I do with this knowledge?
-10. Where did it come from and when?
+9. Which important claims are source evidence versus project interpretation, and where can they be checked?
+10. What should I do with this knowledge?
+11. Where did it come from and when?
 
 If the reader still needs to consume the original source to understand the main model, the explainer is not ready.
 
@@ -138,14 +173,16 @@ A processed source may update:
 - `data/sources.json`
 - `data/research-bundles/<intake-id>.json`
 - `data/insights.json`
+- `data/claim-evidence.json`
 - `data/knowledge-deltas.json`
+- `data/learning-prompts.json`
 - `data/knowledge-graph.json`
 - `content/explainers/*.md`
 - generated `explainers/<slug>/index.html`
 - generated `previews/<slug>/index.html`
 - `sitemap.xml`
 
-Do not edit generated explainer HTML by hand. Change the structured source/insight/delta record or generator and rebuild.
+Do not edit generated explainer HTML by hand. Change the structured source/insight/evidence/delta record or generator and rebuild.
 
 ## Required checks
 
@@ -153,13 +190,18 @@ Before considering a change complete:
 
 ```bash
 python scripts/validate.py
+python scripts/validate_claim_evidence.py
 python scripts/validate_knowledge_deltas.py
+python scripts/validate_learning_prompts.py
 python scripts/validate_graph.py
 python scripts/validate_bundles.py
+python scripts/benchmark_retrieval.py
 python scripts/build.py
 python scripts/build.py --check
 python scripts/build_previews.py
 python scripts/build_previews.py --check
+node --check app.js
+node --check evidence.js
 python -m unittest discover -s tests -p "test_*.py" -v
 python -m compileall -q scripts tests
 ```
