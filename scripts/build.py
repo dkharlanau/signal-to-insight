@@ -66,6 +66,36 @@ def json_ld(insight: dict, source: dict) -> str:
     return json.dumps(payload, ensure_ascii=False).replace("</", "<\\/")
 
 
+def render_dominant_visual(insight: dict) -> str:
+    dominant = insight["visual_plan"]["dominant"]
+    visual_type = dominant["type"]
+    nodes = dominant["nodes"]
+
+    if visual_type == "causal_chain":
+        parts: list[str] = []
+        for index, node in enumerate(nodes):
+            if index:
+                parts.append("        <b>→</b>")
+            parts.append(f'        <article><span>{e(node["label"])}</span><p>{e(node["text"])}</p></article>')
+        return '<div class="model-flow">\n' + "\n".join(parts) + '\n      </div>'
+
+    css_class = {
+        "sequence": "visual-sequence",
+        "layers": "visual-layers",
+        "comparison": "visual-compare",
+        "decision": "visual-decision",
+    }[visual_type]
+    node_markup = "".join(
+        f'''<article>
+          <span>{e(node["label"])}</span>
+          <h3>{e(node["title"])}</h3>
+          <p>{e(node["text"])}</p>
+        </article>'''
+        for node in nodes
+    )
+    return f'<div class="{css_class}" aria-label="{e(dominant["title"])}">{node_markup}</div>'
+
+
 def render_page(insight: dict, source: dict) -> str:
     date_label, date_value = source_date(source)
     creators = ", ".join(source.get("creators", [])) or "Unknown creator"
@@ -115,7 +145,7 @@ def render_page(insight: dict, source: dict) -> str:
         for item in insight.get("supporting_sources", [])
     )
 
-    model = insight["derived_model"]
+    dominant_visual = render_dominant_visual(insight)
     core_topics = "".join(f"<li>{e(topic)}</li>" for topic in insight.get("whole_source_map", {}).get("core_topics", []))
 
     return f'''<!doctype html>
@@ -165,13 +195,7 @@ def render_page(insight: dict, source: dict) -> str:
 
     <section id="model" class="detail-section wrap">
       <p class="kicker">MENTAL MODEL</p>
-      <div class="model-flow">
-        <article><span>01 · Problem</span><p>{e(model['problem'])}</p></article>
-        <b>→</b>
-        <article><span>02 · Mechanism</span><p>{e(model['mechanism'])}</p></article>
-        <b>→</b>
-        <article><span>03 · Result</span><p>{e(model['result'])}</p></article>
-      </div>
+      {dominant_visual}
       <div class="core-map">
         <div><span>Source problem</span><p>{e(insight['whole_source_map']['problem'])}</p></div>
         <div><span>Source thesis</span><p>{e(insight['whole_source_map']['thesis'])}</p></div>
