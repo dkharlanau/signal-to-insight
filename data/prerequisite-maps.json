@@ -1,0 +1,205 @@
+{
+  "version": "1.0.0",
+  "records": [
+    {
+      "insight_id": "enterprise-agents-production-substrate",
+      "summary": "The model is understandable only if execution evidence, protected-data boundaries and executor-independent work are made explicit; adjacent tooling is secondary.",
+      "items": [
+        {
+          "id": "enterprise-prereq-execution-history",
+          "label": "Execution history",
+          "concept_id": "execution-history",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "The central production argument depends on being able to reconstruct consequential work after it happened.",
+          "resolution": {"kind": "explained_here", "insight_id": "enterprise-agents-production-substrate", "target": null}
+        },
+        {
+          "id": "enterprise-prereq-data-boundary",
+          "label": "Protected data separation",
+          "concept_id": "protected-data-separation",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "The control layer is incomplete if observing orchestration implicitly grants broad access to protected business data.",
+          "resolution": {"kind": "explained_here", "insight_id": "enterprise-agents-production-substrate", "target": null}
+        },
+        {
+          "id": "enterprise-prereq-human-agent",
+          "label": "Human-agent task equivalence",
+          "concept_id": "human-agent-task-equivalence",
+          "priority": "learn_next",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "Executor-independent tasks make escalation and handoff understandable without turning human review into an unrelated exception process.",
+          "resolution": {"kind": "explained_here", "insight_id": "enterprise-agents-production-substrate", "target": null}
+        }
+      ]
+    },
+    {
+      "insight_id": "temporal-durable-execution-mental-model",
+      "summary": "Temporal becomes coherent only when Workflow Execution, Event History and Activity retry semantics are understood as separate responsibilities.",
+      "items": [
+        {
+          "id": "temporal-prereq-workflow-execution",
+          "label": "Workflow Execution",
+          "concept_id": "workflow-execution",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "The reader needs a stable unit of long-running orchestration before Worker failure and recovery can make sense.",
+          "resolution": {"kind": "explained_here", "insight_id": "temporal-durable-execution-mental-model", "target": null}
+        },
+        {
+          "id": "temporal-prereq-event-history",
+          "label": "Event History",
+          "concept_id": "event-history",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "Durable recovery depends on understanding where workflow progress is represented independently of one Worker process.",
+          "resolution": {"kind": "explained_here", "insight_id": "temporal-durable-execution-mental-model", "target": null}
+        },
+        {
+          "id": "temporal-prereq-activity",
+          "label": "Activity execution",
+          "concept_id": "activity-execution",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "Side-effecting work must be separated from deterministic orchestration to understand retry behavior and failure boundaries.",
+          "resolution": {"kind": "explained_here", "insight_id": "temporal-durable-execution-mental-model", "target": null}
+        },
+        {
+          "id": "temporal-prereq-idempotency",
+          "label": "Idempotency under retry",
+          "concept_id": "idempotency-under-retry",
+          "priority": "learn_next",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "The practical boundary of durable execution is missed if repeated external effects are assumed to become exactly-once automatically.",
+          "resolution": {"kind": "explained_here", "insight_id": "temporal-durable-execution-mental-model", "target": null}
+        }
+      ]
+    },
+    {
+      "insight_id": "open-policy-agent-decision-enforcement-model",
+      "summary": "OPA needs two prerequisites: policy as explicit decision logic and a clear boundary between deciding permission and enforcing the protected action.",
+      "items": [
+        {
+          "id": "opa-prereq-policy-as-code",
+          "label": "Policy as code",
+          "concept_id": "policy-as-code",
+          "priority": "must_know_now",
+          "prior_coverage": "established",
+          "state": "known_in_graph",
+          "reason": "OPA only makes sense once policy is treated as explicit, reviewable decision logic rather than hidden application branching.",
+          "resolution": {"kind": "existing_concept", "insight_id": null, "target": "policy-as-code"}
+        },
+        {
+          "id": "opa-prereq-decision-enforcement",
+          "label": "Policy decision / enforcement separation",
+          "concept_id": "policy-decision-enforcement-separation",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "The architecture is misread if the policy engine is treated as the component that performs the protected business action.",
+          "resolution": {"kind": "explained_here", "insight_id": "open-policy-agent-decision-enforcement-model", "target": null}
+        },
+        {
+          "id": "opa-prereq-policy-distribution",
+          "label": "Policy distribution",
+          "concept_id": "policy-distribution",
+          "priority": "learn_next",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "Operational use becomes clearer when policy and data lifecycle are separated from application deployment through bundles or equivalent mechanisms.",
+          "resolution": {"kind": "explained_here", "insight_id": "open-policy-agent-decision-enforcement-model", "target": null}
+        }
+      ]
+    },
+    {
+      "insight_id": "react-reason-act-observe-loop",
+      "summary": "ReAct requires a compact loop model first; production governance is useful boundary context but is not a prerequisite for understanding the paper mechanism itself.",
+      "items": [
+        {
+          "id": "react-prereq-loop",
+          "label": "ReAct loop",
+          "concept_id": "react-loop",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "The paper's mechanism is the repeated relationship between reasoning, environment action and returned observation.",
+          "resolution": {"kind": "explained_here", "insight_id": "react-reason-act-observe-loop", "target": null}
+        },
+        {
+          "id": "react-prereq-reasoning-trace",
+          "label": "Reasoning trace",
+          "concept_id": "reasoning-trace",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "A reasoning step must be distinguished from an external action because only the latter changes or queries the environment.",
+          "resolution": {"kind": "explained_here", "insight_id": "react-reason-act-observe-loop", "target": null}
+        },
+        {
+          "id": "react-prereq-observation",
+          "label": "Observation grounding",
+          "concept_id": "observation-grounding",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "The value of acting is not only execution; returned evidence changes what the model can reason about next.",
+          "resolution": {"kind": "explained_here", "insight_id": "react-reason-act-observe-loop", "target": null}
+        },
+        {
+          "id": "react-prereq-production-boundary",
+          "label": "Controlled execution",
+          "concept_id": "controlled-execution",
+          "priority": "optional_depth",
+          "prior_coverage": "established",
+          "state": "known_in_graph",
+          "reason": "This prior model is useful for separating ReAct's cognitive loop from authorization, durability and outcome verification in production.",
+          "resolution": {"kind": "existing_explainer", "insight_id": "enterprise-agents-production-substrate", "target": null}
+        }
+      ]
+    },
+    {
+      "insight_id": "retrieval-practice-delayed-retention",
+      "summary": "The source needs only the retrieval event and the immediate-versus-delayed distinction; broader learning-science machinery would add noise at this stage.",
+      "items": [
+        {
+          "id": "retrieval-prereq-practice",
+          "label": "Retrieval practice",
+          "concept_id": "retrieval-practice",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "The testing effect cannot be understood unless retrieval is treated as a learning event rather than only an assessment event.",
+          "resolution": {"kind": "explained_here", "insight_id": "retrieval-practice-delayed-retention", "target": null}
+        },
+        {
+          "id": "retrieval-prereq-performance-retention",
+          "label": "Immediate performance / delayed retention gap",
+          "concept_id": "performance-retention-gap",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "The study's central result depends on ranking learning conditions differently immediately and after a meaningful delay.",
+          "resolution": {"kind": "explained_here", "insight_id": "retrieval-practice-delayed-retention", "target": null}
+        },
+        {
+          "id": "retrieval-prereq-confidence",
+          "label": "Metacognitive confidence gap",
+          "concept_id": "metacognitive-confidence-gap",
+          "priority": "learn_next",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "Confidence matters as a secondary concept because feeling fluent immediately can diverge from what is retrievable later.",
+          "resolution": {"kind": "explained_here", "insight_id": "retrieval-practice-delayed-retention", "target": null}
+        }
+      ]
+    }
+  ]
+}
