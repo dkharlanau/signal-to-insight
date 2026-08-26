@@ -1,0 +1,286 @@
+{
+  "version": "1.0.0",
+  "records": [
+    {
+      "insight_id": "enterprise-agents-production-substrate",
+      "claims": [
+        {
+          "id": "enterprise-poc-not-production",
+          "text": "A successful agent proof of concept does not by itself establish production readiness for consequential work.",
+          "impact": "high",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-ai-engineer-enterprise-stack-agents-2026",
+              "url": "https://www.youtube.com/watch?v=mav15aW9lLM",
+              "locator": "Talk section: POC success versus production readiness"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "enterprise-history-supports-reconstruction",
+          "text": "Reconstructable execution history enables stronger audit and replay-based evaluation than developer logs alone.",
+          "impact": "high",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-ai-engineer-enterprise-stack-agents-2026",
+              "url": "https://www.youtube.com/watch?v=mav15aW9lLM",
+              "locator": "Talk sections: append-only execution history and replay as a production evaluation primitive"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "enterprise-controlled-substrate-interpretation",
+          "text": "The model should be treated as one executor inside a controlled execution substrate rather than as the complete production system.",
+          "impact": "high",
+          "origin": "project_interpretation",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-ai-engineer-enterprise-stack-agents-2026",
+              "url": "https://www.youtube.com/watch?v=mav15aW9lLM",
+              "locator": "Talk architecture model across execution history, protected data, human handoff and replay"
+            }
+          ],
+          "note": "This wording is the project's synthesis of the source architecture, not a direct quotation or source-authored product definition."
+        }
+      ]
+    },
+    {
+      "insight_id": "temporal-durable-execution-mental-model",
+      "claims": [
+        {
+          "id": "temporal-history-persists-state",
+          "text": "Temporal persists Workflow Execution progress as Event History so workflow state can survive Worker-process loss and be reconstructed.",
+          "impact": "high",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-temporal-docs-2026",
+              "url": "https://docs.temporal.io/glossary",
+              "locator": "Glossary definitions for Durable Execution, Workflow Execution and Event History"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "temporal-worker-task-queue",
+          "text": "Worker Processes poll Task Queues, execute application code for tasks, and return results while durable workflow progress remains represented by the Temporal Service.",
+          "impact": "medium",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-temporal-docs-2026",
+              "url": "https://docs.temporal.io/glossary",
+              "locator": "Glossary definitions for Worker Process and Task Queue"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "temporal-retry-not-exactly-once",
+          "text": "Durable orchestration does not make external side effects exactly-once automatically; retryable Activity work still needs idempotent or otherwise safe external operations.",
+          "impact": "high",
+          "origin": "project_interpretation",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-temporal-docs-2026",
+              "url": "https://docs.temporal.io/glossary",
+              "locator": "Glossary material on Activity Execution, Retry Policy and idempotency"
+            }
+          ],
+          "note": "This is a product boundary derived from Temporal retry/idempotency guidance; it prevents durable execution from being misread as a universal exactly-once guarantee."
+        }
+      ]
+    },
+    {
+      "insight_id": "open-policy-agent-decision-enforcement-model",
+      "claims": [
+        {
+          "id": "opa-decision-enforcement-separation",
+          "text": "OPA acts as a policy decision point; the integrating application or service remains the policy enforcement point responsible for obeying the returned decision.",
+          "impact": "high",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-open-policy-agent-opa-2026",
+              "url": "https://www.openpolicyagent.org/docs/deployments",
+              "locator": "Deployments documentation: Policy Decision Point versus Policy Enforcement Point"
+            },
+            {
+              "kind": "primary_source",
+              "source_id": "src-open-policy-agent-opa-2026",
+              "url": "https://github.com/open-policy-agent/opa#how-does-opa-work",
+              "locator": "Repository README: How does OPA work?"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "opa-bundles-separate-policy-lifecycle",
+          "text": "OPA Bundles let policy and data be distributed and reloaded independently from the application code deployment lifecycle.",
+          "impact": "medium",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-open-policy-agent-opa-2026",
+              "url": "https://www.openpolicyagent.org/docs/management-bundles",
+              "locator": "Official Bundles documentation"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "opa-control-primitive-not-executor",
+          "text": "OPA can supply an authorization primitive inside controlled execution, but it is not itself the component that performs, verifies or durably records the protected business action.",
+          "impact": "high",
+          "origin": "project_interpretation",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-open-policy-agent-opa-2026",
+              "url": "https://www.openpolicyagent.org/docs/deployments",
+              "locator": "Decision/enforcement responsibility boundary"
+            },
+            {
+              "kind": "prior_insight",
+              "insight_id": "enterprise-agents-production-substrate",
+              "locator": "Controlled-execution model"
+            }
+          ],
+          "note": "The source establishes the decision/enforcement split; the connection to the existing controlled-execution model is project synthesis."
+        }
+      ]
+    },
+    {
+      "insight_id": "react-reason-act-observe-loop",
+      "claims": [
+        {
+          "id": "react-interleaves-reason-action-observation",
+          "text": "ReAct interleaves language reasoning traces with environment actions and observations so external feedback can change subsequent reasoning and action selection.",
+          "impact": "high",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-react-paper-2210-03629",
+              "url": "https://arxiv.org/pdf/2210.03629",
+              "locator": "PDF Figure 1 p. 2 and Section 2 pp. 3-4"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "react-benchmark-context",
+          "text": "The paper reports task-specific gains over Act-only and selected comparison methods, but its benchmark results are tied to the evaluated 2022-era models, prompting setup and environments.",
+          "impact": "medium",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-react-paper-2210-03629",
+              "url": "https://arxiv.org/pdf/2210.03629",
+              "locator": "PDF Table 1 p. 5, Table 2/discussion p. 6, conclusion pp. 9-10"
+            }
+          ],
+          "note": "The evidence supports the mechanism and reported task results, not a universal claim that ReAct is the best current agent architecture."
+        },
+        {
+          "id": "react-not-production-control-layer",
+          "text": "A ReAct reasoning/action loop selects and updates actions at the model layer; authorization, durable execution evidence, retries and outcome verification still belong to an external production-control layer.",
+          "impact": "high",
+          "origin": "project_interpretation",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-react-paper-2210-03629",
+              "url": "https://arxiv.org/pdf/2210.03629",
+              "locator": "Method Section 2 plus ethics/safety discussion pp. 9-10"
+            },
+            {
+              "kind": "prior_insight",
+              "insight_id": "enterprise-agents-production-substrate",
+              "locator": "Controlled-execution and execution-history model"
+            }
+          ],
+          "note": "This boundary deliberately separates model-level action selection from production governance; the paper does not claim to provide the latter."
+        }
+      ]
+    },
+    {
+      "insight_id": "retrieval-practice-delayed-retention",
+      "claims": [
+        {
+          "id": "retrieval-improves-delayed-retention",
+          "text": "In the reported prose-learning experiments, free-recall testing without feedback produced stronger delayed retention than additional study despite less re-exposure to the source material.",
+          "impact": "high",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-test-enhanced-learning-2006",
+              "url": "https://learninglab.psych.purdue.edu/downloads/2006/2006_Roediger_Karpicke_PsychSci.pdf",
+              "locator": "Experiment 1 Figure 1 pp. 250-251 and Experiment 2 Figure 2 pp. 252-253"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "retrieval-immediate-delayed-crossover",
+          "text": "Immediate performance can favor additional study while delayed retention favors prior retrieval, so immediate fluency is not a reliable proxy for durable learning.",
+          "impact": "high",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-test-enhanced-learning-2006",
+              "url": "https://learninglab.psych.purdue.edu/downloads/2006/2006_Roediger_Karpicke_PsychSci.pdf",
+              "locator": "Experiment 1 crossover Figure 1 pp. 250-251; Experiment 2 crossover Figure 2 pp. 252-253; Table 2 confidence ratings"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "retrieval-no-spacing-prescription",
+          "text": "This study justifies testing delayed reconstruction as a product signal, but it does not establish an optimal spacing schedule or prove transfer to complex application tasks.",
+          "impact": "high",
+          "origin": "project_interpretation",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-test-enhanced-learning-2006",
+              "url": "https://learninglab.psych.purdue.edu/downloads/2006/2006_Roediger_Karpicke_PsychSci.pdf",
+              "locator": "Study design/General Discussion; longest tested interval one week, free-recall outcome on two prose passages"
+            }
+          ],
+          "note": "The product implication is intentionally narrower than a spaced-repetition prescription; spacing, feedback and transfer require additional evidence."
+        }
+      ]
+    }
+  ]
+}
