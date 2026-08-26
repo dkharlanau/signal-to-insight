@@ -1,7 +1,7 @@
 {
   "project": {
     "name": "Signal to Insight",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "purpose": "Turn supplied sources into coherent, personalized, visual and actionable learning artifacts.",
     "profile": "/config/research-profile.json",
     "pipeline": "/docs/PIPELINE.md"
@@ -43,6 +43,54 @@
         "problem": "A model can complete a task without the organization being able to govern the task.",
         "mechanism": "Put identity, authority, durable history, protected data access, human intervention and replay around execution.",
         "result": "The same work becomes more controllable, explainable and testable regardless of whether the executor is an AI model or a person."
+      },
+      "coherence_review": {
+        "central_chain": [
+          "A proof of concept demonstrates that a model can perform a task.",
+          "Production use turns that task into consequential organizational work that requires authority, state, evidence and recovery.",
+          "Execution history, protected data access, executor-independent tasks and replay form one control layer around the model.",
+          "That layer makes the work more explainable, interruptible and testable over time."
+        ],
+        "prerequisites_complete": true,
+        "source_vs_enrichment_clear": true,
+        "open_gaps": [
+          "The talk establishes architectural primitives more strongly than concrete implementation guidance; adjacent tools are therefore project-added learning connections.",
+          "The YouTube upload date is not independently verified."
+        ],
+        "scores": {
+          "coherence": 5,
+          "prerequisite_completeness": 4,
+          "evidence_confidence": 4,
+          "practical_leverage": 5
+        }
+      },
+      "visual_plan": {
+        "dominant": {
+          "type": "causal_chain",
+          "title": "Capability is not controlled execution",
+          "nodes": [
+            {
+              "label": "01 · Problem",
+              "title": "Capability without governance",
+              "text": "A model can complete a task without the organization being able to govern the task."
+            },
+            {
+              "label": "02 · Mechanism",
+              "title": "Controlled execution substrate",
+              "text": "Put identity, authority, durable history, protected data access, human intervention and replay around execution."
+            },
+            {
+              "label": "03 · Result",
+              "title": "Explainable and replayable work",
+              "text": "The same work becomes more controllable, explainable and testable regardless of whether the executor is an AI model or a person."
+            }
+          ]
+        },
+        "supporting": ["comparison", "concept_grid", "tool_map", "examples", "limitations", "action_map", "source_map"],
+        "image": {
+          "needed": false,
+          "reason": "The core learning is architectural and relational; diagrams communicate it more precisely than a decorative or generated image."
+        }
       },
       "concepts": [
         {
