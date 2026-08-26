@@ -11,6 +11,7 @@ on:
       - "styles.css"
       - "explainer.css"
       - "visual-plan.css"
+      - "retention.css"
       - "preview.css"
       - "app.js"
   pull_request:
