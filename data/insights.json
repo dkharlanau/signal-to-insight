@@ -1,7 +1,7 @@
 {
   "project": {
     "name": "Signal to Insight",
-    "version": "0.3.0",
+    "version": "0.4.0",
     "purpose": "Turn supplied sources into coherent, personalized, visual and actionable learning artifacts.",
     "profile": "/config/research-profile.json",
     "pipeline": "/docs/PIPELINE.md"
@@ -14,20 +14,6 @@
       "status": "published",
       "title": "Why enterprise AI agents fail after the POC",
       "one_liner": "A production agent needs a controlled execution environment around the model, not just a model connected to tools.",
-      "source": {
-        "type": "video",
-        "title": "Why Your Enterprise Tech Stack Isn't Ready for AI Agents - And What to Build Instead",
-        "url": "https://www.youtube.com/watch?v=mav15aW9lLM",
-        "speakers": ["Christopher Lovejoy", "Saul Howard"],
-        "publisher": "AI Engineer",
-        "event": "AI Engineer World's Fair 2026",
-        "published_at": null,
-        "event_date": "2026-07-02",
-        "captured_at": "2026-08-26",
-        "analyzed_at": "2026-08-26",
-        "duration": "19:15",
-        "date_note": "The conference session date is verified from the official AI Engineer World's Fair 2026 schedule. The YouTube upload date is not recorded here because it has not been independently verified."
-      },
       "why_this_matters": "Many agent demos prove task capability but do not prove that the surrounding system can authorize, observe, interrupt, reconstruct and evaluate real work.",
       "whole_source_map": {
         "problem": "POC architecture often omits controls and state-management properties required in production.",
@@ -113,12 +99,6 @@
           "depth": "learn",
           "why_needed": "Historical state can become evaluation material for models, prompts, policies and tools."
         }
-      ],
-      "patterns": [
-        {"name": "Immutable execution history", "purpose": "Make execution reconstructable."},
-        {"name": "Separated execution and data planes", "purpose": "Reduce unnecessary exposure of protected data while keeping orchestration observable."},
-        {"name": "Executor-independent task model", "purpose": "Allow human and AI execution to share the same workflow contract."},
-        {"name": "Replay as an evaluation primitive", "purpose": "Compare changes against reconstructable historical cases."}
       ],
       "tool_map": [
         {
@@ -225,6 +205,247 @@
         "source_dates_recorded": true,
         "full_transcript_stored": false,
         "analysis_type": "original commentary, enrichment and application",
+        "reviewed_at": "2026-08-26"
+      }
+    },
+    {
+      "id": "temporal-durable-execution-mental-model",
+      "source_id": "src-temporal-docs-2026",
+      "slug": "temporal-durable-execution",
+      "status": "review",
+      "title": "Temporal: the mental model behind durable execution",
+      "one_liner": "Temporal moves workflow progress out of one process and into durable execution state so Workers can fail, restart and continue the work.",
+      "why_this_matters": "Retries are easy to describe and surprisingly hard to compose across multi-step, long-running work. Temporal is useful to understand because it changes the unit of reliability from a running process to a persisted Workflow Execution.",
+      "whole_source_map": {
+        "problem": "Long-running or multi-step processes become fragile when their progress exists mainly inside one process and every failure path must be rebuilt manually.",
+        "thesis": "Temporal provides durable execution by persisting Workflow Execution state and progress in the Temporal Service while Worker Processes execute tasks from queues.",
+        "core_topics": [
+          "Workflow Execution",
+          "Event History",
+          "Worker Process and Task Queue",
+          "Activity Execution",
+          "Retry Policy, timeouts and idempotency"
+        ]
+      },
+      "derived_model": {
+        "problem": "If process progress lives only in application memory, a crash can turn recovery into custom state-management code.",
+        "mechanism": "Temporal keeps Workflow Execution progress as persisted Event History; Workers poll tasks, execute Workflow/Activity code, record progress, and can later reconstruct workflow state from history.",
+        "result": "The process can survive Worker or process failures and continue from durable state instead of treating every restart as a new workflow."
+      },
+      "coherence_review": {
+        "central_chain": [
+          "A multi-step process needs state that outlives the process currently executing it.",
+          "Temporal represents the process as a Workflow Execution whose progress is persisted by the Temporal Service as Event History.",
+          "Worker Processes poll Task Queues and execute Workflow or Activity work, so Workers are replaceable executors rather than the sole owners of workflow state.",
+          "Retry Policies and timeouts help repeat failed work, while external effects still need safe/idempotent Activity design.",
+          "The useful outcome is durable continuation across failures, waits and long-running work."
+        ],
+        "prerequisites_complete": true,
+        "source_vs_enrichment_clear": true,
+        "open_gaps": [
+          "Exact replay/determinism coding constraints differ by SDK and should be checked in the chosen language guide before implementation.",
+          "Advanced history management, production topology and Temporal Cloud operations are intentionally outside this first mental model."
+        ],
+        "scores": {
+          "coherence": 5,
+          "prerequisite_completeness": 4,
+          "evidence_confidence": 5,
+          "practical_leverage": 4
+        }
+      },
+      "visual_plan": {
+        "dominant": {
+          "type": "sequence",
+          "title": "Where the workflow state survives",
+          "nodes": [
+            {
+              "label": "01 · Start",
+              "title": "Workflow Execution",
+              "text": "A client starts durable work whose identity and progress live beyond one Worker process."
+            },
+            {
+              "label": "02 · Persist",
+              "title": "Event History",
+              "text": "The Temporal Service records Events in an append-only history representing Workflow Execution state."
+            },
+            {
+              "label": "03 · Dispatch",
+              "title": "Task Queue",
+              "text": "Workflow and Activity tasks are made available for Worker Processes to poll and execute."
+            },
+            {
+              "label": "04 · Execute",
+              "title": "Worker + Activity",
+              "text": "Workers run application code; side-effecting work can retry and therefore needs safe external-operation semantics."
+            },
+            {
+              "label": "05 · Recover",
+              "title": "Replay and continue",
+              "text": "If a Worker disappears, persisted history remains and workflow state can be reconstructed so execution continues."
+            }
+          ]
+        },
+        "supporting": ["layers", "concept_grid", "tool_map", "examples", "limitations", "action_map", "source_map"],
+        "image": {
+          "needed": false,
+          "reason": "The important idea is the movement and persistence of workflow state; a sequence/layer diagram teaches this more precisely than a generated illustration."
+        }
+      },
+      "concepts": [
+        {
+          "name": "Workflow Execution",
+          "depth": "learn",
+          "why_needed": "This is the durable unit of execution; it is not equivalent to one running Worker process."
+        },
+        {
+          "name": "Event History",
+          "depth": "learn",
+          "why_needed": "Temporal defines it as an append-only log of Events representing the full state of a Workflow Execution."
+        },
+        {
+          "name": "Worker Process + Task Queue",
+          "depth": "learn",
+          "why_needed": "Workers poll queues and execute code, which separates durable workflow state from any single executor process."
+        },
+        {
+          "name": "Activity Execution",
+          "depth": "learn",
+          "why_needed": "Activities are the practical boundary for work that interacts with external systems and can be retried."
+        },
+        {
+          "name": "Idempotency under retry",
+          "depth": "learn",
+          "why_needed": "A retry can repeat external work; Temporal's documentation explicitly calls for idempotent Activity design to avoid duplicate effects."
+        }
+      ],
+      "tool_map": [
+        {
+          "name": "Temporal CLI",
+          "category": "local development and operations",
+          "why_explore": "The official CLI can start an embedded local development service with `temporal server start-dev`, which makes it the fastest way to inspect Temporal locally.",
+          "url": "https://docs.temporal.io/cli",
+          "relationship": "Source-native Temporal tool documented in the official source.",
+          "status": "try"
+        },
+        {
+          "name": "Temporal SDK",
+          "category": "workflow application SDK",
+          "why_explore": "SDKs provide the APIs used to define Workflows, Activities, Clients and Worker Programs; choose the language already comfortable for the smallest experiment.",
+          "url": "https://docs.temporal.io/develop",
+          "relationship": "Source-native Temporal component documented in the official source.",
+          "status": "learn"
+        },
+        {
+          "name": "Temporal Web UI",
+          "category": "workflow inspection",
+          "why_explore": "The Web UI exposes Workflow Execution state and metadata, which is useful for making the durability model visible during an experiment.",
+          "url": "https://docs.temporal.io/glossary",
+          "relationship": "Source-native Temporal component documented in the official source.",
+          "status": "try"
+        },
+        {
+          "name": "Temporal Cloud",
+          "category": "managed Temporal environment",
+          "why_explore": "It becomes relevant only after the local execution model proves useful and a managed production service is preferable to self-hosting.",
+          "url": "https://docs.temporal.io/cloud",
+          "relationship": "Source-native managed offering; not required for the first local learning experiment.",
+          "status": "watch"
+        }
+      ],
+      "examples": [
+        {
+          "domain": "custom automation",
+          "scenario": "A multi-step onboarding process waits for external APIs, human input and later retries.",
+          "question": "Should progress survive process restarts without writing custom recovery tables and retry orchestration for every step?"
+        },
+        {
+          "domain": "AI agent",
+          "scenario": "An agent workflow invokes tools over minutes or hours and may wait for approval or external results.",
+          "question": "Is the agent loop important enough that a Worker restart should not erase which steps already completed or what should happen next?"
+        }
+      ],
+      "limitations": [
+        "Temporal introduces a workflow runtime, SDK programming model and service dependency; simple stateless request-response or short best-effort jobs may be better served by lighter infrastructure.",
+        "Retries do not make external effects exactly-once. Activities that can be retried still need idempotent or otherwise safe interactions with external systems.",
+        "Workflow logic must respect Temporal's replay/execution model; arbitrary non-deterministic behavior cannot be treated like ordinary in-process code.",
+        "This explainer deliberately stops before advanced history lifecycle, deployment versioning, replication, scaling and Cloud operations."
+      ],
+      "action_map": {
+        "use_now": [
+          "Use the durability question when designing any long-running automation: where does progress live if the current process disappears?"
+        ],
+        "try": [
+          "Install Temporal CLI and run the official local development service with `temporal server start-dev`.",
+          "Run one official language quickstart, then restart the Worker during a deliberately multi-step workflow and inspect what persisted in the Web UI/Event History."
+        ],
+        "learn": [
+          "Workflow Execution versus Worker Process",
+          "Event History and replay",
+          "Workflow versus Activity boundaries",
+          "Retry Policy, timeouts and Activity idempotency"
+        ],
+        "build": [
+          "A tiny long-running agent or approval workflow where an external/tool call is an Activity and workflow progress survives a Worker restart."
+        ],
+        "watch": [
+          "Whether durable workflow runtimes become a common substrate for production AI-agent execution rather than each agent framework rebuilding recovery semantics."
+        ],
+        "ignore_for_now": [
+          "Temporal Cloud, multi-region replication, Nexus and advanced production tuning until the local durable-execution model proves useful."
+        ]
+      },
+      "connections": [
+        "durable execution",
+        "workflow orchestration",
+        "event history",
+        "replay",
+        "retry semantics",
+        "idempotency",
+        "long-running agents"
+      ],
+      "supporting_sources": [
+        {
+          "title": "Temporal Platform Documentation",
+          "url": "https://docs.temporal.io/",
+          "publisher": "Temporal Technologies Inc.",
+          "purpose": "canonical documentation source and platform framing",
+          "accessed_at": "2026-08-26"
+        },
+        {
+          "title": "Temporal Glossary",
+          "url": "https://docs.temporal.io/glossary",
+          "publisher": "Temporal Technologies Inc.",
+          "purpose": "official definitions for Durable Execution, Event History, Worker Process, Workflow Execution, Retry Policy and idempotency",
+          "accessed_at": "2026-08-26"
+        },
+        {
+          "title": "Temporal CLI",
+          "url": "https://docs.temporal.io/cli",
+          "publisher": "Temporal Technologies Inc.",
+          "purpose": "official local development service and CLI behavior",
+          "accessed_at": "2026-08-26"
+        },
+        {
+          "title": "Temporal Quickstarts",
+          "url": "https://docs.temporal.io/quickstarts",
+          "publisher": "Temporal Technologies Inc.",
+          "purpose": "official language quickstart paths",
+          "accessed_at": "2026-08-26"
+        },
+        {
+          "title": "Develop durable applications with Temporal SDKs",
+          "url": "https://docs.temporal.io/develop",
+          "publisher": "Temporal Technologies Inc.",
+          "purpose": "official SDK entry point and current supported language guides",
+          "accessed_at": "2026-08-26"
+        }
+      ],
+      "tags": ["temporal", "durable-execution", "workflows", "retries", "idempotency", "developer-tools"],
+      "provenance": {
+        "source_linked": true,
+        "source_dates_recorded": true,
+        "full_transcript_stored": false,
+        "analysis_type": "direct official-documentation analysis with practical learning application",
         "reviewed_at": "2026-08-26"
       }
     }
