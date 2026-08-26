@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dkharlanau.github.io/signal-to-insight/schemas/source.schema.json",
+  "title": "Signal to Insight source registry",
+  "type": "object",
+  "required": ["sources"],
+  "properties": {
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "title", "canonical_url", "creators", "captured_at", "analyzed_at", "derived_records"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^src-[a-z0-9-]+$"},
+          "type": {"type": "string"},
+          "title": {"type": "string", "minLength": 1},
+          "canonical_url": {"type": "string", "format": "uri"},
+          "creators": {"type": "array", "items": {"type": "string"}},
+          "publisher": {"type": ["string", "null"]},
+          "event": {"type": ["string", "null"]},
+          "published_at": {"type": ["string", "null"]},
+          "event_date": {"type": ["string", "null"]},
+          "captured_at": {"type": "string", "format": "date"},
+          "analyzed_at": {"type": "string", "format": "date"},
+          "date_note": {"type": ["string", "null"]},
+          "verification": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["title", "url", "accessed_at"],
+              "properties": {
+                "title": {"type": "string"},
+                "url": {"type": "string", "format": "uri"},
+                "accessed_at": {"type": "string", "format": "date"}
+              },
+              "additionalProperties": false
+            }
+          },
+          "derived_records": {"type": "array", "items": {"type": "string"}}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
