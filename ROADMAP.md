@@ -2,217 +2,203 @@
 
 ## Product goal
 
-Turn one supplied source into a personalized, coherent learning artifact that is faster to consume than the source while preserving the mental model needed to understand and use it.
+Turn one supplied source into a personalized, coherent learning artifact that is faster to consume than the source while preserving the mental model needed to understand, use and later reconstruct it.
 
 The product is source-driven, not domain-driven.
 
-## Current state — foundation complete
+## Current state — five-source foundation proven
 
-The stable source-to-output contracts are now implemented:
+The first product milestone has been reached through **review-ready output** across five genuinely different real sources:
 
-- intake queue + normalized URLs;
-- source/date provenance model;
-- research profile;
-- source adapter contracts;
-- normalized research bundle;
-- insight model;
-- validators + cross-reference checks;
-- public explainer generator;
-- review-only noindex previews;
-- reusable visual grammar;
-- generated searchable library;
-- end-to-end acceptance test;
-- CI checks for knowledge integrity and generated-output drift.
+1. **video** — enterprise agent production architecture;
+2. **technical documentation** — Temporal durable execution;
+3. **GitHub repository / tool** — Open Policy Agent;
+4. **research paper / PDF** — ReAct;
+5. **outside-domain research article** — retrieval practice / delayed retention.
 
-This means the next work should focus on **research intelligence and real source throughput**, not adding more repository scaffolding.
+This proves that one stable knowledge model can handle source types with very different structures. Four newer cases remain deliberately in `review`; publication is a separate explicit decision rather than an automatic consequence of research completion.
 
-## Loop 1 — Real extraction adapters
+Implemented end-to-end capabilities now include:
 
-Goal: make common source types easy for an agent to inspect with consistent provenance.
+- owner Issue + CLI intake with normalized URL deduplication;
+- graph-aware research-bundle scaffolding;
+- whole-source mapping and source-safe provenance;
+- explicit prior-knowledge classification before review;
+- direct research paths for video, documentation, GitHub repositories, PDF/papers and web research articles;
+- coherent-core and prerequisite checks;
+- structured visual planning with chain / sequence / layers / comparison / decision primitives;
+- atomic researched case patches instead of manual edits to large shared registries;
+- review-only case materialization with CI-enforced no-auto-publish boundary;
+- generated `noindex,nofollow` review previews;
+- cumulative typed knowledge graph;
+- strict published-only public graph projection;
+- searchable public library and Knowledge surface;
+- lexical + graph prior-knowledge retrieval with noise guards;
+- local-first delayed reconstruction UI on generated explainers;
+- CI for schemas, research bundles, graph integrity, case patches, generated outputs and browser JavaScript.
 
-Build/test concrete processing paths for:
+The main risk has therefore changed. It is no longer “can the repository represent and render different sources?” It is now **whether the system measurably improves understanding and retention enough to justify continued use**.
 
-- YouTube/video metadata + transcript/subtitle inspection when available;
-- web articles/documentation;
-- PDF/research papers;
-- GitHub repositories;
-- tool/product documentation.
+## Next milestone — prove learning utility
 
-Requirements:
+Do not add a backend or more source abstractions yet. Prove three things with the current system.
 
-- source-specific extraction can change without changing the research-bundle schema;
-- full third-party text stays transient/private;
-- extraction method/confidence/gaps are recorded;
-- dates and versions come from trustworthy metadata;
-- the adapter may fail visibly rather than invent content.
+### 1. Review and publish intentionally
 
-Success test: process at least one real example of each major source type through the same normalized bundle contract.
+Take at least two current review explainers through a real human review:
 
-## Loop 2 — Research orchestrator
+- Temporal;
+- Open Policy Agent;
+- ReAct;
+- retrieval practice.
 
-Goal: reduce `queued URL → review-ready explainer` to one agent task.
+For each review, check:
 
-The orchestrator should perform:
+- central model is correct;
+- important source claims have visible provenance;
+- project interpretation is distinguishable from source claims;
+- limitations are strong enough to prevent misuse;
+- visual structure teaches rather than decorates;
+- prior-knowledge graph changes are appropriate;
+- publication would improve the public library rather than merely increase volume.
+
+Only then perform a separate explicit `review → published` transition.
+
+### 2. Test the retention loop
+
+Use delayed recall on at least three explainers.
+
+The minimal experiment is:
 
 ```text
-pick queued source
-→ capture
-→ map whole source
-→ score with research profile
-→ select coherent core
-→ identify missing prerequisites
-→ verify consequential claims
-→ research useful adjacent tools/systems
-→ create/update source registry
-→ create insight record
-→ choose visual plan
-→ generate preview
-→ run quality gates
-→ leave for review
+read explainer
+→ leave it
+→ reconstruct problem / mechanism / result / boundary from memory
+→ reveal compact answer key
+→ record recalled / missed pieces locally
+→ optionally repeat later
 ```
 
-No automatic publication.
+Measure whether the recall prompt captures the **mental model**, not trivia.
 
-The preferred first implementation is an agent playbook/command that works with existing research tools. A custom backend is not required until repeated runs prove it is useful.
+Do not infer an optimized spacing algorithm from the 2006 retrieval-practice study. Before becoming prescriptive about scheduling, add evidence on:
 
-## Loop 3 — Coherence engine
+- spacing;
+- feedback after failed retrieval;
+- transfer / application rather than recall alone.
 
-Goal: make the output reliably better than a normal summary.
+### 3. Test cumulative knowledge quality
 
-Add explicit checks for:
+For several new sources, record whether prior-knowledge retrieval:
 
-- central causal/mechanical chain;
-- concept dependency graph;
-- missing prerequisites;
-- selected-detail contribution to the model;
-- contradictions between retained claims;
-- source claim vs project interpretation;
-- completeness: can the reader explain the topic end-to-end?
+- finds genuinely relevant concepts;
+- avoids false connections across domains;
+- reduces repeated explanation of known basics;
+- surfaces useful contradictions/refinements;
+- keeps review-only knowledge out of the public projection.
 
-Possible structured scores:
+A good graph is not the one with the most nodes. It is the one that improves the next analysis.
 
-- coherence;
-- prerequisite completeness;
-- evidence confidence;
-- novelty;
-- practical leverage;
-- tool/system relevance;
-- explanation completeness.
+## Near-term product work
 
-Scores should guide review, not replace judgment.
+### Review workflow
 
-## Loop 4 — Visual planning + explanatory assets
+Build a safe explicit review/publish command or PR workflow that:
 
-Goal: make the visual output adapt to the idea rather than merely apply one template.
+- can only publish an existing `review` insight;
+- requires a human-supplied review decision;
+- validates source/date/coherence/public projection before transition;
+- updates intake, explainer, library, sitemap and public knowledge atomically;
+- supports reverting a published insight to review/archived without losing provenance.
 
-Add a structured `visual_plan` to each insight:
+Do not auto-approve review from CI or an agent run.
 
-- dominant primitive: chain / sequence / layers / comparison / decision / state / annotated object;
-- supporting primitives;
-- key labels/relationships;
-- whether an image is useful;
-- why the image teaches something a diagram cannot;
-- source/rights notes for non-generated assets.
+### Retention model
 
-Then update the generator to select page composition from that plan.
+Current implementation is intentionally small and local-first:
 
-Generated images should be optional. Prefer CSS/SVG diagrams for mechanisms; use generated imagery for spatial, physical or conceptual scenes where it materially improves understanding.
+- one reconstruction prompt per explainer;
+- compact answer key derived from the model;
+- optional 2-day / 1-week local reminder state;
+- recalled / missed-pieces result;
+- no account;
+- no backend;
+- no saved free-text answer;
+- no gamification.
 
-## Loop 5 — Accumulating personal knowledge graph
+Next additions should be evidence-driven. Candidate structured fields after the experiment proves useful:
 
-Goal: make every source improve future source analysis.
+- explicit `retention_prompt` authored with the insight rather than DOM-derived;
+- application/transfer prompt for concepts where recall is insufficient;
+- local review history export/import;
+- concept-level due state only if it improves navigation.
 
-Model:
+### Retrieval quality
 
-- concepts and aliases;
-- concept → prerequisite;
-- source → concept;
-- insight → pattern;
-- tool → concept;
-- tool → category/alternative;
-- evidence supports / contradicts;
-- first-seen / last-verified dates;
-- `known`, `needs_refresh`, `new_to_learn` state.
+Continue hardening prior-knowledge retrieval with real cases. Prefer:
 
-Use the graph to avoid re-explaining familiar basics while still surfacing genuinely new connections.
+- exact concept/alias evidence;
+- multiple independent topical matches;
+- typed graph neighbors after a strong seed;
+- transparent matched terms and relationship path.
 
-## Loop 6 — Better intake surfaces
+Avoid embedding-heavy infrastructure until lexical + graph retrieval has a documented failure mode it cannot solve.
 
-Goal: make supplying a source effortless.
+### Visual quality
 
-Possible surfaces:
+The visual grammar has now been exercised on multiple structures. Improve visual components only when a real explainer exposes a comprehension or layout problem.
 
-- ChatGPT / connected GitHub agent;
-- GitHub Issue Form with URL + optional focus;
-- CLI;
-- lightweight web intake page;
-- browser share/bookmark action;
-- API endpoint only if needed later.
+Useful next tests:
 
-All surfaces should create the same `data/inbox.json` contract.
+- decision tree source;
+- state-transition source;
+- a source where one real image/figure teaches more than a CSS diagram.
 
-## Loop 7 — Publishing and discovery
+Do not add generated imagery by default.
 
-Goal: make useful public explainers discoverable without turning the project into a content farm.
+## Later — publishing and discovery
 
-Improve:
+After review flow and learning utility are proven:
 
-- generated library organization;
-- related explainers;
-- concept/tool pages;
-- canonical metadata + structured data;
+- related explainers generated from public graph edges;
+- concept pages backed only by published evidence;
 - RSS/Atom;
-- `llms.txt` / machine-readable discovery;
+- generated sitemap from published records;
 - OpenGraph cards;
-- sitemap generation from published records;
+- `llms.txt` / machine-readable discovery;
 - cross-links from source → concept → tool → explainer.
 
 Quality remains more important than volume.
 
-## Loop 8 — Services / MCP
+## Later — services / MCP
 
-Only after the content model is proven across multiple real sources:
+Only if repeated use shows that external access is useful:
 
 - versioned JSON feed;
 - `get_insight(slug)`;
 - `search_insights(query)`;
 - `get_concept(name)`;
 - `get_tools_for_concept(name)`;
-- MCP wrapper for agent access;
-- optional private profile/context service;
-- optional automated PR creation for review-ready explainers.
+- MCP wrapper;
+- optional private retention/context service.
 
-## Loop 9 — Evaluation
+The static/local-first architecture remains preferable until a service solves a demonstrated problem.
 
-Measure learning utility rather than output count.
+## Evaluation
 
-Candidate metrics:
+The project should optimize learning utility, not output count.
 
-- time saved vs source duration/read time;
-- `I understand this now` rating;
+Core metrics / review questions:
+
+- time saved versus consuming the original source;
+- `I can explain the central model now`;
+- delayed `I can reconstruct the central model`;
 - prerequisite gaps found during review;
 - percentage of explainers producing a useful action/learning decision;
-- number of useful cross-source connections;
+- useful cross-source connections versus false-positive connections;
 - percentage of drafts requiring structural rewrite;
 - source/date completeness;
-- stale-tool detection;
-- later recall of the central model.
-
-## Next acceptance milestone
-
-Process **five genuinely different real sources**:
-
-1. video;
-2. GitHub repository/tool;
-3. research paper/PDF;
-4. technical documentation/article;
-5. source outside the usual AI/enterprise domain with high conceptual leverage.
-
-For each one, require:
-
-`intake → bundle → verification → insight → visual plan → preview → review → published explainer → library`
-
-After those five, reassess the schemas and only then introduce more backend/service complexity.
+- later ability to apply the model to a new example.
 
 ## Non-goals
 
@@ -222,5 +208,7 @@ After those five, reassess the schemas and only then introduce more backend/serv
 - isolated quotes / “top takeaways” as the main product;
 - storing full third-party transcripts/content;
 - decorative image generation without explanatory value;
-- automatic publication without review;
-- backend infrastructure before repeated real-source runs prove the need.
+- automatic publication without human review;
+- quiz banks, streaks or gamification as the product;
+- sophisticated spaced repetition before a minimal delayed-recall loop proves useful;
+- backend infrastructure before repeated real use proves the need.
