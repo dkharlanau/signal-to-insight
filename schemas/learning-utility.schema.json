@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dkharlanau.github.io/signal-to-insight/schemas/learning-utility.schema.json",
+  "title": "Signal to Insight local learning utility log",
+  "type": "object",
+  "required": ["version", "records"],
+  "properties": {
+    "version": {"type": "string"},
+    "records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "insight_id", "recorded_at", "source_minutes_estimate", "explainer_minutes", "immediate_model", "decision", "delayed", "transfer"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "insight_id": {"type": "string", "minLength": 1},
+          "recorded_at": {"type": "string", "format": "date-time"},
+          "source_minutes_estimate": {"type": "number", "exclusiveMinimum": 0},
+          "explainer_minutes": {"type": "number", "exclusiveMinimum": 0},
+          "immediate_model": {"enum": ["yes", "partial", "no"]},
+          "decision": {"enum": ["use_now", "try", "learn", "build", "watch", "ignore_for_now"]},
+          "delayed": {
+            "anyOf": [
+              {"type": "null"},
+              {
+                "type": "object",
+                "required": ["delay_days", "reconstruction", "recalled_pieces", "missed_pieces"],
+                "properties": {
+                  "delay_days": {"type": "number", "minimum": 0},
+                  "reconstruction": {"enum": ["complete", "partial", "failed"]},
+                  "recalled_pieces": {"type": "array", "items": {"type": "string"}},
+                  "missed_pieces": {"type": "array", "items": {"type": "string"}}
+                },
+                "additionalProperties": false
+              }
+            ]
+          },
+          "transfer": {"enum": ["applied", "partial", "failed", "not_tested"]},
+          "note": {"type": ["string", "null"]}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
