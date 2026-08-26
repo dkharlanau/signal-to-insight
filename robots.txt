@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://dkharlanau.github.io/signal-to-insight/sitemap.xml
