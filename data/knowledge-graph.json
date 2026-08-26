@@ -1,0 +1,260 @@
+{
+  "graph_version": "0.1.0",
+  "updated_at": "2026-08-26",
+  "concepts": [
+    {
+      "id": "controlled-execution",
+      "label": "Controlled execution",
+      "summary": "A production work substrate that makes consequential execution authorized, observable, interruptible, reconstructable and testable.",
+      "domain": "agent architecture",
+      "coverage": "explained",
+      "insight_ids": ["enterprise-agents-production-substrate"],
+      "aliases": ["production execution substrate"],
+      "tags": ["agents", "governance", "execution"]
+    },
+    {
+      "id": "execution-history",
+      "label": "Execution history",
+      "summary": "A durable record of what happened during work so state, decisions and actions can be reconstructed later.",
+      "domain": "execution architecture",
+      "coverage": "explained",
+      "insight_ids": ["enterprise-agents-production-substrate", "temporal-durable-execution-mental-model"],
+      "aliases": ["append-only execution history", "execution ledger"],
+      "tags": ["history", "audit", "replay"]
+    },
+    {
+      "id": "protected-data-separation",
+      "label": "Protected data separation",
+      "summary": "Separating orchestration visibility from broad access to protected business data and secrets.",
+      "domain": "security architecture",
+      "coverage": "introduced",
+      "insight_ids": ["enterprise-agents-production-substrate"],
+      "aliases": ["data execution plane separation"],
+      "tags": ["security", "data", "governance"]
+    },
+    {
+      "id": "human-agent-task-equivalence",
+      "label": "Human-agent task equivalence",
+      "summary": "Modeling work so the executor can move between an AI agent and a person without creating a separate exception process.",
+      "domain": "work orchestration",
+      "coverage": "explained",
+      "insight_ids": ["enterprise-agents-production-substrate"],
+      "aliases": ["executor-independent task"],
+      "tags": ["agents", "human-in-the-loop", "workflow"]
+    },
+    {
+      "id": "replayable-evaluation",
+      "label": "Replayable evaluation",
+      "summary": "Using reconstructed historical execution state to evaluate models, prompts, policies and tools against past work.",
+      "domain": "agent evaluation",
+      "coverage": "explained",
+      "insight_ids": ["enterprise-agents-production-substrate"],
+      "aliases": ["historical replay evaluation"],
+      "tags": ["evals", "replay", "agents"]
+    },
+    {
+      "id": "policy-as-code",
+      "label": "Policy as code",
+      "summary": "Representing authorization and policy decisions as explicit, reviewable rules rather than scattered application logic.",
+      "domain": "governance",
+      "coverage": "introduced",
+      "insight_ids": ["enterprise-agents-production-substrate"],
+      "aliases": [],
+      "tags": ["policy", "authorization", "governance"]
+    },
+    {
+      "id": "observability",
+      "label": "Observability",
+      "summary": "Structured traces, metrics and logs that make distributed execution inspectable without becoming the source of business truth itself.",
+      "domain": "operations",
+      "coverage": "introduced",
+      "insight_ids": ["enterprise-agents-production-substrate"],
+      "aliases": [],
+      "tags": ["telemetry", "operations", "execution"]
+    },
+    {
+      "id": "durable-execution",
+      "label": "Durable execution",
+      "summary": "Execution whose workflow progress survives process failure, waits and restarts because durable state exists outside any one Worker process.",
+      "domain": "workflow systems",
+      "coverage": "explained",
+      "insight_ids": ["enterprise-agents-production-substrate", "temporal-durable-execution-mental-model"],
+      "aliases": ["durable workflow execution"],
+      "tags": ["workflow", "recovery", "state"]
+    },
+    {
+      "id": "workflow-execution",
+      "label": "Workflow Execution",
+      "summary": "The durable Temporal unit representing one running workflow identity and its persisted progress over time.",
+      "domain": "Temporal",
+      "coverage": "explained",
+      "insight_ids": ["temporal-durable-execution-mental-model"],
+      "aliases": [],
+      "tags": ["temporal", "workflow", "state"]
+    },
+    {
+      "id": "event-history",
+      "label": "Event History",
+      "summary": "Temporal's append-only event record that represents Workflow Execution progress and supports state reconstruction.",
+      "domain": "Temporal",
+      "coverage": "explained",
+      "insight_ids": ["temporal-durable-execution-mental-model"],
+      "aliases": ["workflow event history"],
+      "tags": ["temporal", "history", "replay"]
+    },
+    {
+      "id": "task-queue",
+      "label": "Task Queue",
+      "summary": "The Temporal dispatch boundary from which Worker Processes poll Workflow and Activity tasks for execution.",
+      "domain": "Temporal",
+      "coverage": "explained",
+      "insight_ids": ["temporal-durable-execution-mental-model"],
+      "aliases": [],
+      "tags": ["temporal", "queue", "dispatch"]
+    },
+    {
+      "id": "worker-process",
+      "label": "Worker Process",
+      "summary": "A replaceable process that polls Temporal Task Queues and runs Workflow or Activity application code.",
+      "domain": "Temporal",
+      "coverage": "explained",
+      "insight_ids": ["temporal-durable-execution-mental-model"],
+      "aliases": ["Temporal Worker"],
+      "tags": ["temporal", "worker", "execution"]
+    },
+    {
+      "id": "activity-execution",
+      "label": "Activity Execution",
+      "summary": "The Temporal boundary for side-effecting work that can interact with external systems and may be retried after failure.",
+      "domain": "Temporal",
+      "coverage": "explained",
+      "insight_ids": ["temporal-durable-execution-mental-model"],
+      "aliases": ["Temporal Activity"],
+      "tags": ["temporal", "side-effects", "retry"]
+    },
+    {
+      "id": "idempotency-under-retry",
+      "label": "Idempotency under retry",
+      "summary": "Designing external effects so repeating a failed operation does not create unintended duplicate outcomes.",
+      "domain": "reliability engineering",
+      "coverage": "explained",
+      "insight_ids": ["temporal-durable-execution-mental-model"],
+      "aliases": ["idempotent activity design"],
+      "tags": ["reliability", "retry", "side-effects"]
+    }
+  ],
+  "relations": [
+    {
+      "id": "rel-controlled-execution-depends-on-execution-history",
+      "from": "controlled-execution",
+      "to": "execution-history",
+      "type": "depends_on",
+      "rationale": "Consequential work cannot be reconstructed or evaluated later without a durable history of execution.",
+      "evidence_insights": ["enterprise-agents-production-substrate"]
+    },
+    {
+      "id": "rel-controlled-execution-depends-on-protected-data-separation",
+      "from": "controlled-execution",
+      "to": "protected-data-separation",
+      "type": "depends_on",
+      "rationale": "Governed orchestration should not require broad access to protected data simply to observe or control work.",
+      "evidence_insights": ["enterprise-agents-production-substrate"]
+    },
+    {
+      "id": "rel-controlled-execution-depends-on-human-agent-task-equivalence",
+      "from": "controlled-execution",
+      "to": "human-agent-task-equivalence",
+      "type": "depends_on",
+      "rationale": "Production work needs a stable task model when execution moves between an agent and a human reviewer.",
+      "evidence_insights": ["enterprise-agents-production-substrate"]
+    },
+    {
+      "id": "rel-controlled-execution-depends-on-policy-as-code",
+      "from": "controlled-execution",
+      "to": "policy-as-code",
+      "type": "depends_on",
+      "rationale": "Explicit policy decisions make authorization boundaries reviewable and testable instead of implicit in application code.",
+      "evidence_insights": ["enterprise-agents-production-substrate"]
+    },
+    {
+      "id": "rel-controlled-execution-depends-on-observability",
+      "from": "controlled-execution",
+      "to": "observability",
+      "type": "depends_on",
+      "rationale": "Operators need structured telemetry to inspect execution health even when business evidence lives in a separate durable record.",
+      "evidence_insights": ["enterprise-agents-production-substrate"]
+    },
+    {
+      "id": "rel-execution-history-enables-replayable-evaluation",
+      "from": "execution-history",
+      "to": "replayable-evaluation",
+      "type": "enables",
+      "rationale": "Historical execution state becomes reusable evaluation material only when enough context can be reconstructed reliably.",
+      "evidence_insights": ["enterprise-agents-production-substrate"]
+    },
+    {
+      "id": "rel-durable-execution-related-to-controlled-execution",
+      "from": "durable-execution",
+      "to": "controlled-execution",
+      "type": "related_to",
+      "rationale": "Durability solves continuity of execution while controlled execution adds governance, authority, evidence and intervention around that work.",
+      "evidence_insights": ["enterprise-agents-production-substrate", "temporal-durable-execution-mental-model"]
+    },
+    {
+      "id": "rel-durable-execution-realized-by-workflow-execution",
+      "from": "durable-execution",
+      "to": "workflow-execution",
+      "type": "realized_by",
+      "rationale": "Temporal realizes durable work as a persisted Workflow Execution rather than tying workflow state to one running process.",
+      "evidence_insights": ["temporal-durable-execution-mental-model"]
+    },
+    {
+      "id": "rel-workflow-execution-depends-on-event-history",
+      "from": "workflow-execution",
+      "to": "event-history",
+      "type": "depends_on",
+      "rationale": "Persisted Event History is the record from which Workflow Execution progress can be reconstructed after Worker failure.",
+      "evidence_insights": ["temporal-durable-execution-mental-model"]
+    },
+    {
+      "id": "rel-workflow-execution-realized-by-worker-process",
+      "from": "workflow-execution",
+      "to": "worker-process",
+      "type": "realized_by",
+      "rationale": "Worker Processes execute application code for the durable Workflow Execution while remaining replaceable executors.",
+      "evidence_insights": ["temporal-durable-execution-mental-model"]
+    },
+    {
+      "id": "rel-worker-process-depends-on-task-queue",
+      "from": "worker-process",
+      "to": "task-queue",
+      "type": "depends_on",
+      "rationale": "Workers receive executable Workflow and Activity tasks by polling the configured Temporal Task Queue.",
+      "evidence_insights": ["temporal-durable-execution-mental-model"]
+    },
+    {
+      "id": "rel-worker-process-realized-by-activity-execution",
+      "from": "worker-process",
+      "to": "activity-execution",
+      "type": "related_to",
+      "rationale": "Workers execute Activity code as one of the main boundaries where Temporal applications interact with external systems.",
+      "evidence_insights": ["temporal-durable-execution-mental-model"]
+    },
+    {
+      "id": "rel-activity-execution-depends-on-idempotency-under-retry",
+      "from": "activity-execution",
+      "to": "idempotency-under-retry",
+      "type": "depends_on",
+      "rationale": "Activity retries can repeat external work, so safe side effects require idempotent or otherwise duplicate-safe design.",
+      "evidence_insights": ["temporal-durable-execution-mental-model"]
+    },
+    {
+      "id": "rel-event-history-refines-execution-history",
+      "from": "event-history",
+      "to": "execution-history",
+      "type": "refines",
+      "rationale": "Temporal Event History is a concrete implementation-level example of the broader execution-history concept used in production architecture.",
+      "evidence_insights": ["enterprise-agents-production-substrate", "temporal-durable-execution-mental-model"]
+    }
+  ]
+}
