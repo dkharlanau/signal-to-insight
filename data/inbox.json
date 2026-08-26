@@ -22,6 +22,17 @@
       "source_id": "src-temporal-docs-2026",
       "insight_id": "temporal-durable-execution-mental-model",
       "notes": "Second real-source acceptance case. Official Temporal documentation; documentation/tool adapter."
+    },
+    {
+      "id": "intake-2026-08-26-github-opa",
+      "source_url": "https://github.com/open-policy-agent/opa",
+      "source_type": "repository",
+      "submitted_at": "2026-08-26",
+      "requested_focus": "How does OPA separate policy decision-making from enforcement, and what should I learn or try from that architecture?",
+      "status": "queued",
+      "source_id": null,
+      "insight_id": null,
+      "notes": "GitHub source intake issue #12. Third real acceptance case. Exercise the GitHub repository/tool adapter and connect the result to existing policy-as-code and controlled-execution concepts."
     }
   ]
 }
