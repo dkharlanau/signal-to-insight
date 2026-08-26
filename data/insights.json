@@ -1,8 +1,10 @@
 {
   "project": {
     "name": "Signal to Insight",
-    "version": "0.1.0",
-    "purpose": "Turn high-signal technology sources into durable explanations, reusable patterns, and practical applications."
+    "version": "0.2.0",
+    "purpose": "Turn supplied sources into coherent, personalized, visual and actionable learning artifacts.",
+    "profile": "/config/research-profile.json",
+    "pipeline": "/docs/PIPELINE.md"
   },
   "insights": [
     {
@@ -10,69 +12,199 @@
       "slug": "why-enterprise-ai-agents-fail-after-the-poc",
       "status": "published",
       "title": "Why enterprise AI agents fail after the POC",
-      "one_liner": "A production agent needs an execution substrate for controlled work, not just a model connected to tools.",
+      "one_liner": "A production agent needs a controlled execution environment around the model, not just a model connected to tools.",
       "source": {
         "type": "video",
-        "title": "Why Your Enterprise Tech Stack Isn't Ready for AI Agents",
+        "title": "Why Your Enterprise Tech Stack Isn't Ready for AI Agents - And What to Build Instead",
         "url": "https://www.youtube.com/watch?v=mav15aW9lLM",
-        "speakers": ["Christopher Lovejoy", "Saul Howard"],
+        "speakers": [
+          "Christopher Lovejoy",
+          "Saul Howard"
+        ],
         "publisher": "AI Engineer",
-        "duration": "19:14"
+        "event": "AI Engineer World's Fair 2026",
+        "published_at": null,
+        "event_date": "2026-07-02",
+        "captured_at": "2026-08-26",
+        "analyzed_at": "2026-08-26",
+        "duration": "19:15",
+        "date_note": "The conference session date is verified from the official AI Engineer World's Fair 2026 schedule. The YouTube upload date is not recorded here because it has not been independently verified."
       },
-      "signal": "A successful AI proof of concept can still be architecturally far from a production-ready enterprise system.",
-      "derived_insight": "The reusable unit is not the agent itself. It is the controlled execution environment around the agent: identity, authority, history, data access, human intervention and replay.",
-      "patterns": [
+      "why_this_matters": "Many agent demos prove task capability but do not prove that the surrounding system can authorize, observe, interrupt, reconstruct and evaluate real work.",
+      "whole_source_map": {
+        "problem": "POC architecture often omits controls and state-management properties required in production.",
+        "thesis": "Enterprise agent architecture should be designed around controlled execution rather than model calls alone.",
+        "core_topics": [
+          "append-only execution history",
+          "separation of orchestration and protected data",
+          "human/agent executor equivalence",
+          "replayable evaluation"
+        ]
+      },
+      "derived_model": {
+        "problem": "A model can complete a task without the organization being able to govern the task.",
+        "mechanism": "Put identity, authority, durable history, protected data access, human intervention and replay around execution.",
+        "result": "The same work becomes more controllable, explainable and testable regardless of whether the executor is an AI model or a person."
+      },
+      "concepts": [
         {
-          "name": "Immutable execution history",
-          "purpose": "Reconstruct what happened and why without depending on ad-hoc developer logs."
+          "name": "Execution history",
+          "depth": "learn",
+          "why_needed": "Reconstruct what happened and why instead of relying on ad-hoc developer logs."
         },
         {
-          "name": "Separated execution and data planes",
-          "purpose": "Keep observability and orchestration possible without granting broad access to sensitive business data."
+          "name": "Data / execution plane separation",
+          "depth": "know",
+          "why_needed": "Observability should not automatically imply broad access to protected data."
         },
         {
           "name": "Human-agent task equivalence",
-          "purpose": "Model the task independently from the executor so work can move between AI and humans without creating a parallel exception process."
+          "depth": "learn",
+          "why_needed": "A task should be able to move between AI and a person without creating an unrelated exception workflow."
         },
         {
           "name": "Replayable evaluation",
-          "purpose": "Use reconstructable historical cases to compare models, prompts, policies or tools against the same context."
+          "depth": "learn",
+          "why_needed": "Historical state can become evaluation material for models, prompts, policies and tools."
         }
       ],
-      "application": {
-        "domain": "SAP / enterprise master data",
-        "scenario": "Customer master change",
-        "question": "Can the system explain months later why a customer was changed, under whose authority, using which context and approval?",
-        "execution_chain": [
-          "change request",
-          "identity and authority",
-          "agent proposal",
-          "policy evaluation",
-          "AI or human execution",
-          "SAP or MDG action",
-          "verification",
-          "execution history"
-        ]
-      },
-      "limitations": [
-        "An append-only history still needs identity, policy versions, retention, tamper protection and meaningful event semantics.",
-        "Separating data and orchestration reduces exposure but does not automatically eliminate prompt injection or data exfiltration.",
-        "Human handoff still requires ownership, locking, idempotency, approval authority, timeout and recovery rules."
+      "patterns": [
+        {
+          "name": "Immutable execution history",
+          "purpose": "Make execution reconstructable."
+        },
+        {
+          "name": "Separated execution and data planes",
+          "purpose": "Reduce unnecessary exposure of protected data while keeping orchestration observable."
+        },
+        {
+          "name": "Executor-independent task model",
+          "purpose": "Allow human and AI execution to share the same workflow contract."
+        },
+        {
+          "name": "Replay as an evaluation primitive",
+          "purpose": "Compare changes against reconstructable historical cases."
+        }
       ],
+      "tool_map": [
+        {
+          "name": "Temporal",
+          "category": "durable workflow execution",
+          "why_explore": "Useful adjacent system for learning how long-running workflows resume after failures.",
+          "url": "https://docs.temporal.io/",
+          "relationship": "Project enrichment; not asserted as a tool named in the talk.",
+          "status": "learn"
+        },
+        {
+          "name": "OpenTelemetry",
+          "category": "observability",
+          "why_explore": "Useful for understanding standardized traces, metrics and logs around distributed execution.",
+          "url": "https://opentelemetry.io/docs/",
+          "relationship": "Project enrichment; not asserted as a tool named in the talk.",
+          "status": "learn"
+        },
+        {
+          "name": "Open Policy Agent",
+          "category": "policy as code",
+          "why_explore": "A concrete way to learn how policy decisions can be separated from application code.",
+          "url": "https://www.openpolicyagent.org/docs",
+          "relationship": "Project enrichment; not asserted as a tool named in the talk.",
+          "status": "try"
+        }
+      ],
+      "examples": [
+        {
+          "domain": "custom AI workflow",
+          "scenario": "An agent is allowed to update a customer record or execute another consequential business action.",
+          "question": "Can the system later reconstruct the request, authority, context, policy, executor, action and verification?"
+        },
+        {
+          "domain": "SAP / master data",
+          "scenario": "Customer master change",
+          "question": "Can the system explain months later why a customer was changed, under whose authority, using which context and approval?"
+        }
+      ],
+      "limitations": [
+        "An append-only history still needs identity evidence, policy and component versions, retention, tamper protection and meaningful event semantics.",
+        "Separating data and orchestration reduces exposure but does not automatically eliminate prompt injection or data exfiltration.",
+        "Human handoff still requires ownership, locking, idempotency, approval authority, timeout and recovery rules.",
+        "Replay is only useful when reconstructed context and evaluation criteria are trustworthy."
+      ],
+      "action_map": {
+        "use_now": [
+          "Evaluate agent architectures by asking whether consequential work can be reconstructed and explained later."
+        ],
+        "try": [
+          "Model one real workflow as an executor-independent task with explicit authority and verification.",
+          "Experiment with a small policy-as-code rule using Open Policy Agent."
+        ],
+        "learn": [
+          "durable execution and workflow engines",
+          "event sourcing / append-only histories",
+          "OpenTelemetry tracing concepts",
+          "policy-as-code"
+        ],
+        "build": [
+          "A minimal execution-ledger prototype for an agent workflow."
+        ],
+        "watch": [
+          "How production agent platforms standardize identity, policy, handoff and replay."
+        ],
+        "ignore_for_now": []
+      },
       "connections": [
         "event sourcing",
+        "durable execution",
         "zero trust",
         "policy-as-code",
         "human-in-the-loop",
         "agent evaluation",
-        "enterprise observability"
+        "observability"
       ],
-      "content_types": ["insight", "pattern", "explainer", "application"],
-      "tags": ["ai-agents", "enterprise-ai", "architecture", "sap", "governance", "evals"],
+      "supporting_sources": [
+        {
+          "title": "AI Engineer World's Fair 2026 Schedule",
+          "url": "https://ai.engineer/worldsfair/schedule",
+          "publisher": "AI Engineer",
+          "purpose": "event date and session metadata verification",
+          "accessed_at": "2026-08-26"
+        },
+        {
+          "title": "Temporal Platform Documentation",
+          "url": "https://docs.temporal.io/",
+          "publisher": "Temporal",
+          "purpose": "adjacent tool context for durable workflow execution",
+          "accessed_at": "2026-08-26"
+        },
+        {
+          "title": "OpenTelemetry Documentation",
+          "url": "https://opentelemetry.io/docs/",
+          "publisher": "OpenTelemetry",
+          "purpose": "adjacent tool context for observability",
+          "accessed_at": "2026-08-26"
+        },
+        {
+          "title": "Open Policy Agent Documentation",
+          "url": "https://www.openpolicyagent.org/docs",
+          "publisher": "Open Policy Agent",
+          "purpose": "adjacent tool context for policy-as-code",
+          "accessed_at": "2026-08-26"
+        }
+      ],
+      "tags": [
+        "ai-agents",
+        "architecture",
+        "durable-execution",
+        "governance",
+        "evals",
+        "tools"
+      ],
       "provenance": {
         "source_linked": true,
+        "source_dates_recorded": true,
         "full_transcript_stored": false,
-        "analysis_type": "original commentary and application"
+        "analysis_type": "original commentary, enrichment and application",
+        "reviewed_at": "2026-08-26"
       }
     }
   ]
