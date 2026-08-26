@@ -41,6 +41,9 @@ jobs:
       - name: Validate prerequisite maps
         run: python scripts/validate_prerequisites.py
 
+      - name: Validate multi-source syntheses
+        run: python scripts/validate_syntheses.py
+
       - name: Validate authored learning prompts
         run: python scripts/validate_learning_prompts.py
 
