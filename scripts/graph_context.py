@@ -44,21 +44,43 @@ def searchable(concept: dict) -> str:
     ])
 
 
-def lexical_score(query: str, query_words: set[str], concept: dict) -> int:
+def lexical_features(query: str, query_words: set[str], concept: dict) -> dict:
     label_and_aliases = concept.get("label", "") + " " + " ".join(concept.get("aliases", []))
     label_words = words(label_and_aliases)
     tag_words = words(" ".join(concept.get("tags", [])) + " " + concept.get("domain", ""))
     body_words = words(concept.get("summary", ""))
-    score = len(query_words & label_words) * 6 + len(query_words & tag_words) * 3 + len(query_words & body_words)
+    label_hits = query_words & label_words
+    tag_hits = query_words & tag_words
+    body_hits = query_words & body_words
 
     normalized_query = normalized_phrase(query)
     phrases = [concept.get("label", ""), *concept.get("aliases", [])]
-    if any(
+    phrase_match = any(
         phrase and len(words(phrase)) > 0 and normalized_phrase(phrase) in normalized_query
         for phrase in phrases
-    ):
-        score += 8
-    return score
+    )
+    score = len(label_hits) * 6 + len(tag_hits) * 3 + len(body_hits) + (8 if phrase_match else 0)
+    return {
+        "score": score,
+        "label_hits": label_hits,
+        "tag_hits": tag_hits,
+        "body_hits": body_hits,
+        "phrase_match": phrase_match,
+        "distinct_hits": label_hits | tag_hits | body_hits,
+    }
+
+
+def is_strong_seed(features: dict) -> bool:
+    """Reject accidental single-token tag/body matches before graph expansion amplifies them."""
+    if features["phrase_match"]:
+        return True
+    if features["label_hits"]:
+        return True
+    # No label match: require at least two independent topical terms. A single tag such as
+    # 'retrieval', 'engine' or 'system' is not enough evidence that two domains are related.
+    if len(features["distinct_hits"]) >= 2 and (features["tag_hits"] or len(features["body_hits"]) >= 2):
+        return True
+    return False
 
 
 def rank(query: str, limit: int = 5) -> dict:
@@ -71,11 +93,12 @@ def rank(query: str, limit: int = 5) -> dict:
         return {"query": query, "matches": [], "message": "No searchable terms."}
 
     scored: list[tuple[int, str]] = []
+    feature_map: dict[str, dict] = {}
     for concept in concepts.values():
-        score = lexical_score(query, query_words, concept)
-        # One low-value body-token overlap is usually generic noise. Keep stronger tag/label matches.
-        if score >= 3:
-            scored.append((score, concept["id"]))
+        features = lexical_features(query, query_words, concept)
+        feature_map[concept["id"]] = features
+        if is_strong_seed(features):
+            scored.append((features["score"], concept["id"]))
     scored.sort(key=lambda item: (-item[0], concepts[item[1]]["label"].lower()))
 
     seed_limit = min(max(1, limit), 3)
@@ -97,10 +120,7 @@ def rank(query: str, limit: int = 5) -> dict:
             }
             neighbors[left].append(entry)
             if right not in seeds:
-                neighbor_candidates.setdefault(right, {
-                    "via": [],
-                    "strength": 0,
-                })
+                neighbor_candidates.setdefault(right, {"via": [], "strength": 0})
                 neighbor_candidates[right]["via"].append({"seed": left, "type": relation["type"], "direction": "out"})
                 neighbor_candidates[right]["strength"] += score_map.get(left, 0)
         if right in seeds:
@@ -113,10 +133,7 @@ def rank(query: str, limit: int = 5) -> dict:
             }
             neighbors[right].append(entry)
             if left not in seeds:
-                neighbor_candidates.setdefault(left, {
-                    "via": [],
-                    "strength": 0,
-                })
+                neighbor_candidates.setdefault(left, {"via": [], "strength": 0})
                 neighbor_candidates[left]["via"].append({"seed": right, "type": relation["type"], "direction": "in"})
                 neighbor_candidates[left]["strength"] += score_map.get(right, 0)
 
@@ -125,13 +142,12 @@ def rank(query: str, limit: int = 5) -> dict:
         neighbor_candidates,
         key=lambda concept_id: (
             -neighbor_candidates[concept_id]["strength"],
-            -score_map.get(concept_id, 0),
+            -feature_map.get(concept_id, {}).get("score", 0),
             concepts[concept_id]["label"].lower(),
         ),
     )[:remaining]
     selected = seeds + expanded
 
-    # Populate neighbors for graph-expanded concepts too, so the agent sees local structure around every returned match.
     selected_set = set(selected)
     for relation in graph.get("relations", []):
         if relation["from"] in selected_set and not any(
@@ -170,11 +186,13 @@ def rank(query: str, limit: int = 5) -> dict:
                 "slug": insight.get("slug"),
             })
         lexical = concept_id in seeds
+        features = feature_map.get(concept_id, {})
         matches.append({
             "concept_id": concept_id,
             "label": concept["label"],
             "score": score_map.get(concept_id, 0),
             "match_type": "lexical" if lexical else "graph_neighbor",
+            "matched_terms": sorted(features.get("distinct_hits", [])) if lexical else [],
             "via": [] if lexical else neighbor_candidates.get(concept_id, {}).get("via", []),
             "coverage": concept["coverage"],
             "summary": concept["summary"],
@@ -217,6 +235,15 @@ def self_test() -> int:
         print("graph context self-test failed; expected one-hop graph context")
         return 1
 
+    learning = rank(
+        "testing retrieval practice immediate performance delayed retention repeated study confidence experiment mental model",
+        limit=5,
+    )
+    learning_ids = [item["concept_id"] for item in learning.get("matches", [])]
+    if learning_ids:
+        print(f"graph context self-test failed; unrelated learning-science query returned prior concepts: {learning_ids}")
+        return 1
+
     print("Graph context self-test passed.")
     return 0
 
@@ -244,6 +271,8 @@ def main() -> int:
     for match in result["matches"]:
         origin = "direct" if match["match_type"] == "lexical" else "via graph"
         print(f"\n[{match['score']}] {match['label']} ({match['coverage']}; {origin})")
+        if match.get("matched_terms"):
+            print(f"  terms: {', '.join(match['matched_terms'])}")
         print(f"  {match['summary']}")
         for evidence in match["evidence"]:
             print(f"  evidence: {evidence['status']} · {evidence['title']}")
