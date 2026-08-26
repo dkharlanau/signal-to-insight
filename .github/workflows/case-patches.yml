@@ -1,0 +1,86 @@
+name: Materialize researched case patches
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "data/case-patches/**.json"
+      - "scripts/apply_case_patch.py"
+      - ".github/workflows/case-patches.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "data/case-patches/**.json"
+      - "scripts/apply_case_patch.py"
+      - ".github/workflows/case-patches.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    if: github.actor != 'github-actions[bot]' || github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || 'main' }}
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Find changed case patches
+        id: patches
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE="${{ github.event.pull_request.base.sha }}"
+            HEAD="${{ github.event.pull_request.head.sha }}"
+          else
+            BASE="${{ github.event.before }}"
+            HEAD="${{ github.sha }}"
+          fi
+          FILES=$(git diff --name-only "$BASE" "$HEAD" -- 'data/case-patches/*.json' | tr '\n' ' ')
+          echo "files=$FILES" >> "$GITHUB_OUTPUT"
+          echo "Changed patches: ${FILES:-none}"
+
+      - name: Apply changed case patches
+        if: steps.patches.outputs.files != ''
+        shell: bash
+        run: |
+          for patch in ${{ steps.patches.outputs.files }}; do
+            python scripts/apply_case_patch.py "$patch"
+          done
+
+      - name: Validate materialized knowledge
+        run: |
+          python scripts/validate.py
+          python scripts/validate_bundles.py
+          python scripts/validate_graph.py
+          python scripts/public_projection.py
+
+      - name: Build review and public surfaces
+        run: |
+          python scripts/build_previews.py --self-test
+          python scripts/build_previews.py
+          python scripts/build.py
+          python scripts/build_library.py
+          python scripts/build_public_graph.py
+
+      - name: Commit materialized case on main
+        if: github.event_name == 'push' && steps.patches.outputs.files != ''
+        shell: bash
+        run: |
+          if [ -z "$(git status --porcelain -- data/inbox.json data/sources.json data/insights.json data/knowledge-graph.json previews explainers library knowledge)" ]; then
+            echo "Case patch is already materialized."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/inbox.json data/sources.json data/insights.json data/knowledge-graph.json previews explainers library knowledge
+          git commit -m "build: materialize researched case patches"
+          git push origin HEAD:main
