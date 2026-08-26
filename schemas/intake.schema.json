@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dkharlanau.github.io/signal-to-insight/schemas/intake.schema.json",
+  "title": "Signal to Insight intake queue",
+  "type": "object",
+  "required": ["queue_version", "items"],
+  "properties": {
+    "queue_version": {"type": "string"},
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "source_url", "source_type", "submitted_at", "status"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^intake-[a-z0-9-]+$"},
+          "source_url": {"type": "string", "format": "uri"},
+          "source_type": {"type": "string", "enum": ["video", "article", "paper", "podcast", "documentation", "repository", "tool", "product", "course", "presentation", "notes", "system"]},
+          "submitted_at": {"type": "string", "format": "date"},
+          "requested_focus": {"type": ["string", "null"]},
+          "status": {"type": "string", "enum": ["queued", "capturing", "mapping", "researching", "drafting", "review", "published", "blocked", "rejected"]},
+          "source_id": {"type": ["string", "null"]},
+          "insight_id": {"type": ["string", "null"]},
+          "notes": {"type": ["string", "null"]}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
