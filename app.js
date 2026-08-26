@@ -7,6 +7,13 @@ if (document.body.classList.contains('generated-page')) {
   document.head.appendChild(explainerStyles);
 }
 
+if (document.body.classList.contains('preview-page')) {
+  const previewStyles = document.createElement('link');
+  previewStyles.rel = 'stylesheet';
+  previewStyles.href = '../../preview.css';
+  document.head.appendChild(previewStyles);
+}
+
 function updateProgress() {
   if (!progressBar) return;
   const scrollable = document.documentElement.scrollHeight - window.innerHeight;
