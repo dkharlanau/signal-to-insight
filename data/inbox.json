@@ -1,0 +1,16 @@
+{
+  "queue_version": "1.0.0",
+  "items": [
+    {
+      "id": "intake-2026-08-26-ai-engineer-enterprise-stack-agents",
+      "source_url": "https://www.youtube.com/watch?v=mav15aW9lLM",
+      "source_type": "video",
+      "submitted_at": "2026-08-26",
+      "requested_focus": "Understand the concepts, architecture patterns, useful tools and practical implications. Preserve the whole mental model rather than isolated highlights.",
+      "status": "published",
+      "source_id": "src-ai-engineer-enterprise-stack-agents-2026",
+      "insight_id": "enterprise-agents-production-substrate",
+      "notes": "Reference case used to prove the source-to-understanding pipeline."
+    }
+  ]
+}
