@@ -11,7 +11,7 @@ from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parents[1]
 ACTION_BUCKETS = {"use_now", "try", "learn", "build", "watch", "ignore_for_now"}
-QUEUE_STATUSES = {"queued", "capturing", "mapping", "researching", "drafting", "review", "published", "blocked", "rejected"}
+QUEUE_STATUSES = {"queued", "capturing", "mapping", "researching", "drafting", "review", "published", "archived", "blocked", "rejected"}
 INSIGHT_STATUSES = {"draft", "review", "published", "archived"}
 VISUAL_TYPES = {"causal_chain", "sequence", "layers", "comparison", "decision"}
 SUPPORTING_VISUALS = VISUAL_TYPES | {"concept_grid", "tool_map", "examples", "limitations", "action_map", "source_map"}
