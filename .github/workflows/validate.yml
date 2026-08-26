@@ -38,6 +38,11 @@ jobs:
           python scripts/graph_context.py --self-test
           python scripts/scaffold_bundle.py --self-test
 
+      - name: Validate browser JavaScript
+        run: |
+          node --check app.js
+          node --check library.js
+
       - name: Run pipeline acceptance tests
         run: python -m unittest discover -s tests -p "test_*.py" -v
 
