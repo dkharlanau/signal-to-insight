@@ -92,7 +92,7 @@
           "label": "Policy as code",
           "concept_id": "policy-as-code",
           "priority": "must_know_now",
-          "prior_coverage": "established",
+          "prior_coverage": "partial",
           "state": "known_in_graph",
           "reason": "OPA only makes sense once policy is treated as explicit, reviewable decision logic rather than hidden application branching.",
           "resolution": {"kind": "existing_concept", "insight_id": null, "target": "policy-as-code"}
