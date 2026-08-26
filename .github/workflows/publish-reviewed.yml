@@ -1,0 +1,92 @@
+name: Publish reviewed insight
+
+on:
+  workflow_dispatch:
+    inputs:
+      insight_id:
+        description: "Existing insight ID currently in review"
+        required: true
+        type: string
+      confirmation:
+        description: "Type PUBLISH:<insight-id> exactly"
+        required: true
+        type: string
+      review_note:
+        description: "Human review note: what was checked before publication"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    if: github.actor == github.repository_owner
+    runs-on: ubuntu-latest
+    concurrency:
+      group: publish-reviewed
+      cancel-in-progress: false
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Publish reviewed data transition
+        env:
+          INSIGHT_ID: ${{ inputs.insight_id }}
+          CONFIRMATION: ${{ inputs.confirmation }}
+          REVIEW_NOTE: ${{ inputs.review_note }}
+          REVIEWED_BY: ${{ github.actor }}
+        run: |
+          python scripts/publish_reviewed.py \
+            --insight "$INSIGHT_ID" \
+            --confirm "$CONFIRMATION" \
+            --reviewed-by "$REVIEWED_BY" \
+            --review-note "$REVIEW_NOTE"
+
+      - name: Validate publication state
+        run: |
+          python scripts/validate.py
+          python scripts/validate_bundles.py
+          python scripts/validate_case_patches.py
+          python scripts/validate_graph.py
+          python scripts/public_projection.py
+          python scripts/pending_case_patches.py
+
+      - name: Rebuild all public and review surfaces
+        run: |
+          python scripts/build.py
+          python scripts/build_previews.py
+          python scripts/build_library.py
+          python scripts/build_public_graph.py
+          python scripts/build_sitemap.py
+
+      - name: Verify generated state is internally consistent
+        run: |
+          python scripts/build.py --check
+          python scripts/build_previews.py --check
+          python scripts/build_library.py --check
+          python scripts/build_sitemap.py --check
+          node --check app.js
+          node --check library.js
+
+      - name: Commit publication atomically
+        env:
+          INSIGHT_ID: ${{ inputs.insight_id }}
+        run: |
+          if [ -z "$(git status --porcelain -- data/inbox.json data/insights.json data/knowledge-graph.json explainers previews library knowledge sitemap.xml)" ]; then
+            echo "No publication changes found."
+            exit 1
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/inbox.json data/insights.json data/knowledge-graph.json explainers previews library knowledge sitemap.xml
+          git commit -m "publish: ${INSIGHT_ID}"
+          git push origin HEAD:main
