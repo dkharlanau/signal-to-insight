@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dkharlanau.github.io/signal-to-insight/data/insight.schema.json",
+  "title": "Signal to Insight record",
+  "type": "object",
+  "required": [
+    "id",
+    "slug",
+    "title",
+    "source",
+    "why_this_matters",
+    "derived_model",
+    "action_map",
+    "provenance"
+  ],
+  "properties": {
+    "id": { "type": "string" },
+    "slug": { "type": "string" },
+    "status": { "enum": ["draft", "review", "published", "archived"] },
+    "title": { "type": "string" },
+    "one_liner": { "type": "string" },
+    "source": {
+      "type": "object",
+      "required": [
+        "type",
+        "title",
+        "url",
+        "published_at",
+        "event_date",
+        "captured_at",
+        "analyzed_at"
+      ],
+      "properties": {
+        "type": { "type": "string" },
+        "title": { "type": "string" },
+        "url": { "type": "string" },
+        "published_at": { "type": ["string", "null"], "format": "date" },
+        "event_date": { "type": ["string", "null"], "format": "date" },
+        "captured_at": { "type": "string", "format": "date" },
+        "analyzed_at": { "type": "string", "format": "date" },
+        "date_note": { "type": "string" }
+      }
+    },
+    "why_this_matters": { "type": "string" },
+    "whole_source_map": { "type": "object" },
+    "derived_model": {
+      "type": "object",
+      "required": ["problem", "mechanism", "result"]
+    },
+    "concepts": { "type": "array" },
+    "patterns": { "type": "array" },
+    "tool_map": { "type": "array" },
+    "examples": { "type": "array" },
+    "limitations": { "type": "array" },
+    "action_map": {
+      "type": "object",
+      "required": ["use_now", "try", "learn", "build", "watch", "ignore_for_now"],
+      "properties": {
+        "use_now": { "type": "array" },
+        "try": { "type": "array" },
+        "learn": { "type": "array" },
+        "build": { "type": "array" },
+        "watch": { "type": "array" },
+        "ignore_for_now": { "type": "array" }
+      }
+    },
+    "supporting_sources": { "type": "array" },
+    "provenance": {
+      "type": "object",
+      "required": ["source_linked", "source_dates_recorded", "full_transcript_stored", "reviewed_at"]
+    }
+  }
+}
