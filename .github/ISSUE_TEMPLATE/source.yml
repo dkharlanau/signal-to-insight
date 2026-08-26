@@ -1,0 +1,50 @@
+name: Add source
+description: Queue a video, article, paper, repository, tool or other source for Signal to Insight.
+title: "[source] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Add one source. The agent will use the repository research profile and pipeline to turn it into a review-ready explainer. Creating the issue does not publish anything.
+
+  - type: input
+    id: source_url
+    attributes:
+      label: Source URL
+      description: Canonical or share URL. Tracking parameters and video timestamps will be normalized when possible.
+      placeholder: https://...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: source_type
+    attributes:
+      label: Source type
+      options:
+        - video
+        - article
+        - paper
+        - podcast
+        - documentation
+        - repository
+        - tool
+        - product
+        - course
+        - presentation
+        - system
+        - notes
+    validations:
+      required: true
+
+  - type: textarea
+    id: focus
+    attributes:
+      label: Focus
+      description: Optional. What should the analysis pay special attention to?
+      placeholder: What should I understand, learn, try or build from this?
+
+  - type: textarea
+    id: note
+    attributes:
+      label: Note
+      description: Optional context about why this source looked interesting.
