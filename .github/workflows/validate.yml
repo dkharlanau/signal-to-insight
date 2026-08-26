@@ -33,6 +33,11 @@ jobs:
       - name: Validate claim-level evidence trace
         run: python scripts/validate_claim_evidence.py
 
+      - name: Validate contradiction and refinement reviews
+        run: |
+          python scripts/validate_knowledge_reviews.py
+          python scripts/validate_knowledge_reviews.py --self-test
+
       - name: Validate authored learning prompts
         run: python scripts/validate_learning_prompts.py
 
