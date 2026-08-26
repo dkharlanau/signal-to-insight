@@ -30,6 +30,9 @@ jobs:
       - name: Validate curated Knowledge Delta
         run: python scripts/validate_knowledge_deltas.py
 
+      - name: Validate authored learning prompts
+        run: python scripts/validate_learning_prompts.py
+
       - name: Validate research bundles
         run: python scripts/validate_bundles.py
 
