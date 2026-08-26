@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dkharlanau.github.io/signal-to-insight/schemas/run-manifest.schema.json",
+  "title": "Signal to Insight reproducible source-run manifest",
+  "type": "object",
+  "required": ["manifest_version", "intake_id", "source_url", "source_type", "created_at", "last_checked_at", "initial_context", "current_context", "research_bundle", "expected_artifacts", "state", "agent_handoff"],
+  "properties": {
+    "manifest_version": {"type": "string"},
+    "intake_id": {"type": "string", "minLength": 1},
+    "source_url": {"type": "string", "format": "uri"},
+    "source_type": {"type": "string"},
+    "requested_focus": {"type": ["string", "null"]},
+    "created_at": {"type": "string", "format": "date-time"},
+    "last_checked_at": {"type": "string", "format": "date-time"},
+    "initial_context": {"$ref": "#/$defs/context"},
+    "current_context": {"$ref": "#/$defs/context"},
+    "research_bundle": {"type": "string", "minLength": 1},
+    "bundle_created_this_run": {"type": "boolean"},
+    "expected_artifacts": {"type": "object", "additionalProperties": {"type": "string"}},
+    "state": {"type": "object"},
+    "agent_handoff": {
+      "type": "object",
+      "required": ["contract", "instruction"],
+      "properties": {
+        "contract": {"const": "AGENTS.md"},
+        "instruction": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "checks": {"type": "object"}
+  },
+  "$defs": {
+    "context": {
+      "type": "object",
+      "required": ["profile_version", "graph_version", "graph_updated_at"],
+      "properties": {
+        "profile_version": {"type": ["string", "null"]},
+        "graph_version": {"type": ["string", "null"]},
+        "graph_updated_at": {"type": ["string", "null"]}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
