@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dkharlanau.github.io/signal-to-insight/schemas/claim-evidence.schema.json",
+  "title": "Signal to Insight claim-level evidence trace",
+  "type": "object",
+  "required": ["version", "records"],
+  "properties": {
+    "version": {"type": "string"},
+    "records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["insight_id", "claims"],
+        "properties": {
+          "insight_id": {"type": "string", "minLength": 1},
+          "claims": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "object",
+              "required": ["id", "text", "impact", "origin", "status", "evidence", "note"],
+              "properties": {
+                "id": {"type": "string", "minLength": 1},
+                "text": {"type": "string", "minLength": 1},
+                "impact": {"enum": ["high", "medium"]},
+                "origin": {"enum": ["source", "verification", "project_interpretation", "prior_knowledge"]},
+                "status": {"enum": ["supported", "uncertain", "unresolved"]},
+                "evidence": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": ["kind", "locator"],
+                    "properties": {
+                      "kind": {"enum": ["primary_source", "verification", "prior_insight"]},
+                      "source_id": {"type": "string", "minLength": 1},
+                      "url": {"type": "string", "format": "uri"},
+                      "insight_id": {"type": "string", "minLength": 1},
+                      "locator": {"type": "string", "minLength": 1}
+                    },
+                    "additionalProperties": false
+                  }
+                },
+                "note": {"type": ["string", "null"]}
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
