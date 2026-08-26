@@ -65,6 +65,57 @@
       "derived_records": [
         "temporal-durable-execution-mental-model"
       ]
+    },
+    {
+      "id": "src-open-policy-agent-opa-2026",
+      "type": "repository",
+      "title": "Open Policy Agent (OPA)",
+      "canonical_url": "https://github.com/open-policy-agent/opa",
+      "creators": [
+        "Open Policy Agent project"
+      ],
+      "publisher": "Open Policy Agent / CNCF",
+      "event": null,
+      "published_at": null,
+      "event_date": null,
+      "captured_at": "2026-08-26",
+      "analyzed_at": "2026-08-26",
+      "date_note": "Living repository with no single publication date. Latest GitHub release checked during analysis was v1.19.1, published 2026-08-17; official repository and documentation inspected 2026-08-26.",
+      "verification": [
+        {
+          "title": "Open Policy Agent GitHub repository",
+          "url": "https://github.com/open-policy-agent/opa",
+          "accessed_at": "2026-08-26"
+        },
+        {
+          "title": "Open Policy Agent v1.19.1 release",
+          "url": "https://github.com/open-policy-agent/opa/releases/tag/v1.19.1",
+          "accessed_at": "2026-08-26"
+        },
+        {
+          "title": "Open Policy Agent Documentation",
+          "url": "https://www.openpolicyagent.org/docs",
+          "accessed_at": "2026-08-26"
+        },
+        {
+          "title": "OPA Deployments",
+          "url": "https://www.openpolicyagent.org/docs/deployments",
+          "accessed_at": "2026-08-26"
+        },
+        {
+          "title": "OPA Bundles",
+          "url": "https://www.openpolicyagent.org/docs/management-bundles",
+          "accessed_at": "2026-08-26"
+        },
+        {
+          "title": "OPA Decision Logs",
+          "url": "https://www.openpolicyagent.org/docs/management-decision-logs",
+          "accessed_at": "2026-08-26"
+        }
+      ],
+      "derived_records": [
+        "open-policy-agent-decision-enforcement-model"
+      ]
     }
   ]
 }
