@@ -1,0 +1,76 @@
+{
+  "version": "1.0.0",
+  "records": [
+    {
+      "insight_id": "enterprise-agents-production-substrate",
+      "decision": "skim_selected_parts",
+      "rationale": "The explainer preserves the core production model, but the original talk is still worth opening for the architecture framing and the speakers' examples around execution history, protected data and human intervention.",
+      "novelty": {"level": "high", "reason": "This was the baseline source that introduced the project's controlled-execution mental model rather than repeating prior project knowledge."},
+      "source_quality": {"level": "high", "reason": "Primary conference talk by the practitioners presenting the architecture; source/date provenance is preserved even though exact timestamps were not independently captured."},
+      "relevance": {"level": "high", "reason": "The source directly shaped the product's model for production agent architecture, governance and replayable evidence."},
+      "practical_leverage": {"level": "high", "reason": "The architecture can be used as a review checklist for consequential agent workflows and enterprise integration designs."},
+      "compression_loss": {"level": "medium", "reason": "The explainer keeps the mental model but compresses speaker framing, examples and transitions that can help when evaluating a real architecture."},
+      "selected_parts": [
+        {"label": "POC success versus production readiness", "locator": "Talk section: POC success versus production readiness", "why": "Establishes why model capability alone is not the production problem.", "claim_refs": ["enterprise-poc-not-production"]},
+        {"label": "Execution history and replay", "locator": "Talk sections: append-only execution history and replay as a production evaluation primitive", "why": "Shows why reconstructable work evidence is a first-class production concern.", "claim_refs": ["enterprise-history-supports-reconstruction"]},
+        {"label": "Controlled substrate architecture", "locator": "Talk architecture model across execution history, protected data, human handoff and replay", "why": "Useful when translating the talk into an architecture review rather than a summary.", "claim_refs": ["enterprise-controlled-substrate-interpretation"]}
+      ]
+    },
+    {
+      "insight_id": "temporal-durable-execution-mental-model",
+      "decision": "skim_selected_parts",
+      "rationale": "The explainer is enough to understand the durable-execution model, but anyone planning to implement it should open the official definitions for Workflow Execution, Event History, Worker, Activity and retry/idempotency semantics.",
+      "novelty": {"level": "high", "reason": "Temporal converts the earlier abstract durable-execution idea into a concrete runtime mechanism and adds retry/idempotency boundaries."},
+      "source_quality": {"level": "high", "reason": "Official Temporal documentation is the primary source for runtime semantics and is more authoritative than secondary tutorials."},
+      "relevance": {"level": "high", "reason": "The mechanism is directly useful for long-running, failure-tolerant agent or workflow execution."},
+      "practical_leverage": {"level": "high", "reason": "The model changes how state, Worker failure, Activities and external side effects should be separated in a real implementation."},
+      "compression_loss": {"level": "medium", "reason": "A compact explainer cannot replace version-specific SDK/API details or the full operational semantics needed to build with Temporal."},
+      "selected_parts": [
+        {"label": "Workflow Execution and Event History", "locator": "Glossary definitions for Durable Execution, Workflow Execution and Event History", "why": "These definitions explain where durable state lives and how execution can be reconstructed.", "claim_refs": ["temporal-history-persists-state"]},
+        {"label": "Worker Process and Task Queue", "locator": "Glossary definitions for Worker Process and Task Queue", "why": "Clarifies the boundary between durable service state and replaceable application workers.", "claim_refs": ["temporal-worker-task-queue"]},
+        {"label": "Activity retry and idempotency", "locator": "Glossary material on Activity Execution, Retry Policy and idempotency", "why": "Prevents the common mistake of equating durable orchestration with exactly-once external side effects.", "claim_refs": ["temporal-retry-not-exactly-once"]}
+      ]
+    },
+    {
+      "insight_id": "open-policy-agent-decision-enforcement-model",
+      "decision": "skim_selected_parts",
+      "rationale": "The explainer preserves the architectural boundary, while the official OPA material is still worth opening for the exact PDP/PEP responsibilities and policy distribution model if OPA may be used in a real system.",
+      "novelty": {"level": "high", "reason": "OPA makes policy-as-code concrete and introduces the reusable decision-versus-enforcement boundary."},
+      "source_quality": {"level": "high", "reason": "The analysis is grounded in the official repository and official OPA deployment/bundle documentation."},
+      "relevance": {"level": "high", "reason": "Explicit authorization is a practical control primitive for agent-driven consequential actions."},
+      "practical_leverage": {"level": "high", "reason": "The decision/enforcement split can be applied even when OPA itself is not selected as the implementation technology."},
+      "compression_loss": {"level": "medium", "reason": "The explainer intentionally omits Rego syntax, deployment modes and detailed bundle management needed for implementation."},
+      "selected_parts": [
+        {"label": "Policy decision versus enforcement", "locator": "Deployments documentation: Policy Decision Point versus Policy Enforcement Point", "why": "This is the central architectural boundary worth preserving from the source.", "claim_refs": ["opa-decision-enforcement-separation"]},
+        {"label": "How OPA works", "locator": "Repository README section: How does OPA work?", "why": "Shows the concrete input-policy-data-decision interaction without requiring the whole repository to be read.", "claim_refs": ["opa-decision-enforcement-separation"]},
+        {"label": "Bundles", "locator": "Official Bundles documentation", "why": "Useful when the practical question is how policy/data lifecycle can be separated from application deployment.", "claim_refs": ["opa-bundles-separate-policy-lifecycle"]}
+      ]
+    },
+    {
+      "insight_id": "react-reason-act-observe-loop",
+      "decision": "skim_selected_parts",
+      "rationale": "The explainer is sufficient for the core ReAct loop, but Figure 1, the method section and benchmark/limitations discussion are worth opening to see how the paper operationalizes the loop and what its reported results actually cover.",
+      "novelty": {"level": "high", "reason": "The source adds a model-level reason/action/observation feedback loop not previously represented in the project graph."},
+      "source_quality": {"level": "high", "reason": "The primary research paper is the appropriate source for the method, experimental setup and limitations."},
+      "relevance": {"level": "high", "reason": "The mechanism remains conceptually useful for understanding tool-using agents even though the exact 2022 benchmark setup is dated."},
+      "practical_leverage": {"level": "medium", "reason": "The loop is a strong design concept, but translating the original prompting method directly into a modern production agent is not automatically justified."},
+      "compression_loss": {"level": "medium", "reason": "The explainer compresses experimental detail and example trajectories that are useful for judging the paper's scope rather than only remembering the mechanism."},
+      "selected_parts": [
+        {"label": "Figure 1 and method", "locator": "PDF Figure 1 p. 2 and Section 2 pp. 3-4", "why": "Shows the actual interleaving pattern rather than a verbal summary of it.", "claim_refs": ["react-interleaves-reason-action-observation"]},
+        {"label": "Benchmark context", "locator": "PDF Table 1 p. 5, Table 2/discussion p. 6, conclusion pp. 9-10", "why": "Keeps reported gains tied to the evaluated tasks/models instead of turning them into a universal performance claim.", "claim_refs": ["react-benchmark-context"]},
+        {"label": "Safety and production boundary", "locator": "Method Section 2 plus ethics/safety discussion pp. 9-10", "why": "Helps separate model-level action selection from production authorization and execution controls.", "claim_refs": ["react-not-production-control-layer"]}
+      ]
+    },
+    {
+      "insight_id": "retrieval-practice-delayed-retention",
+      "decision": "explainer_is_enough",
+      "rationale": "For the product question — whether immediate clarity is enough and whether delayed reconstruction should be measured — the explainer preserves the experiment's decisive crossover and limitations. The original paper is mainly needed for research-method detail or academic use.",
+      "novelty": {"level": "high", "reason": "The source opens a new learning-science branch and changes the product from immediate explanation toward retained reconstruction."},
+      "source_quality": {"level": "high", "reason": "The analysis uses the original peer-reviewed 2006 study as primary evidence rather than a secondary productivity summary."},
+      "relevance": {"level": "high", "reason": "The immediate-versus-delayed distinction directly determines how Signal to Insight should evaluate learning utility."},
+      "practical_leverage": {"level": "high", "reason": "The result already justifies measuring delayed reconstruction and not treating immediate fluency as sufficient evidence of learning."},
+      "compression_loss": {"level": "low", "reason": "For the current product decision, the central experimental result, confidence gap and major limitations can be preserved without requiring the full methods paper."},
+      "selected_parts": []
+    }
+  ]
+}
