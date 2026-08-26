@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""List case patches whose source/insight/intake state has not been materialized yet."""
+"""List review case patches that still need materialization into shared registries."""
 
 from __future__ import annotations
 
@@ -30,6 +30,20 @@ def main() -> int:
         intake = inbox.get(patch.get("intake_id"))
         source = patch.get("source", {})
         insight = patch.get("insight", {})
+        current_insight = insights.get(insight.get("id"))
+
+        # A case patch is an immutable review snapshot. Once that same insight has been
+        # explicitly published, it is finalized and must never be rematerialized to review.
+        if (
+            intake is not None
+            and current_insight is not None
+            and intake.get("source_id") == source.get("id")
+            and intake.get("insight_id") == insight.get("id")
+            and intake.get("status") == "published"
+            and current_insight.get("status") == "published"
+        ):
+            continue
+
         expected_status = patch.get("intake_status", insight.get("status", "review"))
         materialized = (
             intake is not None
@@ -37,7 +51,7 @@ def main() -> int:
             and intake.get("insight_id") == insight.get("id")
             and intake.get("status") == expected_status
             and sources.get(source.get("id")) == source
-            and insights.get(insight.get("id")) == insight
+            and current_insight == insight
         )
         if not materialized:
             print(path.relative_to(ROOT))
