@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dkharlanau.github.io/signal-to-insight/schemas/prerequisite-map.schema.json",
+  "title": "Signal to Insight prerequisite maps",
+  "type": "object",
+  "required": ["version", "records"],
+  "properties": {
+    "version": {"type": "string"},
+    "records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["insight_id", "summary", "items"],
+        "properties": {
+          "insight_id": {"type": "string", "minLength": 1},
+          "summary": {"type": "string", "minLength": 1},
+          "items": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 5,
+            "items": {
+              "type": "object",
+              "required": ["id", "label", "concept_id", "priority", "prior_coverage", "state", "reason", "resolution"],
+              "properties": {
+                "id": {"type": "string", "minLength": 1},
+                "label": {"type": "string", "minLength": 1},
+                "concept_id": {"type": ["string", "null"]},
+                "priority": {"enum": ["must_know_now", "learn_next", "optional_depth"]},
+                "prior_coverage": {"enum": ["absent", "partial", "established"]},
+                "state": {"enum": ["known_in_graph", "explained_here", "gap"]},
+                "reason": {"type": "string", "minLength": 1},
+                "resolution": {
+                  "type": "object",
+                  "required": ["kind", "insight_id", "target"],
+                  "properties": {
+                    "kind": {"enum": ["existing_concept", "existing_explainer", "explained_here", "learning_target"]},
+                    "insight_id": {"type": ["string", "null"]},
+                    "target": {"type": ["string", "null"]}
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
