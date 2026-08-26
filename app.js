@@ -1,5 +1,12 @@
 const progressBar = document.getElementById('progressBar');
 
+if (document.body.classList.contains('generated-page')) {
+  const explainerStyles = document.createElement('link');
+  explainerStyles.rel = 'stylesheet';
+  explainerStyles.href = '../../explainer.css';
+  document.head.appendChild(explainerStyles);
+}
+
 function updateProgress() {
   if (!progressBar) return;
   const scrollable = document.documentElement.scrollHeight - window.innerHeight;
