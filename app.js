@@ -100,7 +100,71 @@ function addRecallNavLink() {
   else nav.appendChild(link);
 }
 
-function buildRetentionLoop() {
+async function fetchJson(path) {
+  const response = await fetch(`${relativeRoot()}${path}`, { cache: 'no-store' });
+  if (!response.ok) throw new Error(`${path}: HTTP ${response.status}`);
+  return response.json();
+}
+
+async function loadAuthoredLearningMaterial(id) {
+  try {
+    const [promptData, insightData, graphData] = await Promise.all([
+      fetchJson('data/learning-prompts.json'),
+      fetchJson('data/insights.json'),
+      fetchJson('data/knowledge-graph.json'),
+    ]);
+    const record = (promptData.records || []).find((item) => item.insight_id === id);
+    const insight = (insightData.insights || []).find((item) => item.id === id);
+    if (!record || !insight) return null;
+
+    const concepts = new Map((graphData.concepts || []).map((item) => [item.id, item.label]));
+    const answer = record.answer_key || {};
+    const boundaryIndex = Number(answer.boundary_limitation_index || 0);
+    const anchors = (answer.anchor_concept_ids || []).map((conceptId) => concepts.get(conceptId) || conceptId);
+    const answers = [
+      `Problem — ${insight.whole_source_map?.problem || 'Reconstruct the source problem.'}`,
+      `Thesis / mechanism — ${insight.whole_source_map?.thesis || 'Reconstruct the source thesis or mechanism.'}`,
+      anchors.length ? `Anchors — ${anchors.join(' · ')}` : 'Anchors — recall the concepts that make the mechanism work.',
+      `Boundary — ${(insight.limitations || [])[boundaryIndex] || 'Name one boundary where the model stops being sufficient.'}`,
+    ];
+
+    const transfer = record.transfer_prompt;
+    const transferPrinciples = transfer
+      ? (transfer.expected_concept_ids || []).map((conceptId) => concepts.get(conceptId) || conceptId)
+      : [];
+
+    return {
+      prompt: record.retention_prompt,
+      answers,
+      transferPrompt: transfer?.prompt || null,
+      transferPrinciples,
+    };
+  } catch (_) {
+    return null;
+  }
+}
+
+function fallbackLearningMaterial() {
+  const title = document.querySelector('.detail-hero h1')?.textContent.trim() || 'this model';
+  const coreColumns = document.querySelectorAll('#model .core-map > div');
+  const problem = coreColumns[0]?.querySelector('p')?.textContent.trim() || 'Reconstruct the source problem.';
+  const thesis = coreColumns[1]?.querySelector('p')?.textContent.trim() || 'Reconstruct the source thesis or mechanism.';
+  const topics = Array.from(coreColumns[2]?.querySelectorAll('li') || []).slice(0, 2).map((item) => item.textContent.trim());
+  const limitation = document.querySelector('.limitation-list li')?.textContent.trim() || 'Name one boundary where the model stops being sufficient.';
+  return {
+    prompt: `Without looking back, reconstruct “${title}”: what problem is being solved, what mechanism or thesis matters, what changes as a result, and where does the model break?`,
+    answers: [
+      `Problem — ${problem}`,
+      `Thesis / mechanism — ${thesis}`,
+      topics.length ? `Anchors — ${topics.join(' · ')}` : 'Anchors — recall two concepts or components that make the model work.',
+      `Boundary — ${limitation}`,
+    ],
+    transferPrompt: null,
+    transferPrinciples: [],
+  };
+}
+
+async function buildRetentionLoop() {
   if (!document.body.classList.contains('generated-page')) return;
   if (document.getElementById('recall')) return;
 
@@ -108,12 +172,8 @@ function buildRetentionLoop() {
   const sources = document.getElementById('sources');
   if (!actions || !sources) return;
 
-  const title = document.querySelector('.detail-hero h1')?.textContent.trim() || 'this model';
-  const coreColumns = document.querySelectorAll('#model .core-map > div');
-  const problem = coreColumns[0]?.querySelector('p')?.textContent.trim() || 'Reconstruct the source problem.';
-  const thesis = coreColumns[1]?.querySelector('p')?.textContent.trim() || 'Reconstruct the source thesis or mechanism.';
-  const topics = Array.from(coreColumns[2]?.querySelectorAll('li') || []).slice(0, 2).map((item) => item.textContent.trim());
-  const limitation = document.querySelector('.limitation-list li')?.textContent.trim() || 'Name one boundary where the model stops being sufficient.';
+  const id = explainerId();
+  const material = (await loadAuthoredLearningMaterial(id)) || fallbackLearningMaterial();
 
   const section = document.createElement('section');
   section.id = 'recall';
@@ -121,14 +181,14 @@ function buildRetentionLoop() {
   section.innerHTML = `
     <div class="retention-intro">
       <div><p class="kicker">RECALL LATER</p><h2>Can the model survive without the page?</h2></div>
-      <p>Attempt reconstruction before rereading. This is a small retention experiment, not a quiz bank or an optimized spaced-repetition algorithm.</p>
+      <p>Attempt reconstruction before rereading. The question is authored with the insight and targets the model rather than page trivia.</p>
     </div>
     <div class="retention-card">
       <div class="retention-practice">
         <span class="retention-label">RECONSTRUCT BEFORE REOPENING</span>
         <h3 data-retention-prompt></h3>
         <p>Say it aloud or write it below. Aim for the structure, not exact wording.</p>
-        <textarea class="retention-draft" aria-label="Your recall attempt" placeholder="Problem → mechanism / thesis → result or implication → one boundary. This text is not saved or sent anywhere."></textarea>
+        <textarea class="retention-draft" aria-label="Your recall attempt" placeholder="Your reconstruction stays only in this text box. It is not saved or sent anywhere."></textarea>
         <div class="retention-controls" aria-label="Schedule another recall">
           <button type="button" class="retention-button" data-retention-days="2">Review in 2 days</button>
           <button type="button" class="retention-button" data-retention-days="7">Review in 1 week</button>
@@ -145,28 +205,41 @@ function buildRetentionLoop() {
           <button type="button" class="retention-button is-secondary" data-retention-clear>Clear local state</button>
         </div>
       </details>
+    </div>
+    <div class="retention-transfer" data-retention-transfer hidden>
+      <span class="retention-label">TRANSFER / APPLICATION</span>
+      <h3 data-transfer-prompt></h3>
+      <p>Try to apply the model to this new case before opening the expected principles.</p>
+      <textarea class="retention-draft" aria-label="Your transfer attempt" placeholder="Your application attempt is not saved or sent anywhere."></textarea>
+      <details class="retention-transfer-answer">
+        <summary>Reveal expected principles after attempting the case</summary>
+        <ul data-transfer-principles></ul>
+      </details>
     </div>`;
 
-  const prompt = section.querySelector('[data-retention-prompt]');
-  prompt.textContent = `Without looking back, reconstruct “${title}”: what problem is being solved, what mechanism or thesis matters, what changes as a result, and where does the model break?`;
-
+  section.querySelector('[data-retention-prompt]').textContent = material.prompt;
   const answerList = section.querySelector('[data-retention-answer]');
-  const answers = [
-    `Problem — ${problem}`,
-    `Thesis / mechanism — ${thesis}`,
-    topics.length ? `Anchors — ${topics.join(' · ')}` : 'Anchors — recall two concepts or components that make the model work.',
-    `Boundary — ${limitation}`,
-  ];
-  answers.forEach((answer) => {
+  material.answers.forEach((answer) => {
     const item = document.createElement('li');
     item.textContent = answer;
     answerList.appendChild(item);
   });
 
+  if (material.transferPrompt) {
+    const transferBlock = section.querySelector('[data-retention-transfer]');
+    transferBlock.hidden = false;
+    transferBlock.querySelector('[data-transfer-prompt]').textContent = material.transferPrompt;
+    const principles = transferBlock.querySelector('[data-transfer-principles]');
+    material.transferPrinciples.forEach((principle) => {
+      const item = document.createElement('li');
+      item.textContent = principle;
+      principles.appendChild(item);
+    });
+  }
+
   sources.parentNode.insertBefore(section, sources);
   addRecallNavLink();
 
-  const id = explainerId();
   const storageKey = `signal-to-insight:retention:${id}`;
   let state = safeStorageGet(storageKey);
   const status = section.querySelector('[data-retention-status]');
@@ -178,7 +251,7 @@ function buildRetentionLoop() {
       const due = new Date(state.dueAt);
       if (Date.now() >= due.getTime()) {
         section.classList.add('is-due');
-        parts.push(`Due now — attempt recall before revealing the answer.`);
+        parts.push('Due now — attempt recall before revealing the answer.');
       } else {
         parts.push(`Next recall: ${formatRecallDate(state.dueAt)}.`);
       }
