@@ -27,5 +27,8 @@ jobs:
       - name: Validate research bundles
         run: python scripts/validate_bundles.py
 
+      - name: Run pipeline acceptance tests
+        run: python -m unittest discover -s tests -p "test_*.py" -v
+
       - name: Compile Python utilities
-        run: python -m compileall -q scripts
+        run: python -m compileall -q scripts tests
