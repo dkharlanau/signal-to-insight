@@ -1,0 +1,121 @@
+{
+  "intake": {
+    "id": "intake-2026-08-26-example-system-talk",
+    "source_url": "https://example.com/system-talk",
+    "source_type": "video",
+    "submitted_at": "2026-08-26",
+    "requested_focus": "Understand the mechanism and decide what to learn.",
+    "status": "review",
+    "source_id": "src-example-system-talk-2026",
+    "insight_id": "example-controlled-execution"
+  },
+  "source": {
+    "id": "src-example-system-talk-2026",
+    "type": "video",
+    "title": "Example System Talk",
+    "canonical_url": "https://example.com/system-talk",
+    "creators": ["Example Author"],
+    "publisher": "Example Publisher",
+    "published_at": "2026-08-20",
+    "event_date": null,
+    "captured_at": "2026-08-26",
+    "analyzed_at": "2026-08-26",
+    "date_note": null,
+    "verification": [],
+    "derived_records": ["example-controlled-execution"]
+  },
+  "bundle": {
+    "bundle_version": "1.0.0",
+    "intake_id": "intake-2026-08-26-example-system-talk",
+    "source_id": "src-example-system-talk-2026",
+    "source": {
+      "type": "video",
+      "canonical_url": "https://example.com/system-talk",
+      "title": "Example System Talk",
+      "creators": ["Example Author"],
+      "publisher": "Example Publisher",
+      "published_at": "2026-08-20",
+      "event_date": null,
+      "version": null,
+      "language": "en",
+      "duration": "10:00",
+      "date_note": null
+    },
+    "inspection": {
+      "method": "synthetic test fixture",
+      "full_content_used_ephemerally": true,
+      "full_content_committed": false,
+      "confidence": "direct",
+      "gaps": []
+    },
+    "content_map": {
+      "problem": "A capable component is not sufficient without a reliable execution system.",
+      "thesis": "Separate the task model from the executor.",
+      "sections": ["problem", "mechanism", "result"],
+      "concepts": ["task contract"],
+      "mechanisms": ["executor-independent task"],
+      "tools": [],
+      "examples": ["controlled update"],
+      "claims": ["execution context matters"],
+      "evidence": [],
+      "assumptions": ["the action has consequences"],
+      "limitations": ["the simplified model omits concurrency"],
+      "open_questions": ["how should task ownership be represented?"]
+    },
+    "selection": {
+      "requested_focus": "Understand the mechanism and decide what to learn.",
+      "coherent_core": ["task contract", "executor", "verification"],
+      "prerequisites": ["basic workflow concepts"],
+      "drop_notes": ["decorative anecdotes removed"],
+      "connections": ["workflow engines"]
+    },
+    "verification_candidates": [],
+    "source_locators": [],
+    "created_at": "2026-08-26"
+  },
+  "insight": {
+    "id": "example-controlled-execution",
+    "source_id": "src-example-system-talk-2026",
+    "slug": "example-controlled-execution",
+    "status": "published",
+    "title": "Controlled execution needs more than a capable component",
+    "one_liner": "The useful unit is the task plus its execution controls, not the executor alone.",
+    "why_this_matters": "A successful isolated action can still be unreliable as a system behavior.",
+    "whole_source_map": {
+      "problem": "A capable component is not sufficient without a reliable execution system.",
+      "thesis": "Separate the task model from the executor.",
+      "core_topics": ["task contract", "authority", "verification"]
+    },
+    "derived_model": {
+      "problem": "Executor capability is mistaken for system reliability.",
+      "mechanism": "Define a task contract and put authority and verification around execution.",
+      "result": "Different executors can perform the same controlled work."
+    },
+    "concepts": [
+      {"name": "Task contract", "depth": "learn", "why_needed": "It defines work independently from the executor."}
+    ],
+    "tool_map": [],
+    "examples": [
+      {"domain": "custom system", "scenario": "Controlled record update", "question": "Can the same task be safely performed by different executors?"}
+    ],
+    "limitations": ["Concurrency and ownership still require explicit rules."],
+    "action_map": {
+      "use_now": ["Separate task semantics from executor implementation."],
+      "try": [],
+      "learn": ["workflow execution"],
+      "build": [],
+      "watch": [],
+      "ignore_for_now": []
+    },
+    "supporting_sources": [],
+    "connections": ["workflow engines"],
+    "tags": ["architecture", "workflow"],
+    "provenance": {
+      "source_linked": true,
+      "source_dates_recorded": true,
+      "full_transcript_stored": false,
+      "analysis_type": "synthetic test fixture",
+      "reviewed_at": "2026-08-26"
+    }
+  }
+}
