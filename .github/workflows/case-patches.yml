@@ -5,15 +5,19 @@ on:
     branches: [main]
     paths:
       - "data/case-patches/**.json"
+      - "schemas/case-patch.schema.json"
       - "scripts/apply_case_patch.py"
       - "scripts/pending_case_patches.py"
+      - "scripts/validate_case_patches.py"
       - ".github/workflows/case-patches.yml"
   pull_request:
     branches: [main]
     paths:
       - "data/case-patches/**.json"
+      - "schemas/case-patch.schema.json"
       - "scripts/apply_case_patch.py"
       - "scripts/pending_case_patches.py"
+      - "scripts/validate_case_patches.py"
       - ".github/workflows/case-patches.yml"
 
 permissions:
@@ -34,6 +38,9 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+
+      - name: Preflight researched case patches
+        run: python scripts/validate_case_patches.py
 
       - name: Resolve case patches to materialize
         id: patches
@@ -66,6 +73,7 @@ jobs:
         run: |
           python scripts/validate.py
           python scripts/validate_bundles.py
+          python scripts/validate_case_patches.py
           python scripts/validate_graph.py
           python scripts/public_projection.py
 
