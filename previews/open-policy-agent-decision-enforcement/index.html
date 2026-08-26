@@ -16,7 +16,7 @@
   <header class="site-header wrap">
     <a class="brand" href="../../"><span class="brand-mark">S→I</span><span>Signal to Insight</span></a>
     <nav aria-label="Explainer navigation">
-      <a href="#model">Model</a><a href="#concepts">Concepts</a><a href="#tools">Tools</a><a href="#actions">Actions</a><a href="#sources">Sources</a>
+      <a href="#delta">Delta</a><a href="#model">Model</a><a href="#concepts">Concepts</a><a href="#tools">Tools</a><a href="#actions">Actions</a><a href="#sources">Sources</a>
     </nav>
   </header>
 
@@ -41,6 +41,35 @@
     <section class="detail-section wrap">
       <p class="kicker">WHY THIS MATTERS</p>
       <p class="big-statement">Policy-as-code becomes much more concrete once the trust boundary is clear. OPA does not perform the protected action and it does not magically enforce its answer; it gives an application a separately versioned, testable decision engine while the application stays the enforcement point.</p>
+    </section>
+
+    <section id="delta" class="detail-section wrap knowledge-delta-section">
+      <p class="kicker">KNOWLEDGE DELTA</p>
+      <h2>What this source changes in the existing model.</h2>
+      <p class="big-statement">OPA makes two previously broad governance ideas more precise: policy can be explicit code, and deciding permission is different from enforcing the action.</p>
+      <div class="concept-grid"><article class="concept-card delta-card">
+          <span>Refines</span>
+          <h3>Policy as code</h3>
+          <p><strong>Source says:</strong> OPA evaluates declarative Rego policy and data against structured input and returns a decision to the integrating application.</p>
+          <p><strong>Previously:</strong> Policy as code was previously introduced only as one useful control around agent execution.</p>
+          <p><strong>Project interpretation:</strong> OPA turns the broad idea into a concrete architecture with a policy engine, policy/data lifecycle and an explicit decision interface.</p>
+          <small>Prior evidence: <a href="../../explainers/why-enterprise-ai-agents-fail-after-the-poc/">Why enterprise AI agents fail after the POC</a></small>
+        </article><article class="concept-card delta-card">
+          <span>Reinforces</span>
+          <h3>Controlled execution</h3>
+          <p><strong>Source says:</strong> The application keeps ownership of the protected action while OPA computes a policy decision from explicit input, policy and data.</p>
+          <p><strong>Previously:</strong> Controlled execution already required explicit authority around consequential work.</p>
+          <p><strong>Project interpretation:</strong> OPA supplies a concrete authorization component compatible with that model without pretending the policy engine itself executes or verifies the business action.</p>
+          <small>Prior evidence: <a href="../../explainers/why-enterprise-ai-agents-fail-after-the-poc/">Why enterprise AI agents fail after the POC</a></small>
+        </article><article class="concept-card delta-card">
+          <span>New</span>
+          <h3>Policy decision / enforcement separation</h3>
+          <p><strong>Source says:</strong> OPA returns decisions; the integrating service remains responsible for enforcement and the protected operation.</p>
+          <p><strong>Previously:</strong> The project had policy and control concepts but not this explicit architectural boundary.</p>
+          <p><strong>Project interpretation:</strong> This becomes a reusable design test: identify who decides, who enforces and who owns the side effect.</p>
+          <small>Prior evidence: <span class="delta-baseline">No prior project evidence — baseline/new knowledge.</span></small>
+        </article></div>
+      <p class="section-note"><strong>Noise rejected:</strong> prior concepts retrieved but deliberately classified as not relevant: execution-history, protected-data-separation.</p>
     </section>
 
     <section id="model" class="detail-section wrap">

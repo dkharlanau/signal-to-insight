@@ -16,7 +16,7 @@
   <header class="site-header wrap">
     <a class="brand" href="../../"><span class="brand-mark">S→I</span><span>Signal to Insight</span></a>
     <nav aria-label="Explainer navigation">
-      <a href="#model">Model</a><a href="#concepts">Concepts</a><a href="#tools">Tools</a><a href="#actions">Actions</a><a href="#sources">Sources</a>
+      <a href="#delta">Delta</a><a href="#model">Model</a><a href="#concepts">Concepts</a><a href="#tools">Tools</a><a href="#actions">Actions</a><a href="#sources">Sources</a>
     </nav>
   </header>
 
@@ -41,6 +41,35 @@
     <section class="detail-section wrap">
       <p class="kicker">WHY THIS MATTERS</p>
       <p class="big-statement">Retries are easy to describe and surprisingly hard to compose across multi-step, long-running work. Temporal is useful to understand because it changes the unit of reliability from a running process to a persisted Workflow Execution.</p>
+    </section>
+
+    <section id="delta" class="detail-section wrap knowledge-delta-section">
+      <p class="kicker">KNOWLEDGE DELTA</p>
+      <h2>What this source changes in the existing model.</h2>
+      <p class="big-statement">Temporal turns the earlier generic idea of durable, reconstructable execution into a concrete workflow-runtime model.</p>
+      <div class="concept-grid"><article class="concept-card delta-card">
+          <span>Refines</span>
+          <h3>Durable execution</h3>
+          <p><strong>Source says:</strong> Temporal persists Workflow Execution progress as Event History while replaceable Workers execute tasks from Task Queues.</p>
+          <p><strong>Previously:</strong> The enterprise-agent case introduced durable execution as a desirable production property but did not explain a concrete runtime mechanism.</p>
+          <p><strong>Project interpretation:</strong> Temporal narrows the abstract property into a specific mechanism: state survives outside any one Worker process and can be reconstructed from history.</p>
+          <small>Prior evidence: <a href="../../explainers/why-enterprise-ai-agents-fail-after-the-poc/">Why enterprise AI agents fail after the POC</a></small>
+        </article><article class="concept-card delta-card">
+          <span>Refines</span>
+          <h3>Execution history</h3>
+          <p><strong>Source says:</strong> Temporal defines Event History as an append-only record representing Workflow Execution state and progress.</p>
+          <p><strong>Previously:</strong> Execution history was already present as a general governance and replay concept.</p>
+          <p><strong>Project interpretation:</strong> The source makes the concept operational by showing one system where history is also the mechanism for workflow-state reconstruction.</p>
+          <small>Prior evidence: <a href="../../explainers/why-enterprise-ai-agents-fail-after-the-poc/">Why enterprise AI agents fail after the POC</a></small>
+        </article><article class="concept-card delta-card">
+          <span>New</span>
+          <h3>Idempotency under retry</h3>
+          <p><strong>Source says:</strong> Activity work can be retried, so external effects still need safe or idempotent semantics.</p>
+          <p><strong>Previously:</strong> The earlier agent architecture did not yet model repeated side effects under workflow retry.</p>
+          <p><strong>Project interpretation:</strong> This adds an important boundary: durable orchestration does not make external side effects exactly-once by itself.</p>
+          <small>Prior evidence: <span class="delta-baseline">No prior project evidence — baseline/new knowledge.</span></small>
+        </article></div>
+      
     </section>
 
     <section id="model" class="detail-section wrap">

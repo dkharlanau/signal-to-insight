@@ -16,7 +16,7 @@
   <header class="site-header wrap">
     <a class="brand" href="../../"><span class="brand-mark">S→I</span><span>Signal to Insight</span></a>
     <nav aria-label="Explainer navigation">
-      <a href="#model">Model</a><a href="#concepts">Concepts</a><a href="#tools">Tools</a><a href="#actions">Actions</a><a href="#sources">Sources</a>
+      <a href="#delta">Delta</a><a href="#model">Model</a><a href="#concepts">Concepts</a><a href="#tools">Tools</a><a href="#actions">Actions</a><a href="#sources">Sources</a>
     </nav>
   </header>
 
@@ -41,6 +41,35 @@
     <section class="detail-section wrap">
       <p class="kicker">WHY THIS MATTERS</p>
       <p class="big-statement">ReAct is a useful mental model for the inside of an agent loop. It explains how a model can alternate between thinking and interacting with an environment, while making clear why a separate execution layer is still required for authorization, reliable side effects, recovery and audit.</p>
+    </section>
+
+    <section id="delta" class="detail-section wrap knowledge-delta-section">
+      <p class="kicker">KNOWLEDGE DELTA</p>
+      <h2>What this source changes in the existing model.</h2>
+      <p class="big-statement">ReAct does not replace the production control model; it clarifies a different layer: how a model updates its next action using reasoning and external observations.</p>
+      <div class="concept-grid"><article class="concept-card delta-card">
+          <span>Refines</span>
+          <h3>Controlled execution</h3>
+          <p><strong>Source says:</strong> ReAct interleaves reasoning, environment actions and observations inside the model&#x27;s task trajectory.</p>
+          <p><strong>Previously:</strong> Controlled execution describes authorization, safe execution, reconstruction and verification around consequential work.</p>
+          <p><strong>Project interpretation:</strong> The source refines the boundary by separating a cognitive/action-selection loop from the production substrate that governs whether and how selected actions may execute.</p>
+          <small>Prior evidence: <a href="../../explainers/why-enterprise-ai-agents-fail-after-the-poc/">Why enterprise AI agents fail after the POC</a></small>
+        </article><article class="concept-card delta-card">
+          <span>New</span>
+          <h3>ReAct loop</h3>
+          <p><strong>Source says:</strong> Thought, action and returned observation are interleaved so each observation can change the next reasoning/action choice.</p>
+          <p><strong>Previously:</strong> No existing concept described this model-level feedback loop.</p>
+          <p><strong>Project interpretation:</strong> The loop becomes a reusable mental model for agent reasoning, distinct from orchestration durability and authorization.</p>
+          <small>Prior evidence: <span class="delta-baseline">No prior project evidence — baseline/new knowledge.</span></small>
+        </article><article class="concept-card delta-card">
+          <span>New</span>
+          <h3>Observation grounding</h3>
+          <p><strong>Source says:</strong> External actions return observations that provide new evidence and can correct or redirect subsequent reasoning.</p>
+          <p><strong>Previously:</strong> Earlier project knowledge emphasized control and replay rather than environment feedback inside a reasoning trajectory.</p>
+          <p><strong>Project interpretation:</strong> This adds the idea that tool use is valuable not only for action but also for grounding the next internal decision.</p>
+          <small>Prior evidence: <span class="delta-baseline">No prior project evidence — baseline/new knowledge.</span></small>
+        </article></div>
+      <p class="section-note"><strong>Noise rejected:</strong> prior concepts retrieved but deliberately classified as not relevant: execution-history.</p>
     </section>
 
     <section id="model" class="detail-section wrap">
