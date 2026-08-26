@@ -10,7 +10,7 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["id", "source_id", "slug", "status", "title", "one_liner", "why_this_matters", "whole_source_map", "derived_model", "concepts", "tool_map", "examples", "limitations", "action_map", "supporting_sources", "provenance"],
+        "required": ["id", "source_id", "slug", "status", "title", "one_liner", "why_this_matters", "whole_source_map", "derived_model", "coherence_review", "visual_plan", "concepts", "tool_map", "examples", "limitations", "action_map", "supporting_sources", "provenance"],
         "properties": {
           "id": {"type": "string", "pattern": "^[a-z0-9-]+$"},
           "source_id": {"type": "string", "pattern": "^src-[a-z0-9-]+$"},
@@ -27,6 +27,71 @@
           "derived_model": {
             "type": "object",
             "required": ["problem", "mechanism", "result"]
+          },
+          "coherence_review": {
+            "type": "object",
+            "required": ["central_chain", "prerequisites_complete", "source_vs_enrichment_clear", "open_gaps", "scores"],
+            "properties": {
+              "central_chain": {"type": "array", "minItems": 2, "items": {"type": "string"}},
+              "prerequisites_complete": {"type": "boolean"},
+              "source_vs_enrichment_clear": {"type": "boolean"},
+              "open_gaps": {"type": "array", "items": {"type": "string"}},
+              "scores": {
+                "type": "object",
+                "required": ["coherence", "prerequisite_completeness", "evidence_confidence", "practical_leverage"],
+                "properties": {
+                  "coherence": {"type": "integer", "minimum": 1, "maximum": 5},
+                  "prerequisite_completeness": {"type": "integer", "minimum": 1, "maximum": 5},
+                  "evidence_confidence": {"type": "integer", "minimum": 1, "maximum": 5},
+                  "practical_leverage": {"type": "integer", "minimum": 1, "maximum": 5}
+                },
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false
+          },
+          "visual_plan": {
+            "type": "object",
+            "required": ["dominant", "supporting", "image"],
+            "properties": {
+              "dominant": {
+                "type": "object",
+                "required": ["type", "title", "nodes"],
+                "properties": {
+                  "type": {"type": "string", "enum": ["causal_chain", "sequence", "layers", "comparison", "decision"]},
+                  "title": {"type": "string"},
+                  "nodes": {
+                    "type": "array",
+                    "minItems": 2,
+                    "items": {
+                      "type": "object",
+                      "required": ["label", "title", "text"],
+                      "properties": {
+                        "label": {"type": "string"},
+                        "title": {"type": "string"},
+                        "text": {"type": "string"}
+                      },
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "additionalProperties": false
+              },
+              "supporting": {
+                "type": "array",
+                "items": {"type": "string", "enum": ["causal_chain", "sequence", "layers", "comparison", "decision", "concept_grid", "tool_map", "examples", "limitations", "action_map", "source_map"]}
+              },
+              "image": {
+                "type": "object",
+                "required": ["needed", "reason"],
+                "properties": {
+                  "needed": {"type": "boolean"},
+                  "reason": {"type": "string"}
+                },
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false
           },
           "concepts": {"type": "array"},
           "patterns": {"type": "array"},
