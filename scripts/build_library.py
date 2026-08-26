@@ -98,7 +98,7 @@ def render() -> str:
   <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
   <header class="site-header wrap">
     <a class="brand" href="../"><span class="brand-mark">S→I</span><span>Signal to Insight</span></a>
-    <nav aria-label="Library navigation"><a href="../">Engine</a><a href="../data/insights.json">Data</a><a href="../data/sources.json">Sources</a></nav>
+    <nav aria-label="Library navigation"><a href="../">Engine</a><a href="../knowledge/">Knowledge</a><a href="../data/insights.json">Data</a><a href="../data/sources.json">Sources</a></nav>
   </header>
 
   <main>
