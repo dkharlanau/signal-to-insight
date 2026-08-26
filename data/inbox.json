@@ -44,6 +44,17 @@
       "source_id": "src-react-paper-2210-03629",
       "insight_id": "react-reason-act-observe-loop",
       "notes": "GitHub source intake issue #13. Fourth real acceptance case; research paper/PDF adapter. Queued manually after the Issue event did not produce an intake workflow run."
+    },
+    {
+      "id": "intake-2026-08-26-psychologicalscience-j-1467-9280-2006-01693-x",
+      "source_url": "https://www.psychologicalscience.org/journals/psychological-science/j.1467-9280.2006.01693.x",
+      "source_type": "article",
+      "submitted_at": "2026-08-26",
+      "requested_focus": "Understand the testing/retrieval-practice effect, especially the difference between immediate performance and delayed retention, why repeated study can create misleading confidence, what the experiment does and does not establish, and how this should change Signal to Insight from a source-understanding engine into a system that also helps retain the mental model.",
+      "status": "queued",
+      "source_id": null,
+      "insight_id": null,
+      "notes": "GitHub source intake issue #14. Fifth real acceptance case and deliberately outside AI/enterprise. Use the original 2006 Roediger & Karpicke research article as the primary source, with PubMed and the authors' Memory Lab as verification/enrichment. Do not turn the product into a quiz app; derive the minimum useful retention loop."
     }
   ]
 }

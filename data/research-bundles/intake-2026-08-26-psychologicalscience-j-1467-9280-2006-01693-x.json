@@ -1,0 +1,138 @@
+{
+  "bundle_version": "1.1.0",
+  "intake_id": "intake-2026-08-26-psychologicalscience-j-1467-9280-2006-01693-x",
+  "source_id": null,
+  "source": {
+    "type": "article",
+    "canonical_url": "https://www.psychologicalscience.org/journals/psychological-science/j.1467-9280.2006.01693.x",
+    "title": null,
+    "creators": [],
+    "publisher": null,
+    "published_at": null,
+    "event_date": null,
+    "version": null,
+    "language": null,
+    "duration": null,
+    "date_note": null
+  },
+  "inspection": {
+    "method": "not inspected",
+    "full_content_used_ephemerally": false,
+    "full_content_committed": false,
+    "confidence": "metadata_only",
+    "gaps": [
+      "Source content has not been mapped yet."
+    ]
+  },
+  "prior_knowledge": {
+    "captured_at": "2026-08-26",
+    "query": "Understand the testing/retrieval-practice effect, especially the difference between immediate performance and delayed retention, why repeated study can create misleading confidence, what the experiment does and does not establish, and how this should change Signal to Insight from a source-understanding engine into a system that also helps retain the mental model.",
+    "matches": [
+      {
+        "concept_id": "open-policy-agent",
+        "label": "Open Policy Agent (OPA)",
+        "coverage": "explained",
+        "evidence_insights": [
+          {
+            "id": "open-policy-agent-decision-enforcement-model",
+            "status": "review",
+            "title": "Open Policy Agent: separate policy decisions from enforcement"
+          }
+        ],
+        "relationship_to_source": "unclassified"
+      },
+      {
+        "concept_id": "observation-grounding",
+        "label": "Observation grounding",
+        "coverage": "explained",
+        "evidence_insights": [
+          {
+            "id": "react-reason-act-observe-loop",
+            "status": "review",
+            "title": "ReAct: reason, act, observe — then update the plan"
+          }
+        ],
+        "relationship_to_source": "unclassified"
+      },
+      {
+        "concept_id": "controlled-execution",
+        "label": "Controlled execution",
+        "coverage": "explained",
+        "evidence_insights": [
+          {
+            "id": "enterprise-agents-production-substrate",
+            "status": "published",
+            "title": "Why enterprise AI agents fail after the POC"
+          },
+          {
+            "id": "open-policy-agent-decision-enforcement-model",
+            "status": "review",
+            "title": "Open Policy Agent: separate policy decisions from enforcement"
+          },
+          {
+            "id": "react-reason-act-observe-loop",
+            "status": "review",
+            "title": "ReAct: reason, act, observe — then update the plan"
+          }
+        ],
+        "relationship_to_source": "unclassified"
+      },
+      {
+        "concept_id": "policy-as-code",
+        "label": "Policy as code",
+        "coverage": "introduced",
+        "evidence_insights": [
+          {
+            "id": "enterprise-agents-production-substrate",
+            "status": "published",
+            "title": "Why enterprise AI agents fail after the POC"
+          },
+          {
+            "id": "open-policy-agent-decision-enforcement-model",
+            "status": "review",
+            "title": "Open Policy Agent: separate policy decisions from enforcement"
+          }
+        ],
+        "relationship_to_source": "unclassified"
+      },
+      {
+        "concept_id": "policy-decision-enforcement-separation",
+        "label": "Policy decision / enforcement separation",
+        "coverage": "explained",
+        "evidence_insights": [
+          {
+            "id": "open-policy-agent-decision-enforcement-model",
+            "status": "review",
+            "title": "Open Policy Agent: separate policy decisions from enforcement"
+          }
+        ],
+        "relationship_to_source": "unclassified"
+      }
+    ],
+    "classification_required": true
+  },
+  "content_map": {
+    "problem": null,
+    "thesis": null,
+    "sections": [],
+    "concepts": [],
+    "mechanisms": [],
+    "tools": [],
+    "examples": [],
+    "claims": [],
+    "evidence": [],
+    "assumptions": [],
+    "limitations": [],
+    "open_questions": []
+  },
+  "selection": {
+    "requested_focus": "Understand the testing/retrieval-practice effect, especially the difference between immediate performance and delayed retention, why repeated study can create misleading confidence, what the experiment does and does not establish, and how this should change Signal to Insight from a source-understanding engine into a system that also helps retain the mental model.",
+    "coherent_core": [],
+    "prerequisites": [],
+    "drop_notes": [],
+    "connections": []
+  },
+  "verification_candidates": [],
+  "source_locators": [],
+  "created_at": "2026-08-26"
+}
