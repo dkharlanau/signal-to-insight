@@ -37,7 +37,8 @@
 .retention-status,
 .retention-note,
 .retention-answer summary,
-.retention-answer strong {
+.retention-answer strong,
+.retention-transfer summary {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 .retention-label {
@@ -104,7 +105,8 @@
   display: flex;
   flex-direction: column;
 }
-.retention-answer summary {
+.retention-answer summary,
+.retention-transfer summary {
   cursor: pointer;
   list-style: none;
   font-size: 11px;
@@ -112,9 +114,12 @@
   letter-spacing: .08em;
   text-transform: uppercase;
 }
-.retention-answer summary::-webkit-details-marker { display: none; }
-.retention-answer summary::after { content: " +"; }
-.retention-answer[open] summary::after { content: " −"; }
+.retention-answer summary::-webkit-details-marker,
+.retention-transfer summary::-webkit-details-marker { display: none; }
+.retention-answer summary::after,
+.retention-transfer summary::after { content: " +"; }
+.retention-answer[open] summary::after,
+.retention-transfer details[open] summary::after { content: " −"; }
 .retention-answer ol {
   margin: 62px 0 34px;
   padding: 0;
@@ -142,6 +147,34 @@
   font-size: 10px;
   line-height: 1.5;
 }
+.retention-transfer {
+  margin-top: 18px;
+  padding: 28px;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+}
+.retention-transfer[hidden] { display: none; }
+.retention-transfer h3 {
+  max-width: 900px;
+  margin: 30px 0 10px;
+  font-size: clamp(22px, 2.8vw, 38px);
+  line-height: 1.05;
+  letter-spacing: -.025em;
+}
+.retention-transfer > p {
+  max-width: 680px;
+  color: var(--muted);
+}
+.retention-transfer-answer {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+.retention-transfer-answer ul {
+  margin: 18px 0 0;
+  padding-left: 20px;
+}
+.retention-transfer-answer li { margin: 8px 0; }
 
 @media (max-width: 900px) {
   .retention-intro,
@@ -154,7 +187,8 @@
 
 @media (max-width: 600px) {
   .retention-practice,
-  .retention-answer { padding: 20px; }
+  .retention-answer,
+  .retention-transfer { padding: 20px; }
   .retention-practice h3 { margin-top: 52px; }
   .retention-controls,
   .retention-results { display: grid; grid-template-columns: 1fr; }
