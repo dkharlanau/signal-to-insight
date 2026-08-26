@@ -1,0 +1,336 @@
+{
+  "patch_version": "1.0.0",
+  "intake_id": "intake-2026-08-26-psychologicalscience-j-1467-9280-2006-01693-x",
+  "intake_status": "review",
+  "updated_at": "2026-08-26",
+  "graph_version": "0.4.0",
+  "source": {
+    "id": "src-test-enhanced-learning-2006",
+    "type": "article",
+    "title": "Test-Enhanced Learning: Taking Memory Tests Improves Long-Term Retention",
+    "canonical_url": "https://www.psychologicalscience.org/journals/psychological-science/j.1467-9280.2006.01693.x",
+    "creators": [
+      "Henry L. Roediger III",
+      "Jeffrey D. Karpicke"
+    ],
+    "publisher": "Psychological Science / Association for Psychological Science",
+    "event": null,
+    "published_at": "2006-03-01",
+    "event_date": null,
+    "captured_at": "2026-08-26",
+    "analyzed_at": "2026-08-26",
+    "date_note": "The Psychological Science Volume 17 Issue 3 index identifies the article as first published March 1, 2006.",
+    "verification": [
+      {
+        "title": "Psychological Science Volume 17 Issue 3",
+        "url": "https://journals.sagepub.com/toc/pssa/17/3",
+        "accessed_at": "2026-08-26"
+      },
+      {
+        "title": "PubMed record PMID 16507066",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/16507066/",
+        "accessed_at": "2026-08-26"
+      },
+      {
+        "title": "Original article PDF hosted by Purdue Learning Lab",
+        "url": "https://learninglab.psych.purdue.edu/downloads/2006/2006_Roediger_Karpicke_PsychSci.pdf",
+        "accessed_at": "2026-08-26"
+      }
+    ],
+    "derived_records": [
+      "retrieval-practice-delayed-retention"
+    ]
+  },
+  "insight": {
+    "id": "retrieval-practice-delayed-retention",
+    "source_id": "src-test-enhanced-learning-2006",
+    "slug": "retrieval-practice-delayed-retention",
+    "status": "review",
+    "title": "Retrieval practice: optimize for what remains, not what feels easy now",
+    "one_liner": "Repeated study can win the immediate test and still lose a week later; attempting retrieval is a learning event that can improve delayed retention while exposing misleading confidence.",
+    "why_this_matters": "Signal to Insight currently optimizes the moment of explanation. This study shows why that is only half the learning problem: fluent reading can make a model feel learned while retrieval after a delay reveals whether the model actually remained available in memory.",
+    "whole_source_map": {
+      "problem": "Immediate performance and subjective fluency can make repeated study look effective even when less information survives after a delay.",
+      "thesis": "Retrieving studied material from memory can strengthen later retention beyond additional exposure to the material; in the reported prose experiments, extra study helped short-delay performance while prior retrieval helped delayed recall.",
+      "core_topics": [
+        "retrieval practice / testing effect",
+        "immediate performance versus delayed retention",
+        "repeated study versus free recall",
+        "confidence versus actual later memory",
+        "reduced forgetting after repeated retrieval",
+        "narrow product implication: delayed reconstruction of the central mental model"
+      ]
+    },
+    "derived_model": {
+      "problem": "A reader can finish an explainer with high confidence because the material is still present and familiar, yet fail to reconstruct its central model later.",
+      "mechanism": "After initial study, require a genuine retrieval attempt before re-exposure. Retrieval forces the learner to reconstruct the material, and a delayed attempt measures what remains rather than what is currently fluent.",
+      "result": "Understanding becomes a two-stage objective: make the model clear now, then verify that the reader can reconstruct the important structure later."
+    },
+    "coherence_review": {
+      "central_chain": [
+        "Repeated exposure makes material highly available during study and can improve immediate recall.",
+        "A retrieval attempt removes the source and requires the learner to reconstruct what can be produced from memory.",
+        "Across the study's retention intervals, the relative advantage changes: extra study helps at five minutes, while prior retrieval helps after two days or a week.",
+        "Repeated-study participants also predicted better one-week memory even though they later recalled less, so confidence is not a safe proxy for retention.",
+        "For Signal to Insight, the minimum product change is delayed model reconstruction before rereading, not a large quiz system."
+      ],
+      "prerequisites_complete": true,
+      "source_vs_enrichment_clear": true,
+      "open_gaps": [
+        "The study does not determine the optimal delay or spacing schedule for a digital knowledge system.",
+        "The study tests free recall of short prose passages, not transfer to complex professional decisions; later evidence should cover spacing, feedback and application/transfer before the product becomes prescriptive."
+      ],
+      "scores": {
+        "coherence": 5,
+        "prerequisite_completeness": 5,
+        "evidence_confidence": 5,
+        "practical_leverage": 5
+      }
+    },
+    "visual_plan": {
+      "dominant": {
+        "type": "comparison",
+        "title": "Immediate performance is not delayed retention",
+        "nodes": [
+          {
+            "label": "NOW · 5 MIN",
+            "title": "Repeated study looks stronger",
+            "text": "Experiment 2: SSSS 83%, SSST 78%, STTT 71%. Extra exposure produces better immediate recall and higher subjective confidence."
+          },
+          {
+            "label": "LATER · 1 WEEK",
+            "title": "Repeated retrieval retains more",
+            "text": "Experiment 2: STTT 61%, SSST 56%, SSSS 40%. The ordering reverses even though the repeated-study group reread the passage far more."
+          }
+        ]
+      },
+      "supporting": [
+        "sequence",
+        "concept_grid",
+        "examples",
+        "limitations",
+        "action_map",
+        "source_map"
+      ],
+      "image": {
+        "needed": false,
+        "reason": "The evidence is a crossover between learning conditions over time; a comparison plus a small retention-loop diagram teaches it more directly than decorative imagery."
+      }
+    },
+    "concepts": [
+      {
+        "name": "Retrieval practice",
+        "depth": "learn",
+        "why_needed": "The learning event is the attempt to produce knowledge from memory rather than receive the source again."
+      },
+      {
+        "name": "Immediate performance versus delayed retention",
+        "depth": "learn",
+        "why_needed": "The same learning method can rank differently depending on whether success is measured minutes later or days later."
+      },
+      {
+        "name": "Metacognitive confidence gap",
+        "depth": "learn",
+        "why_needed": "Repeated exposure can increase confidence without producing the best delayed recall, so feeling fluent is not the same as retaining the model."
+      },
+      {
+        "name": "Desirable difficulty",
+        "depth": "know",
+        "why_needed": "The authors interpret testing as a case where learning can become harder during practice while producing better later retention."
+      }
+    ],
+    "tool_map": [],
+    "examples": [
+      {
+        "domain": "Experiment 1",
+        "scenario": "After studying a prose passage, students either restudied it or attempted free recall without feedback.",
+        "question": "Why did restudy lead at five minutes (81% vs 75%) while testing led after two days (68% vs 54%) and one week (56% vs 42%)?"
+      },
+      {
+        "domain": "Experiment 2",
+        "scenario": "Students studied four times (SSSS), studied three times plus one test (SSST), or studied once plus three tests (STTT).",
+        "question": "Why did the immediate ordering SSSS > SSST > STTT reverse after one week to STTT > SSST > SSSS?"
+      },
+      {
+        "domain": "Signal to Insight",
+        "scenario": "A reader completes a clear visual explainer and feels that the central mechanism is obvious.",
+        "question": "Can the reader reconstruct the problem → mechanism → result and one key limitation tomorrow before reopening the explainer?"
+      }
+    ],
+    "limitations": [
+      "The participants were Washington University undergraduates ages 18-24, so the study is not a universal population estimate.",
+      "The materials were two short scientific prose passages scored by recalled idea units; results should not be assumed to transfer unchanged to every kind of skill or professional task.",
+      "The longest retention interval reported here was one week, so the paper does not justify a specific long-term scheduling algorithm.",
+      "The retrieval tests provided no feedback. This isolates retrieval from re-exposure but does not imply a practical system should withhold corrective feedback after a failed attempt.",
+      "Delayed recall is evidence of retention, not proof of deep understanding, transfer or correct application to a novel problem.",
+      "The study does not say that every use of testing is beneficial; stakes, question quality, error correction and learning goal still matter."
+    ],
+    "action_map": {
+      "use_now": [
+        "Add a second quality question to every explainer: could the reader reconstruct the central model after a delay without rereading it?",
+        "When revisiting an explainer, attempt recall before reopening the content."
+      ],
+      "try": [
+        "For one explainer, generate a single model-reconstruction prompt and a compact answer key, then revisit it after roughly one day and again later rather than immediately rereading the page.",
+        "Record whether the reader recalled the causal/mechanical chain, not how confident they felt before attempting recall."
+      ],
+      "learn": [
+        "spacing and retrieval scheduling",
+        "feedback after failed retrieval",
+        "transfer-appropriate retrieval and application questions",
+        "calibration between confidence and actual delayed recall"
+      ],
+      "build": [
+        "A minimal retention card attached to each explainer: one reconstruction prompt, answer key, due date and last-recall result."
+      ],
+      "watch": [
+        "Whether the retention loop improves later reconstruction of central models without making the product feel like a flashcard application."
+      ],
+      "ignore_for_now": [
+        "Large quiz banks, gamification and elaborate spaced-repetition scheduling until a small delayed-recall loop proves useful."
+      ]
+    },
+    "connections": [
+      "product quality: immediate readability is a different metric from delayed model retention",
+      "learning path: an explained concept can become an active retrieval target rather than only a link to reread",
+      "review UX: confidence should be recorded only alongside an actual retrieval attempt if calibration is useful",
+      "future research: spacing, feedback and transfer deserve separate sources before scheduling becomes prescriptive"
+    ],
+    "supporting_sources": [
+      {
+        "title": "Test-Enhanced Learning — Psychological Science",
+        "url": "https://journals.sagepub.com/doi/10.1111/j.1467-9280.2006.01693.x",
+        "publisher": "SAGE / Association for Psychological Science",
+        "purpose": "official article metadata, abstract and DOI",
+        "accessed_at": "2026-08-26"
+      },
+      {
+        "title": "Psychological Science Volume 17 Issue 3",
+        "url": "https://journals.sagepub.com/toc/pssa/17/3",
+        "publisher": "SAGE / Association for Psychological Science",
+        "purpose": "exact first-publication date verification: March 1, 2006",
+        "accessed_at": "2026-08-26"
+      },
+      {
+        "title": "PubMed record PMID 16507066",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/16507066/",
+        "publisher": "National Library of Medicine",
+        "purpose": "bibliographic verification and independent abstract record",
+        "accessed_at": "2026-08-26"
+      },
+      {
+        "title": "Original article PDF",
+        "url": "https://learninglab.psych.purdue.edu/downloads/2006/2006_Roediger_Karpicke_PsychSci.pdf",
+        "publisher": "Purdue Learning Lab copy of Psychological Science article",
+        "purpose": "direct Experiment 1/2 design, figures, tables, results and General Discussion",
+        "accessed_at": "2026-08-26"
+      },
+      {
+        "title": "Memory Lab research on test-enhanced learning",
+        "url": "https://psychnet.wustl.edu/memory/research/",
+        "publisher": "Washington University Memory Lab",
+        "purpose": "author-lab context and boundary-condition framing",
+        "accessed_at": "2026-08-26"
+      }
+    ],
+    "tags": [
+      "learning-science",
+      "retrieval-practice",
+      "memory",
+      "retention",
+      "metacognition",
+      "product-learning"
+    ],
+    "provenance": {
+      "source_linked": true,
+      "source_dates_recorded": true,
+      "full_transcript_stored": false,
+      "analysis_type": "direct research-article/PDF analysis with narrow product-learning application",
+      "reviewed_at": "2026-08-26"
+    }
+  },
+  "graph": {
+    "concepts": [
+      {
+        "id": "retrieval-practice",
+        "label": "Retrieval practice",
+        "summary": "Attempting to produce learned material from memory so retrieval itself becomes part of learning rather than only a later assessment event.",
+        "domain": "learning science",
+        "coverage": "explained",
+        "insight_ids": [
+          "retrieval-practice-delayed-retention"
+        ],
+        "aliases": [
+          "testing effect",
+          "test-enhanced learning"
+        ],
+        "tags": [
+          "learning",
+          "retrieval",
+          "memory",
+          "testing-effect"
+        ]
+      },
+      {
+        "id": "performance-retention-gap",
+        "label": "Immediate performance / delayed retention gap",
+        "summary": "The same learning method can improve performance shortly after study yet rank differently when memory is tested after a meaningful delay.",
+        "domain": "learning science",
+        "coverage": "explained",
+        "insight_ids": [
+          "retrieval-practice-delayed-retention"
+        ],
+        "aliases": [
+          "performance retention distinction"
+        ],
+        "tags": [
+          "learning",
+          "retention",
+          "delay",
+          "performance"
+        ]
+      },
+      {
+        "id": "metacognitive-confidence-gap",
+        "label": "Metacognitive confidence gap",
+        "summary": "A mismatch between how well a learner predicts future remembering and how much material is actually retrievable after a delay.",
+        "domain": "learning science",
+        "coverage": "explained",
+        "insight_ids": [
+          "retrieval-practice-delayed-retention"
+        ],
+        "aliases": [
+          "confidence retention gap"
+        ],
+        "tags": [
+          "metacognition",
+          "confidence",
+          "memory",
+          "calibration"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "id": "rel-retrieval-practice-related-to-performance-retention-gap",
+        "from": "retrieval-practice",
+        "to": "performance-retention-gap",
+        "type": "related_to",
+        "rationale": "The study's central retrieval-practice result is a crossover in which extra study helps immediate performance while prior retrieval helps delayed retention.",
+        "evidence_insights": [
+          "retrieval-practice-delayed-retention"
+        ]
+      },
+      {
+        "id": "rel-metacognitive-confidence-gap-related-to-performance-retention-gap",
+        "from": "metacognitive-confidence-gap",
+        "to": "performance-retention-gap",
+        "type": "related_to",
+        "rationale": "Repeated-study participants predicted stronger one-week memory despite later recalling less, showing that immediate fluency/confidence can misrepresent delayed retention.",
+        "evidence_insights": [
+          "retrieval-practice-delayed-retention"
+        ]
+      }
+    ]
+  }
+}
