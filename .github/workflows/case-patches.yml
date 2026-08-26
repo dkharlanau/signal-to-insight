@@ -6,12 +6,14 @@ on:
     paths:
       - "data/case-patches/**.json"
       - "scripts/apply_case_patch.py"
+      - "scripts/pending_case_patches.py"
       - ".github/workflows/case-patches.yml"
   pull_request:
     branches: [main]
     paths:
       - "data/case-patches/**.json"
       - "scripts/apply_case_patch.py"
+      - "scripts/pending_case_patches.py"
       - ".github/workflows/case-patches.yml"
 
 permissions:
@@ -33,7 +35,7 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Find changed case patches
+      - name: Resolve case patches to materialize
         id: patches
         shell: bash
         run: |
@@ -44,11 +46,15 @@ jobs:
             BASE="${{ github.event.before }}"
             HEAD="${{ github.sha }}"
           fi
-          FILES=$(git diff --name-only "$BASE" "$HEAD" -- 'data/case-patches/*.json' | tr '\n' ' ')
+          CHANGED=$(git diff --name-only "$BASE" "$HEAD" -- 'data/case-patches/*.json' | tr '\n' ' ')
+          PENDING=$(python scripts/pending_case_patches.py | tr '\n' ' ')
+          FILES=$(printf '%s\n%s\n' "$CHANGED" "$PENDING" | tr ' ' '\n' | sed '/^$/d' | sort -u | tr '\n' ' ')
           echo "files=$FILES" >> "$GITHUB_OUTPUT"
-          echo "Changed patches: ${FILES:-none}"
+          echo "Changed patches: ${CHANGED:-none}"
+          echo "Pending patches: ${PENDING:-none}"
+          echo "Materializing: ${FILES:-none}"
 
-      - name: Apply changed case patches
+      - name: Apply researched case patches
         if: steps.patches.outputs.files != ''
         shell: bash
         run: |
@@ -76,7 +82,7 @@ jobs:
         shell: bash
         run: |
           if [ -z "$(git status --porcelain -- data/inbox.json data/sources.json data/insights.json data/knowledge-graph.json previews explainers library knowledge)" ]; then
-            echo "Case patch is already materialized."
+            echo "Case patches are already materialized."
             exit 0
           fi
           git config user.name "github-actions[bot]"
