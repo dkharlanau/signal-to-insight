@@ -5,23 +5,28 @@
   "source": {
     "type": "article",
     "canonical_url": "https://www.psychologicalscience.org/journals/psychological-science/j.1467-9280.2006.01693.x",
-    "title": null,
-    "creators": [],
-    "publisher": null,
-    "published_at": null,
+    "title": "Test-Enhanced Learning: Taking Memory Tests Improves Long-Term Retention",
+    "creators": [
+      "Henry L. Roediger III",
+      "Jeffrey D. Karpicke"
+    ],
+    "publisher": "Psychological Science / Association for Psychological Science",
+    "published_at": "2006-03-01",
     "event_date": null,
-    "version": null,
-    "language": null,
+    "version": "Volume 17, Issue 3, pp. 249-255",
+    "language": "en",
     "duration": null,
-    "date_note": null
+    "date_note": "The Psychological Science volume index identifies the article as first published March 1, 2006."
   },
   "inspection": {
-    "method": "not inspected",
-    "full_content_used_ephemerally": false,
+    "method": "Direct inspection of the official APS/SAGE article metadata and abstract plus the seven-page original article PDF hosted by Purdue's Learning Lab; Figures 1-2, Tables 1-2 and the General Discussion were inspected directly.",
+    "full_content_used_ephemerally": true,
     "full_content_committed": false,
-    "confidence": "metadata_only",
+    "confidence": "direct",
     "gaps": [
-      "Source content has not been mapped yet."
+      "The experiments involved Washington University undergraduates learning two short scientific prose passages; the study does not by itself establish the best retrieval schedule for every domain or learner.",
+      "The reported retention intervals extend to one week, so longer-term product scheduling should be treated as a follow-up design question rather than inferred directly from this study.",
+      "The experiments used free recall without feedback; later research on feedback, test formats, transfer and classroom use is useful enrichment but is not part of the core causal evidence retained here."
     ]
   },
   "prior_knowledge": {
@@ -39,7 +44,7 @@
             "title": "Open Policy Agent: separate policy decisions from enforcement"
           }
         ],
-        "relationship_to_source": "unclassified"
+        "relationship_to_source": "not_relevant"
       },
       {
         "concept_id": "observation-grounding",
@@ -52,7 +57,7 @@
             "title": "ReAct: reason, act, observe — then update the plan"
           }
         ],
-        "relationship_to_source": "unclassified"
+        "relationship_to_source": "not_relevant"
       },
       {
         "concept_id": "controlled-execution",
@@ -75,7 +80,7 @@
             "title": "ReAct: reason, act, observe — then update the plan"
           }
         ],
-        "relationship_to_source": "unclassified"
+        "relationship_to_source": "not_relevant"
       },
       {
         "concept_id": "policy-as-code",
@@ -93,7 +98,7 @@
             "title": "Open Policy Agent: separate policy decisions from enforcement"
           }
         ],
-        "relationship_to_source": "unclassified"
+        "relationship_to_source": "not_relevant"
       },
       {
         "concept_id": "policy-decision-enforcement-separation",
@@ -106,33 +111,141 @@
             "title": "Open Policy Agent: separate policy decisions from enforcement"
           }
         ],
-        "relationship_to_source": "unclassified"
+        "relationship_to_source": "not_relevant"
       }
     ],
     "classification_required": true
   },
   "content_map": {
-    "problem": null,
-    "thesis": null,
-    "sections": [],
-    "concepts": [],
-    "mechanisms": [],
+    "problem": "Learners often judge a learning method by how well material can be produced immediately, but the method that produces better immediate performance may produce worse retention after a delay.",
+    "thesis": "Actively retrieving studied material can function as a learning event: in these experiments, free-recall testing without feedback produced worse or similar immediate performance than extra study but substantially better delayed retention.",
+    "sections": [
+      "Introduction and testing-effect rationale",
+      "Experiment 1: one restudy versus one recall test",
+      "Experiment 2: repeated study versus one or three recall tests",
+      "Questionnaire on confidence in one-week memory",
+      "General Discussion and desirable-difficulty interpretation"
+    ],
+    "concepts": [
+      "testing effect / retrieval practice",
+      "immediate performance versus delayed retention",
+      "repeated study / rereading",
+      "metacognitive confidence",
+      "desirable difficulty",
+      "absolute and proportional forgetting"
+    ],
+    "mechanisms": [
+      "A retrieval attempt forces the learner to reconstruct material from memory instead of receiving the full passage again.",
+      "The study manipulates retention interval, revealing a crossover: extra study improves short-delay performance while prior retrieval improves delayed performance.",
+      "Repeated reading can increase subjective confidence even when later recall is lower, so fluency/confidence is not a reliable proxy for durable learning.",
+      "Repeated retrieval reduces forgetting despite much less re-exposure to the source material, ruling out simple restudy/re-exposure as the explanation for the observed delayed benefit."
+    ],
     "tools": [],
-    "examples": [],
-    "claims": [],
-    "evidence": [],
-    "assumptions": [],
-    "limitations": [],
-    "open_questions": []
+    "examples": [
+      "Experiment 1: after 5 minutes the restudy condition recalled 81% versus 75% after testing; after 2 days the tested condition recalled 68% versus 54%, and after 1 week 56% versus 42%.",
+      "Experiment 2: SSSS/SSST/STTT recall at 5 minutes was 83%/78%/71%; after one week it reversed to 40%/56%/61%.",
+      "Experiment 2 participants in the repeated-study condition rated expected one-week remembering higher than participants who had taken one or three tests, despite performing worst a week later."
+    ],
+    "claims": [
+      "Testing improved delayed retention beyond the benefit of simply re-presenting the material, because free-recall tests had no feedback and exposed learners only to what they themselves could retrieve.",
+      "In Experiment 1, additional study improved five-minute recall but initial testing improved two-day and one-week recall.",
+      "In Experiment 2, repeated testing produced the highest one-week recall even though repeated-study participants read the passage far more times.",
+      "Repeated study inflated confidence about one-week memory relative to the testing conditions."
+    ],
+    "evidence": [
+      "Experiment 1 design and Figure 1",
+      "Experiment 1 post-hoc results on five-minute, two-day and one-week recall",
+      "Experiment 2 design, Table 1 reading counts and Table 2 confidence ratings",
+      "Experiment 2 Figure 2 final-test crossover and proportional forgetting analysis",
+      "General Discussion comparing repeated testing with repeated study"
+    ],
+    "assumptions": [
+      "Free recall of idea units is a meaningful measure of retention for the studied prose passages.",
+      "The educationally relevant prose task is informative about study behavior beyond simple word-list memorization, but it is not identical to complex skill acquisition.",
+      "A retrieval attempt can be productive even without feedback when the learner can successfully retrieve substantial material; this should not be generalized to all error-heavy retrieval situations."
+    ],
+    "limitations": [
+      "Participants were 18-24-year-old Washington University undergraduates, not a broad population of learners.",
+      "Only two short prose passages were used, so the findings do not directly specify effects for procedures, motor skills, mathematics or complex professional decision-making.",
+      "The longest reported retention interval was one week.",
+      "The experiments do not establish an optimal number or spacing of retrieval attempts for Signal to Insight.",
+      "No feedback was given in these experiments; that isolates a retrieval effect but does not imply feedback is unnecessary in a practical learning system.",
+      "Better delayed recall should not be equated with complete understanding, transfer or correct application."
+    ],
+    "open_questions": [
+      "What minimal delayed retrieval prompt best tests whether a reader can reconstruct an explainer's central mental model rather than memorize surface facts?",
+      "When should Signal to Insight schedule a recall attempt: same day, next day, one week, or adaptively based on prior recall?",
+      "Should a failed retrieval reveal the whole explainer, a compact answer key, or only the missing prerequisite?",
+      "How should the product distinguish durable recall of the model from the ability to apply it to a new situation?"
+    ]
   },
   "selection": {
     "requested_focus": "Understand the testing/retrieval-practice effect, especially the difference between immediate performance and delayed retention, why repeated study can create misleading confidence, what the experiment does and does not establish, and how this should change Signal to Insight from a source-understanding engine into a system that also helps retain the mental model.",
-    "coherent_core": [],
-    "prerequisites": [],
-    "drop_notes": [],
-    "connections": []
+    "coherent_core": [
+      "Immediate performance and delayed retention are different objectives; a learning method can look worse now and be better later.",
+      "Retrieval practice actively reconstructs knowledge and, in these experiments, produced better delayed retention than additional study even without feedback.",
+      "Repeated study made material feel more learnable and increased confidence, yet produced more forgetting and worse one-week recall.",
+      "Therefore Signal to Insight should not stop at a fluent explainer: after a delay, it should ask the reader to reconstruct the central model from memory before showing the answer again.",
+      "The product implication is a small retention loop, not a quiz bank: one or two model-level retrieval prompts tied to the explainer's causal/mechanical structure."
+    ],
+    "prerequisites": [
+      "Distinguish learning performance during/immediately after study from retention after a delay.",
+      "Treat confidence/fluency as a metacognitive signal that can be miscalibrated rather than as proof of durable learning.",
+      "Retrieval practice means attempting to produce the learned material from memory, not merely rereading or recognizing it."
+    ],
+    "drop_notes": [
+      "Do not turn the result into a generic claim that testing is always superior under every condition.",
+      "Do not import later spacing/feedback literature into the primary causal claim without labeling it as enrichment.",
+      "Do not optimize Signal to Insight around trivia questions; the valuable retrieval target is the central mental model and its key boundaries."
+    ],
+    "connections": [
+      "This source introduces a new learning/retention branch rather than refining the existing agent/enterprise concepts.",
+      "It changes the product success criterion: immediate comprehensibility is necessary but not sufficient; delayed model reconstruction becomes a second quality signal.",
+      "The learning path can become active: concepts already marked explained can later be tested by retrieval rather than only revisited by rereading."
+    ]
   },
-  "verification_candidates": [],
-  "source_locators": [],
+  "verification_candidates": [
+    {
+      "question": "Are the Experiment 1 and Experiment 2 percentages presented with their exact retention intervals and conditions?",
+      "reason": "The central insight is the crossover between immediate and delayed performance; mixing intervals would reverse the interpretation.",
+      "priority": "high"
+    },
+    {
+      "question": "Does the product recommendation remain narrower than the evidence?",
+      "reason": "The study supports delayed retrieval as a useful principle but does not establish one optimal scheduling algorithm or a universal quiz format.",
+      "priority": "high"
+    },
+    {
+      "question": "Should later learning-science sources cover spacing, feedback and transfer before a retention scheduler becomes prescriptive?",
+      "reason": "Those decisions go beyond this two-experiment paper and should be evidence-backed separately.",
+      "priority": "medium"
+    }
+  ],
+  "source_locators": [
+    {
+      "label": "Official article metadata and abstract",
+      "locator": "APS/SAGE article page; Volume 17 Issue 3, first published 2006-03-01"
+    },
+    {
+      "label": "Experiment 1 design",
+      "locator": "Original PDF pp. 250-251"
+    },
+    {
+      "label": "Experiment 1 crossover",
+      "locator": "Original PDF Figure 1 and results, pp. 250-251: 5 min 81/75; 2 days 54/68; 1 week 42/56 for restudy/test"
+    },
+    {
+      "label": "Experiment 2 design and confidence",
+      "locator": "Original PDF pp. 251-252; Table 1 reading counts and Table 2 expected one-week remembering"
+    },
+    {
+      "label": "Experiment 2 crossover",
+      "locator": "Original PDF Figure 2 / pp. 252-253: SSSS/SSST/STTT 83/78/71 at 5 min and 40/56/61 at 1 week"
+    },
+    {
+      "label": "General Discussion",
+      "locator": "Original PDF p. 253 onward: testing as a desirable difficulty, confidence miscalibration, and repeated testing versus repeated study"
+    }
+  ],
   "created_at": "2026-08-26"
 }
