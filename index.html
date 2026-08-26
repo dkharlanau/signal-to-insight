@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Signal to Insight — Applied AI & Enterprise Explanations</title>
-  <meta name="description" content="High-signal AI and enterprise sources turned into practical explanations, reusable patterns, and applications.">
+  <title>Signal to Insight — Personalized Source-to-Understanding Engine</title>
+  <meta name="description" content="Turn videos, papers, tools, repositories and other useful sources into coherent, personalized visual explanations with concepts, tools, actions, sources and dates.">
   <meta name="theme-color" content="#f1f0e9">
   <meta property="og:title" content="Signal to Insight">
-  <meta property="og:description" content="From source material to durable, practical insight.">
+  <meta property="og:description" content="Give it a source. Get back a coherent mental model, useful tools and next actions.">
   <meta property="og:type" content="website">
   <link rel="stylesheet" href="styles.css">
   <script type="application/ld+json">
@@ -15,7 +15,7 @@
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "Signal to Insight",
-    "description": "Applied explanations of AI and enterprise ideas.",
+    "description": "A personalized source-to-understanding engine for concepts, tools and systems.",
     "author": {
       "@type": "Person",
       "name": "Dzmitryi Kharlanau",
@@ -33,55 +33,87 @@
       <span>Signal to Insight</span>
     </a>
     <nav aria-label="Primary navigation">
-      <a href="#method">Method</a>
-      <a href="#explainer">Explainer 001</a>
-      <a href="#principles">Principles</a>
+      <a href="#method">Engine</a>
+      <a href="#explainer">Case 001</a>
+      <a href="#actions">Action map</a>
+      <a href="data/sources.json">Sources</a>
       <a href="data/insights.json">Data</a>
     </nav>
   </header>
 
   <main id="top">
     <section class="hero wrap">
-      <p class="eyebrow">APPLIED INTELLIGENCE / 001</p>
-      <h1>Don't collect more information.<br><em>Compress it into useful models.</em></h1>
+      <p class="eyebrow">PERSONAL RESEARCH ENGINE / 0.2</p>
+      <h1>Give it a source.<br><em>Get back understanding.</em></h1>
       <div class="hero-grid">
-        <p class="lede">A public knowledge system for turning talks, papers, documentation and repositories into practical explanations that survive the news cycle.</p>
-        <div class="signal-chain" aria-label="Signal to insight process">
-          <span>signal</span><b>→</b><span>insight</span><b>→</b><span>application</span>
+        <p class="lede">Video, paper, article, tool, repository or unfamiliar system → a coherent visual model of what matters, what to learn, what to try and what to remember.</p>
+        <div class="signal-chain" aria-label="Source to understanding process">
+          <span>source</span><b>→</b><span>model</span><b>→</b><span>action</span>
         </div>
+      </div>
+      <div class="source-types" aria-label="Supported source types">
+        <span>VIDEO</span><span>PAPER</span><span>ARTICLE</span><span>REPOSITORY</span><span>TOOL</span><span>DOCS</span><span>SYSTEM</span><span>PODCAST</span>
+      </div>
+    </section>
+
+    <section class="profile-band wrap" aria-labelledby="profileTitle">
+      <div>
+        <p class="kicker">THE PERSONALIZATION LAYER</p>
+        <h2 id="profileTitle">Not “summarize this.”<br><em>Figure out what I need from this.</em></h2>
+      </div>
+      <div class="profile-rules">
+        <p><strong>Keep</strong><span>Concepts, prerequisites, tools and examples required for a complete mental model.</span></p>
+        <p><strong>Research</strong><span>Missing context, official docs, counterpoints and useful adjacent systems.</span></p>
+        <p><strong>Drop</strong><span>Repetition, promotional framing and detail that changes neither understanding nor action.</span></p>
+        <p><strong>Never force</strong><span>A SAP or enterprise angle when another application explains the concept better.</span></p>
       </div>
     </section>
 
     <section id="method" class="method section wrap">
       <div class="section-number">00</div>
       <div>
-        <p class="kicker">THE METHOD</p>
-        <h2>Every source has to earn its place.</h2>
+        <p class="kicker">THE ENGINE</p>
+        <h2>Compress the material.<br><em>Preserve the model.</em></h2>
       </div>
       <ol class="method-grid">
-        <li><span>01</span><strong>Extract</strong><p>Find the actual claim, mechanism and evidence. Ignore the decorative language.</p></li>
-        <li><span>02</span><strong>Challenge</strong><p>Separate useful architecture from confident overstatement and missing constraints.</p></li>
-        <li><span>03</span><strong>Connect</strong><p>Link the idea to enterprise patterns, adjacent research and previous insights.</p></li>
-        <li><span>04</span><strong>Apply</strong><p>Translate the concept into a concrete operating, product or SAP scenario.</p></li>
-        <li><span>05</span><strong>Explain</strong><p>Publish a compact model that another person can understand and reuse.</p></li>
+        <li><span>01</span><strong>Capture</strong><p>Record canonical source, creator, publication/event date, capture date and analysis date.</p></li>
+        <li><span>02</span><strong>Map</strong><p>Understand the whole source before selecting highlights: problem, thesis, concepts, tools, examples and assumptions.</p></li>
+        <li><span>03</span><strong>Select</strong><p>Apply the personal research profile and keep the coherent core — including prerequisites needed to understand it.</p></li>
+        <li><span>04</span><strong>Enrich</strong><p>Verify important claims, open official documentation and add missing context or useful tool connections.</p></li>
+        <li><span>05</span><strong>Explain</strong><p>Build a visual landing page ending in use / try / learn / build / watch decisions.</p></li>
       </ol>
+    </section>
+
+    <section class="quality section wrap">
+      <p class="eyebrow">QUALITY GATE</p>
+      <div class="quality-grid">
+        <h2>A page is finished when <em>the source is optional.</em></h2>
+        <div>
+          <p>Can I explain the topic end-to-end after reading the page?</p>
+          <p>Do I know which concepts and tools deserve deeper attention?</p>
+          <p>Do I understand what the source misses or oversimplifies?</p>
+          <p>Do I know what to use, try, learn, build, watch — or ignore?</p>
+        </div>
+      </div>
     </section>
 
     <article id="explainer" class="explainer section wrap">
       <header class="explainer-head">
         <div>
-          <p class="eyebrow">EXPLAINER / 001</p>
+          <p class="eyebrow">CASE / 001 · VIDEO → MENTAL MODEL</p>
           <h2>Why enterprise AI agents fail <em>after</em> the POC</h2>
         </div>
-        <a class="source-link" href="https://www.youtube.com/watch?v=mav15aW9lLM" target="_blank" rel="noreferrer">Source ↗</a>
+        <a class="source-link" href="https://www.youtube.com/watch?v=mav15aW9lLM" target="_blank" rel="noreferrer">Original source ↗</a>
       </header>
 
       <div class="thesis-grid">
-        <p class="thesis">The hard part is not getting an agent to produce the right answer once. The hard part is making every action <strong>authorized, observable, reversible and reviewable</strong> inside a real organization.</p>
+        <p class="thesis">The useful idea is broader than “enterprise AI.” A model may be capable of doing the work while the <strong>execution system around it</strong> is incapable of controlling, explaining or replaying that work.</p>
         <div class="meta-card">
-          <span>Source</span><strong>AI Engineer talk</strong>
+          <span>Source</span><strong>AI Engineer World's Fair 2026</strong>
           <span>Speakers</span><strong>Christopher Lovejoy<br>Saul Howard</strong>
-          <span>Focus</span><strong>Production architecture</strong>
+          <span>Event date</span><strong>02 Jul 2026</strong>
+          <span>Analyzed</span><strong>26 Aug 2026</strong>
+          <span>Scope</span><strong>Architecture pattern, not SAP-specific</strong>
         </div>
       </div>
 
@@ -89,117 +121,168 @@
         <p class="kicker" id="contrastTitle">THE FALSE FINISH LINE</p>
         <div class="contrast-grid">
           <div class="contrast-card pale">
-            <span>POC</span>
-            <h3>Model → Data → API</h3>
-            <p>Accuracy is high. Latency is acceptable. The demo works.</p>
+            <span>CAPABILITY</span>
+            <h3>Model → Tool → Result</h3>
+            <p>The demo proves that the model can perform the task.</p>
           </div>
           <div class="arrow-block" aria-hidden="true">≠</div>
           <div class="contrast-card dark">
-            <span>PRODUCTION</span>
-            <h3>Identity + Policy + Audit + Human + Replay</h3>
-            <p>The organization must be able to explain and control the work.</p>
+            <span>CONTROLLED EXECUTION</span>
+            <h3>Authority + State + Human + History + Replay</h3>
+            <p>The system proves that consequential work can be governed and reconstructed.</p>
           </div>
         </div>
       </section>
 
       <section id="principles" class="primitives" aria-labelledby="primitivesTitle">
-        <p class="kicker" id="primitivesTitle">FOUR PRIMITIVES</p>
+        <p class="kicker" id="primitivesTitle">THE COHERENT CORE · FOUR IDEAS THAT BELONG TOGETHER</p>
 
         <div class="primitive">
           <div class="primitive-id">01</div>
           <div class="primitive-copy">
-            <h3>Execution history, not developer logs</h3>
-            <p>Use an append-only event history as the system's source of truth. The goal is to reconstruct what the agent knew, what it accessed, what it decided and what happened next.</p>
+            <h3>Execution history, not only logs</h3>
+            <p>Record enough state and evidence to reconstruct the request, authority, context, decision, action and verification later.</p>
           </div>
-          <div class="mini-diagram ledger" aria-label="Execution ledger diagram">
-            <span>request</span><span>identity</span><span>read</span><span>decision</span><span>approval</span><span>action</span>
+          <div class="mini-diagram ledger" aria-label="Execution history diagram">
+            <span>request</span><span>identity</span><span>context</span><span>decision</span><span>action</span><span>verify</span>
           </div>
         </div>
 
         <div class="primitive">
           <div class="primitive-id">02</div>
           <div class="primitive-copy">
-            <h3>Separate orchestration from sensitive data</h3>
-            <p>Observability should not require unrestricted access to business data. Keep event references and protected objects separate, then authorize access at the point of use.</p>
+            <h3>Separate execution from protected data</h3>
+            <p>Observability should not automatically grant broad access to the data used by the workflow. Keep references and protected objects separable.</p>
           </div>
-          <div class="plane-diagram" aria-label="Separated data planes diagram">
-            <div><small>EXECUTION PLANE</small><strong>event → object:v4</strong></div>
+          <div class="plane-diagram" aria-label="Separated execution and data planes diagram">
+            <div><small>EXECUTION</small><strong>event → object:v4</strong></div>
             <i>↕ authorized reference</i>
-            <div><small>DATA PLANE</small><strong>protected object:v4</strong></div>
+            <div><small>PROTECTED DATA</small><strong>object:v4</strong></div>
           </div>
         </div>
 
         <div class="primitive">
           <div class="primitive-id">03</div>
           <div class="primitive-copy">
-            <h3>Human and AI are executors of the same task</h3>
-            <p>Model the task independently from its executor. Then an uncertain or policy-sensitive step can move to a human without creating a separate exception workflow.</p>
+            <h3>Task first. Executor second.</h3>
+            <p>Define the task independently from whether an AI or person performs it. Human handoff becomes a normal execution mode, not a parallel exception process.</p>
           </div>
           <div class="task-diagram" aria-label="Human and AI task equivalence">
             <strong>approve_change(context)</strong>
-            <div><span>AI agent</span><span>Human steward</span></div>
+            <div><span>AI executor</span><span>Human executor</span></div>
           </div>
         </div>
 
         <div class="primitive">
           <div class="primitive-id">04</div>
           <div class="primitive-copy">
-            <h3>Replay turns production history into evals</h3>
-            <p>If system state is reconstructable, a new model, prompt, policy or tool can be tested against historical cases while changing one component at a time.</p>
+            <h3>Replay turns history into eval material</h3>
+            <p>When context can be reconstructed, the same case can be rerun with a changed model, prompt, policy or tool and compared against the prior result.</p>
           </div>
           <div class="replay-diagram" aria-label="Replay evaluation diagram">
-            <span>case t₀</span><b>→</b><span>old model / A</span>
-            <span>case t₀</span><b>→</b><span>new model / B</span>
+            <span>same case</span><b>→</b><span>old stack / A</span>
+            <span>same case</span><b>→</b><span>new stack / B</span>
           </div>
         </div>
       </section>
 
       <section class="application" aria-labelledby="applicationTitle">
         <div>
-          <p class="kicker">APPLICATION</p>
-          <h3 id="applicationTitle">SAP customer-master change</h3>
-          <p>A useful test is whether the architecture can answer a question months later: <strong>Why was this customer changed, under whose authority, using which context, and with which approval?</strong></p>
+          <p class="kicker">MENTAL MODEL</p>
+          <h3 id="applicationTitle">Any consequential tool call</h3>
+          <p>Customer update, refund, infrastructure change, account action, healthcare workflow or SAP master-data update: the domain changes, but the production question is the same.</p>
         </div>
-        <div class="flow" aria-label="SAP customer change flow">
-          <span>Change request</span><b>↓</b>
+        <div class="flow" aria-label="Controlled agent execution flow">
+          <span>Request</span><b>↓</b>
           <span>Identity + authority</span><b>↓</b>
-          <span>Agent proposal</span><b>↓</b>
-          <span class="split">Policy → AI / Human</span><b>↓</b>
-          <span>SAP / MDG action</span><b>↓</b>
-          <span>Verification + ledger</span>
+          <span>Context access</span><b>↓</b>
+          <span class="split">Task → AI / Human</span><b>↓</b>
+          <span>Tool / API action</span><b>↓</b>
+          <span>Verification + history</span><b>↓</b>
+          <span>Replay / evaluation</span>
+        </div>
+      </section>
+
+      <section class="tool-section" aria-labelledby="toolsTitle">
+        <p class="kicker">ADJACENT TOOLS TO LEARN</p>
+        <h3 id="toolsTitle">Turn the concept into a learning path.</h3>
+        <p class="section-note">These are project-added connections for learning; they are not presented as tools recommended by the speakers.</p>
+        <div class="tool-grid">
+          <a class="tool-card" href="https://docs.temporal.io/" target="_blank" rel="noreferrer">
+            <span>LEARN</span><strong>Temporal</strong><p>Durable workflows and recovery for long-running execution.</p><small>durable execution ↗</small>
+          </a>
+          <a class="tool-card" href="https://opentelemetry.io/docs/" target="_blank" rel="noreferrer">
+            <span>LEARN</span><strong>OpenTelemetry</strong><p>A standard model for traces, metrics and logs across distributed systems.</p><small>observability ↗</small>
+          </a>
+          <a class="tool-card" href="https://www.openpolicyagent.org/docs" target="_blank" rel="noreferrer">
+            <span>TRY</span><strong>Open Policy Agent</strong><p>A concrete way to separate policy decisions from application logic.</p><small>policy as code ↗</small>
+          </a>
         </div>
       </section>
 
       <section class="critique" aria-labelledby="critiqueTitle">
-        <p class="kicker">WHERE THE TALK OVERSIMPLIFIES</p>
-        <h3 id="critiqueTitle">The primitives help. They do not remove the hard engineering.</h3>
+        <p class="kicker">WHAT THE HIGH-LEVEL MODEL DOESN'T SOLVE</p>
+        <h3 id="critiqueTitle">Useful primitives still leave real engineering.</h3>
         <div class="critique-grid">
-          <p><strong>Auditability</strong><br>An immutable log still needs identity, policy versions, retention, tamper protection and meaningful event semantics.</p>
-          <p><strong>Zero trust</strong><br>Separating data and orchestration reduces exposure; it does not automatically eliminate prompt injection or data exfiltration.</p>
-          <p><strong>Human handoff</strong><br>Executor equivalence still needs ownership, locking, idempotency, approval authority, timeout and recovery rules.</p>
+          <p><strong>History</strong><br>Still needs identity evidence, component/policy versions, retention, event semantics and tamper resistance.</p>
+          <p><strong>Security</strong><br>Separating data and orchestration reduces exposure; it does not eliminate injection or exfiltration risk.</p>
+          <p><strong>Handoff</strong><br>Still needs ownership, locking, idempotency, approval authority, timeout and recovery rules.</p>
+        </div>
+      </section>
+
+      <section id="actions" class="action-section" aria-labelledby="actionTitle">
+        <p class="kicker">WHAT TO DO WITH THIS</p>
+        <h3 id="actionTitle">Understanding should end in a decision.</h3>
+        <div class="action-map">
+          <div><span>USE NOW</span><p>Judge agent readiness by whether consequential actions can be reconstructed and explained later.</p></div>
+          <div><span>TRY</span><p>Model one task as AI/human-executor independent; write one explicit policy rule outside app logic.</p></div>
+          <div><span>LEARN</span><p>Durable execution, event sourcing, OpenTelemetry concepts and policy-as-code.</p></div>
+          <div><span>BUILD</span><p>A minimal execution ledger: request → authority → context → executor → action → verification.</p></div>
+          <div><span>WATCH</span><p>Whether agent platforms converge on standard identity, state, handoff and replay layers.</p></div>
         </div>
       </section>
 
       <footer class="takeaway">
         <p class="kicker">THE DURABLE INSIGHT</p>
-        <blockquote>Don't bolt enterprise controls onto an AI demo. Build an execution substrate where both humans and agents can perform controlled work.</blockquote>
+        <blockquote>Don't judge an AI system only by whether the model can do the work. Judge whether the surrounding execution system lets the work be controlled, transferred, reconstructed and evaluated.</blockquote>
       </footer>
+
+      <section class="source-ledger" aria-labelledby="sourcesTitle">
+        <p class="kicker">SOURCES + DATES</p>
+        <h3 id="sourcesTitle">Keep provenance visible.</h3>
+        <div class="source-row">
+          <span>PRIMARY</span>
+          <p><a href="https://www.youtube.com/watch?v=mav15aW9lLM" target="_blank" rel="noreferrer">Lovejoy & Howard — Why Your Enterprise Tech Stack Isn't Ready for AI Agents</a><br>AI Engineer World's Fair 2026 · event 02 Jul 2026 · analyzed 26 Aug 2026</p>
+        </div>
+        <div class="source-row">
+          <span>VERIFY</span>
+          <p><a href="https://ai.engineer/worldsfair/schedule" target="_blank" rel="noreferrer">AI Engineer World's Fair 2026 schedule</a><br>Used to verify session/event date · accessed 26 Aug 2026</p>
+        </div>
+        <div class="source-row">
+          <span>ENRICH</span>
+          <p><a href="https://docs.temporal.io/" target="_blank" rel="noreferrer">Temporal docs</a> · <a href="https://opentelemetry.io/docs/" target="_blank" rel="noreferrer">OpenTelemetry docs</a> · <a href="https://www.openpolicyagent.org/docs" target="_blank" rel="noreferrer">OPA docs</a><br>Adjacent learning/tool context · accessed 26 Aug 2026</p>
+        </div>
+      </section>
     </article>
 
     <section class="knowledge section wrap">
       <div>
         <p class="eyebrow">KNOWLEDGE LAYER</p>
-        <h2>Human-readable outside.<br>Machine-readable underneath.</h2>
+        <h2>Landing page outside.<br><em>Structured memory underneath.</em></h2>
       </div>
-      <p>Each explainer is paired with structured data: concepts, claims, applications, limitations and provenance. That makes the same knowledge reusable later in search, feeds, APIs and agent tools.</p>
-      <a class="button" href="data/insights.json">Open insights.json →</a>
+      <p>Source metadata, dates, concepts, tools, limitations and action decisions are stored as data so future agents can connect new material to what has already been learned.</p>
+      <div class="button-stack">
+        <a class="button" href="data/insights.json">Open insights.json →</a>
+        <a class="button" href="data/sources.json">Open sources.json →</a>
+        <a class="button" href="config/research-profile.json">Research profile →</a>
+      </div>
     </section>
   </main>
 
   <footer class="site-footer wrap">
     <span>Signal to Insight</span>
     <span>Built by <a href="https://github.com/dkharlanau">Dzmitryi Kharlanau</a></span>
-    <span>Sources are linked. Analysis is original.</span>
+    <span>Source → model → action</span>
   </footer>
 
   <script src="app.js"></script>
