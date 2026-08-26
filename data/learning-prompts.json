@@ -1,0 +1,75 @@
+{
+  "version": "1.0.0",
+  "records": [
+    {
+      "insight_id": "enterprise-agents-production-substrate",
+      "retention_prompt": "Without looking back, reconstruct why a capable AI agent still needs a controlled execution substrate: state the production failure mode, the surrounding mechanism, the operational result, and one boundary where that model is still insufficient.",
+      "answer_key": {
+        "problem_from": "whole_source_map.problem",
+        "mechanism_from": "whole_source_map.thesis",
+        "anchor_concept_ids": ["controlled-execution", "execution-history"],
+        "boundary_limitation_index": 0
+      },
+      "transfer_prompt": {
+        "prompt": "An agent can update a customer master record directly after an LLM tool call. What must exist around that call before you would treat the workflow as production-ready, and what evidence would you want after the change?",
+        "expected_concept_ids": ["controlled-execution", "execution-history", "policy-as-code"]
+      }
+    },
+    {
+      "insight_id": "temporal-durable-execution-mental-model",
+      "retention_prompt": "Reconstruct how Temporal can continue a long-running process after a Worker disappears: identify where durable state lives, how work reaches Workers, what Activities do, and the external-side-effect boundary that retries do not solve automatically.",
+      "answer_key": {
+        "problem_from": "whole_source_map.problem",
+        "mechanism_from": "whole_source_map.thesis",
+        "anchor_concept_ids": ["event-history", "worker-process", "activity-execution"],
+        "boundary_limitation_index": 1
+      },
+      "transfer_prompt": {
+        "prompt": "A three-day onboarding flow waits for approvals, calls two external systems and must survive service restarts. Which state should be durable orchestration, which work should be side-effecting Activities, and what must be made safe under retry?",
+        "expected_concept_ids": ["durable-execution", "activity-execution", "idempotency-under-retry"]
+      }
+    },
+    {
+      "insight_id": "open-policy-agent-decision-enforcement-model",
+      "retention_prompt": "Reconstruct the OPA architecture without naming product features: who supplies input, who computes the policy decision, who enforces the protected action, and why separating those responsibilities is useful but not sufficient by itself.",
+      "answer_key": {
+        "problem_from": "whole_source_map.problem",
+        "mechanism_from": "whole_source_map.thesis",
+        "anchor_concept_ids": ["policy-decision-enforcement-separation", "policy-as-code", "open-policy-agent"],
+        "boundary_limitation_index": 0
+      },
+      "transfer_prompt": {
+        "prompt": "A service asks whether an agent may approve a refund. Sketch the smallest decision/enforcement split: what goes into the policy decision, what comes back, and which component must still own the actual refund side effect?",
+        "expected_concept_ids": ["policy-decision-enforcement-separation", "policy-as-code", "controlled-execution"]
+      }
+    },
+    {
+      "insight_id": "react-reason-act-observe-loop",
+      "retention_prompt": "Reconstruct the ReAct loop as a feedback mechanism: what a reasoning step does, what an action changes or queries, how an observation alters the next decision, and why this loop is not the same thing as a production execution-control layer.",
+      "answer_key": {
+        "problem_from": "whole_source_map.problem",
+        "mechanism_from": "whole_source_map.thesis",
+        "anchor_concept_ids": ["react-loop", "reasoning-trace", "observation-grounding"],
+        "boundary_limitation_index": 0
+      },
+      "transfer_prompt": {
+        "prompt": "An agent searches an external system, receives evidence that contradicts its initial plan, and then wants to perform a consequential write. Which part is the ReAct-style reasoning loop, and which controls belong outside that loop?",
+        "expected_concept_ids": ["react-loop", "observation-grounding", "controlled-execution"]
+      }
+    },
+    {
+      "insight_id": "retrieval-practice-delayed-retention",
+      "retention_prompt": "Reconstruct why repeated study can feel successful yet produce weaker memory later: distinguish immediate performance from delayed retention, explain what retrieval practice changes, and state one limit on what the 2006 study can justify for this product.",
+      "answer_key": {
+        "problem_from": "whole_source_map.problem",
+        "mechanism_from": "whole_source_map.thesis",
+        "anchor_concept_ids": ["retrieval-practice", "performance-retention-gap", "metacognitive-confidence-gap"],
+        "boundary_limitation_index": 0
+      },
+      "transfer_prompt": {
+        "prompt": "Two explainers both feel clear immediately. One reader rereads the first; another tries to reconstruct the second before looking back. What later observation would actually tell you which learning path worked better?",
+        "expected_concept_ids": ["retrieval-practice", "performance-retention-gap", "metacognitive-confidence-gap"]
+      }
+    }
+  ]
+}
