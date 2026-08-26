@@ -2,142 +2,225 @@
 
 ## Product goal
 
-Turn one supplied source into a personalized, coherent learning artifact that is faster to consume than the source but preserves the mental model needed to understand and use it.
+Turn one supplied source into a personalized, coherent learning artifact that is faster to consume than the source while preserving the mental model needed to understand and use it.
 
 The product is source-driven, not domain-driven.
 
-## Phase 1 — Prove the learning format
+## Current state — foundation complete
 
-Goal: make each explainer genuinely useful before automating ingestion.
+The stable source-to-output contracts are now implemented:
 
-- Publish 5–10 explainers across different source types and domains.
-- Include at least one tool/repository explainer, one research source, one video and one custom/system architecture.
-- Test whether a reader can understand the subject without first consuming the source.
-- Establish visual patterns for architecture, sequence, comparison, state, decision and tool maps.
-- Keep `data/insights.json` aligned with every published explainer.
-- Record canonical source metadata and dates for every item.
-- Add explicit `use / try / learn / build / watch / ignore` outcomes.
+- intake queue + normalized URLs;
+- source/date provenance model;
+- research profile;
+- source adapter contracts;
+- normalized research bundle;
+- insight model;
+- validators + cross-reference checks;
+- public explainer generator;
+- review-only noindex previews;
+- reusable visual grammar;
+- generated searchable library;
+- end-to-end acceptance test;
+- CI checks for knowledge integrity and generated-output drift.
 
-## Phase 2 — Personalized intake agent
+This means the next work should focus on **research intelligence and real source throughput**, not adding more repository scaffolding.
 
-Goal: reduce a supplied URL/source to a high-quality reviewable draft.
+## Loop 1 — Real extraction adapters
+
+Goal: make common source types easy for an agent to inspect with consistent provenance.
+
+Build/test concrete processing paths for:
+
+- YouTube/video metadata + transcript/subtitle inspection when available;
+- web articles/documentation;
+- PDF/research papers;
+- GitHub repositories;
+- tool/product documentation.
+
+Requirements:
+
+- source-specific extraction can change without changing the research-bundle schema;
+- full third-party text stays transient/private;
+- extraction method/confidence/gaps are recorded;
+- dates and versions come from trustworthy metadata;
+- the adapter may fail visibly rather than invent content.
+
+Success test: process at least one real example of each major source type through the same normalized bundle contract.
+
+## Loop 2 — Research orchestrator
+
+Goal: reduce `queued URL → review-ready explainer` to one agent task.
+
+The orchestrator should perform:
 
 ```text
-URL / file / repo / tool
-        ↓
-source + date capture
-        ↓
-whole-source content map
-        ↓
-research profile scoring
-        ↓
-coherent-core selection
-        ↓
-verification + prerequisite research
-        ↓
-mental model
-        ↓
-action map
-        ↓
-visual explainer draft
-        ↓
-human review
+pick queued source
+→ capture
+→ map whole source
+→ score with research profile
+→ select coherent core
+→ identify missing prerequisites
+→ verify consequential claims
+→ research useful adjacent tools/systems
+→ create/update source registry
+→ create insight record
+→ choose visual plan
+→ generate preview
+→ run quality gates
+→ leave for review
 ```
 
-Capabilities:
+No automatic publication.
 
-- YouTube transcript/subtitle extraction when legally and technically available;
-- webpage/article parsing;
-- PDF/paper analysis;
-- GitHub repository inspection;
-- documentation/tool research;
-- source metadata capture;
-- supporting-source search;
-- automatic prerequisite detection;
-- relevance and novelty scoring against `config/research-profile.json`.
+The preferred first implementation is an agent playbook/command that works with existing research tools. A custom backend is not required until repeated runs prove it is useful.
 
-Important constraint: intake creates a draft, never silently publishes third-party-derived content.
+## Loop 3 — Coherence engine
 
-## Phase 3 — Coherence and quality engine
+Goal: make the output reliably better than a normal summary.
 
-Goal: prevent the common failure mode of producing disconnected bullet points.
+Add explicit checks for:
 
-- Build a concept dependency graph for each source.
-- Detect missing prerequisites.
-- Identify the source's main causal/mechanical chain.
-- Remove repeated or non-contributing detail.
-- Check that selected concepts remain understandable together.
-- Add a completeness score: can the reader explain the topic end-to-end?
-- Add a visual-utility gate: every diagram/image must teach something.
+- central causal/mechanical chain;
+- concept dependency graph;
+- missing prerequisites;
+- selected-detail contribution to the model;
+- contradictions between retained claims;
+- source claim vs project interpretation;
+- completeness: can the reader explain the topic end-to-end?
 
-## Phase 4 — Accumulating knowledge graph
+Possible structured scores:
 
-Goal: make every new source improve future analysis.
+- coherence;
+- prerequisite completeness;
+- evidence confidence;
+- novelty;
+- practical leverage;
+- tool/system relevance;
+- explanation completeness.
+
+Scores should guide review, not replace judgment.
+
+## Loop 4 — Visual planning + explanatory assets
+
+Goal: make the visual output adapt to the idea rather than merely apply one template.
+
+Add a structured `visual_plan` to each insight:
+
+- dominant primitive: chain / sequence / layers / comparison / decision / state / annotated object;
+- supporting primitives;
+- key labels/relationships;
+- whether an image is useful;
+- why the image teaches something a diagram cannot;
+- source/rights notes for non-generated assets.
+
+Then update the generator to select page composition from that plan.
+
+Generated images should be optional. Prefer CSS/SVG diagrams for mechanisms; use generated imagery for spatial, physical or conceptual scenes where it materially improves understanding.
+
+## Loop 5 — Accumulating personal knowledge graph
+
+Goal: make every source improve future source analysis.
+
+Model:
 
 - concepts and aliases;
-- concept → prerequisite relationships;
-- source → concept relationships;
-- insight → pattern relationships;
-- tool → concept relationships;
-- tool → alternative/category relationships;
-- supporting and contradictory evidence;
-- confidence and review state;
-- dates and freshness;
-- reusable visual models;
-- `already_known` vs `new_to_learn` signals.
+- concept → prerequisite;
+- source → concept;
+- insight → pattern;
+- tool → concept;
+- tool → category/alternative;
+- evidence supports / contradicts;
+- first-seen / last-verified dates;
+- `known`, `needs_refresh`, `new_to_learn` state.
 
-Future agents should use this graph to avoid re-explaining familiar basics while detecting genuinely new connections.
+Use the graph to avoid re-explaining familiar basics while still surfacing genuinely new connections.
 
-## Phase 5 — Visual explainer generator
+## Loop 6 — Better intake surfaces
 
-Goal: generate a polished landing page from the semantic model rather than directly from raw transcript text.
+Goal: make supplying a source effortless.
 
-- choose page narrative based on source type;
-- select diagram type from the mental model;
-- create meaningful visual assets when diagrams are insufficient;
-- create tool/system cards with primary documentation links;
-- show source + date visibly;
-- add mobile-first reading mode;
-- keep pages static and GitHub Pages-friendly where possible.
+Possible surfaces:
 
-## Phase 6 — Services
+- ChatGPT / connected GitHub agent;
+- GitHub Issue Form with URL + optional focus;
+- CLI;
+- lightweight web intake page;
+- browser share/bookmark action;
+- API endpoint only if needed later.
 
-Only after the content and quality models are stable:
+All surfaces should create the same `data/inbox.json` contract.
+
+## Loop 7 — Publishing and discovery
+
+Goal: make useful public explainers discoverable without turning the project into a content farm.
+
+Improve:
+
+- generated library organization;
+- related explainers;
+- concept/tool pages;
+- canonical metadata + structured data;
+- RSS/Atom;
+- `llms.txt` / machine-readable discovery;
+- OpenGraph cards;
+- sitemap generation from published records;
+- cross-links from source → concept → tool → explainer.
+
+Quality remains more important than volume.
+
+## Loop 8 — Services / MCP
+
+Only after the content model is proven across multiple real sources:
 
 - versioned JSON feed;
-- source intake endpoint;
-- search endpoint;
-- RSS / Atom;
 - `get_insight(slug)`;
 - `search_insights(query)`;
 - `get_concept(name)`;
 - `get_tools_for_concept(name)`;
 - MCP wrapper for agent access;
 - optional private profile/context service;
-- optional GitHub Action that opens generated explainers as PRs for review.
+- optional automated PR creation for review-ready explainers.
 
-## Phase 7 — Evaluation
+## Loop 9 — Evaluation
 
-Measure the product on learning utility rather than output volume.
+Measure learning utility rather than output count.
 
-Potential metrics:
+Candidate metrics:
 
 - time saved vs source duration/read time;
-- concept recall after reading;
-- percentage of explainers that produce a useful action/learning decision;
-- number of useful cross-source connections discovered;
-- percentage of generated drafts requiring major restructuring;
+- `I understand this now` rating;
+- prerequisite gaps found during review;
+- percentage of explainers producing a useful action/learning decision;
+- number of useful cross-source connections;
+- percentage of drafts requiring structural rewrite;
 - source/date completeness;
-- stale-tool detection rate;
-- user rating: `I understand this now`.
+- stale-tool detection;
+- later recall of the central model.
+
+## Next acceptance milestone
+
+Process **five genuinely different real sources**:
+
+1. video;
+2. GitHub repository/tool;
+3. research paper/PDF;
+4. technical documentation/article;
+5. source outside the usual AI/enterprise domain with high conceptual leverage.
+
+For each one, require:
+
+`intake → bundle → verification → insight → visual plan → preview → review → published explainer → library`
+
+After those five, reassess the schemas and only then introduce more backend/service complexity.
 
 ## Non-goals
 
 - AI-news aggregation;
 - mass production of generic summaries;
 - forcing every idea into SAP or enterprise context;
-- collecting isolated quotes or “top 10 takeaways”;
-- storing full third-party transcripts;
+- isolated quotes / “top takeaways” as the main product;
+- storing full third-party transcripts/content;
 - decorative image generation without explanatory value;
 - automatic publication without review;
-- backend infrastructure before the learning format proves valuable.
+- backend infrastructure before repeated real-source runs prove the need.
