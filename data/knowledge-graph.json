@@ -1,5 +1,5 @@
 {
-  "graph_version": "0.1.0",
+  "graph_version": "0.2.0",
   "updated_at": "2026-08-26",
   "concepts": [
     {
@@ -8,7 +8,7 @@
       "summary": "A production work substrate that makes consequential execution authorized, observable, interruptible, reconstructable and testable.",
       "domain": "agent architecture",
       "coverage": "explained",
-      "insight_ids": ["enterprise-agents-production-substrate"],
+      "insight_ids": ["enterprise-agents-production-substrate", "open-policy-agent-decision-enforcement-model"],
       "aliases": ["production execution substrate"],
       "tags": ["agents", "governance", "execution"]
     },
@@ -58,7 +58,7 @@
       "summary": "Representing authorization and policy decisions as explicit, reviewable rules rather than scattered application logic.",
       "domain": "governance",
       "coverage": "introduced",
-      "insight_ids": ["enterprise-agents-production-substrate"],
+      "insight_ids": ["enterprise-agents-production-substrate", "open-policy-agent-decision-enforcement-model"],
       "aliases": [],
       "tags": ["policy", "authorization", "governance"]
     },
@@ -141,6 +141,36 @@
       "insight_ids": ["temporal-durable-execution-mental-model"],
       "aliases": ["idempotent activity design"],
       "tags": ["reliability", "retry", "side-effects"]
+    },
+    {
+      "id": "policy-decision-enforcement-separation",
+      "label": "Policy decision / enforcement separation",
+      "summary": "Separating the component that computes a policy decision from the component that owns and enforces the protected action.",
+      "domain": "authorization architecture",
+      "coverage": "explained",
+      "insight_ids": ["open-policy-agent-decision-enforcement-model"],
+      "aliases": ["PDP PEP separation", "decision enforcement separation"],
+      "tags": ["authorization", "policy", "enforcement"]
+    },
+    {
+      "id": "open-policy-agent",
+      "label": "Open Policy Agent (OPA)",
+      "summary": "A general-purpose policy engine that evaluates declarative Rego policy and data against structured input and returns policy decisions to integrating applications.",
+      "domain": "policy engine",
+      "coverage": "explained",
+      "insight_ids": ["open-policy-agent-decision-enforcement-model"],
+      "aliases": ["OPA"],
+      "tags": ["opa", "rego", "authorization", "policy-engine"]
+    },
+    {
+      "id": "policy-distribution",
+      "label": "Policy distribution",
+      "summary": "Distributing versioned policy and supporting data to decision points on a lifecycle separate from application deployment.",
+      "domain": "policy operations",
+      "coverage": "explained",
+      "insight_ids": ["open-policy-agent-decision-enforcement-model"],
+      "aliases": ["policy bundle distribution"],
+      "tags": ["policy", "bundles", "rollout", "operations"]
     }
   ],
   "relations": [
@@ -255,6 +285,46 @@
       "type": "refines",
       "rationale": "Temporal Event History is a concrete implementation-level example of the broader execution-history concept used in production architecture.",
       "evidence_insights": ["enterprise-agents-production-substrate", "temporal-durable-execution-mental-model"]
+    },
+    {
+      "id": "rel-policy-decision-enforcement-separation-refines-policy-as-code",
+      "from": "policy-decision-enforcement-separation",
+      "to": "policy-as-code",
+      "type": "refines",
+      "rationale": "Policy-as-code becomes operationally precise when the decision engine and the application that enforces the result are modeled as separate trust boundaries.",
+      "evidence_insights": ["open-policy-agent-decision-enforcement-model"]
+    },
+    {
+      "id": "rel-policy-as-code-realized-by-open-policy-agent",
+      "from": "policy-as-code",
+      "to": "open-policy-agent",
+      "type": "realized_by",
+      "rationale": "OPA is a concrete implementation of policy-as-code: Rego and policy data are evaluated outside scattered application conditionals to produce explicit decisions.",
+      "evidence_insights": ["open-policy-agent-decision-enforcement-model"]
+    },
+    {
+      "id": "rel-open-policy-agent-depends-on-policy-decision-enforcement-separation",
+      "from": "open-policy-agent",
+      "to": "policy-decision-enforcement-separation",
+      "type": "depends_on",
+      "rationale": "Using OPA correctly depends on understanding that OPA computes policy decisions while the integrating application remains responsible for enforcing them.",
+      "evidence_insights": ["open-policy-agent-decision-enforcement-model"]
+    },
+    {
+      "id": "rel-open-policy-agent-related-to-controlled-execution",
+      "from": "open-policy-agent",
+      "to": "controlled-execution",
+      "type": "related_to",
+      "rationale": "OPA can provide an explicit authorization/policy-decision primitive inside a broader controlled-execution substrate, but it is not the complete substrate by itself.",
+      "evidence_insights": ["open-policy-agent-decision-enforcement-model"]
+    },
+    {
+      "id": "rel-open-policy-agent-related-to-policy-distribution",
+      "from": "open-policy-agent",
+      "to": "policy-distribution",
+      "type": "related_to",
+      "rationale": "OPA bundles show how distributed decision points can receive policy and data on a lifecycle separate from the application binaries that enforce decisions.",
+      "evidence_insights": ["open-policy-agent-decision-enforcement-model"]
     }
   ]
 }
