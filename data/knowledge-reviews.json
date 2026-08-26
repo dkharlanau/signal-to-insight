@@ -1,0 +1,87 @@
+{
+  "version": "1.0.0",
+  "reviews": [
+    {
+      "id": "review-react-controlled-execution-layer",
+      "concept_id": "controlled-execution",
+      "trigger_insight_id": "react-reason-act-observe-loop",
+      "candidate_type": "refinement",
+      "evidence": {
+        "new_claim_ids": ["react-not-production-control-layer"],
+        "prior_claim_ids": ["enterprise-controlled-substrate-interpretation"]
+      },
+      "scope_check": {
+        "same_subject": true,
+        "same_layer": false,
+        "same_conditions": false,
+        "assessment": "different_layer",
+        "explanation": "ReAct describes model-level reasoning, action selection and observation feedback. Controlled execution describes the production substrate around consequential actions: authorization, durable evidence, intervention and verification. The two statements overlap on agent actions but answer different architectural questions."
+      },
+      "resolution": "refinement",
+      "rationale": "The ReAct source narrows the boundary of controlled execution by making explicit that a cognitive/action-selection loop is not itself the production execution substrate. This is refinement by layer separation, not contradictory evidence.",
+      "model_change": {
+        "kind": "none",
+        "target_id": "controlled-execution",
+        "before": null,
+        "after": null,
+        "reason": "The existing controlled-execution definition already describes an external production work substrate, so the reviewed distinction can be preserved through evidence and relations without rewriting the concept definition."
+      },
+      "status": "resolved",
+      "reviewed_by": "dkharlanau",
+      "reviewed_at": "2026-08-26",
+      "history": [
+        {
+          "at": "2026-08-26",
+          "action": "candidate_created",
+          "note": "Prior-knowledge retrieval classified controlled-execution as a refinement candidate for ReAct."
+        },
+        {
+          "at": "2026-08-26",
+          "action": "resolved",
+          "note": "Reviewed as a layer-boundary refinement rather than a contradiction."
+        }
+      ]
+    },
+    {
+      "id": "review-opa-controlled-execution-component",
+      "concept_id": "controlled-execution",
+      "trigger_insight_id": "open-policy-agent-decision-enforcement-model",
+      "candidate_type": "refinement",
+      "evidence": {
+        "new_claim_ids": ["opa-control-primitive-not-executor"],
+        "prior_claim_ids": ["enterprise-controlled-substrate-interpretation"]
+      },
+      "scope_check": {
+        "same_subject": true,
+        "same_layer": true,
+        "same_conditions": true,
+        "assessment": "narrower_scope",
+        "explanation": "Both models address production control around consequential actions, but OPA covers the narrower policy-decision responsibility. The integrating application still enforces and executes the protected operation."
+      },
+      "resolution": "refinement",
+      "rationale": "OPA concretizes one control primitive inside the broader controlled-execution model and makes the decision/enforcement boundary explicit. It does not replace execution history, durable orchestration or outcome verification.",
+      "model_change": {
+        "kind": "none",
+        "target_id": "controlled-execution",
+        "before": null,
+        "after": null,
+        "reason": "The graph already represents policy-as-code as a dependency of controlled execution; the new evidence strengthens that relation without requiring a definition rewrite."
+      },
+      "status": "resolved",
+      "reviewed_by": "dkharlanau",
+      "reviewed_at": "2026-08-26",
+      "history": [
+        {
+          "at": "2026-08-26",
+          "action": "candidate_created",
+          "note": "OPA was compared with the existing controlled-execution concept during cumulative knowledge review."
+        },
+        {
+          "at": "2026-08-26",
+          "action": "resolved",
+          "note": "Reviewed as a narrower production-control refinement, not a competing execution model."
+        }
+      ]
+    }
+  ]
+}
