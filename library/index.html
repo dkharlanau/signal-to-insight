@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Library — Signal to Insight</title>
+  <meta name="description" content="Browse source-backed visual explainers of concepts, tools, systems and practical applications.">
+  <link rel="canonical" href="https://dkharlanau.github.io/signal-to-insight/library/">
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="../library.css">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "CollectionPage", "name": "Signal to Insight Library", "description": "Visual, source-backed explainers generated from the Signal to Insight knowledge layer.", "url": "https://dkharlanau.github.io/signal-to-insight/library/", "hasPart": [{"@type": "TechArticle", "headline": "Why enterprise AI agents fail after the POC", "url": "https://dkharlanau.github.io/signal-to-insight/explainers/why-enterprise-ai-agents-fail-after-the-poc/"}]}</script>
+</head>
+<body class="library-page">
+  <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+  <header class="site-header wrap">
+    <a class="brand" href="../"><span class="brand-mark">S→I</span><span>Signal to Insight</span></a>
+    <nav aria-label="Library navigation"><a href="../">Engine</a><a href="../data/insights.json">Data</a><a href="../data/sources.json">Sources</a></nav>
+  </header>
+
+  <main>
+    <section class="library-hero wrap">
+      <p class="eyebrow">KNOWLEDGE LIBRARY / 001</p>
+      <h1>Models worth<br><em>remembering.</em></h1>
+      <p>Browse reviewed explainers built from videos, papers, tools, repositories, documentation and other high-signal sources.</p>
+    </section>
+
+    <section class="library-controls wrap" aria-label="Library filters">
+      <label class="library-search"><span>Search</span><input id="librarySearch" type="search" placeholder="concept, tool, source, tag…" autocomplete="off"></label>
+      <div class="library-filters"><button type="button" class="filter-chip is-active" data-filter="all">all</button><button type="button" class="filter-chip" data-filter="ai-agents">ai-agents</button><button type="button" class="filter-chip" data-filter="architecture">architecture</button><button type="button" class="filter-chip" data-filter="durable-execution">durable-execution</button><button type="button" class="filter-chip" data-filter="evals">evals</button><button type="button" class="filter-chip" data-filter="governance">governance</button><button type="button" class="filter-chip" data-filter="tools">tools</button></div>
+      <p id="libraryCount" aria-live="polite">1 explainer</p>
+    </section>
+
+    <section class="library-grid wrap" id="libraryGrid">
+      <article class="library-card" data-search="why enterprise ai agents fail after the poc a production agent needs a controlled execution environment around the model, not just a model connected to tools. ai-agents architecture durable-execution governance evals tools why your enterprise tech stack isn&#x27;t ready for ai agents - and what to build instead video christopher lovejoy saul howard event sourcing durable execution zero trust policy-as-code human-in-the-loop agent evaluation observability" data-tags="ai-agents architecture durable-execution governance evals tools">
+          <div class="library-card-meta"><span>video</span><span>2026-07-02</span></div>
+          <h2><a href="../explainers/why-enterprise-ai-agents-fail-after-the-poc/">Why enterprise AI agents fail after the POC</a></h2>
+          <p>A production agent needs a controlled execution environment around the model, not just a model connected to tools.</p>
+          <div class="library-tags"><span>ai-agents</span><span>architecture</span><span>durable-execution</span><span>governance</span><span>evals</span><span>tools</span></div>
+          <footer>
+            <span>AI Engineer</span>
+            <a href="../explainers/why-enterprise-ai-agents-fail-after-the-poc/">Open explainer →</a>
+          </footer>
+        </article>
+    </section>
+  </main>
+
+  <footer class="site-footer wrap"><span>Signal to Insight</span><span>Generated from structured records</span><span>1 published</span></footer>
+  <script src="../app.js"></script>
+  <script src="../library.js"></script>
+</body>
+</html>
