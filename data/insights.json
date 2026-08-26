@@ -1,0 +1,79 @@
+{
+  "project": {
+    "name": "Signal to Insight",
+    "version": "0.1.0",
+    "purpose": "Turn high-signal technology sources into durable explanations, reusable patterns, and practical applications."
+  },
+  "insights": [
+    {
+      "id": "enterprise-agents-production-substrate",
+      "slug": "why-enterprise-ai-agents-fail-after-the-poc",
+      "status": "published",
+      "title": "Why enterprise AI agents fail after the POC",
+      "one_liner": "A production agent needs an execution substrate for controlled work, not just a model connected to tools.",
+      "source": {
+        "type": "video",
+        "title": "Why Your Enterprise Tech Stack Isn't Ready for AI Agents",
+        "url": "https://www.youtube.com/watch?v=mav15aW9lLM",
+        "speakers": ["Christopher Lovejoy", "Saul Howard"],
+        "publisher": "AI Engineer",
+        "duration": "19:14"
+      },
+      "signal": "A successful AI proof of concept can still be architecturally far from a production-ready enterprise system.",
+      "derived_insight": "The reusable unit is not the agent itself. It is the controlled execution environment around the agent: identity, authority, history, data access, human intervention and replay.",
+      "patterns": [
+        {
+          "name": "Immutable execution history",
+          "purpose": "Reconstruct what happened and why without depending on ad-hoc developer logs."
+        },
+        {
+          "name": "Separated execution and data planes",
+          "purpose": "Keep observability and orchestration possible without granting broad access to sensitive business data."
+        },
+        {
+          "name": "Human-agent task equivalence",
+          "purpose": "Model the task independently from the executor so work can move between AI and humans without creating a parallel exception process."
+        },
+        {
+          "name": "Replayable evaluation",
+          "purpose": "Use reconstructable historical cases to compare models, prompts, policies or tools against the same context."
+        }
+      ],
+      "application": {
+        "domain": "SAP / enterprise master data",
+        "scenario": "Customer master change",
+        "question": "Can the system explain months later why a customer was changed, under whose authority, using which context and approval?",
+        "execution_chain": [
+          "change request",
+          "identity and authority",
+          "agent proposal",
+          "policy evaluation",
+          "AI or human execution",
+          "SAP or MDG action",
+          "verification",
+          "execution history"
+        ]
+      },
+      "limitations": [
+        "An append-only history still needs identity, policy versions, retention, tamper protection and meaningful event semantics.",
+        "Separating data and orchestration reduces exposure but does not automatically eliminate prompt injection or data exfiltration.",
+        "Human handoff still requires ownership, locking, idempotency, approval authority, timeout and recovery rules."
+      ],
+      "connections": [
+        "event sourcing",
+        "zero trust",
+        "policy-as-code",
+        "human-in-the-loop",
+        "agent evaluation",
+        "enterprise observability"
+      ],
+      "content_types": ["insight", "pattern", "explainer", "application"],
+      "tags": ["ai-agents", "enterprise-ai", "architecture", "sap", "governance", "evals"],
+      "provenance": {
+        "source_linked": true,
+        "full_transcript_stored": false,
+        "analysis_type": "original commentary and application"
+      }
+    }
+  ]
+}
