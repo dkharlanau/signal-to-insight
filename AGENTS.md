@@ -43,7 +43,11 @@ create / update source registry
   ↓
 create structured insight + curated Knowledge Delta
   ↓
+review contradiction/refinement candidates
+  ↓
 trace important claims to evidence
+  ↓
+resolve prerequisite path / gaps
   ↓
 author reconstruction / transfer prompts
   ↓
@@ -131,6 +135,58 @@ Do not surface a connection merely because retrieval found overlapping words. Ca
 
 Never reinterpret a bundle `reinforcement`, `refinement` or `contradiction` as another relationship without revisiting the source evidence and changing the underlying classification too.
 
+## Contradiction and refinement review
+
+When a new source appears to challenge or narrow existing knowledge, use `data/knowledge-reviews.json` rather than silently changing the graph.
+
+Before accepting `contradiction`, compare:
+
+- whether both claims address the same subject;
+- whether they operate at the same architectural/conceptual layer;
+- whether their conditions and scope are comparable.
+
+A true contradiction requires all three to match. A model-level reasoning loop and a production-control substrate, for example, may discuss the same agent action while still describing different layers.
+
+Every resolved review must preserve:
+
+- evidence from the new and prior claim traces;
+- human-readable scope assessment and rationale;
+- resolution (`refinement / contradiction / different_scope / not_conflict / needs_more_evidence`);
+- any graph/concept change with explicit `before / after`;
+- review history so superseded interpretations are not erased.
+
+Do not optimize for finding disagreements. Optimize for correctly identifying where evidence changes the model.
+
+## Prerequisite path
+
+Every review-ready insight must have a compact prerequisite map in `data/prerequisite-maps.json`.
+
+The map is not a reading list. Include only concepts whose absence materially harms comprehension of the central model, normally no more than five.
+
+Classify priority as:
+
+- `must_know_now` — required to understand the current model;
+- `learn_next` — useful immediately after the core model;
+- `optional_depth` — valuable context but not required.
+
+Classify state as:
+
+- `known_in_graph` — prior evidence already explains it;
+- `explained_here` — the current explainer supplies enough context;
+- `gap` — still unresolved.
+
+Rules:
+
+1. `known_in_graph` must be backed by another insight, not merely by a matching label.
+2. `explained_here` must be evidenced by the current insight.
+3. Prefer an existing published explainer or concept when it genuinely covers the prerequisite.
+4. A `gap` must become an explicit `learning_target`; do not hide it inside prose.
+5. A published insight may not contain an unresolved `must_know_now` gap.
+6. If required prerequisites remain unresolved, `coherence_review.prerequisites_complete` cannot be true.
+7. Do not inflate the list with generic domain foundations that the source does not depend on.
+
+The generated prerequisite path should appear before the mental model so the reader knows what must be understood first.
+
 ## Personalization
 
 Use `config/research-profile.json` as a filter, not as a topic prison.
@@ -154,14 +210,15 @@ A finished explainer must let the reader answer:
 1. What problem is being solved?
 2. Why does the problem exist?
 3. What is the core mechanism?
-4. Which concepts are prerequisites?
+4. Which concepts are prerequisites, and are any still missing?
 5. Which tools/systems are actually worth knowing?
 6. Where does the model break or become incomplete?
 7. What is source content vs project enrichment?
 8. What changed relative to prior knowledge, and why?
-9. Which important claims are source evidence versus project interpretation, and where can they be checked?
-10. What should I do with this knowledge?
-11. Where did it come from and when?
+9. Which apparent contradictions were scope-reviewed rather than accepted mechanically?
+10. Which important claims are source evidence versus project interpretation, and where can they be checked?
+11. What should I do with this knowledge?
+12. Where did it come from and when?
 
 If the reader still needs to consume the original source to understand the main model, the explainer is not ready.
 
@@ -175,6 +232,8 @@ A processed source may update:
 - `data/insights.json`
 - `data/claim-evidence.json`
 - `data/knowledge-deltas.json`
+- `data/knowledge-reviews.json`
+- `data/prerequisite-maps.json`
 - `data/learning-prompts.json`
 - `data/knowledge-graph.json`
 - `content/explainers/*.md`
@@ -182,7 +241,7 @@ A processed source may update:
 - generated `previews/<slug>/index.html`
 - `sitemap.xml`
 
-Do not edit generated explainer HTML by hand. Change the structured source/insight/evidence/delta record or generator and rebuild.
+Do not edit generated explainer HTML by hand. Change the structured source/insight/evidence/delta/review/prerequisite record or generator and rebuild.
 
 ## Required checks
 
@@ -192,6 +251,9 @@ Before considering a change complete:
 python scripts/validate.py
 python scripts/validate_claim_evidence.py
 python scripts/validate_knowledge_deltas.py
+python scripts/validate_knowledge_reviews.py
+python scripts/validate_knowledge_reviews.py --self-test
+python scripts/validate_prerequisites.py
 python scripts/validate_learning_prompts.py
 python scripts/validate_graph.py
 python scripts/validate_bundles.py
