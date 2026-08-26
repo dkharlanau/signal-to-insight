@@ -9,6 +9,9 @@ on:
       - "schemas/knowledge-graph.schema.json"
       - "scripts/validate_graph.py"
       - "scripts/build_graph.py"
+      - "scripts/build_public_graph.py"
+      - "scripts/public_projection.py"
+      - "scripts/migrate_public_projection.py"
       - "scripts/graph_context.py"
       - ".github/workflows/knowledge-graph.yml"
   pull_request:
@@ -19,6 +22,9 @@ on:
       - "schemas/knowledge-graph.schema.json"
       - "scripts/validate_graph.py"
       - "scripts/build_graph.py"
+      - "scripts/build_public_graph.py"
+      - "scripts/public_projection.py"
+      - "scripts/migrate_public_projection.py"
       - "scripts/graph_context.py"
       - ".github/workflows/knowledge-graph.yml"
 
@@ -40,35 +46,40 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Apply current public-projection migration on main
+        if: github.event_name == 'push'
+        run: python scripts/migrate_public_projection.py
+
       - name: Validate graph contracts
         run: |
           python scripts/validate.py
           python scripts/validate_graph.py
+          python scripts/public_projection.py
 
       - name: Test prior-knowledge retrieval
         run: python scripts/graph_context.py --self-test
 
       - name: Rebuild public knowledge graph
-        run: python scripts/build_graph.py
+        run: python scripts/build_public_graph.py
 
       - name: Verify graph on pull requests
         if: github.event_name == 'pull_request'
         run: |
-          if [ -n "$(git status --porcelain -- knowledge)" ]; then
-            git status --short -- knowledge
-            echo "Generated public knowledge graph is missing or stale."
+          if [ -n "$(git status --porcelain -- knowledge data/knowledge-graph.json)" ]; then
+            git status --short -- knowledge data/knowledge-graph.json
+            echo "Public graph projection or generated knowledge page is missing or stale."
             exit 1
           fi
 
       - name: Commit synced graph on main
         if: github.event_name == 'push'
         run: |
-          if [ -z "$(git status --porcelain -- knowledge)" ]; then
+          if [ -z "$(git status --porcelain -- knowledge data/knowledge-graph.json)" ]; then
             echo "Knowledge graph already current."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A knowledge
-          git commit -m "build: sync public knowledge graph"
+          git add data/knowledge-graph.json knowledge
+          git commit -m "build: sync public knowledge projection"
           git push origin HEAD:main
