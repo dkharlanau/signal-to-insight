@@ -27,12 +27,22 @@ jobs:
         id: queue
         run: python scripts/queue_issue.py --event "$GITHUB_EVENT_PATH"
 
-      - name: Commit queued source
+      - name: Scaffold graph-aware research bundle
+        if: steps.queue.outputs.changed == 'true' && steps.queue.outputs.status == 'queued'
+        run: python scripts/scaffold_bundle.py "${{ steps.queue.outputs.id }}"
+
+      - name: Validate queued research state
+        if: steps.queue.outputs.changed == 'true'
+        run: |
+          python scripts/validate_bundles.py
+          python scripts/validate_graph.py
+
+      - name: Commit queued source and research bundle
         if: steps.queue.outputs.changed == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/inbox.json
+          git add data/inbox.json data/research-bundles
           git commit -m "intake: queue source from issue #${{ github.event.issue.number }}"
           git push origin HEAD:main
 
@@ -42,14 +52,16 @@ jobs:
           INTAKE_STATUS: ${{ steps.queue.outputs.status }}
           INTAKE_ID: ${{ steps.queue.outputs.id }}
           INTAKE_URL: ${{ steps.queue.outputs.url }}
+          INTAKE_CHANGED: ${{ steps.queue.outputs.changed }}
         with:
           script: |
             const status = process.env.INTAKE_STATUS;
             const id = process.env.INTAKE_ID;
             const url = process.env.INTAKE_URL;
+            const changed = process.env.INTAKE_CHANGED === 'true';
             let message;
             if (status === 'queued') {
-              message = `Queued as \`${id}\`. Normalized source: ${url}`;
+              message = `Queued as \`${id}\`. Normalized source: ${url}${changed ? `\n\nCreated a research bundle with a snapshot of relevant prior concepts. Those matches start as \`unclassified\` and must be resolved during research.` : ''}`;
             } else if (status === 'already_queued') {
               message = `This source/focus is already queued as \`${id}\`. Normalized source: ${url}`;
             } else {
