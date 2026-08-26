@@ -24,8 +24,16 @@ jobs:
       - name: Validate structured knowledge
         run: python scripts/validate.py
 
+      - name: Validate cumulative knowledge graph
+        run: python scripts/validate_graph.py
+
       - name: Validate research bundles
         run: python scripts/validate_bundles.py
+
+      - name: Test prior-knowledge retrieval
+        run: |
+          python scripts/graph_context.py --self-test
+          python scripts/scaffold_bundle.py --self-test
 
       - name: Run pipeline acceptance tests
         run: python -m unittest discover -s tests -p "test_*.py" -v
