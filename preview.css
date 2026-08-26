@@ -10,3 +10,4 @@
   letter-spacing: .12em;
 }
 .preview-page .detail-hero { padding-top: 54px; }
+.preview-page .site-header { border-top: 3px solid var(--acid); }
