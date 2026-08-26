@@ -30,6 +30,9 @@ jobs:
       - name: Validate research bundles
         run: python scripts/validate_bundles.py
 
+      - name: Validate researched case patches
+        run: python scripts/validate_case_patches.py
+
       - name: Test prior-knowledge retrieval
         run: |
           python scripts/graph_context.py --self-test
