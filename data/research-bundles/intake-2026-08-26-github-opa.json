@@ -1,27 +1,31 @@
 {
   "bundle_version": "1.1.0",
   "intake_id": "intake-2026-08-26-github-opa",
-  "source_id": null,
+  "source_id": "src-open-policy-agent-opa-2026",
   "source": {
     "type": "repository",
     "canonical_url": "https://github.com/open-policy-agent/opa",
-    "title": null,
-    "creators": [],
-    "publisher": null,
+    "title": "Open Policy Agent (OPA)",
+    "creators": [
+      "Open Policy Agent project"
+    ],
+    "publisher": "Open Policy Agent / CNCF",
     "published_at": null,
     "event_date": null,
-    "version": null,
-    "language": null,
+    "version": "v1.19.1",
+    "language": "en",
     "duration": null,
-    "date_note": null
+    "date_note": "Living repository with no single publication date. Latest GitHub release checked during analysis was v1.19.1, published 2026-08-17; repository and official documentation inspected 2026-08-26."
   },
   "inspection": {
-    "method": "not inspected",
-    "full_content_used_ephemerally": false,
+    "method": "Direct inspection of the official GitHub repository README, Apache-2.0 license and latest release metadata, plus official OPA documentation for deployment, bundles, Rego, management APIs and decision logs.",
+    "full_content_used_ephemerally": true,
     "full_content_committed": false,
-    "confidence": "metadata_only",
+    "confidence": "direct",
     "gaps": [
-      "Source content has not been mapped yet."
+      "This first-pass model explains architecture rather than benchmarking OPA latency, throughput or resource usage in a specific deployment topology.",
+      "OPA supports many integration and deployment patterns; the explainer intentionally keeps only the decision/enforcement separation and the minimum management-plane model needed to use it correctly.",
+      "Repository releases and living documentation can change after the 2026-08-26 inspection date."
     ]
   },
   "prior_knowledge": {
@@ -39,7 +43,7 @@
             "title": "Why enterprise AI agents fail after the POC"
           }
         ],
-        "relationship_to_source": "unclassified"
+        "relationship_to_source": "refinement"
       },
       {
         "concept_id": "controlled-execution",
@@ -52,7 +56,7 @@
             "title": "Why enterprise AI agents fail after the POC"
           }
         ],
-        "relationship_to_source": "unclassified"
+        "relationship_to_source": "reinforcement"
       },
       {
         "concept_id": "execution-history",
@@ -70,7 +74,7 @@
             "title": "Temporal: the mental model behind durable execution"
           }
         ],
-        "relationship_to_source": "unclassified"
+        "relationship_to_source": "not_relevant"
       },
       {
         "concept_id": "protected-data-separation",
@@ -83,7 +87,7 @@
             "title": "Why enterprise AI agents fail after the POC"
           }
         ],
-        "relationship_to_source": "unclassified"
+        "relationship_to_source": "not_relevant"
       },
       {
         "concept_id": "activity-execution",
@@ -96,33 +100,153 @@
             "title": "Temporal: the mental model behind durable execution"
           }
         ],
-        "relationship_to_source": "unclassified"
+        "relationship_to_source": "not_relevant"
       }
     ],
     "classification_required": true
   },
   "content_map": {
-    "problem": null,
-    "thesis": null,
-    "sections": [],
-    "concepts": [],
-    "mechanisms": [],
-    "tools": [],
-    "examples": [],
-    "claims": [],
-    "evidence": [],
-    "assumptions": [],
-    "limitations": [],
-    "open_questions": []
+    "problem": "Policy decisions are easy to hardcode inside each service, which couples changing organizational rules to application releases and produces inconsistent policy logic across systems.",
+    "thesis": "OPA separates policy decision-making from enforcement: applications provide structured context to OPA, OPA evaluates declarative Rego policy and data to return a decision, and the application remains responsible for enforcing that decision.",
+    "sections": [
+      "Repository identity, release and integration entry points",
+      "How OPA works: rules, data, queries and decisions",
+      "Policy Decision Point versus Policy Enforcement Point",
+      "Rego as the declarative policy language",
+      "Bundles and distributed policy distribution",
+      "Decision logs, status and management APIs",
+      "Smallest useful local experiment"
+    ],
+    "concepts": [
+      "policy as code",
+      "Policy Decision Point (PDP)",
+      "Policy Enforcement Point (PEP)",
+      "structured policy input",
+      "Rego",
+      "policy/data bundles",
+      "decision logs",
+      "distributed decision points with logically centralized management"
+    ],
+    "mechanisms": [
+      "An application reaches a point where it needs a policy decision and constructs structured input describing the request and context.",
+      "The application queries OPA rather than embedding the rule directly in application code.",
+      "OPA evaluates the input against loaded Rego policy and data and returns an allow/deny or richer structured decision.",
+      "The application acts as the enforcement point: it accepts, rejects or otherwise changes behavior based on the returned decision.",
+      "Bundles can update policy and data independently from the application code deployment lifecycle.",
+      "Decision Logs and Status APIs can report decision and runtime state to a management layer; this operational plane is separate from the decision itself."
+    ],
+    "tools": [
+      "OPA CLI",
+      "Rego Playground",
+      "OPA REST API",
+      "OPA Go SDK",
+      "OPA WebAssembly integration",
+      "Bundles",
+      "Decision Logs",
+      "Status API"
+    ],
+    "examples": [
+      "API authorization: service sends user, operation and resource context; OPA returns allow/deny; service enforces it.",
+      "Deployment placement: a platform can ask which clusters a workload is allowed to use instead of hardcoding placement rules in the platform service.",
+      "Agent governance experiment: an execution service can ask whether a specific actor/agent may perform a consequential operation before invoking the tool, while the execution service remains responsible for actually blocking or allowing the action."
+    ],
+    "claims": [
+      "OPA is an open-source general-purpose policy engine and a graduated CNCF project.",
+      "OPA uses a high-level declarative language, Rego, for policies over structured data.",
+      "OPA is a policy decision point; integrated applications/services are policy enforcement points and must enforce returned decisions.",
+      "OPA can be integrated via REST, Go APIs/SDK and WebAssembly among other patterns.",
+      "Bundles allow policy and data to be distributed and reloaded independently of application deployment.",
+      "Decision Logs can contain policy query events and support masking sensitive fields before upload.",
+      "The latest GitHub release observed on 2026-08-26 was v1.19.1, published 2026-08-17."
+    ],
+    "evidence": [
+      "Official repository README explains that services execute queries when policy decisions are needed and then enforce the returned decision.",
+      "Official OPA deployment documentation describes OPA as the PDP and applications as PEPs, and recommends placing OPA close to enforcement points when latency/availability matter.",
+      "Official Bundles documentation describes policy/data distribution and on-the-fly reload behavior.",
+      "Official Management APIs document Bundles, Decision Logs, Status and Discovery for distributed OPA deployments.",
+      "Official Decision Logs documentation describes logged decision events and data masking.",
+      "GitHub release metadata verifies v1.19.1 and its 2026-08-17 publication timestamp."
+    ],
+    "assumptions": [
+      "A service that queries OPA is designed to treat OPA's answer as authoritative for the policy decision being delegated.",
+      "Policy inputs expose enough context for Rego to make the intended decision without moving the actual enforcement responsibility into OPA.",
+      "A production deployment chooses an OPA topology and policy-distribution mechanism appropriate to its latency, availability and freshness requirements."
+    ],
+    "limitations": [
+      "OPA computes policy decisions; it does not force an application to obey them. The enforcement point remains part of the trusted computing boundary.",
+      "Separating policy from application code does not automatically produce a single central network service. OPA is commonly deployed close to enforcement points while policy management is logically centralized.",
+      "Bundle-based policy distribution is not the same as instantaneous global consistency; policy version and activation status matter during rollout.",
+      "Decision inputs and logs may contain sensitive context, so logging and masking must be designed deliberately.",
+      "A general-purpose policy engine does not decide which business rules are correct; policy modeling, ownership, tests and rollout governance remain organizational responsibilities."
+    ],
+    "open_questions": [
+      "Which OPA deployment mode best fits a specific agent execution service: sidecar/local daemon, library/SDK or Wasm?",
+      "What policy bundle signing, versioning and rollout controls are required for high-consequence enterprise actions?",
+      "How should decision IDs and policy versions be connected to an execution ledger so a later audit can reconstruct both the action and the exact policy decision?"
+    ]
   },
   "selection": {
     "requested_focus": "How does OPA separate policy decision-making from enforcement, and what should I learn or try from that architecture?",
-    "coherent_core": [],
-    "prerequisites": [],
-    "drop_notes": [],
-    "connections": []
+    "coherent_core": [
+      "OPA should be understood first as a decision engine, not as the component that performs or blocks the business action itself.",
+      "The application/PEP supplies structured context and remains responsible for enforcement; OPA/PDP evaluates Rego plus data and returns a decision.",
+      "This separation makes policy logic independently reviewable and changeable instead of scattering it through service code.",
+      "At scale, distributed OPA instances can stay close to enforcement while bundles and management APIs provide a separate policy-distribution and operational layer.",
+      "The smallest experiment should prove the separation by changing a Rego rule while leaving the calling application/request shape unchanged."
+    ],
+    "prerequisites": [
+      "Difference between a policy decision and enforcement of that decision",
+      "Basic understanding of structured request/context data",
+      "Why independently versioned policy rules can be easier to review/test than hardcoded conditionals"
+    ],
+    "drop_notes": [
+      "Do not turn the explainer into a Rego language tutorial; syntax is secondary to the architectural separation.",
+      "Do not cover every OPA integration, Kubernetes admission pattern or ecosystem project in the first mental model.",
+      "Do not imply that OPA is a full authorization product/control plane; the project supplies a policy engine plus APIs and expects surrounding integration/management choices."
+    ],
+    "connections": [
+      "Refines the existing policy-as-code concept with a concrete decision/enforcement boundary.",
+      "Reinforces controlled execution by showing one implementable authorization primitive around consequential work.",
+      "Creates a future connection between policy decision IDs/versions and execution-history evidence without claiming OPA itself is the execution ledger."
+    ]
   },
-  "verification_candidates": [],
-  "source_locators": [],
+  "verification_candidates": [
+    {
+      "question": "Which deployment topology and integration mode should be used for a specific production workload?",
+      "reason": "Latency, availability, language/runtime and policy freshness constraints are deployment-specific and should not be inferred from the general architecture.",
+      "priority": "medium"
+    },
+    {
+      "question": "What sensitive request data could appear in Decision Logs for the intended use case, and what masking rules are needed?",
+      "reason": "Official docs support masking, but the fields requiring protection depend on the application's policy input schema.",
+      "priority": "high"
+    }
+  ],
+  "source_locators": [
+    {
+      "label": "Repository README — How does OPA work?",
+      "locator": "https://github.com/open-policy-agent/opa#how-does-opa-work"
+    },
+    {
+      "label": "Latest checked release — v1.19.1",
+      "locator": "https://github.com/open-policy-agent/opa/releases/tag/v1.19.1"
+    },
+    {
+      "label": "Official docs — OPA overview",
+      "locator": "https://www.openpolicyagent.org/docs"
+    },
+    {
+      "label": "Official docs — Deployments",
+      "locator": "https://www.openpolicyagent.org/docs/deployments"
+    },
+    {
+      "label": "Official docs — Bundles",
+      "locator": "https://www.openpolicyagent.org/docs/management-bundles"
+    },
+    {
+      "label": "Official docs — Decision Logs",
+      "locator": "https://www.openpolicyagent.org/docs/management-decision-logs"
+    }
+  ],
   "created_at": "2026-08-26"
 }
