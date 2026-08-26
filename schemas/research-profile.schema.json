@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dkharlanau.github.io/signal-to-insight/schemas/research-profile.schema.json",
+  "title": "Signal to Insight research profile",
+  "type": "object",
+  "required": ["profile_version", "purpose", "scope", "goals", "selection", "explanation_preferences", "publishing"],
+  "properties": {
+    "profile_version": {"type": "string"},
+    "purpose": {"type": "string"},
+    "scope": {
+      "type": "object",
+      "required": ["domain_locked", "priority_areas", "allowed_source_types"]
+    },
+    "goals": {"type": "array", "items": {"type": "string"}},
+    "selection": {
+      "type": "object",
+      "required": ["dimensions", "rules"]
+    },
+    "explanation_preferences": {
+      "type": "object",
+      "required": ["style", "required_sections", "action_buckets", "visual_rule"]
+    },
+    "publishing": {
+      "type": "object",
+      "required": ["auto_publish", "public_output", "private_input_allowed", "store_full_third_party_transcripts", "require_source_and_date"]
+    }
+  }
+}
