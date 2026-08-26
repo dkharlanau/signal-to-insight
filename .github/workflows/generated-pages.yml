@@ -25,4 +25,9 @@ jobs:
         run: python scripts/build.py
 
       - name: Generated pages must be committed
-        run: git diff --exit-code -- explainers
+        run: |
+          if [ -n "$(git status --porcelain -- explainers)" ]; then
+            git status --short -- explainers
+            echo "Generated explainer pages are missing or stale."
+            exit 1
+          fi
