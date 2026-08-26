@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>[PREVIEW] Open Policy Agent: separate policy decisions from enforcement — Signal to Insight</title>
+  <meta name="description" content="OPA makes policy a separate decision step: the application supplies context, OPA evaluates Rego and data, returns a decision, and the application remains responsible for enforcement.">
+  <meta property="og:title" content="Open Policy Agent: separate policy decisions from enforcement">
+  <meta property="og:description" content="OPA makes policy a separate decision step: the application supplies context, OPA evaluates Rego and data, returns a decision, and the application remains responsible for enforcement.">
+  <meta property="og:type" content="article">
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="generated-page preview-page">
+  <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+  <header class="site-header wrap">
+    <a class="brand" href="../../"><span class="brand-mark">S→I</span><span>Signal to Insight</span></a>
+    <nav aria-label="Explainer navigation">
+      <a href="#model">Model</a><a href="#concepts">Concepts</a><a href="#tools">Tools</a><a href="#actions">Actions</a><a href="#sources">Sources</a>
+    </nav>
+  </header>
+
+  <div class="preview-banner">REVIEW PREVIEW · NOT INDEXED · NOT PUBLISHED</div>
+  <main>
+    <section class="detail-hero wrap">
+      <a class="back-link" href="../../">← Research engine</a>
+      <p class="eyebrow">EXPLAINER · review</p>
+      <h1>Open Policy Agent: separate policy decisions from enforcement</h1>
+      <div class="detail-lede">
+        <p>OPA makes policy a separate decision step: the application supplies context, OPA evaluates Rego and data, returns a decision, and the application remains responsible for enforcement.</p>
+        <dl class="detail-meta">
+          <div><dt>Original source</dt><dd><a href="https://github.com/open-policy-agent/opa" target="_blank" rel="noreferrer">Open Policy Agent (OPA) ↗</a></dd></div>
+          <div><dt>Creator</dt><dd>Open Policy Agent project</dd></div>
+          <div><dt>Source date</dt><dd>not independently verified</dd></div>
+          <div><dt>Captured</dt><dd>2026-08-26</dd></div>
+          <div><dt>Analyzed</dt><dd>2026-08-26</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="detail-section wrap">
+      <p class="kicker">WHY THIS MATTERS</p>
+      <p class="big-statement">Policy-as-code becomes much more concrete once the trust boundary is clear. OPA does not perform the protected action and it does not magically enforce its answer; it gives an application a separately versioned, testable decision engine while the application stays the enforcement point.</p>
+    </section>
+
+    <section id="model" class="detail-section wrap">
+      <p class="kicker">MENTAL MODEL</p>
+      <div class="visual-layers" aria-label="Policy changes above; enforcement stays below"><article>
+          <span>03 · Management</span>
+          <h3>Policy source + bundles + status/logs</h3>
+          <p>Version and distribute policy/data separately, then observe which policy and runtime state produced decisions.</p>
+        </article><article>
+          <span>02 · Decision</span>
+          <h3>OPA / PDP · input + Rego + data → decision</h3>
+          <p>OPA receives structured context, evaluates declarative policy and returns an allow/deny or richer result.</p>
+        </article><article>
+          <span>01 · Enforcement</span>
+          <h3>Application / PEP</h3>
+          <p>The application owns the real operation and must actually accept, reject or alter behavior based on OPA&#x27;s decision.</p>
+        </article></div>
+      <div class="core-map">
+        <div><span>Source problem</span><p>Policy rules become difficult to review, change and keep consistent when authorization and operational decisions are hardcoded across many services.</p></div>
+        <div><span>Source thesis</span><p>OPA decouples policy decision-making from enforcement by evaluating declarative Rego policy plus data against structured input and returning a decision to the integrating application.</p></div>
+        <div><span>Core topics</span><ul><li>Policy Decision Point versus Policy Enforcement Point</li><li>structured input, Rego and policy data</li><li>application-enforced decisions</li><li>policy/data bundles and rollout</li><li>decision logs and management APIs</li></ul></div>
+      </div>
+    </section>
+
+    <section id="concepts" class="detail-section wrap">
+      <p class="kicker">CONCEPTS TO KNOW</p>
+      <h2>Learn only the prerequisites that preserve the model.</h2>
+      <div class="concept-grid"><article class="concept-card">
+          <span>learn</span>
+          <h3>Policy Decision Point (PDP)</h3>
+          <p>OPA computes the policy result; understanding this boundary prevents treating the policy engine as the component that performs the protected action.</p>
+        </article><article class="concept-card">
+          <span>learn</span>
+          <h3>Policy Enforcement Point (PEP)</h3>
+          <p>The integrating application remains responsible for obeying the decision, so enforcement code is still part of the trusted boundary.</p>
+        </article><article class="concept-card">
+          <span>learn</span>
+          <h3>Rego + structured input</h3>
+          <p>OPA evaluates declarative rules over structured request/context data and loaded policy data rather than owning the surrounding application workflow.</p>
+        </article><article class="concept-card">
+          <span>know</span>
+          <h3>Policy bundles</h3>
+          <p>Bundles show how policy/data can move on a lifecycle separate from application deployment while distributed OPA instances remain close to enforcement.</p>
+        </article><article class="concept-card">
+          <span>know</span>
+          <h3>Decision logs</h3>
+          <p>Policy decisions can become operational evidence, but the logged input/output may require deliberate masking of sensitive fields.</p>
+        </article></div>
+    </section>
+
+    <section id="tools" class="detail-section wrap">
+      <p class="kicker">TOOLS / SYSTEMS</p>
+      <h2>Concrete systems worth knowing.</h2>
+      <p class="section-note">Tool connections may be project enrichment rather than recommendations from the original source. Each card states the relationship.</p>
+      <div class="tool-grid"><a class="tool-card" href="https://www.openpolicyagent.org/docs" target="_blank" rel="noreferrer">
+          <span>try</span>
+          <strong>OPA CLI</strong>
+          <p>The smallest practical step is to evaluate one Rego rule locally before adding any service integration.</p>
+          <small>local policy evaluation · Source-native OPA interface documented by the official repository and docs.</small>
+        </a><a class="tool-card" href="https://play.openpolicyagent.org/" target="_blank" rel="noreferrer">
+          <span>try</span>
+          <strong>Rego Playground</strong>
+          <p>It removes installation friction and makes input, policy and result visible on one screen for a first decision experiment.</p>
+          <small>interactive policy learning · Source-native learning tool linked by the official OPA repository.</small>
+        </a><a class="tool-card" href="https://www.openpolicyagent.org/docs/rest-api" target="_blank" rel="noreferrer">
+          <span>learn</span>
+          <strong>OPA REST API</strong>
+          <p>It makes the PDP/PEP boundary concrete: a service sends input, receives a decision and remains responsible for enforcement.</p>
+          <small>service integration · Source-native integration surface documented by OPA.</small>
+        </a><a class="tool-card" href="https://www.openpolicyagent.org/docs/management-bundles" target="_blank" rel="noreferrer">
+          <span>learn</span>
+          <strong>OPA Bundles</strong>
+          <p>Bundles are the next concept after local evaluation because they separate policy rollout from application deployment.</p>
+          <small>policy and data distribution · Source-native management mechanism documented by OPA.</small>
+        </a></div>
+    </section>
+
+    <section class="detail-section wrap">
+      <p class="kicker">EXAMPLES</p>
+      <div class="example-grid"><article class="example-card">
+          <span>API authorization</span>
+          <h3>A service receives a request and needs to decide whether a user may call an operation on a resource.</h3>
+          <p>Can the service delegate the policy decision to OPA while still retaining responsibility for accepting or rejecting the request?</p>
+        </article><article class="example-card">
+          <span>AI agent tool execution</span>
+          <h3>An agent wants to perform a consequential operation such as modifying a customer record or invoking an administrative API.</h3>
+          <p>Can the execution service ask OPA whether this actor, tool and resource combination is permitted before it performs the operation?</p>
+        </article><article class="example-card">
+          <span>platform policy</span>
+          <h3>A deployment platform needs rules about where workloads may run or which metadata must exist before provisioning.</h3>
+          <p>Can policy change without scattering another set of hardcoded conditionals across each platform component?</p>
+        </article></div>
+    </section>
+
+    <section class="detail-section wrap limitation-section">
+      <p class="kicker">WHERE THE MODEL BREAKS</p>
+      <h2>Useful does not mean sufficient.</h2>
+      <ol class="limitation-list"><li>OPA returns decisions but does not force an application to obey them; the PEP remains part of the trusted computing boundary.</li><li>Policy-as-code does not require one remote central policy service. OPA can be distributed close to enforcement while management is logically centralized.</li><li>Bundle distribution is not equivalent to instantaneous global consistency, so policy versions and rollout state matter during change.</li><li>Decision inputs and logs can contain sensitive context; masking and data-minimization rules must be deliberate.</li><li>A policy engine makes rules executable and testable but does not determine whether the organization&#x27;s policy itself is correct.</li></ol>
+    </section>
+
+    <section id="actions" class="detail-section wrap">
+      <p class="kicker">PERSONAL ACTION MAP</p>
+      <h2>Convert understanding into a decision.</h2>
+      <div class="action-grid"><article class="action-card action-use_now">
+          <span>Use now</span>
+          <ul><li>When reviewing authorization architecture, separate the question &#x27;who computes the policy decision?&#x27; from &#x27;who actually enforces the result?&#x27;</li></ul>
+        </article><article class="action-card action-try">
+          <span>Try</span>
+          <ul><li>Use the Rego Playground or OPA CLI to write one allow/deny rule over a small JSON input such as actor, operation and resource.</li><li>Change the policy while keeping the same input/request shape, then observe that the decision changes without changing the calling application logic.</li><li>Run OPA as a local service and make one REST decision request so the PDP/PEP boundary becomes concrete.</li></ul>
+        </article><article class="action-card action-learn">
+          <span>Learn</span>
+          <ul><li>Rego documents, rules and structured input</li><li>Policy Decision Point versus Policy Enforcement Point</li><li>OPA bundle distribution and policy versioning</li><li>Decision Logs, status reporting and sensitive-data masking</li></ul>
+        </article><article class="action-card action-build">
+          <span>Build</span>
+          <ul><li>A tiny policy gate in front of one agent/tool action that records the decision ID and policy version alongside the execution result.</li></ul>
+        </article><article class="action-card action-watch">
+          <span>Watch</span>
+          <ul><li>How agent platforms standardize policy-decision interfaces and connect them to signed policy bundles, identity and execution ledgers.</li></ul>
+        </article><article class="action-card action-ignore_for_now">
+          <span>Ignore for now</span>
+          <ul><li>Deep Kubernetes admission, Terraform, SSH and ecosystem-specific OPA integrations until the basic decision/enforcement model is clear.</li></ul>
+        </article></div>
+    </section>
+
+    <section id="sources" class="detail-section wrap source-section">
+      <p class="kicker">SOURCES + DATES</p>
+      <div class="source-grid">
+        <div>
+          <h3>Primary source</h3>
+          <a href="https://github.com/open-policy-agent/opa" target="_blank" rel="noreferrer">Open Policy Agent (OPA) ↗</a>
+          <p>Open Policy Agent project · Source date: not independently verified</p>
+          <p>Living repository with no single publication date. Latest GitHub release checked during analysis was v1.19.1, published 2026-08-17; official repository and documentation inspected 2026-08-26.</p>
+        </div>
+        <div>
+          <h3>Verification / enrichment</h3>
+          <ul class="supporting-sources"><li>
+          <a href="https://github.com/open-policy-agent/opa" target="_blank" rel="noreferrer">Open Policy Agent GitHub repository</a>
+          <span>primary repository, project positioning, integration entry points and how-OPA-works model · accessed 2026-08-26</span>
+        </li><li>
+          <a href="https://www.openpolicyagent.org/docs" target="_blank" rel="noreferrer">Open Policy Agent Documentation</a>
+          <span>official policy evaluation, Rego and structured-input model · accessed 2026-08-26</span>
+        </li><li>
+          <a href="https://www.openpolicyagent.org/docs/deployments" target="_blank" rel="noreferrer">OPA Deployments</a>
+          <span>official PDP/PEP deployment model and proximity guidance · accessed 2026-08-26</span>
+        </li><li>
+          <a href="https://www.openpolicyagent.org/docs/management-bundles" target="_blank" rel="noreferrer">OPA Bundles</a>
+          <span>official policy/data distribution and reload model · accessed 2026-08-26</span>
+        </li><li>
+          <a href="https://www.openpolicyagent.org/docs/management-decision-logs" target="_blank" rel="noreferrer">OPA Decision Logs</a>
+          <span>official decision-event logging and sensitive-data masking behavior · accessed 2026-08-26</span>
+        </li><li>
+          <a href="https://github.com/open-policy-agent/opa/releases/tag/v1.19.1" target="_blank" rel="noreferrer">Open Policy Agent v1.19.1</a>
+          <span>latest release version/date observed during analysis · accessed 2026-08-26</span>
+        </li></ul>
+        </div>
+      </div>
+      <p class="provenance-note">Analyzed 2026-08-26. Full third-party transcript is not stored. Source claims and project enrichment are kept distinguishable.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer wrap">
+    <span>Signal to Insight</span><span>Explainer: open-policy-agent-decision-enforcement-model</span><span>Reviewed 2026-08-26</span>
+  </footer>
+  <script src="../../app.js"></script>
+</body>
+</html>
