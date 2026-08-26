@@ -47,6 +47,45 @@
       },
       "additionalProperties": false
     },
+    "prior_knowledge": {
+      "type": "object",
+      "required": ["captured_at", "query", "matches", "classification_required"],
+      "properties": {
+        "captured_at": {"type": "string", "format": "date"},
+        "query": {"type": "string"},
+        "classification_required": {"const": true},
+        "matches": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["concept_id", "label", "coverage", "evidence_insights", "relationship_to_source"],
+            "properties": {
+              "concept_id": {"type": "string"},
+              "label": {"type": "string"},
+              "coverage": {"enum": ["introduced", "explained", "applied"]},
+              "evidence_insights": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["id", "status"],
+                  "properties": {
+                    "id": {"type": "string"},
+                    "status": {"type": ["string", "null"]},
+                    "title": {"type": ["string", "null"]}
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "relationship_to_source": {
+                "enum": ["unclassified", "reinforcement", "refinement", "contradiction", "new_knowledge", "not_relevant"]
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
     "content_map": {
       "type": "object",
       "required": ["problem", "thesis", "sections", "concepts", "mechanisms", "tools", "examples", "claims", "evidence", "assumptions", "limitations", "open_questions"],
