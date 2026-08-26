@@ -1,0 +1,217 @@
+{
+  "bundle_version": "1.1.0",
+  "intake_id": "intake-2026-08-26-arxiv-2210-03629",
+  "source_id": null,
+  "source": {
+    "type": "paper",
+    "canonical_url": "https://arxiv.org/abs/2210.03629",
+    "title": "ReAct: Synergizing Reasoning and Acting in Language Models",
+    "creators": [
+      "Shunyu Yao",
+      "Jeffrey Zhao",
+      "Dian Yu",
+      "Nan Du",
+      "Izhak Shafran",
+      "Karthik Narasimhan",
+      "Yuan Cao"
+    ],
+    "publisher": "ICLR 2023 / arXiv",
+    "published_at": "2022-10-06",
+    "event_date": null,
+    "version": "arXiv v3 / ICLR 2023 camera-ready",
+    "language": "en",
+    "duration": null,
+    "date_note": "First submitted to arXiv on 2022-10-06; v3 revised on 2023-03-10 and identified by arXiv as the ICLR 2023 camera-ready version."
+  },
+  "inspection": {
+    "method": "Direct inspection of the arXiv abstract and the ICLR 2023 camera-ready PDF, including the method section, Figure 1, Tables 1-2, conclusion, reproducibility and ethics statements.",
+    "full_content_used_ephemerally": true,
+    "full_content_committed": false,
+    "confidence": "direct",
+    "gaps": [
+      "The experiments use 2022-era PaLM/GPT-3 models and benchmark environments; the architectural mechanism is more durable than the absolute benchmark numbers.",
+      "This pass does not attempt to reproduce the experiments or compare ReAct against 2026 agent/tool-use systems."
+    ]
+  },
+  "prior_knowledge": {
+    "captured_at": "2026-08-26",
+    "query": "ReAct reasoning action observation loop and its relationship to production controlled execution",
+    "matches": [
+      {
+        "concept_id": "controlled-execution",
+        "label": "Controlled execution",
+        "coverage": "explained",
+        "evidence_insights": [
+          {
+            "id": "enterprise-agents-production-substrate",
+            "status": "published",
+            "title": "Why enterprise AI agents fail after the POC"
+          },
+          {
+            "id": "open-policy-agent-decision-enforcement-model",
+            "status": "review",
+            "title": "Open Policy Agent: separate policy decisions from enforcement"
+          }
+        ],
+        "relationship_to_source": "refinement"
+      },
+      {
+        "concept_id": "execution-history",
+        "label": "Execution history",
+        "coverage": "explained",
+        "evidence_insights": [
+          {
+            "id": "enterprise-agents-production-substrate",
+            "status": "published",
+            "title": "Why enterprise AI agents fail after the POC"
+          },
+          {
+            "id": "temporal-durable-execution-mental-model",
+            "status": "review",
+            "title": "Temporal: the mental model behind durable execution"
+          }
+        ],
+        "relationship_to_source": "not_relevant"
+      }
+    ],
+    "classification_required": true
+  },
+  "content_map": {
+    "problem": "Reasoning-only language-model trajectories can remain ungrounded and propagate hallucinated facts, while action-only agents can interact with an environment without enough high-level reasoning to plan, interpret observations or recover from mistakes.",
+    "thesis": "Interleave language reasoning traces with task-specific actions and environment observations so reasoning guides acting while external feedback grounds and updates subsequent reasoning.",
+    "sections": [
+      "Introduction and motivation",
+      "ReAct: synergizing reasoning and acting",
+      "Knowledge-intensive reasoning tasks",
+      "Interactive decision-making tasks",
+      "Related work",
+      "Conclusion, reproducibility and ethics"
+    ],
+    "concepts": [
+      "Thought / reasoning trace",
+      "Action",
+      "Observation",
+      "Thought-Action-Observation trajectory",
+      "Augmented action space with language",
+      "Internal knowledge versus external knowledge",
+      "Sparse reasoning in long action trajectories"
+    ],
+    "mechanisms": [
+      "The agent receives observations and actions as context, then chooses the next step from an action space augmented with free-form language thoughts.",
+      "A thought does not change the external environment; it composes information, decomposes goals, tracks progress or reformulates a plan inside the current trajectory context.",
+      "An external action changes or queries the environment and returns an observation, which becomes new evidence for the next reasoning step.",
+      "Reasoning cadence can alternate tightly with actions on knowledge tasks or appear sparsely at strategically useful points in long interactive tasks."
+    ],
+    "tools": [
+      "Wikipedia API used for Search and Lookup actions",
+      "ALFWorld benchmark environment",
+      "WebShop benchmark environment",
+      "PaLM-540B and GPT-3 used in the reported experiments"
+    ],
+    "examples": [
+      "Figure 1 contrasts Standard, CoT, Act-only and ReAct on a HotpotQA question; ReAct uses observations from search to revise its path to the answer.",
+      "Figure 1 also contrasts Act-only and ReAct in ALFWorld; sparse thoughts help the agent track the goal and transition from finding an object to placing it in the required location."
+    ],
+    "claims": [
+      "ReAct consistently outperformed the Act-only baseline on HotpotQA and Fever in the reported PaLM-540B prompting experiments.",
+      "ReAct scored 60.9 on Fever versus 56.3 for CoT, but 27.4 on HotpotQA versus 29.4 for CoT; combined ReAct/CoT-SC strategies performed better than either alone in those experiments.",
+      "On ALFWorld and WebShop, the paper reports absolute success-rate improvements of 34% and 10% respectively over the compared imitation/reinforcement-learning methods with one or two in-context examples.",
+      "The paper's manual HotpotQA failure analysis found less hallucination for ReAct than CoT but more reasoning-loop errors and a meaningful dependency on useful search results."
+    ],
+    "evidence": [
+      "Figure 1: qualitative comparison of reason-only, act-only and ReAct trajectories",
+      "Section 2: formalization of language thoughts as an augmentation of the action space",
+      "Table 1: HotpotQA and Fever prompting results",
+      "Table 2: manually classified success and failure modes",
+      "Conclusion and ethics statement: scaling, context-length and action-safety limitations"
+    ],
+    "assumptions": [
+      "A language model can express useful intermediate reasoning in language and can be given a constrained action interface to an environment.",
+      "Environment observations contain enough information to ground or correct later reasoning.",
+      "Few-shot trajectories are representative enough for the prompted model to learn the desired thought/action format.",
+      "The benchmark action spaces are intentionally much safer and narrower than real production tool access."
+    ],
+    "limitations": [
+      "ReAct can enter repetitive thought/action loops and may fail to choose a new action that escapes the loop.",
+      "Bad or uninformative search observations can derail subsequent reasoning; the loop is grounded by its environment but is not automatically self-correcting.",
+      "Complex tasks with large action spaces require more demonstrations, which can exceed in-context input length.",
+      "The reported results are tied to older models and selected benchmarks, so the mechanism should not be confused with a universal 2026 performance claim.",
+      "The paper itself notes safety risk when an LLM is connected to real external action spaces; its experiments deliberately restrict dangerous actions."
+    ],
+    "open_questions": [
+      "How much of the benefit survives when modern models use native tool calling without visible chain-of-thought traces?",
+      "Which observations should be persisted as durable execution evidence versus kept only as transient model context?",
+      "What control layer should authorize, constrain, retry and verify a ReAct-selected action in production?",
+      "When should an agent switch between external retrieval/action and internal reasoning rather than rigidly alternate them?"
+    ]
+  },
+  "selection": {
+    "requested_focus": "Understand the ReAct reasoning/action/observation loop, why interleaving reasoning with external actions can outperform reason-only or act-only approaches, where the method fails, and how this model relates to the existing production controlled-execution layer.",
+    "coherent_core": [
+      "Reason-only trajectories can be ungrounded; act-only trajectories can lack planning and working context.",
+      "ReAct inserts language thoughts between environment actions so a trajectory becomes Thought → Action → Observation → updated Thought.",
+      "The key mechanism is bidirectional: reasoning selects useful actions, while observations supply external evidence that can change the next reasoning step.",
+      "The paper's failures matter as much as the benchmark gains: the loop can repeat itself, bad retrieval can poison the trajectory, and larger action spaces strain prompting.",
+      "ReAct is a model-level action-selection loop. A production controlled-execution layer still has to decide whether an action is authorized, execute it safely, preserve evidence, recover and verify outcomes."
+    ],
+    "prerequisites": [
+      "Feedback-loop mental model: action changes or queries an environment, observation updates the next decision.",
+      "Distinguish a model reasoning trace from a durable execution/audit record.",
+      "Distinguish choosing a tool action from governing and reliably executing that action."
+    ],
+    "drop_notes": [
+      "Do not reproduce the long prompt appendices or benchmark trajectories; retain only locators and the mechanism they demonstrate.",
+      "Do not treat the 2022-era model scores as evidence that ReAct is the best current agent architecture.",
+      "Fine-tuning details are secondary to the source-to-understanding goal and can remain a deeper-study branch."
+    ],
+    "connections": [
+      "ReAct reasoning/action loop is adjacent to controlled execution but operates one layer earlier: it selects/proposes actions rather than governing their real execution.",
+      "A ReAct reasoning trace can help diagnose why the model proposed an action, but it is not equivalent to an execution history containing authority, versions, external effects and verification.",
+      "The paper's own safety discussion reinforces the need for restricted action spaces and an external control boundary around consequential tools."
+    ]
+  },
+  "verification_candidates": [
+    {
+      "question": "Are the quoted benchmark numbers being presented in their exact task/baseline context rather than as general current-agent performance?",
+      "reason": "The paper is older and the numbers are easy to overgeneralize beyond PaLM-540B, few-shot prompting and the specific benchmark comparisons.",
+      "priority": "high"
+    },
+    {
+      "question": "Does the explainer clearly separate visible reasoning traces from durable production execution evidence?",
+      "reason": "Without this distinction the paper could accidentally weaken the existing controlled-execution model.",
+      "priority": "high"
+    },
+    {
+      "question": "Should a modern follow-up source be added later for native tool-calling / hidden-reasoning agents?",
+      "reason": "The ReAct mechanism remains conceptually useful, but modern model interfaces have changed significantly since the paper's experiments.",
+      "priority": "medium"
+    }
+  ],
+  "source_locators": [
+    {
+      "label": "arXiv metadata and version history",
+      "locator": "https://arxiv.org/abs/2210.03629"
+    },
+    {
+      "label": "Method formalization",
+      "locator": "PDF section 2, pp. 3-4: language thoughts augment the action space and update trajectory context"
+    },
+    {
+      "label": "Qualitative mental model",
+      "locator": "PDF Figure 1, p. 2: Standard vs CoT vs Act-only vs ReAct; ALFWorld Act-only vs ReAct"
+    },
+    {
+      "label": "Prompting results",
+      "locator": "PDF Table 1, p. 5"
+    },
+    {
+      "label": "Failure modes",
+      "locator": "PDF Table 2 and discussion, p. 6"
+    },
+    {
+      "label": "Scaling and safety limitations",
+      "locator": "PDF conclusion, reproducibility and ethics statements, pp. 9-10"
+    }
+  ],
+  "created_at": "2026-08-26"
+}
