@@ -1,0 +1,31 @@
+{
+  "sources": [
+    {
+      "id": "src-ai-engineer-enterprise-stack-agents-2026",
+      "type": "video",
+      "title": "Why Your Enterprise Tech Stack Isn't Ready for AI Agents - And What to Build Instead",
+      "canonical_url": "https://www.youtube.com/watch?v=mav15aW9lLM",
+      "creators": [
+        "Christopher Lovejoy",
+        "Saul Howard"
+      ],
+      "publisher": "AI Engineer",
+      "event": "AI Engineer World's Fair 2026",
+      "published_at": null,
+      "event_date": "2026-07-02",
+      "captured_at": "2026-08-26",
+      "analyzed_at": "2026-08-26",
+      "date_note": "Official event schedule verifies the session on 2026-07-02. YouTube upload date not independently verified.",
+      "verification": [
+        {
+          "title": "AI Engineer World's Fair 2026 Schedule",
+          "url": "https://ai.engineer/worldsfair/schedule",
+          "accessed_at": "2026-08-26"
+        }
+      ],
+      "derived_records": [
+        "enterprise-agents-production-substrate"
+      ]
+    }
+  ]
+}
