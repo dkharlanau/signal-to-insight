@@ -24,6 +24,8 @@ ACTION_LABELS = {
     "ignore_for_now": "Ignore for now",
 }
 
+LIVING_SOURCE_TYPES = {"documentation", "repository", "tool", "product", "system"}
+
 
 def e(value: object) -> str:
     return html.escape("" if value is None else str(value), quote=True)
@@ -44,6 +46,10 @@ def source_date(source: dict) -> tuple[str, str]:
         return "Published", source["published_at"]
     if source.get("event_date"):
         return "Event date", source["event_date"]
+    if source.get("type") in LIVING_SOURCE_TYPES:
+        accessed = source.get("analyzed_at") or source.get("captured_at")
+        if accessed:
+            return "Source status", f"living source · accessed {accessed}"
     return "Source date", "not independently verified"
 
 
