@@ -1,0 +1,118 @@
+{
+  "bundle_version": "1.0.0",
+  "intake_id": "intake-2026-08-26-ai-engineer-enterprise-stack-agents",
+  "source_id": "src-ai-engineer-enterprise-stack-agents-2026",
+  "source": {
+    "type": "video",
+    "canonical_url": "https://www.youtube.com/watch?v=mav15aW9lLM",
+    "title": "Why Your Enterprise Tech Stack Isn't Ready for AI Agents - And What to Build Instead",
+    "creators": ["Christopher Lovejoy", "Saul Howard"],
+    "publisher": "AI Engineer",
+    "published_at": null,
+    "event_date": "2026-07-02",
+    "version": null,
+    "language": "en",
+    "duration": "19:15",
+    "date_note": "Conference session date verified from the official event schedule; YouTube upload date not independently verified."
+  },
+  "inspection": {
+    "method": "Source analysis used transcript-derived material for the talk, official conference metadata for date verification, and official documentation for adjacent-tool enrichment.",
+    "full_content_used_ephemerally": true,
+    "full_content_committed": false,
+    "confidence": "mixed",
+    "gaps": ["YouTube upload date was not independently verified."]
+  },
+  "content_map": {
+    "problem": "Agent proofs of concept can demonstrate task capability while omitting the control, state and governance properties required for production work.",
+    "thesis": "Production agent systems need an execution substrate around the model so work can be authorized, observed, handed to humans, reconstructed and replayed.",
+    "sections": [
+      "POC success versus production readiness",
+      "append-only execution history",
+      "separation of execution and protected data",
+      "human and agent executors of the same task",
+      "replay as a production evaluation primitive"
+    ],
+    "concepts": [
+      "execution history",
+      "data/execution plane separation",
+      "human-agent task equivalence",
+      "replayable evaluation"
+    ],
+    "mechanisms": [
+      "record execution as reconstructable events rather than relying only on developer logs",
+      "keep orchestration references separate from protected data objects",
+      "model tasks independently from whether the executor is AI or human",
+      "replay reconstructable historical cases against changed models, prompts, policies or tools"
+    ],
+    "tools": [],
+    "examples": [
+      "regulated healthcare workflows",
+      "consequential business actions that require approval and later auditability"
+    ],
+    "claims": [
+      "A working agent POC does not establish production readiness.",
+      "Reconstructable execution state enables stronger audit and evaluation patterns.",
+      "Human escalation is cleaner when task contracts are independent from executor type."
+    ],
+    "evidence": [
+      "Architecture patterns are presented from the speakers' experience deploying agents in a regulated environment."
+    ],
+    "assumptions": [
+      "The workflow performs consequential actions rather than only generating advisory text.",
+      "The organization requires authorization, governance or post-hoc explanation."
+    ],
+    "limitations": [
+      "An immutable history alone does not supply identity evidence, retention, tamper protection or event semantics.",
+      "Data-plane separation reduces exposure but does not eliminate injection or exfiltration risks.",
+      "Human handoff still requires ownership, locking, idempotency, timeout and recovery semantics.",
+      "Replay is only trustworthy when the reconstructed state and evaluation criteria are trustworthy."
+    ],
+    "open_questions": [
+      "Which production-agent platforms will standardize identity, policy, human handoff and replay as common primitives?",
+      "What is the smallest useful implementation of this execution substrate for a custom agent workflow?"
+    ]
+  },
+  "selection": {
+    "requested_focus": "Understand the concepts, architecture patterns, useful tools and practical implications. Preserve the whole mental model rather than isolated highlights.",
+    "coherent_core": [
+      "The model is only one executor inside a larger controlled execution system.",
+      "Execution history, protected-data access, executor-independent tasks and replay reinforce each other and should be understood as one architecture model.",
+      "Production readiness is better tested by whether consequential work can later be explained and reconstructed than by whether a demo returns the right output."
+    ],
+    "prerequisites": [
+      "basic understanding of agent tool calls",
+      "difference between application logs and reconstructable execution state",
+      "basic idea of authorization and human approval"
+    ],
+    "drop_notes": [
+      "Presentation framing and repeated POC-versus-production rhetoric are compressed after the distinction is established.",
+      "SAP is retained only as one optional application example, not as the primary frame."
+    ],
+    "connections": [
+      "event sourcing",
+      "durable workflow execution",
+      "observability",
+      "policy-as-code",
+      "human-in-the-loop systems"
+    ]
+  },
+  "verification_candidates": [
+    {
+      "question": "What workflow system is useful for learning durable execution semantics?",
+      "reason": "The talk motivates durable/reconstructable execution but does not need to prescribe one implementation.",
+      "priority": "medium"
+    },
+    {
+      "question": "Which standard is useful for learning distributed observability concepts?",
+      "reason": "Observability is adjacent to execution reconstruction and should be distinguished from it.",
+      "priority": "medium"
+    },
+    {
+      "question": "What concrete system demonstrates policy-as-code outside application logic?",
+      "reason": "Authorization/policy is central to controlled execution and benefits from a practical learning tool.",
+      "priority": "medium"
+    }
+  ],
+  "source_locators": [],
+  "created_at": "2026-08-26"
+}
