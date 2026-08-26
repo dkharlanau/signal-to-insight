@@ -6,6 +6,8 @@ Give the agent a useful source — video, article, paper, podcast, documentation
 
 This is **not a summarizer** and it is **not domain-locked**. The system preserves the minimum complete mental model behind a source rather than extracting disconnected highlights. New sources are also compared with prior knowledge so repeated ideas reinforce or refine the existing model instead of becoming isolated pages.
 
+The product now treats that comparison as a first-class artifact: every review-ready insight has a curated **Knowledge Delta** explaining what is genuinely new, what reinforces or refines earlier knowledge, and which retrieved connections were rejected as noise.
+
 ## Product loop
 
 ```text
@@ -27,6 +29,8 @@ verification + enrichment
   ↓
 mental model
   ↓
+curated Knowledge Delta
+  ↓
 merge concepts + relations into knowledge graph
   ↓
 structured insight
@@ -43,6 +47,8 @@ The strongest rules in the project are:
 > **Map the whole source first. Then compress it without breaking the model.**
 >
 > **Check what is already known before creating something new.**
+>
+> **Show what the new source actually changes — and reject attractive false connections.**
 
 ## What is implemented
 
@@ -58,16 +64,20 @@ The repository now has a working deterministic foundation for the complete sourc
 - automatic prior-knowledge snapshot in newly scaffolded bundles;
 - cumulative concept graph with stable concept IDs and typed evidence-backed relations;
 - prior-knowledge retrieval with neighboring concepts and supporting insights;
+- curated Knowledge Delta records with source/prior/interpretation separation and explicit noise suppression;
 - machine-readable insight records;
 - schema/semantic validation and cross-reference checks;
-- generated visual explainer pages;
+- generated visual explainer pages with Knowledge Delta sections;
 - `review` previews with `noindex,nofollow` and no public canonical/JSON-LD;
 - reusable explainer visual grammar;
 - generated searchable library with tag filters;
 - generated public knowledge graph and relation-derived learning path;
+- explicit owner-confirmed `review → published` transition;
+- explicit owner-confirmed `published → review/archived` retraction with provenance history;
+- stale public explainer removal when publication is retracted;
 - end-to-end fixture-driven acceptance tests;
 - GitHub Actions checks for structured data and generated-output drift;
-- auto-sync workflows for review previews, the public knowledge graph and the generated library.
+- auto-sync workflows for review previews, published explainers, the public knowledge graph and the generated library.
 
 ## Cumulative knowledge model
 
@@ -100,6 +110,8 @@ contradiction
 new knowledge
 not relevant
 ```
+
+The research-bundle classification is only the input to the public-facing comparison. `data/knowledge-deltas.json` is the curated layer that explains meaningful changes using three separate statements: what the current source establishes, what prior project evidence said, and how the project interprets the difference. `not_relevant` matches remain suppressed rather than becoming decorative graph edges.
 
 Review-only concepts may exist in machine-readable memory so later research can use them. The public `/knowledge/` page exposes only concepts backed by at least one published insight, so cumulative memory cannot bypass human publication review.
 
@@ -149,6 +161,8 @@ Then `config/research-profile.json` determines what deserves attention. Topic ma
 
 After the coherent model exists, reusable concepts and relations are merged into `data/knowledge-graph.json`. Different wording is not enough to create a new concept; prefer a stable concept ID plus aliases when the meaning is already represented.
 
+Before the insight reaches review, curate its Knowledge Delta. Only meaningful `new / reinforces / refines / contradicts` changes should appear. Keep source evidence, prior evidence and project interpretation visibly separate.
+
 The final action vocabulary is deliberately small:
 
 `use now / try / learn / build / watch / ignore for now`
@@ -186,6 +200,33 @@ See [`docs/VISUAL_GRAMMAR.md`](docs/VISUAL_GRAMMAR.md). Images are optional and 
 
 The knowledge graph is a different visualization: its layout is generated from reusable concepts and typed relations, while its learning path is derived from relation semantics rather than manually curated ordering.
 
+## Publication lifecycle
+
+Publication remains deliberately human-controlled.
+
+To publish an existing review insight, use the owner workflow or:
+
+```bash
+python scripts/publish_reviewed.py \
+  --insight <insight-id> \
+  --confirm PUBLISH:<insight-id> \
+  --reviewed-by <reviewer> \
+  --review-note "What was checked"
+```
+
+A published insight can be returned to review or archived without losing provenance:
+
+```bash
+python scripts/retract_published.py \
+  --insight <insight-id> \
+  --target review \
+  --confirm REVIEW:<insight-id> \
+  --changed-by <reviewer> \
+  --note "Why public state changed"
+```
+
+The equivalent archive confirmation is `ARCHIVE:<insight-id>`. Public surfaces are regenerated in the same workflow so a retracted item cannot remain discoverable merely because an old generated file survived.
+
 ## Repository structure
 
 ```text
@@ -197,24 +238,23 @@ data/
   sources.json                    canonical source registry
   research-bundles/               normalized source maps + prior-knowledge snapshots
   insights.json                   publishable knowledge model
+  knowledge-deltas.json           curated source-vs-prior changes
   knowledge-graph.json            cumulative concepts + typed relations
 schemas/                          machine-readable contracts
-docs/
-  PIPELINE.md                     graph-aware source-to-understanding workflow
-  INTAKE.md                       lifecycle and IDs
-  SOURCE_ADAPTERS.md              source-specific capture rules
-  VISUAL_GRAMMAR.md               explanatory visual system
 scripts/
   new_source.py                   queue a URL
   scaffold_bundle.py              create graph-aware research bundle
   graph_context.py                retrieve relevant prior concepts
   validate.py                     knowledge validation
+  validate_knowledge_deltas.py    curated-delta consistency checks
   validate_bundles.py             research-bundle safety + prior-knowledge checks
   validate_graph.py               concept/relation/evidence validation
   build.py                        public explainer generator
   build_previews.py               review-preview generator
   build_library.py                library generator
   build_graph.py                  public graph + learning-path generator
+  publish_reviewed.py             explicit review → published transition
+  retract_published.py            explicit published → review/archived transition
 explainers/                       generated published pages
 previews/                         generated review pages
 library/                          generated browsable collection
@@ -226,10 +266,13 @@ tests/                            end-to-end acceptance fixtures
 
 ```bash
 python scripts/validate.py
+python scripts/validate_knowledge_deltas.py
 python scripts/validate_graph.py
 python scripts/validate_bundles.py
 python scripts/graph_context.py --self-test
 python scripts/scaffold_bundle.py --self-test
+python scripts/publish_reviewed.py --self-test
+python scripts/retract_published.py --self-test
 python -m unittest discover -s tests -p "test_*.py" -v
 python scripts/build.py
 python scripts/build_previews.py
@@ -237,13 +280,13 @@ python scripts/build_library.py
 python scripts/build_graph.py
 ```
 
-Core CI runs graph validation and prior-knowledge self-tests. Generated pages are also checked or synchronized by dedicated workflows so adding a new generated file cannot silently pass because it is untracked.
+Core CI runs graph validation, Knowledge Delta validation, publication-lifecycle tests and prior-knowledge self-tests. Generated pages are also checked or synchronized by dedicated workflows so adding or retracting content cannot silently leave stale public output.
 
 ## Reference cases
 
 The first published case uses the AI Engineer World's Fair 2026 talk **“Why Your Enterprise Tech Stack Isn't Ready for AI Agents — And What to Build Instead”** by Christopher Lovejoy and Saul Howard.
 
-A second real source — Temporal documentation — is held in `review` and exercises a different source adapter and visual structure. Its concepts already participate in machine-readable cumulative memory but remain withheld from the public graph until publication.
+Four additional real sources — Temporal documentation, Open Policy Agent, the ReAct paper and retrieval-practice research — are held in `review` and exercise different source adapters and visual structures. Their concepts may participate in machine-readable cumulative memory but remain withheld from the public graph until publication.
 
 These are reference cases only. The same contracts are designed for new tools, repositories, papers, custom architectures, productivity systems and other high-value sources.
 
