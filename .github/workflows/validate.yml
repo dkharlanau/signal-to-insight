@@ -24,5 +24,8 @@ jobs:
       - name: Validate structured knowledge
         run: python scripts/validate.py
 
+      - name: Validate research bundles
+        run: python scripts/validate_bundles.py
+
       - name: Compile Python utilities
         run: python -m compileall -q scripts
