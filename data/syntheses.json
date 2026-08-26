@@ -1,0 +1,135 @@
+{
+  "version": "1.0.0",
+  "records": [
+    {
+      "id": "production-agent-stack-beyond-model",
+      "slug": "production-agent-stack-beyond-the-model-loop",
+      "status": "review",
+      "evidence_mode": "review_allowed",
+      "question": "What does a production AI agent stack need beyond the model's own reasoning and tool-use loop?",
+      "title": "Beyond the model loop: four responsibilities a production agent stack must separate",
+      "one_liner": "ReAct, OPA, Temporal and the enterprise-agent production model describe different responsibilities; together they form a useful layered mental model, but none of the sources claims this exact combined stack.",
+      "thesis": "A model can reason and select actions without supplying production authority, durable orchestration, reconstructable execution evidence or application-specific outcome verification. Treat those as separate responsibilities that may be composed, not as features of one universal agent framework.",
+      "source_insight_ids": [
+        "enterprise-agents-production-substrate",
+        "temporal-durable-execution-mental-model",
+        "open-policy-agent-decision-enforcement-model",
+        "react-reason-act-observe-loop"
+      ],
+      "consensus": [
+        {
+          "id": "synth-consensus-action-selection-not-control",
+          "statement": "Choosing an action is not the same responsibility as authorizing, safely executing and later verifying a consequential action.",
+          "claim_refs": [
+            "enterprise-controlled-substrate-interpretation",
+            "opa-control-primitive-not-executor",
+            "react-not-production-control-layer"
+          ]
+        },
+        {
+          "id": "synth-consensus-durable-evidence-separate",
+          "statement": "Durable, reconstructable execution state is a production concern separate from the transient process that happens to perform one step.",
+          "claim_refs": [
+            "enterprise-history-supports-reconstruction",
+            "temporal-history-persists-state"
+          ]
+        }
+      ],
+      "layers": [
+        {
+          "order": 1,
+          "name": "Reason / act / observe",
+          "role": "Model-level feedback loop",
+          "source_insight_id": "react-reason-act-observe-loop",
+          "does": "Interleave reasoning, environment actions and returned observations so new evidence can change the next decision.",
+          "does_not": "Provide production authorization, durable workflow state or guaranteed business-side-effect safety.",
+          "claim_refs": [
+            "react-interleaves-reason-action-observation",
+            "react-not-production-control-layer"
+          ]
+        },
+        {
+          "order": 2,
+          "name": "Policy decision",
+          "role": "Explicit authorization logic",
+          "source_insight_id": "open-policy-agent-decision-enforcement-model",
+          "does": "Compute a policy decision from explicit input, policy and data while keeping the protected application as the enforcement point.",
+          "does_not": "Perform, durably record or verify the protected business action itself.",
+          "claim_refs": [
+            "opa-decision-enforcement-separation",
+            "opa-control-primitive-not-executor"
+          ]
+        },
+        {
+          "order": 3,
+          "name": "Durable orchestration",
+          "role": "Long-running workflow continuity",
+          "source_insight_id": "temporal-durable-execution-mental-model",
+          "does": "Persist workflow progress outside any one Worker and coordinate retryable work through durable execution history.",
+          "does_not": "Turn external side effects into exactly-once outcomes automatically.",
+          "claim_refs": [
+            "temporal-history-persists-state",
+            "temporal-worker-task-queue",
+            "temporal-retry-not-exactly-once"
+          ]
+        },
+        {
+          "order": 4,
+          "name": "Controlled execution substrate",
+          "role": "Cross-cutting production control and evidence",
+          "source_insight_id": "enterprise-agents-production-substrate",
+          "does": "Frame authority, protected-data boundaries, intervention and reconstructable execution evidence around consequential agent work.",
+          "does_not": "Specify one mandatory policy engine, workflow runtime or model reasoning method.",
+          "claim_refs": [
+            "enterprise-poc-not-production",
+            "enterprise-history-supports-reconstruction",
+            "enterprise-controlled-substrate-interpretation"
+          ]
+        }
+      ],
+      "reviewed_disagreements": [
+        {
+          "review_id": "review-react-controlled-execution-layer",
+          "why_it_matters": "ReAct and controlled execution discuss agent actions at different layers; treating them as competing architectures creates a false contradiction."
+        },
+        {
+          "review_id": "review-opa-controlled-execution-component",
+          "why_it_matters": "OPA narrows one control responsibility inside the broader production model; it does not replace the execution substrate."
+        }
+      ],
+      "unresolved_gaps": [
+        {
+          "id": "synth-gap-no-canonical-four-tool-stack",
+          "statement": "None of the sources establishes that ReAct + OPA + Temporal + one controlled-execution layer is a canonical or universally appropriate implementation stack.",
+          "claim_refs": [
+            "react-benchmark-context",
+            "opa-control-primitive-not-executor",
+            "enterprise-controlled-substrate-interpretation"
+          ]
+        },
+        {
+          "id": "synth-gap-outcome-verification",
+          "statement": "Application-specific outcome verification remains a separate design problem: permission, orchestration and execution history do not by themselves prove that the intended business result is correct.",
+          "claim_refs": [
+            "opa-control-primitive-not-executor",
+            "temporal-retry-not-exactly-once",
+            "enterprise-history-supports-reconstruction"
+          ]
+        }
+      ],
+      "visual_plan": {
+        "type": "layers",
+        "title": "Separate responsibilities before choosing tools",
+        "caption": "The four layers are a project synthesis across sources. They are not a source-authored reference architecture."
+      },
+      "provenance": {
+        "created_at": "2026-08-26",
+        "reviewed_at": null,
+        "reviewed_by": null,
+        "review_note": null,
+        "source_claims_preserved": true,
+        "project_synthesis_explicit": true
+      }
+    }
+  ]
+}
