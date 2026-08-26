@@ -1,0 +1,65 @@
+{
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "durable-workflow-retry",
+      "query": "durable workflow retry activity side effects idempotency event history",
+      "limit": 5,
+      "required": ["durable-execution", "idempotency-under-retry"],
+      "acceptable": ["execution-history", "event-history", "activity-execution", "workflow-execution", "worker-process"],
+      "forbidden": ["open-policy-agent", "retrieval-practice", "react-loop"],
+      "min_precision": 0.6,
+      "classification_probe": "refinement"
+    },
+    {
+      "id": "opa-decision-enforcement",
+      "query": "OPA policy decision enforcement Rego authorization policy engine",
+      "limit": 5,
+      "required": ["open-policy-agent", "policy-decision-enforcement-separation"],
+      "acceptable": ["policy-as-code", "policy-distribution", "controlled-execution"],
+      "forbidden": ["activity-execution", "retrieval-practice", "event-history"],
+      "min_precision": 0.8,
+      "classification_probe": "refinement"
+    },
+    {
+      "id": "react-feedback-loop",
+      "query": "ReAct reason action observation reasoning trace external feedback grounding agent trajectory",
+      "limit": 5,
+      "required": ["react-loop", "observation-grounding", "reasoning-trace"],
+      "acceptable": ["controlled-execution"],
+      "forbidden": ["open-policy-agent", "retrieval-practice", "policy-distribution"],
+      "min_precision": 0.75,
+      "classification_probe": "refinement"
+    },
+    {
+      "id": "retrieval-practice-retention",
+      "query": "retrieval practice testing effect immediate performance delayed retention repeated study confidence memory",
+      "limit": 5,
+      "required": ["retrieval-practice", "performance-retention-gap", "metacognitive-confidence-gap"],
+      "acceptable": [],
+      "forbidden": ["open-policy-agent", "controlled-execution", "policy-as-code", "observation-grounding"],
+      "min_precision": 0.6,
+      "classification_probe": "new-domain"
+    },
+    {
+      "id": "production-policy-boundary",
+      "query": "controlled execution policy as code authorization permission enforcement protected action",
+      "limit": 5,
+      "required": ["controlled-execution", "policy-as-code", "policy-decision-enforcement-separation"],
+      "acceptable": ["open-policy-agent", "protected-data-separation", "policy-distribution"],
+      "forbidden": ["retrieval-practice", "react-loop", "event-history"],
+      "min_precision": 0.6,
+      "classification_probe": "refinement"
+    },
+    {
+      "id": "retry-does-not-mean-exactly-once",
+      "query": "durable execution retry external side effects duplicate outcomes idempotency exactly once boundary",
+      "limit": 5,
+      "required": ["durable-execution", "idempotency-under-retry"],
+      "acceptable": ["activity-execution", "execution-history", "event-history", "workflow-execution"],
+      "forbidden": ["open-policy-agent", "retrieval-practice", "react-loop"],
+      "min_precision": 0.6,
+      "classification_probe": "contradiction-review"
+    }
+  ]
+}
