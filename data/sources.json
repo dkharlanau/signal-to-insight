@@ -153,6 +153,43 @@
       "derived_records": [
         "react-reason-act-observe-loop"
       ]
+    },
+    {
+      "id": "src-test-enhanced-learning-2006",
+      "type": "article",
+      "title": "Test-Enhanced Learning: Taking Memory Tests Improves Long-Term Retention",
+      "canonical_url": "https://www.psychologicalscience.org/journals/psychological-science/j.1467-9280.2006.01693.x",
+      "creators": [
+        "Henry L. Roediger III",
+        "Jeffrey D. Karpicke"
+      ],
+      "publisher": "Psychological Science / Association for Psychological Science",
+      "event": null,
+      "published_at": "2006-03-01",
+      "event_date": null,
+      "captured_at": "2026-08-26",
+      "analyzed_at": "2026-08-26",
+      "date_note": "The Psychological Science Volume 17 Issue 3 index identifies the article as first published March 1, 2006.",
+      "verification": [
+        {
+          "title": "Psychological Science Volume 17 Issue 3",
+          "url": "https://journals.sagepub.com/toc/pssa/17/3",
+          "accessed_at": "2026-08-26"
+        },
+        {
+          "title": "PubMed record PMID 16507066",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/16507066/",
+          "accessed_at": "2026-08-26"
+        },
+        {
+          "title": "Original article PDF hosted by Purdue Learning Lab",
+          "url": "https://learninglab.psych.purdue.edu/downloads/2006/2006_Roediger_Karpicke_PsychSci.pdf",
+          "accessed_at": "2026-08-26"
+        }
+      ],
+      "derived_records": [
+        "retrieval-practice-delayed-retention"
+      ]
     }
   ]
 }

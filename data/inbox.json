@@ -51,9 +51,9 @@
       "source_type": "article",
       "submitted_at": "2026-08-26",
       "requested_focus": "Understand the testing/retrieval-practice effect, especially the difference between immediate performance and delayed retention, why repeated study can create misleading confidence, what the experiment does and does not establish, and how this should change Signal to Insight from a source-understanding engine into a system that also helps retain the mental model.",
-      "status": "queued",
-      "source_id": null,
-      "insight_id": null,
+      "status": "review",
+      "source_id": "src-test-enhanced-learning-2006",
+      "insight_id": "retrieval-practice-delayed-retention",
       "notes": "GitHub source intake issue #14. Fifth real acceptance case and deliberately outside AI/enterprise. Use the original 2006 Roediger & Karpicke research article as the primary source, with PubMed and the authors' Memory Lab as verification/enrichment. Do not turn the product into a quiz app; derive the minimum useful retention loop."
     }
   ]

@@ -1,5 +1,5 @@
 {
-  "graph_version": "0.3.0",
+  "graph_version": "0.4.0",
   "updated_at": "2026-08-26",
   "concepts": [
     {
@@ -394,6 +394,64 @@
         "retrieval",
         "agents"
       ]
+    },
+    {
+      "id": "retrieval-practice",
+      "label": "Retrieval practice",
+      "summary": "Attempting to produce learned material from memory so retrieval itself becomes part of learning rather than only a later assessment event.",
+      "domain": "learning science",
+      "coverage": "explained",
+      "insight_ids": [
+        "retrieval-practice-delayed-retention"
+      ],
+      "aliases": [
+        "testing effect",
+        "test-enhanced learning"
+      ],
+      "tags": [
+        "learning",
+        "retrieval",
+        "memory",
+        "testing-effect"
+      ]
+    },
+    {
+      "id": "performance-retention-gap",
+      "label": "Immediate performance / delayed retention gap",
+      "summary": "The same learning method can improve performance shortly after study yet rank differently when memory is tested after a meaningful delay.",
+      "domain": "learning science",
+      "coverage": "explained",
+      "insight_ids": [
+        "retrieval-practice-delayed-retention"
+      ],
+      "aliases": [
+        "performance retention distinction"
+      ],
+      "tags": [
+        "learning",
+        "retention",
+        "delay",
+        "performance"
+      ]
+    },
+    {
+      "id": "metacognitive-confidence-gap",
+      "label": "Metacognitive confidence gap",
+      "summary": "A mismatch between how well a learner predicts future remembering and how much material is actually retrievable after a delay.",
+      "domain": "learning science",
+      "coverage": "explained",
+      "insight_ids": [
+        "retrieval-practice-delayed-retention"
+      ],
+      "aliases": [
+        "confidence retention gap"
+      ],
+      "tags": [
+        "metacognition",
+        "confidence",
+        "memory",
+        "calibration"
+      ]
     }
   ],
   "relations": [
@@ -623,6 +681,26 @@
       "rationale": "ReAct explains how a model selects and updates actions, while controlled execution governs whether consequential actions are authorized, safely executed, reconstructed and verified.",
       "evidence_insights": [
         "react-reason-act-observe-loop"
+      ]
+    },
+    {
+      "id": "rel-retrieval-practice-related-to-performance-retention-gap",
+      "from": "retrieval-practice",
+      "to": "performance-retention-gap",
+      "type": "related_to",
+      "rationale": "The study's central retrieval-practice result is a crossover in which extra study helps immediate performance while prior retrieval helps delayed retention.",
+      "evidence_insights": [
+        "retrieval-practice-delayed-retention"
+      ]
+    },
+    {
+      "id": "rel-metacognitive-confidence-gap-related-to-performance-retention-gap",
+      "from": "metacognitive-confidence-gap",
+      "to": "performance-retention-gap",
+      "type": "related_to",
+      "rationale": "Repeated-study participants predicted stronger one-week memory despite later recalling less, showing that immediate fluency/confidence can misrepresent delayed retention.",
+      "evidence_insights": [
+        "retrieval-practice-delayed-retention"
       ]
     }
   ]
