@@ -26,6 +26,45 @@
       "derived_records": [
         "enterprise-agents-production-substrate"
       ]
+    },
+    {
+      "id": "src-temporal-docs-2026",
+      "type": "documentation",
+      "title": "Temporal Platform Documentation",
+      "canonical_url": "https://docs.temporal.io/",
+      "creators": [],
+      "publisher": "Temporal Technologies Inc.",
+      "event": null,
+      "published_at": null,
+      "event_date": null,
+      "captured_at": "2026-08-26",
+      "analyzed_at": "2026-08-26",
+      "date_note": "Living documentation with no single publication date. The inspected official documentation pages were accessed on 2026-08-26.",
+      "verification": [
+        {
+          "title": "Temporal Docs",
+          "url": "https://docs.temporal.io/",
+          "accessed_at": "2026-08-26"
+        },
+        {
+          "title": "Temporal Glossary",
+          "url": "https://docs.temporal.io/glossary",
+          "accessed_at": "2026-08-26"
+        },
+        {
+          "title": "Temporal CLI",
+          "url": "https://docs.temporal.io/cli",
+          "accessed_at": "2026-08-26"
+        },
+        {
+          "title": "Temporal Quickstarts",
+          "url": "https://docs.temporal.io/quickstarts",
+          "accessed_at": "2026-08-26"
+        }
+      ],
+      "derived_records": [
+        "temporal-durable-execution-mental-model"
+      ]
     }
   ]
 }
