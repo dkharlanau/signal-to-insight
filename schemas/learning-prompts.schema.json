@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dkharlanau.github.io/signal-to-insight/schemas/learning-prompts.schema.json",
+  "title": "Signal to Insight authored reconstruction and transfer prompts",
+  "type": "object",
+  "required": ["version", "records"],
+  "properties": {
+    "version": {"type": "string"},
+    "records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["insight_id", "retention_prompt", "answer_key", "transfer_prompt"],
+        "properties": {
+          "insight_id": {"type": "string", "minLength": 1},
+          "retention_prompt": {"type": "string", "minLength": 1},
+          "answer_key": {
+            "type": "object",
+            "required": ["problem_from", "mechanism_from", "anchor_concept_ids", "boundary_limitation_index"],
+            "properties": {
+              "problem_from": {"const": "whole_source_map.problem"},
+              "mechanism_from": {"const": "whole_source_map.thesis"},
+              "anchor_concept_ids": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+              "boundary_limitation_index": {"type": "integer", "minimum": 0}
+            },
+            "additionalProperties": false
+          },
+          "transfer_prompt": {
+            "anyOf": [
+              {"type": "null"},
+              {
+                "type": "object",
+                "required": ["prompt", "expected_concept_ids"],
+                "properties": {
+                  "prompt": {"type": "string", "minLength": 1},
+                  "expected_concept_ids": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+                },
+                "additionalProperties": false
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
