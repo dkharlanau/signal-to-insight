@@ -1,0 +1,78 @@
+name: Publish reviewed synthesis
+
+on:
+  workflow_dispatch:
+    inputs:
+      synthesis_id:
+        description: "Existing synthesis ID currently in review"
+        required: true
+        type: string
+      confirmation:
+        description: "Type PUBLISH_SYNTHESIS:<synthesis-id> exactly"
+        required: true
+        type: string
+      review_note:
+        description: "Human review note explaining what was checked"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    if: github.actor == github.repository_owner
+    runs-on: ubuntu-latest
+    concurrency:
+      group: publish-synthesis
+      cancel-in-progress: false
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Publish synthesis data transition
+        env:
+          SYNTHESIS_ID: ${{ inputs.synthesis_id }}
+          CONFIRMATION: ${{ inputs.confirmation }}
+          REVIEW_NOTE: ${{ inputs.review_note }}
+          REVIEWED_BY: ${{ github.actor }}
+        run: |
+          python scripts/publish_synthesis.py \
+            --synthesis "$SYNTHESIS_ID" \
+            --confirm "$CONFIRMATION" \
+            --reviewed-by "$REVIEWED_BY" \
+            --review-note "$REVIEW_NOTE"
+
+      - name: Validate published synthesis boundary
+        run: |
+          python scripts/validate_syntheses.py
+          python scripts/validate_claim_evidence.py
+          python scripts/validate_knowledge_reviews.py
+
+      - name: Rebuild synthesis surfaces
+        run: python scripts/build_syntheses.py
+
+      - name: Verify generated synthesis state
+        run: python scripts/build_syntheses.py --check
+
+      - name: Commit publication atomically
+        env:
+          SYNTHESIS_ID: ${{ inputs.synthesis_id }}
+        run: |
+          if [ -z "$(git status --porcelain -- data/syntheses.json synthesis-previews syntheses)" ]; then
+            echo "No synthesis publication changes found."
+            exit 1
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/syntheses.json synthesis-previews syntheses
+          git commit -m "publish synthesis: ${SYNTHESIS_ID}"
+          git push origin HEAD:main
