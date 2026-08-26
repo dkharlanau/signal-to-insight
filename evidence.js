@@ -75,6 +75,65 @@
     return li;
   }
 
+  function appendKnowledgeReviews(section, reviewData, id) {
+    const reviews = (reviewData.reviews || []).filter(
+      (item) => item.trigger_insight_id === id && item.status === 'resolved',
+    );
+    if (!reviews.length) return;
+
+    const intro = document.createElement('div');
+    intro.className = 'evidence-review-intro';
+    intro.innerHTML = '<p class="kicker">INTERPRETATION REVIEW</p><h2>Was this really a contradiction?</h2>';
+    const note = document.createElement('p');
+    note.textContent = 'Cross-source disagreements are resolved only after comparing subject, architectural layer and conditions. Different scope is not contradictory evidence.';
+    intro.appendChild(note);
+    section.appendChild(intro);
+
+    const grid = document.createElement('div');
+    grid.className = 'evidence-grid evidence-review-grid';
+    reviews.forEach((review) => {
+      const card = document.createElement('article');
+      card.className = 'evidence-card';
+
+      const meta = document.createElement('div');
+      meta.className = 'evidence-meta';
+      const candidate = document.createElement('span');
+      candidate.className = 'evidence-badge';
+      candidate.textContent = `${review.candidate_type} candidate`;
+      const resolution = document.createElement('span');
+      resolution.className = 'evidence-badge is-status';
+      resolution.textContent = `resolved: ${review.resolution}`;
+      meta.append(candidate, resolution);
+
+      const title = document.createElement('h3');
+      title.textContent = review.rationale;
+
+      const list = document.createElement('ul');
+      list.className = 'evidence-list';
+      const scope = document.createElement('li');
+      const scopeLabel = document.createElement('span');
+      scopeLabel.textContent = `Scope assessment: ${review.scope_check.assessment.replaceAll('_', ' ')}`;
+      const scopeDetail = document.createElement('span');
+      scopeDetail.className = 'evidence-locator';
+      scopeDetail.textContent = review.scope_check.explanation;
+      scope.append(scopeLabel, scopeDetail);
+      list.appendChild(scope);
+
+      const change = document.createElement('li');
+      const changeLabel = document.createElement('span');
+      changeLabel.textContent = review.model_change.kind === 'none' ? 'Graph change: none required' : `Graph change: ${review.model_change.kind}`;
+      const changeDetail = document.createElement('span');
+      changeDetail.className = 'evidence-locator';
+      changeDetail.textContent = review.model_change.reason;
+      change.append(changeLabel, changeDetail);
+      list.appendChild(change);
+
+      card.append(meta, title, list);
+      grid.appendChild(card);
+    });
+    section.appendChild(grid);
+  }
+
   async function buildEvidenceTrace() {
     if (!document.body.classList.contains('generated-page')) return;
     if (document.getElementById('evidence')) return;
@@ -83,10 +142,11 @@
     if (!id || !sourcesSection) return;
 
     try {
-      const [claimsData, insightsData, sourcesData] = await Promise.all([
+      const [claimsData, insightsData, sourcesData, reviewData] = await Promise.all([
         fetchJson('data/claim-evidence.json'),
         fetchJson('data/insights.json'),
         fetchJson('data/sources.json'),
+        fetchJson('data/knowledge-reviews.json'),
       ]);
       const record = (claimsData.records || []).find((item) => item.insight_id === id);
       if (!record || !(record.claims || []).length) return;
@@ -140,10 +200,11 @@
         grid.appendChild(card);
       });
       section.appendChild(grid);
+      appendKnowledgeReviews(section, reviewData, id);
       sourcesSection.parentNode.insertBefore(section, sourcesSection);
       addNavLink();
     } catch (_) {
-      // Evidence trace is supplemental UI; validated structured data remains canonical.
+      // Evidence/review UI is supplemental; validated structured data remains canonical.
     }
   }
 
