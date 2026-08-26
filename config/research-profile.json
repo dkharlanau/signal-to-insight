@@ -1,0 +1,96 @@
+{
+  "profile_version": "0.2.0",
+  "purpose": "Turn any useful source into a coherent, personalized learning artifact that helps the reader understand important concepts, tools, systems and practical applications quickly.",
+  "scope": {
+    "domain_locked": false,
+    "priority_areas": [
+      "AI and AI agents",
+      "developer tools",
+      "software systems and architecture",
+      "automation and workflows",
+      "data and integration",
+      "enterprise technology",
+      "custom-built systems",
+      "product and engineering practices",
+      "new technical concepts with practical leverage"
+    ],
+    "allowed_source_types": [
+      "video",
+      "article",
+      "paper",
+      "podcast",
+      "documentation",
+      "repository",
+      "tool",
+      "product",
+      "course",
+      "presentation",
+      "notes"
+    ]
+  },
+  "goals": [
+    "Understand the whole idea rather than collect isolated facts.",
+    "Identify concepts and tools that are genuinely worth learning.",
+    "Connect new material to existing knowledge and practical work.",
+    "Find things that can be tried, adopted, built or monitored.",
+    "Know enough about important developments even when no immediate action is required.",
+    "Reduce time spent consuming long source material without losing the useful model behind it."
+  ],
+  "selection": {
+    "dimensions": [
+      "relevance",
+      "novelty",
+      "conceptual_leverage",
+      "practical_applicability",
+      "tool_or_system_value",
+      "evidence_strength",
+      "connection_to_existing_knowledge"
+    ],
+    "rules": [
+      "Keep all concepts required to preserve a coherent mental model, even if one prerequisite is not exciting by itself.",
+      "Drop repetition, anecdotes and promotional framing that do not change understanding.",
+      "Do not force a SAP or enterprise application when another domain is a better fit.",
+      "Add missing prerequisites when the source assumes knowledge the reader needs in order to understand the main idea.",
+      "Research outside the source when verification, context or comparison materially improves understanding."
+    ]
+  },
+  "explanation_preferences": {
+    "style": [
+      "compact but deep",
+      "mechanism-first",
+      "visual",
+      "practical",
+      "low-jargon",
+      "critical rather than promotional"
+    ],
+    "required_sections": [
+      "why_this_matters",
+      "mental_model",
+      "key_concepts",
+      "how_it_works",
+      "tools_or_systems",
+      "examples",
+      "limitations",
+      "what_the_source_misses",
+      "what_to_do_with_it",
+      "what_to_learn_next",
+      "sources_and_dates"
+    ],
+    "action_buckets": [
+      "use_now",
+      "try",
+      "learn",
+      "build",
+      "watch",
+      "ignore_for_now"
+    ],
+    "visual_rule": "Every image, diagram or visual block must explain a mechanism, comparison, relationship, sequence or concrete object. Decorative visuals are optional and secondary."
+  },
+  "publishing": {
+    "auto_publish": false,
+    "public_output": "reviewed explainer landing pages and machine-readable insight records",
+    "private_input_allowed": true,
+    "store_full_third_party_transcripts": false,
+    "require_source_and_date": true
+  }
+}
