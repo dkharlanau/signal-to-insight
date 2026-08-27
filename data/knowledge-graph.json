@@ -549,6 +549,63 @@
         "retry",
         "api"
       ]
+    },
+    {
+      "id": "write-ahead-log",
+      "label": "Write-ahead log",
+      "summary": "A commit mechanism where changed data is appended to a separate log before later consolidation into the primary data store.",
+      "domain": "database storage",
+      "coverage": "explained",
+      "insight_ids": [
+        "sqlite-write-ahead-log-checkpointing"
+      ],
+      "aliases": [
+        "WAL"
+      ],
+      "tags": [
+        "database",
+        "storage",
+        "commit",
+        "append"
+      ]
+    },
+    {
+      "id": "checkpointing",
+      "label": "Checkpointing",
+      "summary": "Moving committed changes from the write-ahead log back into the primary database while respecting active readers and durability constraints.",
+      "domain": "database storage",
+      "coverage": "explained",
+      "insight_ids": [
+        "sqlite-write-ahead-log-checkpointing"
+      ],
+      "aliases": [
+        "WAL checkpoint"
+      ],
+      "tags": [
+        "database",
+        "wal",
+        "maintenance",
+        "consolidation"
+      ]
+    },
+    {
+      "id": "wal-reader-snapshot",
+      "label": "WAL reader snapshot",
+      "summary": "A read transaction's stable end mark that limits which WAL commits it can observe for the duration of that transaction.",
+      "domain": "database concurrency",
+      "coverage": "explained",
+      "insight_ids": [
+        "sqlite-write-ahead-log-checkpointing"
+      ],
+      "aliases": [
+        "reader end mark"
+      ],
+      "tags": [
+        "sqlite",
+        "snapshot",
+        "reader",
+        "concurrency"
+      ]
     }
   ],
   "relations": [
@@ -838,6 +895,26 @@
       "rationale": "The receiver must distinguish a retry of the same intended operation from a genuinely new operation before it can suppress duplicate execution.",
       "evidence_insights": [
         "idempotent-receiver-retry-deduplication"
+      ]
+    },
+    {
+      "id": "rel-write-ahead-log-depends-on-checkpointing",
+      "from": "write-ahead-log",
+      "to": "checkpointing",
+      "type": "depends_on",
+      "rationale": "SQLite's WAL lifecycle requires committed pages to be transferred back into the database so the WAL can be bounded and reused over time.",
+      "evidence_insights": [
+        "sqlite-write-ahead-log-checkpointing"
+      ]
+    },
+    {
+      "id": "rel-write-ahead-log-enables-wal-reader-snapshot",
+      "from": "write-ahead-log",
+      "to": "wal-reader-snapshot",
+      "type": "enables",
+      "rationale": "Appending newer commits to WAL lets an existing reader keep its own end mark and stable snapshot without blocking the writer.",
+      "evidence_insights": [
+        "sqlite-write-ahead-log-checkpointing"
       ]
     }
   ]

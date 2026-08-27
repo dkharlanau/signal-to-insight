@@ -260,6 +260,45 @@
       "suppressed_prior_matches": [
         "activity-execution"
       ]
+    },
+    {
+      "insight_id": "sqlite-write-ahead-log-checkpointing",
+      "summary": "SQLite WAL opens a new database-storage branch: append-first commit, checkpointing and reader snapshot boundaries. All retrieved execution/audit-history matches are suppressed because shared log vocabulary does not imply the same mechanism or purpose.",
+      "items": [
+        {
+          "relationship": "new",
+          "concept_id": "write-ahead-log",
+          "label": "Write-ahead log",
+          "source_basis": "SQLite preserves the database file during commit and appends changed pages plus a commit record to a separate WAL.",
+          "prior_basis": "The project graph had execution and workflow histories but no transactional database write-ahead-log concept.",
+          "interpretation": "The log is a storage/commit mechanism that separates foreground append from later consolidation, not a business audit record.",
+          "evidence_insights": []
+        },
+        {
+          "relationship": "new",
+          "concept_id": "checkpointing",
+          "label": "Checkpointing",
+          "source_basis": "SQLite later transfers committed WAL content into the database through a distinct checkpoint operation that can pause behind active readers.",
+          "prior_basis": "No earlier concept represented WAL-to-database consolidation as a separate maintenance phase.",
+          "interpretation": "Checkpointing makes the cost shift explicit: fast append-oriented commits still require later consolidation and coordination with readers.",
+          "evidence_insights": []
+        },
+        {
+          "relationship": "new",
+          "concept_id": "wal-reader-snapshot",
+          "label": "WAL reader snapshot",
+          "source_basis": "Each read transaction fixes an end mark and ignores newer WAL commits for the duration of that transaction.",
+          "prior_basis": "Existing graph concepts did not model SQLite's point-in-time reader boundary over a concurrently growing WAL.",
+          "interpretation": "The end mark explains why a reader can stay stable while a writer continues to append new commits.",
+          "evidence_insights": []
+        }
+      ],
+      "suppressed_prior_matches": [
+        "execution-history",
+        "event-history",
+        "controlled-execution",
+        "replayable-evaluation"
+      ]
     }
   ]
 }

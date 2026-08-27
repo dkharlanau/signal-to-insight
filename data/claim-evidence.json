@@ -419,6 +419,85 @@
           "note": "The source supplies the receiver pattern, AWS supplies production implementation boundaries, and the refinement relationship to the existing Temporal-derived concept is project synthesis."
         }
       ]
+    },
+    {
+      "insight_id": "sqlite-write-ahead-log-checkpointing",
+      "claims": [
+        {
+          "id": "sqlite-wal-append-commit",
+          "text": "In SQLite WAL mode, changes are appended to a separate WAL and a transaction commits when a commit record is appended, without requiring the original database file to be updated at that moment.",
+          "impact": "high",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-sqlite-wal-docs-2026",
+              "url": "https://www.sqlite.org/wal.html",
+              "locator": "Write-Ahead Logging → How WAL Works"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "sqlite-wal-reader-concurrency",
+          "text": "A WAL reader keeps a fixed end mark for its transaction, allowing readers to coexist with an appending writer, while SQLite still permits only one writer at a time.",
+          "impact": "high",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-sqlite-wal-docs-2026",
+              "url": "https://www.sqlite.org/wal.html",
+              "locator": "Write-Ahead Logging → Concurrency"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "sqlite-wal-checkpoint-starvation",
+          "text": "Checkpointing copies committed WAL pages back into the database but can be prevented from completing by long-running or continuously overlapping readers, causing the WAL to keep growing.",
+          "impact": "high",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-sqlite-wal-docs-2026",
+              "url": "https://www.sqlite.org/wal.html",
+              "locator": "Write-Ahead Logging → Checkpointing; Avoiding Excessively Large WAL Files"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "sqlite-wal-not-execution-history",
+          "text": "SQLite WAL should not be treated as the same concept as an application execution history or Temporal Event History merely because all are log-like records; WAL is database commit and recovery machinery with different evidence semantics.",
+          "impact": "high",
+          "origin": "project_interpretation",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-sqlite-wal-docs-2026",
+              "url": "https://www.sqlite.org/wal.html",
+              "locator": "Write-Ahead Logging → How WAL Works and WAL File"
+            },
+            {
+              "kind": "prior_insight",
+              "insight_id": "enterprise-agents-production-substrate",
+              "locator": "Execution history as reconstructable evidence of consequential work"
+            },
+            {
+              "kind": "prior_insight",
+              "insight_id": "temporal-durable-execution-mental-model",
+              "locator": "Temporal Event History as persisted workflow execution progress"
+            }
+          ],
+          "note": "This is a project-level scope comparison used to reject lexical retrieval noise; the SQLite source itself does not discuss the project's execution-history concepts."
+        }
+      ]
     }
   ]
 }

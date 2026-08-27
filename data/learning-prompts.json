@@ -153,6 +153,28 @@
           "request-identity"
         ]
       }
+    },
+    {
+      "insight_id": "sqlite-write-ahead-log-checkpointing",
+      "retention_prompt": "Without looking back, reconstruct SQLite WAL as a three-part model: explain where a write commits before the database file is updated, how a reader's end mark gives it a stable view, what checkpointing does later, and one way active readers can turn that separation into an operational problem.",
+      "answer_key": {
+        "problem_from": "whole_source_map.problem",
+        "mechanism_from": "whole_source_map.thesis",
+        "anchor_concept_ids": [
+          "write-ahead-log",
+          "checkpointing",
+          "wal-reader-snapshot"
+        ],
+        "boundary_limitation_index": 2
+      },
+      "transfer_prompt": {
+        "prompt": "An embedded service has frequent small writes and some long analytical reads. If you switch it to SQLite WAL, explain which foreground work becomes cheaper, what snapshot behavior readers get, and what checkpoint/WAL-growth failure mode you would monitor.",
+        "expected_concept_ids": [
+          "write-ahead-log",
+          "checkpointing",
+          "wal-reader-snapshot"
+        ]
+      }
     }
   ]
 }

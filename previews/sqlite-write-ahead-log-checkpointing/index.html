@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>[PREVIEW] SQLite WAL: commit by append, consolidate by checkpoint — Signal to Insight</title>
+  <meta name="description" content="SQLite WAL keeps the database file stable during commit, appends changed pages to a log, gives readers fixed end marks, and moves committed changes back later through checkpointing.">
+  <meta property="og:title" content="SQLite WAL: commit by append, consolidate by checkpoint">
+  <meta property="og:description" content="SQLite WAL keeps the database file stable during commit, appends changed pages to a log, gives readers fixed end marks, and moves committed changes back later through checkpointing.">
+  <meta property="og:type" content="article">
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="generated-page preview-page">
+  <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+  <header class="site-header wrap">
+    <a class="brand" href="../../"><span class="brand-mark">S→I</span><span>Signal to Insight</span></a>
+    <nav aria-label="Explainer navigation">
+      <a href="#delta">Delta</a><a href="#model">Model</a><a href="#concepts">Concepts</a><a href="#tools">Tools</a><a href="#actions">Actions</a><a href="#sources">Sources</a>
+    </nav>
+  </header>
+
+  <div class="preview-banner">REVIEW PREVIEW · NOT INDEXED · NOT PUBLISHED</div>
+  <main>
+    <section class="detail-hero wrap">
+      <a class="back-link" href="../../">← Research engine</a>
+      <p class="eyebrow">EXPLAINER · review</p>
+      <h1>SQLite WAL: commit by append, consolidate by checkpoint</h1>
+      <div class="detail-lede">
+        <p>SQLite WAL keeps the database file stable during commit, appends changed pages to a log, gives readers fixed end marks, and moves committed changes back later through checkpointing.</p>
+        <dl class="detail-meta">
+          <div><dt>Original source</dt><dd><a href="https://www.sqlite.org/wal.html" target="_blank" rel="noreferrer">Write-Ahead Logging ↗</a></dd></div>
+          <div><dt>Creator</dt><dd>SQLite project</dd></div>
+          <div><dt>Source status</dt><dd>living source · accessed 2026-08-27</dd></div>
+          <div><dt>Captured</dt><dd>2026-08-27</dd></div>
+          <div><dt>Analyzed</dt><dd>2026-08-27</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="detail-section wrap">
+      <p class="kicker">WHY THIS MATTERS</p>
+      <p class="big-statement">WAL is a useful mental model for separating foreground commit from later consolidation. The separation improves reader/writer concurrency but introduces a third operation—checkpointing—with its own blocking, durability and file-growth trade-offs.</p>
+    </section>
+
+    <section id="delta" class="detail-section wrap knowledge-delta-section">
+      <p class="kicker">KNOWLEDGE DELTA</p>
+      <h2>What this source changes in the existing model.</h2>
+      <p class="big-statement">SQLite WAL opens a new database-storage branch: append-first commit, checkpointing and reader snapshot boundaries. All retrieved execution/audit-history matches are suppressed because shared log vocabulary does not imply the same mechanism or purpose.</p>
+      <div class="concept-grid"><article class="concept-card delta-card">
+          <span>New</span>
+          <h3>Write-ahead log</h3>
+          <p><strong>Source says:</strong> SQLite preserves the database file during commit and appends changed pages plus a commit record to a separate WAL.</p>
+          <p><strong>Previously:</strong> The project graph had execution and workflow histories but no transactional database write-ahead-log concept.</p>
+          <p><strong>Project interpretation:</strong> The log is a storage/commit mechanism that separates foreground append from later consolidation, not a business audit record.</p>
+          <small>Prior evidence: <span class="delta-baseline">No prior project evidence — baseline/new knowledge.</span></small>
+        </article><article class="concept-card delta-card">
+          <span>New</span>
+          <h3>Checkpointing</h3>
+          <p><strong>Source says:</strong> SQLite later transfers committed WAL content into the database through a distinct checkpoint operation that can pause behind active readers.</p>
+          <p><strong>Previously:</strong> No earlier concept represented WAL-to-database consolidation as a separate maintenance phase.</p>
+          <p><strong>Project interpretation:</strong> Checkpointing makes the cost shift explicit: fast append-oriented commits still require later consolidation and coordination with readers.</p>
+          <small>Prior evidence: <span class="delta-baseline">No prior project evidence — baseline/new knowledge.</span></small>
+        </article><article class="concept-card delta-card">
+          <span>New</span>
+          <h3>WAL reader snapshot</h3>
+          <p><strong>Source says:</strong> Each read transaction fixes an end mark and ignores newer WAL commits for the duration of that transaction.</p>
+          <p><strong>Previously:</strong> Existing graph concepts did not model SQLite&#x27;s point-in-time reader boundary over a concurrently growing WAL.</p>
+          <p><strong>Project interpretation:</strong> The end mark explains why a reader can stay stable while a writer continues to append new commits.</p>
+          <small>Prior evidence: <span class="delta-baseline">No prior project evidence — baseline/new knowledge.</span></small>
+        </article></div>
+      <p class="section-note"><strong>Noise rejected:</strong> prior concepts retrieved but deliberately classified as not relevant: execution-history, event-history, controlled-execution, replayable-evaluation.</p>
+    </section>
+
+    <section id="model" class="detail-section wrap">
+      <p class="kicker">MENTAL MODEL</p>
+      <div class="visual-sequence" aria-label="Commit now, checkpoint later"><article>
+          <span>01 · Write</span>
+          <h3>Append changed pages</h3>
+          <p>The writer appends new page versions to the WAL instead of overwriting the database file.</p>
+        </article><article>
+          <span>02 · Commit</span>
+          <h3>Append commit record</h3>
+          <p>The transaction becomes committed when the WAL receives its commit marker.</p>
+        </article><article>
+          <span>03 · Read</span>
+          <h3>Freeze an end mark</h3>
+          <p>Each reader uses a fixed end mark and sees page versions no newer than that snapshot boundary.</p>
+        </article><article>
+          <span>04 · Consolidate</span>
+          <h3>Checkpoint</h3>
+          <p>Committed WAL pages are copied back to the database when active readers permit it.</p>
+        </article><article>
+          <span>05 · Reuse</span>
+          <h3>Recycle WAL space</h3>
+          <p>After checkpoint progress and reader release allow it, SQLite can rewind/reuse the WAL instead of growing forever.</p>
+        </article></div>
+      <div class="core-map">
+        <div><span>Source problem</span><p>Rollback journaling writes old pages aside and then changes the database file, coupling commit behavior to the main database and limiting concurrency.</p></div>
+        <div><span>Source thesis</span><p>Append changed pages and a commit record to a WAL, let each reader read through a stable end mark, and checkpoint committed WAL pages back into the database later.</p></div>
+        <div><span>Core topics</span><ul><li>append-first WAL commit</li><li>checkpointing</li><li>reader end marks</li><li>reader/writer concurrency</li><li>single writer</li><li>checkpoint starvation</li><li>durability and performance trade-offs</li></ul></div>
+      </div>
+    </section>
+
+    <section id="concepts" class="detail-section wrap">
+      <p class="kicker">CONCEPTS TO KNOW</p>
+      <h2>Learn only the prerequisites that preserve the model.</h2>
+      <div class="concept-grid"><article class="concept-card">
+          <span>learn</span>
+          <h3>Write-ahead log</h3>
+          <p>Committed changes live first in an append-only WAL rather than immediately overwriting the database file.</p>
+        </article><article class="concept-card">
+          <span>learn</span>
+          <h3>Checkpointing</h3>
+          <p>Checkpointing is the separate maintenance operation that transfers committed WAL content back into the database.</p>
+        </article><article class="concept-card">
+          <span>learn</span>
+          <h3>Reader end mark</h3>
+          <p>A fixed end mark gives each read transaction a stable snapshot while newer commits continue to append.</p>
+        </article></div>
+    </section>
+
+    <section id="tools" class="detail-section wrap">
+      <p class="kicker">TOOLS / SYSTEMS</p>
+      <h2>Concrete systems worth knowing.</h2>
+      <p class="section-note">Tool connections may be project enrichment rather than recommendations from the original source. Each card states the relationship.</p>
+      <div class="tool-grid"><a class="tool-card" href="https://www.sqlite.org/pragma.html#pragma_journal_mode" target="_blank" rel="noreferrer">
+          <span>try</span>
+          <strong>PRAGMA journal_mode=WAL</strong>
+          <p>Enables WAL mode and makes the mental model concrete on a local database.</p>
+          <small>SQLite configuration · Source-native SQLite configuration entry point.</small>
+        </a><a class="tool-card" href="https://www.sqlite.org/c3ref/wal_checkpoint_v2.html" target="_blank" rel="noreferrer">
+          <span>learn</span>
+          <strong>sqlite3_wal_checkpoint_v2</strong>
+          <p>Useful after the conceptual model when an application needs explicit checkpoint policy beyond the default auto-checkpoint.</p>
+          <small>checkpoint control · Source-native SQLite checkpoint interface.</small>
+        </a></div>
+    </section>
+
+    <section class="detail-section wrap">
+      <p class="kicker">EXAMPLES</p>
+      <div class="example-grid"><article class="example-card">
+          <span>embedded application</span>
+          <h3>A UI reads data while a background task commits small updates.</h3>
+          <p>Can readers keep stable snapshots while the writer appends commits, and what checkpoint policy prevents the WAL from becoming the new latency problem?</p>
+        </article><article class="example-card">
+          <span>long-running report</span>
+          <h3>A read transaction stays open while writes continue.</h3>
+          <p>Will the reader&#x27;s end mark prevent checkpoint completion and cause WAL growth or slower later reads?</p>
+        </article></div>
+    </section>
+
+    <section class="detail-section wrap limitation-section">
+      <p class="kicker">WHERE THE MODEL BREAKS</p>
+      <h2>Useful does not mean sufficient.</h2>
+      <ol class="limitation-list"><li>WAL requires shared-memory coordination and therefore normally keeps all database processes on the same host rather than a network filesystem.</li><li>Readers do not block the writer, but SQLite still has one writer at a time.</li><li>Long-running readers can starve checkpoint completion and let the WAL grow.</li><li>Checkpoint and synchronous settings trade foreground latency against durability after power loss; WAL is not a free universal speed-up.</li></ol>
+    </section>
+
+    <section id="actions" class="detail-section wrap">
+      <p class="kicker">PERSONAL ACTION MAP</p>
+      <h2>Convert understanding into a decision.</h2>
+      <div class="action-grid"><article class="action-card action-use_now">
+          <span>Use now</span>
+          <ul><li>When evaluating SQLite concurrency, separate transaction commit from checkpoint work instead of treating them as one write path.</li><li>Look for long-lived reads before blaming WAL growth on write volume alone.</li></ul>
+        </article><article class="action-card action-try">
+          <span>Try</span>
+          <ul><li>Enable WAL on a disposable SQLite database and observe concurrent read/write behavior plus WAL size before and after checkpoints.</li></ul>
+        </article><article class="action-card action-learn">
+          <span>Learn</span>
+          <ul><li>WAL reader end marks</li><li>checkpoint modes</li><li>checkpoint starvation</li><li>SQLite synchronous durability settings</li></ul>
+        </article><article class="action-card action-build">
+          <span>Build</span>
+          <ul><li>A small benchmark that varies reader duration and checkpoint frequency while measuring commit latency and WAL size.</li></ul>
+        </article><article class="action-card action-watch">
+          <span>Watch</span>
+          <ul><li>Whether workload shape makes checkpoint policy a visible operational concern rather than relying on the default threshold.</li></ul>
+        </article><article class="action-card action-ignore_for_now">
+          <span>Ignore for now</span>
+          <ul><li>Treating SQLite WAL as an application audit log or business execution ledger.</li></ul>
+        </article></div>
+    </section>
+
+    <section id="sources" class="detail-section wrap source-section">
+      <p class="kicker">SOURCES + DATES</p>
+      <div class="source-grid">
+        <div>
+          <h3>Primary source</h3>
+          <a href="https://www.sqlite.org/wal.html" target="_blank" rel="noreferrer">Write-Ahead Logging ↗</a>
+          <p>SQLite project · Source status: living source · accessed 2026-08-27</p>
+          <p>Living documentation. WAL mode was introduced in SQLite 3.7.0 on 2010-07-21; page publication date is not asserted.</p>
+        </div>
+        <div>
+          <h3>Verification / enrichment</h3>
+          <ul class="supporting-sources"><li>
+          <a href="https://www.sqlite.org/wal.html" target="_blank" rel="noreferrer">SQLite Write-Ahead Logging</a>
+          <span>primary source for WAL commit, checkpoints, reader end marks, concurrency and operational trade-offs · accessed 2026-08-27</span>
+        </li></ul>
+        </div>
+      </div>
+      <p class="provenance-note">Analyzed 2026-08-27. Full third-party transcript is not stored. Source claims and project enrichment are kept distinguishable.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer wrap">
+    <span>Signal to Insight</span><span>Explainer: sqlite-write-ahead-log-checkpointing</span><span>Reviewed 2026-08-27</span>
+  </footer>
+  <script src="../../app.js"></script>
+</body>
+</html>

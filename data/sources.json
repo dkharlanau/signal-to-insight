@@ -247,6 +247,32 @@
       "derived_records": [
         "idempotent-receiver-retry-deduplication"
       ]
+    },
+    {
+      "id": "src-sqlite-wal-docs-2026",
+      "type": "documentation",
+      "title": "Write-Ahead Logging",
+      "canonical_url": "https://www.sqlite.org/wal.html",
+      "creators": [
+        "SQLite project"
+      ],
+      "publisher": "SQLite",
+      "event": null,
+      "published_at": null,
+      "event_date": null,
+      "captured_at": "2026-08-27",
+      "analyzed_at": "2026-08-27",
+      "date_note": "Living documentation. WAL mode was introduced in SQLite 3.7.0 on 2010-07-21; page publication date is not asserted.",
+      "verification": [
+        {
+          "title": "SQLite Write-Ahead Logging",
+          "url": "https://www.sqlite.org/wal.html",
+          "accessed_at": "2026-08-27"
+        }
+      ],
+      "derived_records": [
+        "sqlite-write-ahead-log-checkpointing"
+      ]
     }
   ]
 }

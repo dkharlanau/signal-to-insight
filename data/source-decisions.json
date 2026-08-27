@@ -282,6 +282,57 @@
         "reason": "The original source contains a compact problem/solution statement; the explainer preserves that entire model while keeping AWS production details explicitly separate as verification."
       },
       "selected_parts": []
+    },
+    {
+      "insight_id": "sqlite-write-ahead-log-checkpointing",
+      "decision": "skim_selected_parts",
+      "rationale": "The explainer is enough for the core mental model, but the official SQLite page contains implementation and operational details that matter before real tuning. Skim the mechanism, concurrency and checkpoint-starvation sections when adopting WAL or diagnosing a concrete workload.",
+      "novelty": {
+        "level": "high",
+        "reason": "The source creates a new database-storage branch; apparent links to execution history were retrieval noise rather than prior coverage."
+      },
+      "source_quality": {
+        "level": "high",
+        "reason": "The source is the official SQLite WAL documentation and directly defines the implementation semantics being explained."
+      },
+      "relevance": {
+        "level": "medium",
+        "reason": "The mechanism is highly reusable for understanding embedded-database concurrency, but it is less broadly applicable than the retry or reconciliation patterns."
+      },
+      "practical_leverage": {
+        "level": "high",
+        "reason": "Knowing the end-mark and checkpoint model changes how WAL growth, long readers, commit latency and durability settings are diagnosed."
+      },
+      "compression_loss": {
+        "level": "medium",
+        "reason": "The explainer intentionally omits WAL format, checkpoint modes, configuration APIs and several edge cases that become relevant during production tuning."
+      },
+      "selected_parts": [
+        {
+          "label": "How WAL Works",
+          "locator": "Write-Ahead Logging → How WAL Works",
+          "why": "Confirms the append-first commit inversion and commit-record boundary.",
+          "claim_refs": [
+            "sqlite-wal-append-commit"
+          ]
+        },
+        {
+          "label": "Concurrency",
+          "locator": "Write-Ahead Logging → Concurrency",
+          "why": "Shows reader end marks, WAL page lookup, reader/writer coexistence and the one-writer limit.",
+          "claim_refs": [
+            "sqlite-wal-reader-concurrency"
+          ]
+        },
+        {
+          "label": "Checkpoint starvation",
+          "locator": "Write-Ahead Logging → Checkpointing; Avoiding Excessively Large WAL Files",
+          "why": "Explains why overlapping long reads can prevent WAL reset and create file growth/performance problems.",
+          "claim_refs": [
+            "sqlite-wal-checkpoint-starvation"
+          ]
+        }
+      ]
     }
   ]
 }

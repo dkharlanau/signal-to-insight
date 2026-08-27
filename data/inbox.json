@@ -73,9 +73,9 @@
       "source_type": "documentation",
       "submitted_at": "2026-08-27",
       "requested_focus": "Understand the WAL mental model, read/write concurrency, checkpointing, failure boundaries, and when append-first persistence changes system behavior.",
-      "status": "queued",
-      "source_id": null,
-      "insight_id": null,
+      "status": "review",
+      "source_id": "src-sqlite-wal-docs-2026",
+      "insight_id": "sqlite-write-ahead-log-checkpointing",
       "notes": "GitHub source intake issue #54. Dogfood cohort: database/storage documentation."
     },
     {

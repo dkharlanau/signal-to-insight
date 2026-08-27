@@ -364,6 +364,54 @@
           }
         }
       ]
+    },
+    {
+      "insight_id": "sqlite-write-ahead-log-checkpointing",
+      "summary": "Three concepts are sufficient for the first mental model: append-first WAL commit, checkpointing as a separate consolidation step, and the reader end-mark snapshot that makes concurrent reads understandable.",
+      "items": [
+        {
+          "id": "sqlite-wal-prereq-log",
+          "label": "Write-ahead log",
+          "concept_id": "write-ahead-log",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "The inversion from overwriting the database to appending committed changes is the central storage mechanism.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "sqlite-write-ahead-log-checkpointing",
+            "target": null
+          }
+        },
+        {
+          "id": "sqlite-wal-prereq-checkpoint",
+          "label": "Checkpointing",
+          "concept_id": "checkpointing",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "The model is incomplete if append-only commit is understood without the later operation that consolidates WAL pages into the database.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "sqlite-write-ahead-log-checkpointing",
+            "target": null
+          }
+        },
+        {
+          "id": "sqlite-wal-prereq-snapshot",
+          "label": "WAL reader snapshot",
+          "concept_id": "wal-reader-snapshot",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "The reader end mark is what makes stable reads alongside newer appended commits coherent.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "sqlite-write-ahead-log-checkpointing",
+            "target": null
+          }
+        }
+      ]
     }
   ]
 }
