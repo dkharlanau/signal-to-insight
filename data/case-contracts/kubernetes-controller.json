@@ -1,0 +1,49 @@
+{
+  "contract_version": "1.0.0",
+  "intake_id": "intake-2026-08-27-kubernetes-controller",
+  "insight_id": "kubernetes-reconciliation-controller-loop",
+  "knowledge_delta": {
+    "insight_id": "kubernetes-reconciliation-controller-loop",
+    "summary": "Kubernetes adds a distinct state-convergence model rather than another durable-workflow mechanism: the source introduces reconciliation, desired state and observed state while the retrieved Temporal/control concepts are deliberately suppressed as different responsibilities.",
+    "items": [
+      {"relationship": "new", "concept_id": "reconciliation-loop", "label": "Reconciliation loop", "source_basis": "The Kubernetes controller pattern repeatedly observes current state and makes or requests changes that move the system toward desired state.", "prior_basis": "The existing graph models durable workflow progress, execution control and agent loops, but it does not model persistent convergence of a declared state invariant.", "interpretation": "Reconciliation becomes a separate reusable automation model: success is not one completed run but continued correction whenever reality drifts from the target.", "evidence_insights": []},
+      {"relationship": "new", "concept_id": "desired-state", "label": "Desired state", "source_basis": "A Kubernetes resource specification declares what state should be true independently of what is currently true.", "prior_basis": "No prior concept explicitly represented a declarative target state as the reference point for continuous corrective automation.", "interpretation": "Separating target state from execution history makes it possible to reason about drift after any individual workflow or command has finished.", "evidence_insights": []},
+      {"relationship": "new", "concept_id": "observed-state", "label": "Observed state", "source_basis": "Controllers use feedback about current reality to determine whether corrective action is required before observing again.", "prior_basis": "Earlier graph concepts record execution state or observations inside other mechanisms, but not the current-state side of a desired-versus-observed convergence loop.", "interpretation": "Observed state becomes the feedback half of reconciliation and prevents declarative intent from being mistaken for proof that the system is actually correct.", "evidence_insights": []}
+    ],
+    "suppressed_prior_matches": ["durable-execution", "workflow-execution", "controlled-execution", "event-history", "worker-process"]
+  },
+  "claim_evidence": {
+    "insight_id": "kubernetes-reconciliation-controller-loop",
+    "claims": [
+      {"id": "kubernetes-controller-reconciliation-loop", "text": "Kubernetes controllers are continuing control loops that observe cluster or external state and make or request changes when current state differs from desired state.", "impact": "high", "origin": "source", "status": "supported", "evidence": [{"kind": "primary_source", "source_id": "src-kubernetes-controllers-2026", "url": "https://kubernetes.io/docs/concepts/architecture/controller/", "locator": "Controllers → Controller pattern; Desired versus current state"}], "note": null},
+      {"id": "kubernetes-focused-controllers", "text": "Kubernetes favors multiple simple controllers that manage particular aspects of cluster state rather than one monolithic controller responsible for every state transition.", "impact": "medium", "origin": "source", "status": "supported", "evidence": [{"kind": "primary_source", "source_id": "src-kubernetes-controllers-2026", "url": "https://kubernetes.io/docs/concepts/architecture/controller/", "locator": "Controllers → Design"}], "note": null},
+      {"id": "kubernetes-reconciliation-not-durable-workflow", "text": "Reconciliation and durable workflow execution solve different problems: reconciliation repeatedly converges a state invariant, while durable workflow execution preserves progress of a particular long-running execution.", "impact": "high", "origin": "project_interpretation", "status": "supported", "evidence": [{"kind": "primary_source", "source_id": "src-kubernetes-controllers-2026", "url": "https://kubernetes.io/docs/concepts/architecture/controller/", "locator": "Controllers → Controller pattern; Desired versus current state"}, {"kind": "prior_insight", "insight_id": "temporal-durable-execution-mental-model", "locator": "Workflow Execution and Event History model"}], "note": "This boundary is project synthesis comparing the Kubernetes reconciliation model with the existing Temporal durable-execution model; Kubernetes documentation does not make this cross-product comparison."}
+    ]
+  },
+  "prerequisite_map": {
+    "insight_id": "kubernetes-reconciliation-controller-loop",
+    "summary": "The controller model needs only three tightly related pieces before the larger implications make sense: the reconciliation loop itself, a declared desired state and feedback about observed state.",
+    "items": [
+      {"id": "kubernetes-prereq-reconciliation", "label": "Reconciliation loop", "concept_id": "reconciliation-loop", "priority": "must_know_now", "prior_coverage": "absent", "state": "explained_here", "reason": "The source is fundamentally about repeated comparison and correction rather than one-shot procedural execution.", "resolution": {"kind": "explained_here", "insight_id": "kubernetes-reconciliation-controller-loop", "target": null}},
+      {"id": "kubernetes-prereq-desired-state", "label": "Desired state", "concept_id": "desired-state", "priority": "must_know_now", "prior_coverage": "absent", "state": "explained_here", "reason": "A controller cannot reconcile anything unless there is an explicit target condition separate from current reality.", "resolution": {"kind": "explained_here", "insight_id": "kubernetes-reconciliation-controller-loop", "target": null}},
+      {"id": "kubernetes-prereq-observed-state", "label": "Observed state", "concept_id": "observed-state", "priority": "must_know_now", "prior_coverage": "absent", "state": "explained_here", "reason": "Feedback about actual state is what lets the controller decide whether the target has drifted and whether corrective work is needed.", "resolution": {"kind": "explained_here", "insight_id": "kubernetes-reconciliation-controller-loop", "target": null}}
+    ]
+  },
+  "learning_prompt": {
+    "insight_id": "kubernetes-reconciliation-controller-loop",
+    "retention_prompt": "Without looking back, reconstruct the Kubernetes controller model: distinguish desired state from observed state, explain the compare-and-correct loop, state why the loop does not terminate after one successful action, and name one failure mode that reconciliation does not solve automatically.",
+    "answer_key": {"problem_from": "whole_source_map.problem", "mechanism_from": "whole_source_map.thesis", "anchor_concept_ids": ["reconciliation-loop", "desired-state", "observed-state"], "boundary_limitation_index": 0},
+    "transfer_prompt": {"prompt": "A customer record is expected to exist consistently in three systems. An overnight workflow created all three copies successfully, but one downstream copy can later disappear or drift. Which part of the problem is better modeled as a reconciliation loop, what becomes desired versus observed state, and what side-effect safety is still required?", "expected_concept_ids": ["reconciliation-loop", "desired-state", "observed-state", "idempotency-under-retry"]}
+  },
+  "source_decision": {
+    "insight_id": "kubernetes-reconciliation-controller-loop",
+    "decision": "explainer_is_enough",
+    "rationale": "For learning the controller mental model, the explainer preserves the source's desired-versus-current-state loop, API/direct-control boundary, focused-controller design and the main limitations. The original page is short and authoritative, but reopening it adds little conceptual value unless implementation-level Kubernetes details are the next goal.",
+    "novelty": {"level": "high", "reason": "The source adds a new convergence-oriented automation model rather than another instance of the existing durable-workflow or agent-control concepts."},
+    "source_quality": {"level": "high", "reason": "The source is official Kubernetes documentation and directly defines the controller pattern used by the platform."},
+    "relevance": {"level": "high", "reason": "The reconciliation model is reusable for resilient automation wherever a long-lived target condition can drift after an earlier successful action."},
+    "practical_leverage": {"level": "high", "reason": "The desired/observed-state distinction changes how persistent operational invariants can be designed and monitored beyond Kubernetes itself."},
+    "compression_loss": {"level": "low", "reason": "The source page is conceptual and compact; the explainer retains the central mechanism, examples, design principle and boundaries without omitting implementation details that the source itself does not teach."},
+    "selected_parts": []
+  }
+}
