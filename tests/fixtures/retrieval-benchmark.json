@@ -1,5 +1,5 @@
 {
-  "version": "1.1.0",
+  "version": "1.2.0",
   "cases": [
     {
       "id": "durable-workflow-retry",
@@ -80,6 +80,46 @@
       "forbidden": ["execution-history", "event-history", "replayable-evaluation", "controlled-execution"],
       "min_precision": 0.6,
       "classification_probe": "cohort-precision-regression"
+    },
+    {
+      "id": "kubernetes-reconciliation-not-workflow",
+      "query": "Understand reconciliation/control loops: desired state vs current state, why many small controllers are preferable to one monolith, and what this teaches about resilient automation.",
+      "limit": 5,
+      "required": ["reconciliation-loop", "desired-state", "observed-state"],
+      "acceptable": [],
+      "forbidden": ["durable-execution", "workflow-execution", "controlled-execution", "event-history", "worker-process"],
+      "min_precision": 0.6,
+      "classification_probe": "cohort-negative-feedback"
+    },
+    {
+      "id": "postgresql-mvcc-not-wal-snapshot",
+      "query": "Understand MVCC as a concurrency model: snapshots, read/write non-blocking behavior, isolation boundaries, and what the model does not eliminate.",
+      "limit": 5,
+      "required": ["multiversion-concurrency-control", "mvcc-snapshot", "transaction-isolation-scope"],
+      "acceptable": ["serialization-failure-retry"],
+      "forbidden": ["wal-reader-snapshot", "write-ahead-log", "checkpointing"],
+      "min_precision": 0.6,
+      "classification_probe": "cohort-negative-feedback"
+    },
+    {
+      "id": "transformer-no-cross-domain-noise",
+      "query": "Understand why self-attention replaced recurrence for the Transformer architecture, what parallelism and dependency modeling changed, and which claims belong to the original machine-translation context rather than later LLM folklore.",
+      "limit": 5,
+      "required": ["self-attention", "sequence-computation-parallelism", "positional-encoding"],
+      "acceptable": ["transformer-sequence-transduction", "attention-dependency-path"],
+      "forbidden": ["retrieval-practice", "observation-grounding", "policy-as-code", "performance-retention-gap", "controlled-execution"],
+      "min_precision": 0.6,
+      "classification_probe": "cohort-negative-feedback"
+    },
+    {
+      "id": "opentelemetry-trace-not-execution-history",
+      "query": "Understand traces as a causal model of distributed work: spans, parent/child relationships, context propagation, links and what observability can reconstruct versus what business execution evidence must record separately.",
+      "limit": 5,
+      "required": ["distributed-trace", "trace-context-propagation", "span-link"],
+      "acceptable": ["telemetry-span", "observability"],
+      "forbidden": ["execution-history", "controlled-execution", "durable-execution", "open-policy-agent"],
+      "min_precision": 0.6,
+      "classification_probe": "cohort-negative-feedback"
     }
   ]
 }
