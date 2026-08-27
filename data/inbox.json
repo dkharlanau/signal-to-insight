@@ -154,6 +154,17 @@
       "source_id": null,
       "insight_id": null,
       "notes": "GitHub source intake issue #61. Dogfood cohort: distributed data processing paper."
+    },
+    {
+      "id": "intake-2026-08-27-martinfowler-idempotent-receiver-html",
+      "source_url": "https://martinfowler.com/articles/patterns-of-distributed-systems/idempotent-receiver.html",
+      "source_type": "article",
+      "submitted_at": "2026-08-27",
+      "requested_focus": "Understand duplicate delivery under retries and the idempotent receiver pattern; connect it carefully to the existing idempotency-under-retry concept and identify where deduplication IDs are insufficient.",
+      "status": "queued",
+      "source_id": null,
+      "insight_id": null,
+      "notes": "GitHub source intake issue #62. Dogfood cohort: distributed systems pattern article."
     }
   ]
 }

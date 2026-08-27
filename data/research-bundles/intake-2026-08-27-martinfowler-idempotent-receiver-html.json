@@ -1,0 +1,84 @@
+{
+  "bundle_version": "1.1.0",
+  "intake_id": "intake-2026-08-27-martinfowler-idempotent-receiver-html",
+  "source_id": null,
+  "source": {
+    "type": "article",
+    "canonical_url": "https://martinfowler.com/articles/patterns-of-distributed-systems/idempotent-receiver.html",
+    "title": null,
+    "creators": [],
+    "publisher": null,
+    "published_at": null,
+    "event_date": null,
+    "version": null,
+    "language": null,
+    "duration": null,
+    "date_note": null
+  },
+  "inspection": {
+    "method": "not inspected",
+    "full_content_used_ephemerally": false,
+    "full_content_committed": false,
+    "confidence": "metadata_only",
+    "gaps": [
+      "Source content has not been mapped yet."
+    ]
+  },
+  "prior_knowledge": {
+    "captured_at": "2026-08-27",
+    "query": "Understand duplicate delivery under retries and the idempotent receiver pattern; connect it carefully to the existing idempotency-under-retry concept and identify where deduplication IDs are insufficient.",
+    "matches": [
+      {
+        "concept_id": "idempotency-under-retry",
+        "label": "Idempotency under retry",
+        "coverage": "explained",
+        "evidence_insights": [
+          {
+            "id": "temporal-durable-execution-mental-model",
+            "status": "review",
+            "title": "Temporal: the mental model behind durable execution"
+          }
+        ],
+        "relationship_to_source": "unclassified"
+      },
+      {
+        "concept_id": "activity-execution",
+        "label": "Activity Execution",
+        "coverage": "explained",
+        "evidence_insights": [
+          {
+            "id": "temporal-durable-execution-mental-model",
+            "status": "review",
+            "title": "Temporal: the mental model behind durable execution"
+          }
+        ],
+        "relationship_to_source": "unclassified"
+      }
+    ],
+    "classification_required": true
+  },
+  "content_map": {
+    "problem": null,
+    "thesis": null,
+    "sections": [],
+    "concepts": [],
+    "mechanisms": [],
+    "tools": [],
+    "examples": [],
+    "claims": [],
+    "evidence": [],
+    "assumptions": [],
+    "limitations": [],
+    "open_questions": []
+  },
+  "selection": {
+    "requested_focus": "Understand duplicate delivery under retries and the idempotent receiver pattern; connect it carefully to the existing idempotency-under-retry concept and identify where deduplication IDs are insufficient.",
+    "coherent_core": [],
+    "prerequisites": [],
+    "drop_notes": [],
+    "connections": []
+  },
+  "verification_candidates": [],
+  "source_locators": [],
+  "created_at": "2026-08-27"
+}
