@@ -5,53 +5,164 @@
   "source": {
     "type": "documentation",
     "canonical_url": "https://www.postgresql.org/docs/current/mvcc-intro.html",
-    "title": null,
-    "creators": [],
-    "publisher": null,
+    "title": "PostgreSQL 18: Multiversion Concurrency Control",
+    "creators": [
+      "PostgreSQL Global Development Group"
+    ],
+    "publisher": "PostgreSQL Global Development Group",
     "published_at": null,
     "event_date": null,
-    "version": null,
-    "language": null,
+    "version": "18.6 / PostgreSQL 18 documentation",
+    "language": "en",
     "duration": null,
-    "date_note": null
+    "date_note": "Living documentation. The current manual resolves to PostgreSQL 18; the PostgreSQL site reports 18.6 released on 2026-08-13. Analyzed as accessed on 2026-08-27."
   },
   "inspection": {
-    "method": "not inspected",
-    "full_content_used_ephemerally": false,
+    "method": "Direct inspection of the official PostgreSQL 18 MVCC introduction, transaction-isolation sections for Read Committed, Repeatable Read and Serializable, plus MVCC caveats.",
+    "full_content_used_ephemerally": true,
     "full_content_committed": false,
-    "confidence": "metadata_only",
+    "confidence": "direct",
     "gaps": [
-      "Source content has not been mapped yet."
+      "Tuple-version storage internals, VACUUM/dead-tuple lifecycle and predicate-lock implementation details are outside this first mental model."
     ]
   },
   "prior_knowledge": {
     "captured_at": "2026-08-27",
     "query": "Understand MVCC as a concurrency model: snapshots, read/write non-blocking behavior, isolation boundaries, and what the model does not eliminate.",
-    "matches": [],
+    "matches": [
+      {
+        "concept_id": "wal-reader-snapshot",
+        "label": "WAL reader snapshot",
+        "coverage": "explained",
+        "evidence_insights": [
+          {
+            "id": "sqlite-write-ahead-log-checkpointing",
+            "status": "review",
+            "title": "SQLite WAL: commit by append, consolidate by checkpoint"
+          }
+        ],
+        "relationship_to_source": "not_relevant"
+      }
+    ],
     "classification_required": true
   },
   "content_map": {
-    "problem": null,
-    "thesis": null,
-    "sections": [],
-    "concepts": [],
-    "mechanisms": [],
-    "tools": [],
-    "examples": [],
-    "claims": [],
-    "evidence": [],
-    "assumptions": [],
-    "limitations": [],
-    "open_questions": []
+    "problem": "Concurrent sessions need consistent views of data without forcing every reader and writer to serialize behind the same locks.",
+    "thesis": "PostgreSQL uses multiversion concurrency control so statements read a visibility snapshot of row versions; the isolation level determines how long that snapshot remains stable and which anomalies are prevented, while stronger guarantees can reject a transaction and require retry.",
+    "sections": [
+      "13.1 Introduction",
+      "13.2 Transaction Isolation",
+      "13.2.1 Read Committed",
+      "13.2.2 Repeatable Read",
+      "13.2.3 Serializable",
+      "13.6 Caveats"
+    ],
+    "concepts": [
+      "Multiversion Concurrency Control (MVCC)",
+      "MVCC snapshot",
+      "statement versus transaction snapshot scope",
+      "transaction isolation",
+      "serialization failure and retry"
+    ],
+    "mechanisms": [
+      "select visible committed row versions through a snapshot rather than reading every newest physical change",
+      "refresh the snapshot per statement in Read Committed",
+      "hold a stable transaction snapshot in Repeatable Read",
+      "wait or fail when concurrent writers conflict on the same target rows",
+      "monitor read/write dependencies in Serializable and abort transactions that would produce a non-serializable outcome"
+    ],
+    "tools": [
+      "SET TRANSACTION",
+      "pg_locks"
+    ],
+    "examples": [
+      "two SELECT statements in one Read Committed transaction can observe different committed states",
+      "a Repeatable Read transaction keeps one database view but may fail if it tries to update a row changed after its snapshot",
+      "Serializable can abort one of two transactions whose combined writes cannot match any serial execution"
+    ],
+    "claims": [
+      "Each SQL statement sees a snapshot of the database rather than an inconsistent mixture of concurrent updates.",
+      "MVCC lets ordinary reads and writes proceed without conflicting read/write locks, but it does not eliminate write/write waits or explicit locking.",
+      "Read Committed uses a fresh snapshot for each statement, while Repeatable Read holds a stable snapshot for the transaction.",
+      "Serializable adds dependency monitoring and can abort a transaction, so applications must be prepared to retry the whole transaction."
+    ],
+    "evidence": [
+      "PostgreSQL 18 §13.1 defines MVCC snapshots and the read-versus-write nonblocking advantage.",
+      "PostgreSQL 18 §13.2.1 states that Read Committed SELECT sees a snapshot as of query start and successive SELECTs can see newer commits.",
+      "PostgreSQL 18 §13.2.2 states that Repeatable Read sees the snapshot from the start of the transaction and can raise serialization failure on conflicting updates.",
+      "PostgreSQL 18 §13.2.3 describes Serializable Snapshot Isolation dependency monitoring and transaction retry."
+    ],
+    "assumptions": [
+      "Applications choose an isolation level appropriate to the consistency rules they need.",
+      "A stable snapshot is a visibility rule over committed versions, not a copy of the entire database.",
+      "Applications that use retrying isolation levels can safely restart the whole database transaction."
+    ],
+    "limitations": [
+      "MVCC minimizes read/write lock contention but does not make all database operations nonblocking.",
+      "Repeatable Read can still allow serialization anomalies even though it provides a stable snapshot.",
+      "Serializable can abort transactions and shifts part of correctness to a robust retry path.",
+      "Some DDL and sequence behaviors have transaction-visibility caveats outside the simple snapshot model."
+    ],
+    "open_questions": [
+      "How PostgreSQL stores tuple versions and reclaims obsolete versions through VACUUM.",
+      "How to choose between Serializable, explicit row/table locks and application-level coordination for a specific business invariant."
+    ]
   },
   "selection": {
     "requested_focus": "Understand MVCC as a concurrency model: snapshots, read/write non-blocking behavior, isolation boundaries, and what the model does not eliminate.",
-    "coherent_core": [],
-    "prerequisites": [],
-    "drop_notes": [],
-    "connections": []
+    "coherent_core": [
+      "MVCC separates the reader's visible snapshot from concurrent physical updates",
+      "Read Committed and Repeatable Read differ mainly in snapshot lifetime",
+      "same-row writers can still wait or conflict",
+      "Serializable protects serial outcomes by detecting dependencies and rejecting transactions",
+      "transaction retry is part of the consistency contract, not an exceptional afterthought"
+    ],
+    "prerequisites": [
+      "visibility snapshot",
+      "transaction isolation"
+    ],
+    "drop_notes": [
+      "Do not expand into VACUUM, tuple headers or index internals before the snapshot/isolation model is clear.",
+      "Do not merge PostgreSQL MVCC snapshots with SQLite WAL reader end marks: both give stable visibility but use different storage and concurrency mechanisms."
+    ],
+    "connections": [
+      "SQLite WAL reader snapshots are a useful contrast but not the same concept as PostgreSQL MVCC visibility snapshots.",
+      "Database transaction retry is not a substitute for idempotent receiver semantics around external side effects."
+    ]
   },
-  "verification_candidates": [],
-  "source_locators": [],
+  "verification_candidates": [
+    {
+      "question": "How do PostgreSQL tuple xmin/xmax visibility rules implement the snapshot model internally?",
+      "reason": "Useful implementation depth after the concurrency mental model is learned.",
+      "priority": "low"
+    },
+    {
+      "question": "Which workload patterns make Serializable Snapshot Isolation preferable to explicit locking?",
+      "reason": "Practical decision guidance requires workload-specific evidence beyond this conceptual source.",
+      "priority": "medium"
+    }
+  ],
+  "source_locators": [
+    {
+      "label": "MVCC snapshot and nonblocking reads/writes",
+      "locator": "PostgreSQL 18 §13.1 Introduction"
+    },
+    {
+      "label": "Read Committed snapshot scope",
+      "locator": "PostgreSQL 18 §13.2.1 Read Committed"
+    },
+    {
+      "label": "Repeatable Read snapshot scope",
+      "locator": "PostgreSQL 18 §13.2.2 Repeatable Read"
+    },
+    {
+      "label": "Serializable dependency detection and retry",
+      "locator": "PostgreSQL 18 §13.2.3 Serializable"
+    },
+    {
+      "label": "MVCC caveats",
+      "locator": "PostgreSQL 18 §13.6 Caveats"
+    }
+  ],
   "created_at": "2026-08-27"
 }
