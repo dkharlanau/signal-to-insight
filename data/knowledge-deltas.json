@@ -344,6 +344,46 @@
       "suppressed_prior_matches": [
         "wal-reader-snapshot"
       ]
+    },
+    {
+      "insight_id": "duckdb-in-process-analytics",
+      "summary": "DuckDB adds a deployment/composition concept that was missing from the graph: analytical SQL can live inside the host process. The automatically retrieved execution/workflow concepts are rejected as unrelated rather than forced into the new source.",
+      "items": [
+        {
+          "relationship": "new",
+          "concept_id": "in-process-analytical-database",
+          "label": "In-process analytical database",
+          "source_basis": "DuckDB explicitly describes itself as an analytical in-process database system and exposes native clients that run the engine with the host application.",
+          "prior_basis": "Existing graph knowledge covers workflow execution, reconciliation and database concurrency, but not the deployment boundary where an analytical database is embedded directly in a host process.",
+          "interpretation": "The architectural leverage is a composition change: SQL becomes a library/runtime capability rather than necessarily a network service.",
+          "evidence_insights": []
+        },
+        {
+          "relationship": "new",
+          "concept_id": "embedded-query-engine",
+          "label": "Embedded query engine",
+          "source_basis": "Native client APIs let application code invoke DuckDB directly without provisioning a separate database server for the embedded use case.",
+          "prior_basis": "No prior concept represented query execution as an application-local capability independent of a shared database-service boundary.",
+          "interpretation": "This makes it reasonable to design local utilities around an embedded engine first and add a service boundary only when sharing, lifecycle or governance requirements justify it.",
+          "evidence_insights": []
+        },
+        {
+          "relationship": "new",
+          "concept_id": "direct-file-querying",
+          "label": "Direct file querying",
+          "source_basis": "The DuckDB repository demonstrates SQL directly over CSV and Parquet files.",
+          "prior_basis": "Earlier data concepts focus on concurrency/storage behavior rather than removing an explicit load-to-database step for analytical files.",
+          "interpretation": "For many local pipelines, file data can remain the input artifact while SQL becomes the transformation interface, reducing an intermediate ingestion step.",
+          "evidence_insights": []
+        }
+      ],
+      "suppressed_prior_matches": [
+        "protected-data-separation",
+        "worker-process",
+        "controlled-execution",
+        "activity-execution",
+        "task-queue"
+      ]
     }
   ]
 }

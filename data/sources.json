@@ -309,6 +309,37 @@
       "derived_records": [
         "postgresql-mvcc-snapshot-isolation"
       ]
+    },
+    {
+      "id": "src-duckdb-repository-2026",
+      "type": "repository",
+      "title": "DuckDB",
+      "canonical_url": "https://github.com/duckdb/duckdb",
+      "creators": [
+        "DuckDB project"
+      ],
+      "publisher": "DuckDB Foundation / DuckDB project",
+      "event": null,
+      "published_at": null,
+      "event_date": null,
+      "captured_at": "2026-08-27",
+      "analyzed_at": "2026-08-27",
+      "date_note": "Living repository and documentation inspected on 2026-08-27; no single publication date is asserted.",
+      "verification": [
+        {
+          "title": "DuckDB GitHub repository",
+          "url": "https://github.com/duckdb/duckdb",
+          "accessed_at": "2026-08-27"
+        },
+        {
+          "title": "DuckDB concurrency documentation",
+          "url": "https://duckdb.org/docs/current/connect/concurrency",
+          "accessed_at": "2026-08-27"
+        }
+      ],
+      "derived_records": [
+        "duckdb-in-process-analytics"
+      ]
     }
   ]
 }

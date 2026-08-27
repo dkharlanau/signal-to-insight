@@ -95,9 +95,9 @@
       "source_type": "repository",
       "submitted_at": "2026-08-27",
       "requested_focus": "Understand the architectural value of an in-process analytical database, how this changes data-tool composition, and where the model differs from client/server databases.",
-      "status": "queued",
-      "source_id": null,
-      "insight_id": null,
+      "status": "review",
+      "source_id": "src-duckdb-repository-2026",
+      "insight_id": "duckdb-in-process-analytics",
       "notes": "GitHub source intake issue #56. Dogfood cohort: data systems repository."
     },
     {

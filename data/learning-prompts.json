@@ -197,6 +197,28 @@
           "serialization-failure-retry"
         ]
       }
+    },
+    {
+      "insight_id": "duckdb-in-process-analytics",
+      "retention_prompt": "Without looking back, reconstruct the DuckDB architecture boundary: what does in-process mean, why does it change how a data tool is composed, how does direct file querying amplify that effect, and what workload boundary prevents the model from becoming a universal database rule?",
+      "answer_key": {
+        "problem_from": "whole_source_map.problem",
+        "mechanism_from": "whole_source_map.thesis",
+        "anchor_concept_ids": [
+          "in-process-analytical-database",
+          "embedded-query-engine",
+          "direct-file-querying"
+        ],
+        "boundary_limitation_index": 1
+      },
+      "transfer_prompt": {
+        "prompt": "You are building a small local utility that receives CSV/Parquet extracts, runs repeatable joins/aggregations and exports a result. When is an embedded DuckDB engine a cleaner default than provisioning PostgreSQL, and what requirement would make you reconsider that boundary?",
+        "expected_concept_ids": [
+          "in-process-analytical-database",
+          "embedded-query-engine",
+          "direct-file-querying"
+        ]
+      }
     }
   ]
 }

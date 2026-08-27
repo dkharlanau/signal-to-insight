@@ -474,6 +474,54 @@
           }
         }
       ]
+    },
+    {
+      "insight_id": "duckdb-in-process-analytics",
+      "summary": "The mental model needs three pieces: the in-process deployment boundary, the embedded query-engine composition pattern, and direct file querying as one concrete leverage point.",
+      "items": [
+        {
+          "id": "duckdb-prereq-in-process",
+          "label": "In-process analytical database",
+          "concept_id": "in-process-analytical-database",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "Without the deployment boundary, DuckDB looks like just another SQL database rather than a different composition model.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "duckdb-in-process-analytics",
+            "target": null
+          }
+        },
+        {
+          "id": "duckdb-prereq-embedded-query",
+          "label": "Embedded query engine",
+          "concept_id": "embedded-query-engine",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "This concept explains how host application code invokes analytics directly instead of through a separate database-service hop.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "duckdb-in-process-analytics",
+            "target": null
+          }
+        },
+        {
+          "id": "duckdb-prereq-direct-files",
+          "label": "Direct file querying",
+          "concept_id": "direct-file-querying",
+          "priority": "learn_next",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "It is the most concrete example of how embedding can remove an intermediate ingestion boundary from a local data workflow.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "duckdb-in-process-analytics",
+            "target": null
+          }
+        }
+      ]
     }
   ]
 }
