@@ -34,16 +34,6 @@ def normalized_phrase(value: str) -> str:
     return " ".join(TOKEN.findall(value.lower()))
 
 
-def searchable(concept: dict) -> str:
-    return " ".join([
-        concept.get("label", ""),
-        concept.get("summary", ""),
-        concept.get("domain", ""),
-        " ".join(concept.get("aliases", [])),
-        " ".join(concept.get("tags", [])),
-    ])
-
-
 def lexical_features(query: str, query_words: set[str], concept: dict) -> dict:
     label_and_aliases = concept.get("label", "") + " " + " ".join(concept.get("aliases", []))
     label_words = words(label_and_aliases)
@@ -76,14 +66,24 @@ def is_strong_seed(features: dict) -> bool:
         return True
     if features["label_hits"]:
         return True
-    # No label match: require at least two independent topical terms. A single tag such as
-    # 'retrieval', 'engine' or 'system' is not enough evidence that two domains are related.
     if len(features["distinct_hits"]) >= 2 and (features["tag_hits"] or len(features["body_hits"]) >= 2):
         return True
     return False
 
 
-def rank(query: str, limit: int = 5) -> dict:
+def rank(
+    query: str,
+    limit: int = 5,
+    *,
+    strict_seed_gating: bool = True,
+    query_relevant_bridge: bool = True,
+) -> dict:
+    """Rank prior concepts.
+
+    The default is the current candidate algorithm. Benchmark callers can disable both
+    dogfood-derived protections to reproduce the permissive one-hop baseline on the same
+    graph and gold set without maintaining a second retrieval implementation.
+    """
     graph = json.loads(GRAPH.read_text(encoding="utf-8"))
     insight_data = json.loads(INSIGHTS.read_text(encoding="utf-8"))
     insights = {item["id"]: item for item in insight_data.get("insights", [])}
@@ -97,7 +97,8 @@ def rank(query: str, limit: int = 5) -> dict:
     for concept in concepts.values():
         features = lexical_features(query, query_words, concept)
         feature_map[concept["id"]] = features
-        if is_strong_seed(features):
+        eligible = is_strong_seed(features) if strict_seed_gating else features["score"] > 0
+        if eligible:
             scored.append((features["score"], concept["id"]))
     scored.sort(key=lambda item: (-item[0], concepts[item[1]]["label"].lower()))
 
@@ -121,7 +122,7 @@ def rank(query: str, limit: int = 5) -> dict:
             neighbors[left].append(entry)
             if right not in seeds:
                 neighbor_candidates.setdefault(right, {"via": [], "strength": 0})
-                neighbor_candidates[right]["via"].append({"seed": left, "type": relation["type"], "direction": "out"})
+                neighbor_candidates[right]["via"].append({"seed": left, "type": relation["type"], "direction": "out", "hop": 1})
                 neighbor_candidates[right]["strength"] += score_map.get(left, 0)
         if right in seeds:
             entry = {
@@ -134,39 +135,40 @@ def rank(query: str, limit: int = 5) -> dict:
             neighbors[right].append(entry)
             if left not in seeds:
                 neighbor_candidates.setdefault(left, {"via": [], "strength": 0})
-                neighbor_candidates[left]["via"].append({"seed": right, "type": relation["type"], "direction": "in"})
+                neighbor_candidates[left]["via"].append({"seed": right, "type": relation["type"], "direction": "in", "hop": 1})
                 neighbor_candidates[left]["strength"] += score_map.get(right, 0)
 
-    # One hop is normally enough and keeps retrieval precise. Real dogfood exposed one
-    # important miss, though: a query can directly match several source-specific concepts
-    # whose shared parent/prior model is one more edge away. Allow that second hop only when
-    # the intermediate neighbor independently has a strong lexical match to the query.
-    # This makes the graph act as semantic context without opening arbitrary two-hop drift.
-    bridge_ids = {
-        concept_id
-        for concept_id in neighbor_candidates
-        if is_strong_seed(feature_map[concept_id])
-    }
-    direct_candidates = set(neighbor_candidates)
-    for relation in graph.get("relations", []):
-        left = relation["from"]
-        right = relation["to"]
-        bridge_id: str | None = None
-        target_id: str | None = None
-        direction: str | None = None
-        if left in bridge_ids:
-            bridge_id, target_id, direction = left, right, "out"
-        elif right in bridge_ids:
-            bridge_id, target_id, direction = right, left, "in"
-        if bridge_id is None or target_id is None or direction is None:
-            continue
-        if target_id in seeds or target_id in direct_candidates or target_id == bridge_id:
-            continue
-        bridge_strength = neighbor_candidates[bridge_id]["strength"]
-        neighbor_candidates[target_id] = {
-            "via": [{"seed": bridge_id, "type": relation["type"], "direction": direction, "hop": 2}],
-            "strength": max(1, bridge_strength // 2),
+    if query_relevant_bridge:
+        # Real dogfood exposed a recall miss where source-specific monitoring concepts were
+        # direct lexical matches and the broader prior `observability` model was one graph
+        # edge beyond them. Permit that second hop only through an intermediate concept that
+        # independently has a strong lexical match to the query. This restores parent context
+        # without opening arbitrary two-hop graph wandering.
+        bridge_ids = {
+            concept_id
+            for concept_id in neighbor_candidates
+            if is_strong_seed(feature_map[concept_id])
         }
+        direct_candidates = set(neighbor_candidates)
+        for relation in graph.get("relations", []):
+            left = relation["from"]
+            right = relation["to"]
+            bridge_id: str | None = None
+            target_id: str | None = None
+            direction: str | None = None
+            if left in bridge_ids:
+                bridge_id, target_id, direction = left, right, "out"
+            elif right in bridge_ids:
+                bridge_id, target_id, direction = right, left, "in"
+            if bridge_id is None or target_id is None or direction is None:
+                continue
+            if target_id in seeds or target_id in direct_candidates or target_id == bridge_id:
+                continue
+            bridge_strength = neighbor_candidates[bridge_id]["strength"]
+            neighbor_candidates[target_id] = {
+                "via": [{"seed": bridge_id, "type": relation["type"], "direction": direction, "hop": 2}],
+                "strength": max(1, bridge_strength // 2),
+            }
 
     remaining = max(0, limit - len(seeds))
     expanded = sorted(
@@ -186,22 +188,16 @@ def rank(query: str, limit: int = 5) -> dict:
             for item in neighbors[relation["from"]]
         ):
             neighbors[relation["from"]].append({
-                "direction": "out",
-                "type": relation["type"],
-                "concept_id": relation["to"],
-                "label": concepts[relation["to"]]["label"],
-                "rationale": relation["rationale"],
+                "direction": "out", "type": relation["type"], "concept_id": relation["to"],
+                "label": concepts[relation["to"]]["label"], "rationale": relation["rationale"],
             })
         if relation["to"] in selected_set and not any(
             item["concept_id"] == relation["from"] and item["type"] == relation["type"] and item["direction"] == "in"
             for item in neighbors[relation["to"]]
         ):
             neighbors[relation["to"]].append({
-                "direction": "in",
-                "type": relation["type"],
-                "concept_id": relation["from"],
-                "label": concepts[relation["from"]]["label"],
-                "rationale": relation["rationale"],
+                "direction": "in", "type": relation["type"], "concept_id": relation["from"],
+                "label": concepts[relation["from"]]["label"], "rationale": relation["rationale"],
             })
 
     matches = []
@@ -235,6 +231,10 @@ def rank(query: str, limit: int = 5) -> dict:
         "query": query,
         "query_terms": sorted(query_words),
         "matches": matches,
+        "retrieval_mode": {
+            "strict_seed_gating": strict_seed_gating,
+            "query_relevant_bridge": query_relevant_bridge,
+        },
         "instruction": "Use lexical matches as likely prior concepts and graph-neighbor matches as context. Distinguish reinforcement, refinement, contradiction and genuinely new concepts before drafting a new insight."
     }
 
@@ -263,7 +263,7 @@ def self_test() -> int:
         print(f"graph context self-test failed; OPA query retained lexical noise: {opa_ids}")
         return 1
     if not any(item["match_type"] == "graph_neighbor" for item in opa["matches"]):
-        print("graph context self-test failed; expected one-hop graph context")
+        print("graph context self-test failed; expected graph context")
         return 1
 
     learning = rank(
@@ -291,13 +291,19 @@ def main() -> int:
     parser.add_argument("query", nargs="?", help="New-source topic, question or short description")
     parser.add_argument("--limit", type=int, default=5)
     parser.add_argument("--json", action="store_true", help="Emit machine-readable JSON")
+    parser.add_argument("--baseline", action="store_true", help="Use permissive pre-dogfood one-hop ranking for comparison")
     parser.add_argument("--self-test", action="store_true")
     args = parser.parse_args()
     if args.self_test:
         return self_test()
     if not args.query:
         parser.error("query is required unless --self-test is used")
-    result = rank(args.query, max(1, args.limit))
+    result = rank(
+        args.query,
+        max(1, args.limit),
+        strict_seed_gating=not args.baseline,
+        query_relevant_bridge=not args.baseline,
+    )
     if args.json:
         print(json.dumps(result, indent=2, ensure_ascii=False))
         return 0
