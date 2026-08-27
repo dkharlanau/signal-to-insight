@@ -143,6 +143,17 @@
       "source_id": null,
       "insight_id": null,
       "notes": "GitHub source intake issue #60. Dogfood cohort: foundational ML paper."
+    },
+    {
+      "id": "intake-2026-08-27-research-mapreduce-simplified-data-processing-on-large-cl",
+      "source_url": "https://research.google/pubs/mapreduce-simplified-data-processing-on-large-clusters",
+      "source_type": "paper",
+      "submitted_at": "2026-08-27",
+      "requested_focus": "Understand the MapReduce abstraction boundary: what map/reduce lets the programmer specify, what the runtime takes over, and why hiding partitioning, scheduling and failure recovery created leverage.",
+      "status": "queued",
+      "source_id": null,
+      "insight_id": null,
+      "notes": "GitHub source intake issue #61. Dogfood cohort: distributed data processing paper."
     }
   ]
 }
