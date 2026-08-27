@@ -5,134 +5,109 @@
   "source": {
     "type": "article",
     "canonical_url": "https://12factor.net/processes",
-    "title": null,
-    "creators": [],
-    "publisher": null,
+    "title": "The Twelve-Factor App — VI. Processes",
+    "creators": ["Adam Wiggins"],
+    "publisher": "The Twelve-Factor App",
     "published_at": null,
     "event_date": null,
     "version": null,
-    "language": null,
+    "language": "en",
     "duration": null,
-    "date_note": null
+    "date_note": "The page states 'Written by Adam Wiggins' and 'Last updated 2017'; inspected on 2026-08-27."
   },
   "inspection": {
-    "method": "not inspected",
-    "full_content_used_ephemerally": false,
+    "method": "Direct inspection of the complete Twelve-Factor Processes page; the source is short enough that the whole conceptual argument was mapped directly.",
+    "full_content_used_ephemerally": true,
     "full_content_committed": false,
-    "confidence": "metadata_only",
+    "confidence": "direct",
     "gaps": [
-      "Source content has not been mapped yet."
+      "The source predates modern durable-workflow runtimes and does not discuss their externalized state models.",
+      "Backing-service availability, consistency and session-store architecture are outside this factor."
     ]
   },
   "prior_knowledge": {
     "captured_at": "2026-08-27",
     "query": "Understand the stateless/share-nothing process model, why durable state belongs in backing services, and where this principle helps or becomes too simplistic for modern long-running workflows.",
     "matches": [
-      {
-        "concept_id": "durable-execution",
-        "label": "Durable execution",
-        "coverage": "explained",
-        "evidence_insights": [
-          {
-            "id": "enterprise-agents-production-substrate",
-            "status": "published",
-            "title": "Why enterprise AI agents fail after the POC"
-          },
-          {
-            "id": "temporal-durable-execution-mental-model",
-            "status": "review",
-            "title": "Temporal: the mental model behind durable execution"
-          }
-        ],
-        "relationship_to_source": "unclassified"
-      },
-      {
-        "concept_id": "worker-process",
-        "label": "Worker Process",
-        "coverage": "explained",
-        "evidence_insights": [
-          {
-            "id": "temporal-durable-execution-mental-model",
-            "status": "review",
-            "title": "Temporal: the mental model behind durable execution"
-          }
-        ],
-        "relationship_to_source": "unclassified"
-      },
-      {
-        "concept_id": "workflow-execution",
-        "label": "Workflow Execution",
-        "coverage": "explained",
-        "evidence_insights": [
-          {
-            "id": "temporal-durable-execution-mental-model",
-            "status": "review",
-            "title": "Temporal: the mental model behind durable execution"
-          }
-        ],
-        "relationship_to_source": "unclassified"
-      },
-      {
-        "concept_id": "controlled-execution",
-        "label": "Controlled execution",
-        "coverage": "explained",
-        "evidence_insights": [
-          {
-            "id": "enterprise-agents-production-substrate",
-            "status": "published",
-            "title": "Why enterprise AI agents fail after the POC"
-          },
-          {
-            "id": "open-policy-agent-decision-enforcement-model",
-            "status": "review",
-            "title": "Open Policy Agent: separate policy decisions from enforcement"
-          },
-          {
-            "id": "react-reason-act-observe-loop",
-            "status": "review",
-            "title": "ReAct: reason, act, observe — then update the plan"
-          }
-        ],
-        "relationship_to_source": "unclassified"
-      },
-      {
-        "concept_id": "activity-execution",
-        "label": "Activity Execution",
-        "coverage": "explained",
-        "evidence_insights": [
-          {
-            "id": "temporal-durable-execution-mental-model",
-            "status": "review",
-            "title": "Temporal: the mental model behind durable execution"
-          }
-        ],
-        "relationship_to_source": "unclassified"
-      }
+      {"concept_id": "durable-execution", "label": "Durable execution", "coverage": "explained", "evidence_insights": [{"id": "enterprise-agents-production-substrate", "status": "published", "title": "Why enterprise AI agents fail after the POC"}, {"id": "temporal-durable-execution-mental-model", "status": "review", "title": "Temporal: the mental model behind durable execution"}], "relationship_to_source": "not_relevant"},
+      {"concept_id": "worker-process", "label": "Worker Process", "coverage": "explained", "evidence_insights": [{"id": "temporal-durable-execution-mental-model", "status": "review", "title": "Temporal: the mental model behind durable execution"}], "relationship_to_source": "not_relevant"},
+      {"concept_id": "workflow-execution", "label": "Workflow Execution", "coverage": "explained", "evidence_insights": [{"id": "temporal-durable-execution-mental-model", "status": "review", "title": "Temporal: the mental model behind durable execution"}], "relationship_to_source": "not_relevant"},
+      {"concept_id": "controlled-execution", "label": "Controlled execution", "coverage": "explained", "evidence_insights": [{"id": "enterprise-agents-production-substrate", "status": "published", "title": "Why enterprise AI agents fail after the POC"}, {"id": "open-policy-agent-decision-enforcement-model", "status": "review", "title": "Open Policy Agent: separate policy decisions from enforcement"}, {"id": "react-reason-act-observe-loop", "status": "review", "title": "ReAct: reason, act, observe — then update the plan"}], "relationship_to_source": "not_relevant"},
+      {"concept_id": "activity-execution", "label": "Activity Execution", "coverage": "explained", "evidence_insights": [{"id": "temporal-durable-execution-mental-model", "status": "review", "title": "Temporal: the mental model behind durable execution"}], "relationship_to_source": "not_relevant"}
     ],
     "classification_required": true
   },
   "content_map": {
-    "problem": null,
-    "thesis": null,
-    "sections": [],
-    "concepts": [],
-    "mechanisms": [],
-    "tools": [],
-    "examples": [],
-    "claims": [],
-    "evidence": [],
-    "assumptions": [],
-    "limitations": [],
-    "open_questions": []
+    "problem": "A request or job may be handled by a different process after scaling, restart, deploy or relocation, so correctness cannot depend on data surviving inside one process's memory or local filesystem.",
+    "thesis": "Run application processes as stateless, share-nothing execution units; keep any data that must survive requests/jobs in stateful backing services, using process-local memory/files only as disposable short-lived cache within the current transaction/work unit.",
+    "sections": ["Stateless and share-nothing processes", "Brief process-local cache", "Restart/relocation boundary", "Build-time assets", "Sticky sessions as a violation"],
+    "concepts": ["stateless process", "share-nothing process", "backing-service state", "ephemeral process-local state", "sticky-session anti-pattern"],
+    "mechanisms": [
+      "Do not assume future requests or jobs land on the same process.",
+      "Persist durable data in a backing service such as a database rather than process memory or local disk.",
+      "Allow memory/filesystem only as brief cache whose loss does not break correctness.",
+      "Treat process restart, deploy and relocation as normal events that can erase local state.",
+      "Move user session state to a datastore instead of relying on sticky routing to one process."
+    ],
+    "tools": ["stateful backing service", "database", "session datastore"],
+    "examples": [
+      "A process downloads a large file, transforms it and persists the result; the downloaded local file can disappear afterward without correctness loss.",
+      "A user's session survives because it is stored externally rather than only in the memory of the process that handled the previous request.",
+      "A horizontally scaled worker can be replaced because the next job does not require hidden local memory from the previous instance."
+    ],
+    "claims": [
+      "Twelve-factor application processes are stateless and share-nothing.",
+      "Data that must persist belongs in a stateful backing service rather than process-local memory or filesystem.",
+      "Process-local memory/files can be used only as brief disposable cache because future work may run in a different process and restarts erase local state.",
+      "Sticky sessions that depend on one process retaining session state violate the process factor."
+    ],
+    "evidence": [
+      "The complete Processes page explicitly states stateless/share-nothing execution and external backing services for persistent data.",
+      "The page states that local memory/filesystem can be brief single-transaction cache but must not be assumed available on a future request/job.",
+      "The page names restart/deploy/relocation as reasons local process state disappears and rejects sticky-session reliance."
+    ],
+    "assumptions": [
+      "A backing service can provide the durability/availability required by the application state it owns.",
+      "The execution platform may freely replace or reschedule processes.",
+      "Any process-local cache can be recomputed or discarded without violating correctness."
+    ],
+    "limitations": [
+      "Stateless processes do not mean the application as a whole has no state; durable state is deliberately moved to backing services.",
+      "The factor does not specify how a long-running workflow persists orchestration progress; modern durable runtimes can keep state externally while still using disposable worker processes.",
+      "Externalizing state introduces network, consistency, latency and backing-service failure concerns that this short factor does not solve.",
+      "The guidance is about runtime process disposability, not a claim that every algorithm or operation must complete in one request or cannot use temporary local working data."
+    ],
+    "open_questions": [
+      "Which state belongs in a database, queue, object store or durable workflow service for a specific application?",
+      "Where does externalizing every intermediate value create unnecessary latency versus useful disposability?",
+      "How should modern long-running workflows separate disposable compute from durable orchestration state?"
+    ]
   },
   "selection": {
     "requested_focus": "Understand the stateless/share-nothing process model, why durable state belongs in backing services, and where this principle helps or becomes too simplistic for modern long-running workflows.",
-    "coherent_core": [],
-    "prerequisites": [],
-    "drop_notes": [],
-    "connections": []
+    "coherent_core": [
+      "A process is disposable and cannot be trusted to serve the next request/job.",
+      "Durable correctness state therefore lives outside the process in backing services.",
+      "Local memory/files remain useful only when they are disposable/recomputable within the current work unit.",
+      "The principle is compatible with modern durable workflows when orchestration state is externalized, but the source itself does not define a workflow engine."
+    ],
+    "prerequisites": ["process instance", "persistent versus ephemeral state", "backing service"],
+    "drop_notes": [
+      "Do not equate generic Twelve-Factor processes with Temporal Worker Processes, Workflow Executions or Activities; the retrieved names are implementation-specific concepts outside this source.",
+      "Do not turn 'stateless process' into 'stateless application'; the source explicitly depends on stateful backing services."
+    ],
+    "connections": [
+      "durable execution is compatible at a boundary level when workflow state lives outside disposable workers, but it is not the mechanism taught by this source",
+      "the same disposability principle applies to horizontally scaled web processes and background workers when durable state is external"
+    ]
   },
   "verification_candidates": [],
-  "source_locators": [],
+  "source_locators": [
+    {"label": "Stateless/share-nothing rule", "locator": "VI. Processes → stateless and share-nothing processes"},
+    {"label": "Persistent backing service", "locator": "VI. Processes → persistent data in a stateful backing service"},
+    {"label": "Brief local cache", "locator": "VI. Processes → memory/filesystem as brief single-transaction cache"},
+    {"label": "Restart boundary", "locator": "VI. Processes → restart/deploy/relocation wipes local state"},
+    {"label": "Sticky sessions", "locator": "VI. Processes → sticky sessions are a violation"}
+  ],
   "created_at": "2026-08-27"
 }
