@@ -1,8 +1,8 @@
 name: Deploy Signal to Insight Pages
 
+# Pages is currently a repository-level setting. Keep this workflow manual until Pages is
+# enabled for GitHub Actions; then it can be switched to push-on-main deployment.
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
