@@ -59,11 +59,15 @@ jobs:
           if [ "${{ github.event_name }}" = "pull_request" ]; then
             BASE="${{ github.event.pull_request.base.sha }}"
             HEAD="${{ github.event.pull_request.head.sha }}"
+            # Triple-dot compares the PR head with the merge base. This avoids
+            # treating files added to main after branch creation as deletions
+            # owned by a stale PR branch.
+            CHANGED=$(git diff --name-only --diff-filter=AMCR "$BASE...$HEAD" -- 'data/case-patches/*.json' | tr '\n' ' ')
           else
             BASE="${{ github.event.before }}"
             HEAD="${{ github.sha }}"
+            CHANGED=$(git diff --name-only --diff-filter=AMCR "$BASE" "$HEAD" -- 'data/case-patches/*.json' | tr '\n' ' ')
           fi
-          CHANGED=$(git diff --name-only "$BASE" "$HEAD" -- 'data/case-patches/*.json' | tr '\n' ' ')
           PENDING=$(python scripts/pending_case_patches.py | tr '\n' ' ')
           FILES=$(printf '%s\n%s\n' "$CHANGED" "$PENDING" | tr ' ' '\n' | sed '/^$/d' | sort -u | tr '\n' ' ')
           echo "files=$FILES" >> "$GITHUB_OUTPUT"
