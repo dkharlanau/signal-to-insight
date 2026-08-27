@@ -1,0 +1,116 @@
+{
+  "patch_version": "1.0.0",
+  "intake_id": "intake-2026-08-27-12factor-processes",
+  "intake_status": "review",
+  "updated_at": "2026-08-27",
+  "graph_version": "0.4.0",
+  "source": {
+    "id": "src-twelve-factor-processes-2017",
+    "type": "article",
+    "title": "The Twelve-Factor App — VI. Processes",
+    "canonical_url": "https://12factor.net/processes",
+    "creators": ["Adam Wiggins"],
+    "publisher": "The Twelve-Factor App",
+    "event": null,
+    "published_at": null,
+    "event_date": null,
+    "captured_at": "2026-08-27",
+    "analyzed_at": "2026-08-27",
+    "date_note": "The page states 'Written by Adam Wiggins' and 'Last updated 2017'; inspected on 2026-08-27.",
+    "verification": [{"title": "The Twelve-Factor App — VI. Processes", "url": "https://12factor.net/processes", "accessed_at": "2026-08-27"}],
+    "derived_records": ["twelve-factor-stateless-process-boundary"]
+  },
+  "insight": {
+    "id": "twelve-factor-stateless-process-boundary",
+    "source_id": "src-twelve-factor-processes-2017",
+    "slug": "twelve-factor-stateless-process-boundary",
+    "status": "review",
+    "title": "Twelve-Factor processes: disposable compute, durable state elsewhere",
+    "one_liner": "A twelve-factor process is stateless and share-nothing: persistent correctness state belongs in backing services, while local memory or disk is only disposable working cache.",
+    "why_this_matters": "'Stateless' is easy to misunderstand as 'the application has no state.' The useful boundary is narrower: process instances must be disposable because the next request/job may run elsewhere, so anything that must survive belongs outside the process. That same separation remains useful even for modern long-running work, provided durable orchestration state also lives outside disposable compute.",
+    "whole_source_map": {
+      "problem": "Scaling, restart, deploy or relocation means a future request/job cannot rely on hidden state inside the process instance that handled earlier work.",
+      "thesis": "Keep processes stateless/share-nothing, store persistent data in stateful backing services, and use process-local memory/files only as short-lived disposable cache whose loss does not break correctness.",
+      "core_topics": ["stateless process", "share-nothing process", "stateful backing service", "ephemeral local cache", "restart/relocation disposability", "sticky-session anti-pattern"]
+    },
+    "derived_model": {
+      "problem": "Process-local state couples correctness to one machine/process lifetime and breaks when work is rescheduled or the process restarts.",
+      "mechanism": "Move durable state to backing services; let process memory/files hold only transient working data; route future requests/jobs to any available process without requiring affinity to previous local state.",
+      "result": "Compute instances become replaceable and horizontally scalable, while state durability becomes an explicit responsibility of backing services rather than hidden process lifetime."
+    },
+    "coherence_review": {
+      "central_chain": [
+        "A process instance cannot be assumed to receive the next request or survive the next deploy/restart.",
+        "Therefore data required by future work cannot live only in that process's memory or local filesystem.",
+        "Persistent data is moved to a stateful backing service while local storage remains disposable cache for the current work unit.",
+        "Session affinity that depends on one process retaining user state defeats this disposability and is rejected.",
+        "The factor makes compute disposable; it does not make the whole application stateless or define how every backing service achieves durability."
+      ],
+      "prerequisites_complete": true,
+      "source_vs_enrichment_clear": true,
+      "open_gaps": [
+        "The source predates durable workflow runtimes and does not define their orchestration-state model.",
+        "Backing-service consistency, availability and latency trade-offs are external to this factor."
+      ],
+      "scores": {"coherence": 5, "prerequisite_completeness": 5, "evidence_confidence": 5, "practical_leverage": 5}
+    },
+    "visual_plan": {
+      "dominant": {
+        "type": "sequence",
+        "title": "The process can disappear; the state must not",
+        "nodes": [
+          {"label": "01 · Handle", "title": "Disposable process", "text": "A process handles the current request or job without assuming future affinity."},
+          {"label": "02 · Cache", "title": "Temporary local work", "text": "Memory or local files may hold short-lived data that can be discarded or recomputed."},
+          {"label": "03 · Persist", "title": "Backing service", "text": "Anything needed by future work is written to a durable stateful service."},
+          {"label": "04 · Replace", "title": "Any next process", "text": "A different or restarted process can continue future requests because correctness did not depend on the old local state."}
+        ]
+      },
+      "supporting": ["comparison", "concept_grid", "examples", "limitations", "action_map", "source_map"],
+      "image": {"needed": false, "reason": "The value is the lifetime boundary between disposable process-local work and persistent backing-service state; a sequence is sufficient."}
+    },
+    "concepts": [
+      {"name": "Stateless process", "depth": "learn", "why_needed": "The runtime unit must not require hidden state from an earlier request/job in the same process."},
+      {"name": "Backing-service state", "depth": "learn", "why_needed": "Persistent application state remains necessary; it is deliberately externalized from disposable compute."},
+      {"name": "Ephemeral process state", "depth": "learn", "why_needed": "Local memory/files are still useful when their loss is safe and they serve only as temporary working cache."}
+    ],
+    "tool_map": [],
+    "examples": [
+      {"domain": "web session", "scenario": "A user request lands on a different process than the previous request.", "question": "Does the session survive because it lives in a backing store, or did the application silently depend on sticky routing and process memory?"},
+      {"domain": "background job", "scenario": "A worker downloads a large file, transforms it and writes the result.", "question": "Can the local file disappear after the work unit because the durable result has already been persisted elsewhere?"},
+      {"domain": "long-running workflow", "scenario": "A worker process is restarted while a multi-day business workflow is waiting.", "question": "Is durable workflow progress outside the disposable worker, or was process-local memory accidentally treated as orchestration state?"}
+    ],
+    "limitations": [
+      "Stateless processes do not imply a stateless application; the factor explicitly relies on stateful backing services.",
+      "Externalizing state introduces network, consistency and backing-service failure modes that this source does not solve.",
+      "The factor does not define durable workflow execution; modern workflow state can remain external while workers themselves stay disposable.",
+      "Process-local storage is not forbidden when used as disposable cache or temporary working data whose loss does not violate correctness."
+    ],
+    "action_map": {
+      "use_now": ["For each service or worker, list the data whose loss on restart would break correctness; anything on that list should not exist only in process memory/local disk.", "Distinguish disposable cache from durable state instead of banning local state categorically."],
+      "try": ["Restart or replace one service instance mid-flow and verify that later requests/jobs can continue without session affinity or hidden local files."],
+      "learn": ["backing-service failure semantics", "session state", "durable orchestration state", "process lifecycle"],
+      "build": ["A small two-instance demo where requests alternate between processes while shared session/work state remains in an external store."],
+      "watch": ["Where externalizing high-volume intermediate state adds unnecessary latency and should remain recomputable local cache instead."],
+      "ignore_for_now": ["Equating generic twelve-factor processes with Temporal-specific Worker, Workflow or Activity concepts."
+      ]
+    },
+    "connections": [
+      "durable-execution: compatible boundary but different mechanism — durable workflow progress can live outside disposable processes, while this source only defines process statelessness",
+      "worker-process: the shared word 'process' does not make Twelve-Factor processes equivalent to Temporal Worker Processes"
+    ],
+    "supporting_sources": [{"title": "The Twelve-Factor App — VI. Processes", "url": "https://12factor.net/processes", "publisher": "The Twelve-Factor App", "purpose": "complete primary source for stateless/share-nothing processes, backing-service persistence, local cache and sticky-session boundary", "accessed_at": "2026-08-27"}],
+    "tags": ["twelve-factor", "stateless", "processes", "backing-services", "scalability", "architecture"],
+    "provenance": {"source_linked": true, "source_dates_recorded": true, "full_transcript_stored": false, "analysis_type": "direct complete-source analysis of the Twelve-Factor Processes page with modern-workflow boundary kept as project interpretation", "reviewed_at": "2026-08-27"}
+  },
+  "graph": {
+    "concepts": [
+      {"id": "stateless-process", "label": "Stateless process", "summary": "A disposable runtime process whose correctness does not depend on state retained from earlier requests or jobs in its own memory or local filesystem.", "domain": "application architecture", "coverage": "explained", "insight_ids": ["twelve-factor-stateless-process-boundary"], "aliases": ["share-nothing process"], "tags": ["stateless", "process", "scaling", "disposability"]},
+      {"id": "backing-service-state", "label": "Backing-service state", "summary": "Persistent application data stored outside disposable processes in a stateful service so future requests or jobs can access it regardless of process lifetime.", "domain": "application architecture", "coverage": "explained", "insight_ids": ["twelve-factor-stateless-process-boundary"], "aliases": ["externalized persistent state"], "tags": ["state", "backing-service", "persistence"]},
+      {"id": "ephemeral-process-state", "label": "Ephemeral process state", "summary": "Temporary memory or local-file data used by the current work unit that can be discarded or recomputed without violating application correctness.", "domain": "application architecture", "coverage": "explained", "insight_ids": ["twelve-factor-stateless-process-boundary"], "aliases": ["process-local cache"], "tags": ["cache", "ephemeral", "process", "local-state"]}
+    ],
+    "relations": [
+      {"id": "rel-backing-service-state-enables-stateless-process", "from": "backing-service-state", "to": "stateless-process", "type": "enables", "rationale": "Moving persistent correctness state into backing services lets any disposable process serve future work without relying on the previous process's local lifetime.", "evidence_insights": ["twelve-factor-stateless-process-boundary"]},
+      {"id": "rel-ephemeral-process-state-related-to-stateless-process", "from": "ephemeral-process-state", "to": "stateless-process", "type": "related_to", "rationale": "Statelessness permits temporary process-local working data when its loss is safe and no future request or job depends on it.", "evidence_insights": ["twelve-factor-stateless-process-boundary"]}
+    ]
+  }
+}
