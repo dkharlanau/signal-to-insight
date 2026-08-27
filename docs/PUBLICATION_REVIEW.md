@@ -16,7 +16,7 @@ Three remaining source insights are reviewed next because together they are the 
 
 Then review:
 
-4. synthesis — `agent-production-control-stack`.
+4. synthesis — `production-agent-stack-beyond-model`.
 
 This means the synthesis cannot be published merely because it looks coherent. Its source-insight publication dependencies must first pass their own human reviews.
 
@@ -104,7 +104,7 @@ Show the synthesis card:
 ```bash
 python scripts/publication_review.py card \
   --kind synthesis \
-  --candidate agent-production-control-stack
+  --candidate production-agent-stack-beyond-model
 ```
 
 ### Required synthesis checks
@@ -124,7 +124,7 @@ Record the disposition locally:
 ```bash
 python scripts/publication_review.py record \
   --kind synthesis \
-  --candidate agent-production-control-stack \
+  --candidate production-agent-stack-beyond-model \
   --verdict approve \
   --checks all \
   --note "Verified layer model, contribution evidence, false contradictions, gaps and visual."
@@ -137,7 +137,7 @@ Only then:
 ```bash
 python scripts/publication_review.py publish-command \
   --kind synthesis \
-  --candidate agent-production-control-stack \
+  --candidate production-agent-stack-beyond-model \
   --reviewed-by <reviewer>
 ```
 
