@@ -17,6 +17,7 @@ on:
       - "scripts/knowledge_history.py"
       - "scripts/build_history.py"
       - "scripts/build_concepts.py"
+      - "scripts/build_sitemap.py"
       - "scripts/build_graph.py"
       - "scripts/build_public_graph.py"
       - "scripts/public_projection.py"
@@ -39,6 +40,7 @@ on:
       - "scripts/knowledge_history.py"
       - "scripts/build_history.py"
       - "scripts/build_concepts.py"
+      - "scripts/build_sitemap.py"
       - "scripts/build_graph.py"
       - "scripts/build_public_graph.py"
       - "scripts/public_projection.py"
@@ -87,25 +89,26 @@ jobs:
           python scripts/build_public_graph.py
           python scripts/build_history.py
           python scripts/build_concepts.py
+          python scripts/build_sitemap.py
 
       - name: Verify knowledge surfaces on pull requests
         if: github.event_name == 'pull_request'
         run: |
-          if [ -n "$(git status --porcelain -- knowledge data/knowledge-graph.json)" ]; then
-            git status --short -- knowledge data/knowledge-graph.json
-            echo "Public graph, temporal history or concept navigation is missing or stale."
+          if [ -n "$(git status --porcelain -- knowledge data/knowledge-graph.json sitemap.xml)" ]; then
+            git status --short -- knowledge data/knowledge-graph.json sitemap.xml
+            echo "Public graph, temporal history, concept navigation or sitemap is missing or stale."
             exit 1
           fi
 
       - name: Commit synced knowledge surfaces on main
         if: github.event_name == 'push'
         run: |
-          if [ -z "$(git status --porcelain -- knowledge data/knowledge-graph.json)" ]; then
+          if [ -z "$(git status --porcelain -- knowledge data/knowledge-graph.json sitemap.xml)" ]; then
             echo "Knowledge surfaces already current."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/knowledge-graph.json knowledge
+          git add data/knowledge-graph.json knowledge sitemap.xml
           git commit -m "build: sync public knowledge projection"
           git push origin HEAD:main
