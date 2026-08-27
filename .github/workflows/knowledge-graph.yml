@@ -1,13 +1,20 @@
-name: Validate knowledge graph
+name: Validate knowledge graph and history
 
 on:
   push:
     branches: [main]
     paths:
       - "data/knowledge-graph.json"
+      - "data/knowledge-history.json"
+      - "data/knowledge-reviews.json"
+      - "data/reanalysis-events.json"
       - "data/insights.json"
       - "schemas/knowledge-graph.schema.json"
+      - "schemas/knowledge-history.schema.json"
       - "scripts/validate_graph.py"
+      - "scripts/validate_knowledge_history.py"
+      - "scripts/knowledge_history.py"
+      - "scripts/build_history.py"
       - "scripts/build_graph.py"
       - "scripts/build_public_graph.py"
       - "scripts/public_projection.py"
@@ -18,9 +25,16 @@ on:
     branches: [main]
     paths:
       - "data/knowledge-graph.json"
+      - "data/knowledge-history.json"
+      - "data/knowledge-reviews.json"
+      - "data/reanalysis-events.json"
       - "data/insights.json"
       - "schemas/knowledge-graph.schema.json"
+      - "schemas/knowledge-history.schema.json"
       - "scripts/validate_graph.py"
+      - "scripts/validate_knowledge_history.py"
+      - "scripts/knowledge_history.py"
+      - "scripts/build_history.py"
       - "scripts/build_graph.py"
       - "scripts/build_public_graph.py"
       - "scripts/public_projection.py"
@@ -50,32 +64,38 @@ jobs:
         if: github.event_name == 'push'
         run: python scripts/migrate_public_projection.py
 
-      - name: Validate graph contracts
+      - name: Validate graph and temporal-history contracts
         run: |
           python scripts/validate.py
           python scripts/validate_graph.py
+          python scripts/validate_knowledge_history.py
           python scripts/public_projection.py
 
-      - name: Test prior-knowledge retrieval
-        run: python scripts/graph_context.py --self-test
+      - name: Test prior-knowledge and history queries
+        run: |
+          python scripts/graph_context.py --self-test
+          python scripts/knowledge_history.py --self-test
+          python scripts/build_history.py --self-test
 
-      - name: Rebuild public knowledge graph
-        run: python scripts/build_public_graph.py
+      - name: Rebuild public knowledge surfaces
+        run: |
+          python scripts/build_public_graph.py
+          python scripts/build_history.py
 
-      - name: Verify graph on pull requests
+      - name: Verify graph and history on pull requests
         if: github.event_name == 'pull_request'
         run: |
           if [ -n "$(git status --porcelain -- knowledge data/knowledge-graph.json)" ]; then
             git status --short -- knowledge data/knowledge-graph.json
-            echo "Public graph projection or generated knowledge page is missing or stale."
+            echo "Public graph or temporal-history projection is missing or stale."
             exit 1
           fi
 
-      - name: Commit synced graph on main
+      - name: Commit synced knowledge surfaces on main
         if: github.event_name == 'push'
         run: |
           if [ -z "$(git status --porcelain -- knowledge data/knowledge-graph.json)" ]; then
-            echo "Knowledge graph already current."
+            echo "Knowledge graph and history already current."
             exit 0
           fi
           git config user.name "github-actions[bot]"
