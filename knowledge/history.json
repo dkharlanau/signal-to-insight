@@ -1,0 +1,57 @@
+{
+  "history_version": "1.0.0",
+  "projection": "published-evidence-only",
+  "entities": [
+    {
+      "entity_type": "concept",
+      "entity_id": "controlled-execution",
+      "active_state": {
+        "id": "state-controlled-execution-2026-08-26",
+        "effective_at": "2026-08-26",
+        "review_status": "reviewed",
+        "snapshot": {
+          "summary": "A production work substrate that makes consequential execution authorized, observable, interruptible, reconstructable and testable.",
+          "domain": "agent architecture",
+          "coverage": "explained"
+        },
+        "evidence": {
+          "insight_ids": [
+            "enterprise-agents-production-substrate"
+          ],
+          "knowledge_review_ids": [],
+          "reanalysis_event_ids": [],
+          "independence": "independent"
+        },
+        "note": "Baseline concept state established by the first published source. Later reviewed sources have strengthened or narrowed its boundary without requiring a material definition rewrite."
+      },
+      "observations": [],
+      "timeline_visible": false
+    },
+    {
+      "entity_type": "relation",
+      "entity_id": "rel-controlled-execution-depends-on-policy-as-code",
+      "active_state": {
+        "id": "state-rel-controlled-execution-policy-2026-08-26",
+        "effective_at": "2026-08-26",
+        "review_status": "reviewed",
+        "snapshot": {
+          "from": "controlled-execution",
+          "to": "policy-as-code",
+          "type": "depends_on",
+          "rationale": "Explicit policy decisions make authorization boundaries reviewable and testable instead of implicit in application code."
+        },
+        "evidence": {
+          "insight_ids": [
+            "enterprise-agents-production-substrate"
+          ],
+          "knowledge_review_ids": [],
+          "reanalysis_event_ids": [],
+          "independence": "independent"
+        },
+        "note": "Baseline relation from the published controlled-execution model."
+      },
+      "observations": [],
+      "timeline_visible": false
+    }
+  ]
+}
