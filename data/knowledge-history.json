@@ -1,0 +1,98 @@
+{
+  "history_version": "1.0.0",
+  "entities": [
+    {
+      "entity_type": "concept",
+      "entity_id": "controlled-execution",
+      "active_state_id": "state-controlled-execution-2026-08-26",
+      "public_state_id": "state-controlled-execution-2026-08-26",
+      "states": [
+        {
+          "id": "state-controlled-execution-2026-08-26",
+          "effective_at": "2026-08-26",
+          "review_status": "reviewed",
+          "snapshot": {
+            "summary": "A production work substrate that makes consequential execution authorized, observable, interruptible, reconstructable and testable.",
+            "domain": "agent architecture",
+            "coverage": "explained"
+          },
+          "evidence": {
+            "insight_ids": ["enterprise-agents-production-substrate"],
+            "knowledge_review_ids": [],
+            "reanalysis_event_ids": [],
+            "independence": "independent"
+          },
+          "note": "Baseline concept state established by the first published source. Later reviewed sources have strengthened or narrowed its boundary without requiring a material definition rewrite."
+        }
+      ],
+      "transitions": [],
+      "observations": [
+        {
+          "id": "observation-controlled-execution-opa-refinement",
+          "at": "2026-08-26",
+          "kind": "refined",
+          "rationale": "OPA concretizes the narrower policy-decision responsibility inside controlled execution while leaving enforcement, execution history and outcome verification outside the policy engine. The knowledge review explicitly concluded that the existing concept definition did not need rewriting.",
+          "evidence": {
+            "insight_ids": ["open-policy-agent-decision-enforcement-model"],
+            "knowledge_review_ids": ["review-opa-controlled-execution-component"],
+            "reanalysis_event_ids": [],
+            "independence": "independent"
+          }
+        },
+        {
+          "id": "observation-controlled-execution-react-boundary",
+          "at": "2026-08-26",
+          "kind": "narrowed",
+          "rationale": "ReAct clarifies that model-level reasoning/action selection is a different architectural layer from the production substrate that authorizes, records and verifies consequential execution. The reviewed distinction narrows the boundary without changing the stored definition.",
+          "evidence": {
+            "insight_ids": ["react-reason-act-observe-loop"],
+            "knowledge_review_ids": ["review-react-controlled-execution-layer"],
+            "reanalysis_event_ids": [],
+            "independence": "independent"
+          }
+        }
+      ]
+    },
+    {
+      "entity_type": "relation",
+      "entity_id": "rel-controlled-execution-depends-on-policy-as-code",
+      "active_state_id": "state-rel-controlled-execution-policy-2026-08-26",
+      "public_state_id": "state-rel-controlled-execution-policy-2026-08-26",
+      "states": [
+        {
+          "id": "state-rel-controlled-execution-policy-2026-08-26",
+          "effective_at": "2026-08-26",
+          "review_status": "reviewed",
+          "snapshot": {
+            "from": "controlled-execution",
+            "to": "policy-as-code",
+            "type": "depends_on",
+            "rationale": "Explicit policy decisions make authorization boundaries reviewable and testable instead of implicit in application code."
+          },
+          "evidence": {
+            "insight_ids": ["enterprise-agents-production-substrate"],
+            "knowledge_review_ids": [],
+            "reanalysis_event_ids": [],
+            "independence": "independent"
+          },
+          "note": "Baseline relation from the published controlled-execution model."
+        }
+      ],
+      "transitions": [],
+      "observations": [
+        {
+          "id": "observation-controlled-execution-policy-opa",
+          "at": "2026-08-26",
+          "kind": "reinforced",
+          "rationale": "OPA provides a concrete policy-engine example that strengthens the relation while preserving the same dependency semantics: explicit policy decisions are one control primitive, not the executor of the protected action.",
+          "evidence": {
+            "insight_ids": ["open-policy-agent-decision-enforcement-model"],
+            "knowledge_review_ids": ["review-opa-controlled-execution-component"],
+            "reanalysis_event_ids": [],
+            "independence": "independent"
+          }
+        }
+      ]
+    }
+  ]
+}
