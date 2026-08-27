@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dkharlanau.github.io/signal-to-insight/schemas/knowledge-evolution.schema.json",
+  "title": "Signal to Insight knowledge evolution ledger",
+  "type": "object",
+  "required": ["version", "subjects"],
+  "properties": {
+    "version": {"type": "string"},
+    "subjects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["subject_type", "subject_id", "active_state_id", "states", "events"],
+        "properties": {
+          "subject_type": {"enum": ["concept", "relation"]},
+          "subject_id": {"type": "string", "minLength": 1},
+          "active_state_id": {"type": "string", "minLength": 1},
+          "states": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["id", "recorded_at", "status", "snapshot", "evidence_insight_ids", "review_ids", "reanalysis_event_ids"],
+              "properties": {
+                "id": {"type": "string", "minLength": 1},
+                "recorded_at": {"type": "string", "format": "date"},
+                "status": {"enum": ["active", "superseded"]},
+                "snapshot": {"type": "object"},
+                "evidence_insight_ids": {"type": "array", "items": {"type": "string"}},
+                "review_ids": {"type": "array", "items": {"type": "string"}},
+                "reanalysis_event_ids": {"type": "array", "items": {"type": "string"}}
+              },
+              "additionalProperties": false
+            }
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["id", "kind", "recorded_at", "material_state_change", "from_state_id", "to_state_id", "evidence_lineage", "trigger_insight_id", "trigger_reanalysis_event_id", "review_ids", "evidence_claim_ids", "reason"],
+              "properties": {
+                "id": {"type": "string", "minLength": 1},
+                "kind": {"enum": ["reinforced", "refined", "narrowed", "contradicted", "superseded", "restored", "reconsidered"]},
+                "recorded_at": {"type": "string", "format": "date"},
+                "material_state_change": {"type": "boolean"},
+                "from_state_id": {"type": "string", "minLength": 1},
+                "to_state_id": {"type": ["string", "null"]},
+                "evidence_lineage": {"enum": ["independent_source", "same_source_revision", "review_resolution"]},
+                "trigger_insight_id": {"type": ["string", "null"]},
+                "trigger_reanalysis_event_id": {"type": ["string", "null"]},
+                "review_ids": {"type": "array", "items": {"type": "string"}},
+                "evidence_claim_ids": {"type": "array", "items": {"type": "string"}},
+                "reason": {"type": "string", "minLength": 1}
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
