@@ -200,7 +200,7 @@
     },
     {
       "insight_id": "duckdb-in-process-analytics",
-      "retention_prompt": "Without looking back, reconstruct the DuckDB architecture boundary: what does in-process mean, why does it change how a data tool is composed, how does direct file querying amplify that effect, and what workload boundary prevents the model from becoming a universal database rule?",
+      "retention_prompt": "Without looking back, reconstruct the DuckDB architecture boundary: what changes when the analytical engine runs inside the host process, how direct file or host-data querying gains leverage from that boundary, what process-centered write constraint remains, and why Quack does not make the in-process model false.",
       "answer_key": {
         "problem_from": "whole_source_map.problem",
         "mechanism_from": "whole_source_map.thesis",
@@ -209,10 +209,10 @@
           "embedded-query-engine",
           "direct-file-querying"
         ],
-        "boundary_limitation_index": 1
+        "boundary_limitation_index": 0
       },
       "transfer_prompt": {
-        "prompt": "You are building a small local utility that receives CSV/Parquet extracts, runs repeatable joins/aggregations and exports a result. When is an embedded DuckDB engine a cleaner default than provisioning PostgreSQL, and what requirement would make you reconsider that boundary?",
+        "prompt": "A local utility needs SQL over DataFrames and Parquet, while another product needs many independent services to write one shared database. Which workload fits an in-process analytical engine, where can direct-file querying remove a staging step, and which requirement pushes the architecture toward a remote shared-service boundary?",
         "expected_concept_ids": [
           "in-process-analytical-database",
           "embedded-query-engine",

@@ -616,7 +616,8 @@
       "domain": "database concurrency",
       "coverage": "explained",
       "insight_ids": [
-        "postgresql-mvcc-snapshot-isolation"
+        "postgresql-mvcc-snapshot-isolation",
+        "duckdb-in-process-analytics"
       ],
       "aliases": [
         "MVCC",

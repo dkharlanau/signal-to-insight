@@ -398,42 +398,51 @@
     {
       "insight_id": "duckdb-in-process-analytics",
       "decision": "skim_selected_parts",
-      "rationale": "The explainer captures the composition model, but the original repository README is worth a short skim for the breadth of clients and direct file examples, and the concurrency page is worth opening because it defines the most important deployment boundary. Reading the full repository is unnecessary for this mental model.",
+      "rationale": "The explainer preserves the transferable in-process architecture, but three official sections remain worth opening because they define the exact embedding rationale, the stable concurrency boundary and the current Quack direction that a generic embedded-database summary is most likely to flatten.",
       "novelty": {
         "level": "high",
-        "reason": "The source introduces an in-process analytical deployment model that is not represented elsewhere in the current graph."
+        "reason": "The source adds a new database-composition model about where the analytical engine lives and how data reaches it; only the MVCC sub-mechanism reinforces prior knowledge."
       },
       "source_quality": {
         "level": "high",
-        "reason": "The primary source is the official DuckDB repository and the boundary evidence comes from official DuckDB documentation."
+        "reason": "The evidence comes from the official DuckDB repository, Foundation documentation, stable release metadata and the project's current v2.0 preview."
       },
       "relevance": {
         "level": "high",
-        "reason": "Embedding analytical SQL can materially simplify local data utilities and transformation tools where a separate database service adds more friction than value."
+        "reason": "The in-process model is directly applicable to local data utilities, analytical product features and deciding whether database infrastructure is actually necessary."
       },
       "practical_leverage": {
         "level": "high",
-        "reason": "The model can immediately change architecture choices for small data-processing applications and utilities."
+        "reason": "It can remove a deployment or ingestion boundary for suitable analytical workloads while making the remaining process-ownership trade-off explicit."
       },
       "compression_loss": {
         "level": "medium",
-        "reason": "The explainer intentionally omits the breadth of DuckDB clients/extensions and evolving concurrency options; those details are useful when choosing a concrete implementation."
+        "reason": "The mental model compresses well, but implementation decisions depend on exact concurrency constraints and a fast-moving remote-mode roadmap."
       },
       "selected_parts": [
         {
-          "label": "Repository README",
-          "locator": "README → DuckDB / clients",
-          "why": "See the official in-process positioning and native client breadth before choosing the embedded boundary.",
+          "label": "In-process architecture",
+          "locator": "Why DuckDB → In-process",
+          "why": "This is the architectural reason DuckDB can remove a separate DBMS-server boundary and reduce host/data transfer friction.",
           "claim_refs": [
             "duckdb-in-process-positioning"
           ]
         },
         {
-          "label": "Concurrency",
+          "label": "Concurrency boundary",
           "locator": "Handling Concurrency → Single Process / Multiple Processes",
-          "why": "Understand the process-centered read/write boundary and current multi-process options before choosing an architecture.",
+          "why": "Shows both the one-process read-write ownership rule and the MVCC/OCC behavior inside that process.",
           "claim_refs": [
-            "duckdb-process-boundary"
+            "duckdb-process-boundary",
+            "duckdb-mvcc-inside-process"
+          ]
+        },
+        {
+          "label": "Quack remote-mode direction",
+          "locator": "DuckDB v2.0 preview → DuckDB as a Server: Quack and CONNECT",
+          "why": "Keeps the architecture current by showing that remote client-server access is being added as an explicit mode.",
+          "claim_refs": [
+            "duckdb-quack-extends-boundary"
           ]
         }
       ]

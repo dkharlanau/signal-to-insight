@@ -616,23 +616,23 @@
       "claims": [
         {
           "id": "duckdb-in-process-positioning",
-          "text": "DuckDB is designed as an analytical in-process SQL database system and can be embedded through native language clients.",
+          "text": "DuckDB's core architecture is an in-process analytical database system, so normal embedded use does not require a separate DBMS server process.",
           "impact": "high",
-          "origin": "source",
+          "origin": "verification",
           "status": "supported",
           "evidence": [
             {
-              "kind": "primary_source",
+              "kind": "verification",
               "source_id": "src-duckdb-repository-2026",
-              "url": "https://github.com/duckdb/duckdb",
-              "locator": "README → DuckDB / clients"
+              "url": "https://duckdb.org/why_duckdb",
+              "locator": "Why DuckDB → In-process"
             }
           ],
           "note": null
         },
         {
           "id": "duckdb-direct-file-querying",
-          "text": "DuckDB can query CSV and Parquet files directly from SQL without requiring an explicit prior import into a separate server database.",
+          "text": "DuckDB can query CSV and Parquet files directly from SQL instead of requiring every analytical dataset to be imported into a separate database service first.",
           "impact": "medium",
           "origin": "source",
           "status": "supported",
@@ -648,7 +648,7 @@
         },
         {
           "id": "duckdb-process-boundary",
-          "text": "The core writable concurrency model is centered on a single process, so DuckDB's embedded simplicity should not be generalized into a universal client/server database replacement.",
+          "text": "DuckDB's stable writable concurrency model centers read-write ownership in one process, so embedded simplicity should not be generalized into automatic coordination of arbitrary writer processes.",
           "impact": "high",
           "origin": "verification",
           "status": "supported",
@@ -660,28 +660,60 @@
               "locator": "Handling Concurrency → Single Process / Multiple Processes"
             }
           ],
-          "note": "DuckDB's newer Quack and DuckLake options are evolving; this claim describes the core embedded model rather than asserting that multi-process architectures are impossible."
+          "note": null
+        },
+        {
+          "id": "duckdb-mvcc-inside-process",
+          "text": "Inside the single read-write process, DuckDB uses multiversion concurrency control and optimistic concurrency control so multiple writer threads can proceed until they conflict on the same rows or related state.",
+          "impact": "medium",
+          "origin": "verification",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "verification",
+              "source_id": "src-duckdb-repository-2026",
+              "url": "https://duckdb.org/docs/current/connect/concurrency",
+              "locator": "Handling Concurrency → Single Process / Multiple Processes"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "duckdb-quack-extends-boundary",
+          "text": "DuckDB's v2.0 preview introduces Quack and CONNECT as a client-server option, so in-process is the foundational local architecture rather than the only access pattern the project intends to support.",
+          "impact": "high",
+          "origin": "verification",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "verification",
+              "source_id": "src-duckdb-repository-2026",
+              "url": "https://duckdb.org/2026/08/17/duckdb-20-highlights",
+              "locator": "DuckDB v2.0 preview → DuckDB as a Server: Quack and CONNECT"
+            }
+          ],
+          "note": null
         },
         {
           "id": "duckdb-postgres-boundary",
-          "text": "DuckDB's in-process deployment model and PostgreSQL MVCC snapshots are different concepts even though both products use concurrency-control mechanisms.",
-          "impact": "medium",
+          "text": "DuckDB reinforces PostgreSQL's MVCC concept at the concurrency layer while remaining a different deployment model: MVCC does not make an in-process analytical engine equivalent to a shared PostgreSQL server architecture.",
+          "impact": "high",
           "origin": "project_interpretation",
           "status": "supported",
           "evidence": [
             {
-              "kind": "primary_source",
+              "kind": "verification",
               "source_id": "src-duckdb-repository-2026",
-              "url": "https://github.com/duckdb/duckdb",
-              "locator": "README → in-process positioning"
+              "url": "https://duckdb.org/docs/current/connect/concurrency",
+              "locator": "Handling Concurrency → Single Process / Multiple Processes"
             },
             {
               "kind": "prior_insight",
               "insight_id": "postgresql-mvcc-snapshot-isolation",
-              "locator": "MVCC snapshot/isolation model"
+              "locator": "PostgreSQL MVCC snapshot/isolation model"
             }
           ],
-          "note": "This comparison is project synthesis and is not claimed by DuckDB or PostgreSQL documentation."
+          "note": "This is project synthesis across DuckDB and PostgreSQL evidence: the sources support their own concurrency models, while the layer distinction is the project's cumulative interpretation."
         }
       ]
     },

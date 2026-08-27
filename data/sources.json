@@ -324,7 +324,7 @@
       "event_date": null,
       "captured_at": "2026-08-27",
       "analyzed_at": "2026-08-27",
-      "date_note": "Living repository and documentation inspected on 2026-08-27; no single publication date is asserted.",
+      "date_note": "Living repository. Latest stable release observed was v1.5.5, published 2026-07-22. DuckDB's 2026-08-17 v2.0 preview describes Quack/CONNECT as an emerging client-server mode, so this review treats in-process as the foundational architecture rather than an eternal no-server constraint.",
       "verification": [
         {
           "title": "DuckDB GitHub repository",
@@ -332,8 +332,28 @@
           "accessed_at": "2026-08-27"
         },
         {
+          "title": "Why DuckDB",
+          "url": "https://duckdb.org/why_duckdb",
+          "accessed_at": "2026-08-27"
+        },
+        {
           "title": "DuckDB concurrency documentation",
           "url": "https://duckdb.org/docs/current/connect/concurrency",
+          "accessed_at": "2026-08-27"
+        },
+        {
+          "title": "Querying Parquet Files",
+          "url": "https://duckdb.org/docs/current/guides/file_formats/query_parquet",
+          "accessed_at": "2026-08-27"
+        },
+        {
+          "title": "DuckDB v1.5.5 Bugfix Release",
+          "url": "https://github.com/duckdb/duckdb/releases/tag/v1.5.5",
+          "accessed_at": "2026-08-27"
+        },
+        {
+          "title": "A Preview of DuckDB v2.0",
+          "url": "https://duckdb.org/2026/08/17/duckdb-20-highlights",
           "accessed_at": "2026-08-27"
         }
       ],
