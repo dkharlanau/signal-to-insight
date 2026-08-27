@@ -1,20 +1,35 @@
 (() => {
-  // `decision.js` is already loaded as a generated-page enhancement by app.js. Keep the
-  // concept navigation as a separate module, but bootstrap it here so generated HTML never
-  // needs hand editing and the page shell remains provider/data agnostic.
-  function loadConceptNavigation() {
-    if (document.querySelector('script[data-concept-navigation]')) return;
-    const styles = document.createElement('link');
-    styles.rel = 'stylesheet';
-    styles.href = '../../concept-links.css';
-    styles.dataset.conceptNavigation = 'true';
-    document.head.appendChild(styles);
+  // `decision.js` is already loaded as a generated-page enhancement by app.js. Keep
+  // optional navigation/visual layers as separate modules so generated HTML never needs
+  // hand editing and a failed enhancement cannot remove the base explainer.
+  function loadPageExtensions() {
+    if (!document.querySelector('script[data-concept-navigation]')) {
+      const styles = document.createElement('link');
+      styles.rel = 'stylesheet';
+      styles.href = '../../concept-links.css';
+      styles.dataset.conceptNavigation = 'true';
+      document.head.appendChild(styles);
 
-    const script = document.createElement('script');
-    script.src = '../../concept-links.js';
-    script.async = true;
-    script.dataset.conceptNavigation = 'true';
-    document.head.appendChild(script);
+      const script = document.createElement('script');
+      script.src = '../../concept-links.js';
+      script.async = true;
+      script.dataset.conceptNavigation = 'true';
+      document.head.appendChild(script);
+    }
+
+    if (!document.querySelector('script[data-visual-extensions]')) {
+      const styles = document.createElement('link');
+      styles.rel = 'stylesheet';
+      styles.href = '../../visual-extensions.css';
+      styles.dataset.visualExtensions = 'true';
+      document.head.appendChild(styles);
+
+      const script = document.createElement('script');
+      script.src = '../../visual-extensions.js';
+      script.async = true;
+      script.dataset.visualExtensions = 'true';
+      document.head.appendChild(script);
+    }
   }
 
   const DECISION_LABELS = {
@@ -156,6 +171,6 @@
     }
   }
 
-  loadConceptNavigation();
+  loadPageExtensions();
   buildSourceDecision();
 })();
