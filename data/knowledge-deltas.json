@@ -732,6 +732,46 @@
         }
       ],
       "suppressed_prior_matches": []
+    },
+    {
+      "insight_id": "twelve-factor-stateless-process-boundary",
+      "summary": "Twelve-Factor adds a process-lifetime boundary rather than another workflow runtime: compute processes are disposable, durable correctness state belongs in backing services, and local memory/files are acceptable only when their loss is safe.",
+      "items": [
+        {
+          "relationship": "new",
+          "concept_id": "stateless-process",
+          "label": "Stateless process",
+          "source_basis": "The source states that twelve-factor processes are stateless/share-nothing and cannot assume future requests or jobs return to the same process.",
+          "prior_basis": "The graph had implementation-specific Worker and Workflow concepts but no generic disposable-process runtime boundary.",
+          "interpretation": "Stateless process becomes a reusable architecture concept about process lifetime, independent of any one orchestration technology.",
+          "evidence_insights": []
+        },
+        {
+          "relationship": "new",
+          "concept_id": "backing-service-state",
+          "label": "Backing-service state",
+          "source_basis": "Any data that must persist is stored in a stateful backing service rather than process memory or local filesystem.",
+          "prior_basis": "No prior concept explicitly represented the application-level rule that durable correctness state must survive outside disposable compute processes.",
+          "interpretation": "The application can remain stateful while compute stays replaceable because persistence has an explicit external owner.",
+          "evidence_insights": []
+        },
+        {
+          "relationship": "new",
+          "concept_id": "ephemeral-process-state",
+          "label": "Ephemeral process state",
+          "source_basis": "Memory and local filesystem may be used as brief single-transaction cache but must not be required by future requests/jobs.",
+          "prior_basis": "The existing graph did not distinguish safe temporary process-local working data from durable application state.",
+          "interpretation": "This avoids the overcorrection that stateless architecture forbids all local state; the real test is whether losing it breaks correctness.",
+          "evidence_insights": []
+        }
+      ],
+      "suppressed_prior_matches": [
+        "durable-execution",
+        "worker-process",
+        "workflow-execution",
+        "controlled-execution",
+        "activity-execution"
+      ]
     }
   ]
 }

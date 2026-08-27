@@ -1335,6 +1335,80 @@
           "note": null
         }
       ]
+    },
+    {
+      "insight_id": "twelve-factor-stateless-process-boundary",
+      "claims": [
+        {
+          "id": "twelve-factor-stateless-share-nothing",
+          "text": "Twelve-factor application processes are stateless and share-nothing, so correctness must not depend on hidden state retained inside one process instance across requests or jobs.",
+          "impact": "high",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-twelve-factor-processes-2017",
+              "url": "https://12factor.net/processes",
+              "locator": "VI. Processes → stateless and share-nothing processes"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "twelve-factor-persist-backing-service",
+          "text": "Data that must persist beyond the current process work unit belongs in a stateful backing service rather than only in process memory or local filesystem.",
+          "impact": "high",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-twelve-factor-processes-2017",
+              "url": "https://12factor.net/processes",
+              "locator": "VI. Processes → persistent data in a stateful backing service"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "twelve-factor-local-cache-disposable",
+          "text": "Process memory or filesystem may be used as brief temporary cache only when future requests or jobs do not depend on that local state surviving restart, relocation or process replacement.",
+          "impact": "medium",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-twelve-factor-processes-2017",
+              "url": "https://12factor.net/processes",
+              "locator": "VI. Processes → memory/filesystem as brief single-transaction cache"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "twelve-factor-not-durable-workflow-runtime",
+          "text": "The stateless-process principle is compatible with durable workflows when orchestration state lives outside disposable workers, but the Twelve-Factor source itself does not define a durable workflow execution mechanism.",
+          "impact": "high",
+          "origin": "project_interpretation",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-twelve-factor-processes-2017",
+              "url": "https://12factor.net/processes",
+              "locator": "VI. Processes → stateless/share-nothing and persistent backing-service state"
+            },
+            {
+              "kind": "prior_insight",
+              "insight_id": "temporal-durable-execution-mental-model",
+              "locator": "Durable Workflow Execution state outside replaceable Worker Processes"
+            }
+          ],
+          "note": "The source establishes disposable process-local state; compatibility with Temporal-style external durable workflow state is project synthesis and should not be read as a source claim."
+        }
+      ]
     }
   ]
 }

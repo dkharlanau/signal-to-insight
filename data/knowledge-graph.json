@@ -1245,6 +1245,62 @@
         "collaboration",
         "operations"
       ]
+    },
+    {
+      "id": "stateless-process",
+      "label": "Stateless process",
+      "summary": "A disposable runtime process whose correctness does not depend on state retained from earlier requests or jobs in its own memory or local filesystem.",
+      "domain": "application architecture",
+      "coverage": "explained",
+      "insight_ids": [
+        "twelve-factor-stateless-process-boundary"
+      ],
+      "aliases": [
+        "share-nothing process"
+      ],
+      "tags": [
+        "stateless",
+        "process",
+        "scaling",
+        "disposability"
+      ]
+    },
+    {
+      "id": "backing-service-state",
+      "label": "Backing-service state",
+      "summary": "Persistent application data stored outside disposable processes in a stateful service so future requests or jobs can access it regardless of process lifetime.",
+      "domain": "application architecture",
+      "coverage": "explained",
+      "insight_ids": [
+        "twelve-factor-stateless-process-boundary"
+      ],
+      "aliases": [
+        "externalized persistent state"
+      ],
+      "tags": [
+        "state",
+        "backing-service",
+        "persistence"
+      ]
+    },
+    {
+      "id": "ephemeral-process-state",
+      "label": "Ephemeral process state",
+      "summary": "Temporary memory or local-file data used by the current work unit that can be discarded or recomputed without violating application correctness.",
+      "domain": "application architecture",
+      "coverage": "explained",
+      "insight_ids": [
+        "twelve-factor-stateless-process-boundary"
+      ],
+      "aliases": [
+        "process-local cache"
+      ],
+      "tags": [
+        "cache",
+        "ephemeral",
+        "process",
+        "local-state"
+      ]
     }
   ],
   "relations": [
@@ -1844,6 +1900,26 @@
       "rationale": "A shared state backend gives collaborators a common mapping, while locking/coordination protects that mapping from overlapping mutation.",
       "evidence_insights": [
         "terraform-state-identity-binding"
+      ]
+    },
+    {
+      "id": "rel-backing-service-state-enables-stateless-process",
+      "from": "backing-service-state",
+      "to": "stateless-process",
+      "type": "enables",
+      "rationale": "Moving persistent correctness state into backing services lets any disposable process serve future work without relying on the previous process's local lifetime.",
+      "evidence_insights": [
+        "twelve-factor-stateless-process-boundary"
+      ]
+    },
+    {
+      "id": "rel-ephemeral-process-state-related-to-stateless-process",
+      "from": "ephemeral-process-state",
+      "to": "stateless-process",
+      "type": "related_to",
+      "rationale": "Statelessness permits temporary process-local working data when its loss is safe and no future request or job depends on it.",
+      "evidence_insights": [
+        "twelve-factor-stateless-process-boundary"
       ]
     }
   ]

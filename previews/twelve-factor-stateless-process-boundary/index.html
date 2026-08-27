@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>[PREVIEW] Twelve-Factor processes: disposable compute, durable state elsewhere — Signal to Insight</title>
+  <meta name="description" content="A twelve-factor process is stateless and share-nothing: persistent correctness state belongs in backing services, while local memory or disk is only disposable working cache.">
+  <meta property="og:title" content="Twelve-Factor processes: disposable compute, durable state elsewhere">
+  <meta property="og:description" content="A twelve-factor process is stateless and share-nothing: persistent correctness state belongs in backing services, while local memory or disk is only disposable working cache.">
+  <meta property="og:type" content="article">
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="generated-page preview-page">
+  <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+  <header class="site-header wrap">
+    <a class="brand" href="../../"><span class="brand-mark">S→I</span><span>Signal to Insight</span></a>
+    <nav aria-label="Explainer navigation">
+      <a href="#delta">Delta</a><a href="#model">Model</a><a href="#concepts">Concepts</a><a href="#tools">Tools</a><a href="#actions">Actions</a><a href="#sources">Sources</a>
+    </nav>
+  </header>
+
+  <div class="preview-banner">REVIEW PREVIEW · NOT INDEXED · NOT PUBLISHED</div>
+  <main>
+    <section class="detail-hero wrap">
+      <a class="back-link" href="../../">← Research engine</a>
+      <p class="eyebrow">EXPLAINER · review</p>
+      <h1>Twelve-Factor processes: disposable compute, durable state elsewhere</h1>
+      <div class="detail-lede">
+        <p>A twelve-factor process is stateless and share-nothing: persistent correctness state belongs in backing services, while local memory or disk is only disposable working cache.</p>
+        <dl class="detail-meta">
+          <div><dt>Original source</dt><dd><a href="https://12factor.net/processes" target="_blank" rel="noreferrer">The Twelve-Factor App — VI. Processes ↗</a></dd></div>
+          <div><dt>Creator</dt><dd>Adam Wiggins</dd></div>
+          <div><dt>Source date</dt><dd>not independently verified</dd></div>
+          <div><dt>Captured</dt><dd>2026-08-27</dd></div>
+          <div><dt>Analyzed</dt><dd>2026-08-27</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="detail-section wrap">
+      <p class="kicker">WHY THIS MATTERS</p>
+      <p class="big-statement">&#x27;Stateless&#x27; is easy to misunderstand as &#x27;the application has no state.&#x27; The useful boundary is narrower: process instances must be disposable because the next request/job may run elsewhere, so anything that must survive belongs outside the process. That same separation remains useful even for modern long-running work, provided durable orchestration state also lives outside disposable compute.</p>
+    </section>
+
+    <section id="delta" class="detail-section wrap knowledge-delta-section">
+      <p class="kicker">KNOWLEDGE DELTA</p>
+      <h2>What this source changes in the existing model.</h2>
+      <p class="big-statement">Twelve-Factor adds a process-lifetime boundary rather than another workflow runtime: compute processes are disposable, durable correctness state belongs in backing services, and local memory/files are acceptable only when their loss is safe.</p>
+      <div class="concept-grid"><article class="concept-card delta-card">
+          <span>New</span>
+          <h3>Stateless process</h3>
+          <p><strong>Source says:</strong> The source states that twelve-factor processes are stateless/share-nothing and cannot assume future requests or jobs return to the same process.</p>
+          <p><strong>Previously:</strong> The graph had implementation-specific Worker and Workflow concepts but no generic disposable-process runtime boundary.</p>
+          <p><strong>Project interpretation:</strong> Stateless process becomes a reusable architecture concept about process lifetime, independent of any one orchestration technology.</p>
+          <small>Prior evidence: <span class="delta-baseline">No prior project evidence — baseline/new knowledge.</span></small>
+        </article><article class="concept-card delta-card">
+          <span>New</span>
+          <h3>Backing-service state</h3>
+          <p><strong>Source says:</strong> Any data that must persist is stored in a stateful backing service rather than process memory or local filesystem.</p>
+          <p><strong>Previously:</strong> No prior concept explicitly represented the application-level rule that durable correctness state must survive outside disposable compute processes.</p>
+          <p><strong>Project interpretation:</strong> The application can remain stateful while compute stays replaceable because persistence has an explicit external owner.</p>
+          <small>Prior evidence: <span class="delta-baseline">No prior project evidence — baseline/new knowledge.</span></small>
+        </article><article class="concept-card delta-card">
+          <span>New</span>
+          <h3>Ephemeral process state</h3>
+          <p><strong>Source says:</strong> Memory and local filesystem may be used as brief single-transaction cache but must not be required by future requests/jobs.</p>
+          <p><strong>Previously:</strong> The existing graph did not distinguish safe temporary process-local working data from durable application state.</p>
+          <p><strong>Project interpretation:</strong> This avoids the overcorrection that stateless architecture forbids all local state; the real test is whether losing it breaks correctness.</p>
+          <small>Prior evidence: <span class="delta-baseline">No prior project evidence — baseline/new knowledge.</span></small>
+        </article></div>
+      <p class="section-note"><strong>Noise rejected:</strong> prior concepts retrieved but deliberately classified as not relevant: durable-execution, worker-process, workflow-execution, controlled-execution, activity-execution.</p>
+    </section>
+
+    <section id="model" class="detail-section wrap">
+      <p class="kicker">MENTAL MODEL</p>
+      <div class="visual-sequence" aria-label="The process can disappear; the state must not"><article>
+          <span>01 · Handle</span>
+          <h3>Disposable process</h3>
+          <p>A process handles the current request or job without assuming future affinity.</p>
+        </article><article>
+          <span>02 · Cache</span>
+          <h3>Temporary local work</h3>
+          <p>Memory or local files may hold short-lived data that can be discarded or recomputed.</p>
+        </article><article>
+          <span>03 · Persist</span>
+          <h3>Backing service</h3>
+          <p>Anything needed by future work is written to a durable stateful service.</p>
+        </article><article>
+          <span>04 · Replace</span>
+          <h3>Any next process</h3>
+          <p>A different or restarted process can continue future requests because correctness did not depend on the old local state.</p>
+        </article></div>
+      <div class="core-map">
+        <div><span>Source problem</span><p>Scaling, restart, deploy or relocation means a future request/job cannot rely on hidden state inside the process instance that handled earlier work.</p></div>
+        <div><span>Source thesis</span><p>Keep processes stateless/share-nothing, store persistent data in stateful backing services, and use process-local memory/files only as short-lived disposable cache whose loss does not break correctness.</p></div>
+        <div><span>Core topics</span><ul><li>stateless process</li><li>share-nothing process</li><li>stateful backing service</li><li>ephemeral local cache</li><li>restart/relocation disposability</li><li>sticky-session anti-pattern</li></ul></div>
+      </div>
+    </section>
+
+    <section id="concepts" class="detail-section wrap">
+      <p class="kicker">CONCEPTS TO KNOW</p>
+      <h2>Learn only the prerequisites that preserve the model.</h2>
+      <div class="concept-grid"><article class="concept-card">
+          <span>learn</span>
+          <h3>Stateless process</h3>
+          <p>The runtime unit must not require hidden state from an earlier request/job in the same process.</p>
+        </article><article class="concept-card">
+          <span>learn</span>
+          <h3>Backing-service state</h3>
+          <p>Persistent application state remains necessary; it is deliberately externalized from disposable compute.</p>
+        </article><article class="concept-card">
+          <span>learn</span>
+          <h3>Ephemeral process state</h3>
+          <p>Local memory/files are still useful when their loss is safe and they serve only as temporary working cache.</p>
+        </article></div>
+    </section>
+
+    <section id="tools" class="detail-section wrap">
+      <p class="kicker">TOOLS / SYSTEMS</p>
+      <h2>Concrete systems worth knowing.</h2>
+      <p class="section-note">Tool connections may be project enrichment rather than recommendations from the original source. Each card states the relationship.</p>
+      <div class="tool-grid"><p class="empty-note">No tool is required to understand this source.</p></div>
+    </section>
+
+    <section class="detail-section wrap">
+      <p class="kicker">EXAMPLES</p>
+      <div class="example-grid"><article class="example-card">
+          <span>web session</span>
+          <h3>A user request lands on a different process than the previous request.</h3>
+          <p>Does the session survive because it lives in a backing store, or did the application silently depend on sticky routing and process memory?</p>
+        </article><article class="example-card">
+          <span>background job</span>
+          <h3>A worker downloads a large file, transforms it and writes the result.</h3>
+          <p>Can the local file disappear after the work unit because the durable result has already been persisted elsewhere?</p>
+        </article><article class="example-card">
+          <span>long-running workflow</span>
+          <h3>A worker process is restarted while a multi-day business workflow is waiting.</h3>
+          <p>Is durable workflow progress outside the disposable worker, or was process-local memory accidentally treated as orchestration state?</p>
+        </article></div>
+    </section>
+
+    <section class="detail-section wrap limitation-section">
+      <p class="kicker">WHERE THE MODEL BREAKS</p>
+      <h2>Useful does not mean sufficient.</h2>
+      <ol class="limitation-list"><li>Stateless processes do not imply a stateless application; the factor explicitly relies on stateful backing services.</li><li>Externalizing state introduces network, consistency and backing-service failure modes that this source does not solve.</li><li>The factor does not define durable workflow execution; modern workflow state can remain external while workers themselves stay disposable.</li><li>Process-local storage is not forbidden when used as disposable cache or temporary working data whose loss does not violate correctness.</li></ol>
+    </section>
+
+    <section id="actions" class="detail-section wrap">
+      <p class="kicker">PERSONAL ACTION MAP</p>
+      <h2>Convert understanding into a decision.</h2>
+      <div class="action-grid"><article class="action-card action-use_now">
+          <span>Use now</span>
+          <ul><li>For each service or worker, list the data whose loss on restart would break correctness; anything on that list should not exist only in process memory/local disk.</li><li>Distinguish disposable cache from durable state instead of banning local state categorically.</li></ul>
+        </article><article class="action-card action-try">
+          <span>Try</span>
+          <ul><li>Restart or replace one service instance mid-flow and verify that later requests/jobs can continue without session affinity or hidden local files.</li></ul>
+        </article><article class="action-card action-learn">
+          <span>Learn</span>
+          <ul><li>backing-service failure semantics</li><li>session state</li><li>durable orchestration state</li><li>process lifecycle</li></ul>
+        </article><article class="action-card action-build">
+          <span>Build</span>
+          <ul><li>A small two-instance demo where requests alternate between processes while shared session/work state remains in an external store.</li></ul>
+        </article><article class="action-card action-watch">
+          <span>Watch</span>
+          <ul><li>Where externalizing high-volume intermediate state adds unnecessary latency and should remain recomputable local cache instead.</li></ul>
+        </article><article class="action-card action-ignore_for_now">
+          <span>Ignore for now</span>
+          <ul><li>Equating generic twelve-factor processes with Temporal-specific Worker, Workflow or Activity concepts.</li></ul>
+        </article></div>
+    </section>
+
+    <section id="sources" class="detail-section wrap source-section">
+      <p class="kicker">SOURCES + DATES</p>
+      <div class="source-grid">
+        <div>
+          <h3>Primary source</h3>
+          <a href="https://12factor.net/processes" target="_blank" rel="noreferrer">The Twelve-Factor App — VI. Processes ↗</a>
+          <p>Adam Wiggins · Source date: not independently verified</p>
+          <p>The page states &#x27;Written by Adam Wiggins&#x27; and &#x27;Last updated 2017&#x27;; inspected on 2026-08-27.</p>
+        </div>
+        <div>
+          <h3>Verification / enrichment</h3>
+          <ul class="supporting-sources"><li>
+          <a href="https://12factor.net/processes" target="_blank" rel="noreferrer">The Twelve-Factor App — VI. Processes</a>
+          <span>complete primary source for stateless/share-nothing processes, backing-service persistence, local cache and sticky-session boundary · accessed 2026-08-27</span>
+        </li></ul>
+        </div>
+      </div>
+      <p class="provenance-note">Analyzed 2026-08-27. Full third-party transcript is not stored. Source claims and project enrichment are kept distinguishable.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer wrap">
+    <span>Signal to Insight</span><span>Explainer: twelve-factor-stateless-process-boundary</span><span>Reviewed 2026-08-27</span>
+  </footer>
+  <script src="../../app.js"></script>
+</body>
+</html>

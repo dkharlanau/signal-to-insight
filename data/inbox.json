@@ -216,9 +216,9 @@
       "source_type": "article",
       "submitted_at": "2026-08-27",
       "requested_focus": "Understand the stateless/share-nothing process model, why durable state belongs in backing services, and where this principle helps or becomes too simplistic for modern long-running workflows.",
-      "status": "queued",
-      "source_id": null,
-      "insight_id": null,
+      "status": "review",
+      "source_id": "src-twelve-factor-processes-2017",
+      "insight_id": "twelve-factor-stateless-process-boundary",
       "notes": "GitHub source intake issue #67. Dogfood cohort: software architecture / operating model article."
     }
   ]

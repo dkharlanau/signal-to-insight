@@ -378,6 +378,28 @@
           "shared-state-coordination"
         ]
       }
+    },
+    {
+      "insight_id": "twelve-factor-stateless-process-boundary",
+      "retention_prompt": "Without looking back, reconstruct the Twelve-Factor process boundary: explain why future requests/jobs cannot rely on one process instance, where persistent application state belongs, what process-local state is still allowed, and why this does not mean the whole application is stateless.",
+      "answer_key": {
+        "problem_from": "whole_source_map.problem",
+        "mechanism_from": "whole_source_map.thesis",
+        "anchor_concept_ids": [
+          "stateless-process",
+          "backing-service-state",
+          "ephemeral-process-state"
+        ],
+        "boundary_limitation_index": 0
+      },
+      "transfer_prompt": {
+        "prompt": "A service is scaled to five interchangeable instances and a multi-step job may resume after a restart. Decide which data can remain local, which state must move to an external durable service, and what property makes an instance genuinely disposable.",
+        "expected_concept_ids": [
+          "stateless-process",
+          "backing-service-state",
+          "ephemeral-process-state"
+        ]
+      }
     }
   ]
 }

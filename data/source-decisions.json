@@ -746,6 +746,32 @@
         "reason": "The official purpose page is compact and conceptual; its important mapping, metadata, performance and synchronization arguments can be retained without reproducing backend-specific details."
       },
       "selected_parts": []
+    },
+    {
+      "insight_id": "twelve-factor-stateless-process-boundary",
+      "decision": "explainer_is_enough",
+      "rationale": "The original Processes page is very short and the explainer preserves its complete conceptual argument: stateless/share-nothing processes, persistent backing-service state, disposable local cache, restart boundaries and the sticky-session warning. Reopening the source adds little unless the canonical wording itself is needed.",
+      "novelty": {
+        "level": "high",
+        "reason": "The source adds a generic runtime-process disposability model rather than another implementation-specific workflow or worker concept."
+      },
+      "source_quality": {
+        "level": "high",
+        "reason": "The primary source is the canonical Twelve-Factor Processes page authored by Adam Wiggins and fully inspected."
+      },
+      "relevance": {
+        "level": "high",
+        "reason": "The process/state boundary remains directly useful for horizontally scaled services, background workers and containerized deployments."
+      },
+      "practical_leverage": {
+        "level": "high",
+        "reason": "The model gives a concrete review test: if losing one process breaks future correctness, durable state has been placed at the wrong lifetime boundary."
+      },
+      "compression_loss": {
+        "level": "low",
+        "reason": "The source itself is compact and contains no large implementation sections that must be preserved for the requested mental model."
+      },
+      "selected_parts": []
     }
   ]
 }

@@ -956,6 +956,54 @@
           }
         }
       ]
+    },
+    {
+      "insight_id": "twelve-factor-stateless-process-boundary",
+      "summary": "The model needs only three pieces: a disposable stateless process, a backing service that owns persistent state, and an explicit category of ephemeral local working data whose loss is safe.",
+      "items": [
+        {
+          "id": "twelve-factor-prereq-process",
+          "label": "Stateless process",
+          "concept_id": "stateless-process",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "The factor is fundamentally about making process instances disposable across requests, jobs, restarts and scaling.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "twelve-factor-stateless-process-boundary",
+            "target": null
+          }
+        },
+        {
+          "id": "twelve-factor-prereq-backing-state",
+          "label": "Backing-service state",
+          "concept_id": "backing-service-state",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "Without external persistent state, 'stateless process' is easily misread as an application with no durable state at all.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "twelve-factor-stateless-process-boundary",
+            "target": null
+          }
+        },
+        {
+          "id": "twelve-factor-prereq-ephemeral",
+          "label": "Ephemeral process state",
+          "concept_id": "ephemeral-process-state",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "The source explicitly allows process-local cache when losing it is safe, which defines the practical boundary rather than a blanket ban on local state.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "twelve-factor-stateless-process-boundary",
+            "target": null
+          }
+        }
+      ]
     }
   ]
 }
