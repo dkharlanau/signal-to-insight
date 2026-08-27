@@ -87,6 +87,12 @@ jobs:
       - name: Test next-research target derivation
         run: python scripts/next_research.py --self-test
 
+      - name: Test living-source revision workflow
+        run: python scripts/source_freshness.py self-test
+
+      - name: Test portable private state
+        run: python scripts/local_state.py self-test
+
       - name: Test explicit publication lifecycle boundaries
         run: |
           python scripts/publish_reviewed.py --self-test
