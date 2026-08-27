@@ -97,7 +97,8 @@
     if (inferType("https://github.com/open-policy-agent/opa") !== "repository") throw new Error("repository inference failed");
     if (inferType("https://arxiv.org/abs/2210.03629") !== "paper") throw new Error("paper inference failed");
     const issue = buildIssueUrl({ url: "https://example.com/a?utm_source=x", type: "article", focus: "why", note: "note" });
-    if (!issue.includes("issues/new") || !decodeURIComponent(issue).includes("### Source URL")) throw new Error("issue prefill failed");
+    const issueUrl = new URL(issue);
+    if (!issue.includes("issues/new") || !(issueUrl.searchParams.get("body") || "").includes("### Source URL")) throw new Error("issue prefill failed");
     console.log("capture self-test passed; URL cleanup, type inference and GitHub issue prefill work.");
   }
 
