@@ -1,0 +1,134 @@
+/* Evidence-driven visual primitives used only when a real source benefits from them. */
+
+.visual-extension {
+  margin: 28px 0 34px;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+}
+
+.visual-extension-heading {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 18px;
+  align-items: end;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--ink);
+}
+.visual-extension-heading > span,
+.visual-extension-label,
+.visual-branches span,
+.visual-extension-fallback summary {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  font-weight: 800;
+}
+.visual-extension-heading > span,
+.visual-extension-label { font-size: 10px; }
+.visual-extension-heading h3 { margin: 0; font-size: 22px; line-height: 1.05; }
+
+.visual-tree-layers {
+  display: grid;
+  gap: 0;
+}
+.visual-tree-layer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  border-bottom: 1px solid var(--line);
+}
+.visual-tree-layer:last-child { border-bottom: 0; }
+.visual-extension-node {
+  min-height: 205px;
+  padding: 22px;
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+}
+.visual-tree-layer .visual-extension-node:last-child { border-right: 0; }
+.visual-extension-node h3 { margin: 10px 0 12px; font-size: 22px; line-height: 1.05; }
+.visual-extension-node p { margin: 0; color: var(--muted); line-height: 1.5; }
+.visual-kind-decision { background: color-mix(in srgb, var(--acid) 22%, var(--paper)); }
+.visual-kind-recovery { background: color-mix(in srgb, var(--acid) 14%, var(--paper)); }
+.visual-extension-node[data-initial="true"] { box-shadow: inset 0 4px 0 var(--ink); }
+
+.visual-branches {
+  list-style: none;
+  padding: 0;
+  margin: auto 0 0;
+  padding-top: 18px;
+  display: grid;
+  gap: 7px;
+}
+.visual-branches li {
+  border-top: 1px solid var(--line);
+  padding-top: 8px;
+  display: grid;
+  grid-template-columns: minmax(95px, .7fr) 1.3fr;
+  gap: 10px;
+  align-items: baseline;
+}
+.visual-branches span { font-size: 9px; color: var(--muted); }
+.visual-branches strong { font-size: 12px; }
+
+.visual-state-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.visual-state-grid .visual-extension-node { border-bottom: 1px solid var(--line); }
+
+.visual-extension-fallback {
+  border-top: 1px solid var(--ink);
+  padding: 15px 20px;
+}
+.visual-extension-fallback summary { cursor: pointer; font-size: 10px; }
+.visual-extension-fallback ol { margin: 18px 0 4px; padding-left: 22px; }
+.visual-extension-fallback li { padding: 5px 0; line-height: 1.45; }
+.visual-extension-reason {
+  margin: 0;
+  padding: 14px 20px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.source-figure-v2 { padding-bottom: 0; }
+.source-figure-link {
+  display: block;
+  padding: 24px;
+  background: white;
+}
+.source-figure-link img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 520px;
+  object-fit: contain;
+}
+.source-figure-v2 figcaption {
+  padding: 18px 20px;
+  border-top: 1px solid var(--line);
+}
+.source-figure-v2 figcaption p { margin: 0 0 8px; line-height: 1.5; }
+.source-figure-v2 figcaption small {
+  font: 700 9px ui-monospace, SFMono-Regular, Menlo, monospace;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+@media (max-width: 900px) {
+  .visual-state-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 640px) {
+  .visual-extension-heading { grid-template-columns: 1fr; }
+  .visual-tree-layer,
+  .visual-state-grid { grid-template-columns: 1fr; }
+  .visual-extension-node,
+  .visual-tree-layer .visual-extension-node { border-right: 0; border-bottom: 1px solid var(--line); }
+  .visual-tree-layer .visual-extension-node:last-child { border-bottom: 0; }
+  .visual-branches li { grid-template-columns: 1fr; }
+  .source-figure-link { padding: 12px; overflow-x: auto; }
+  .source-figure-link img { min-width: 620px; }
+}
