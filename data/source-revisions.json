@@ -1,0 +1,43 @@
+{
+  "revision_version": "1.0.0",
+  "sources": [
+    {
+      "source_id": "src-temporal-docs-2026",
+      "canonical_url": "https://docs.temporal.io/",
+      "upstream": {
+        "provider": "github",
+        "repository": "temporalio/documentation",
+        "tracking_mode": "branch",
+        "branch": "main",
+        "release": null
+      },
+      "analyzed_revision": {
+        "kind": "commit",
+        "id": "6f46de944c41b1823331536a65356548b94578c7",
+        "occurred_at": "2026-08-25T21:05:06Z",
+        "recorded_at": "2026-08-27",
+        "capture_quality": "reconstructed",
+        "basis": "The Temporal review insight was committed at 2026-08-26T13:11:42Z. This is the latest commit on the official temporalio/documentation main branch before that review timestamp. The original analysis recorded access date but not commit SHA, so this baseline is explicitly reconstructed rather than claimed as directly captured."
+      }
+    },
+    {
+      "source_id": "src-open-policy-agent-opa-2026",
+      "canonical_url": "https://github.com/open-policy-agent/opa",
+      "upstream": {
+        "provider": "github",
+        "repository": "open-policy-agent/opa",
+        "tracking_mode": "branch",
+        "branch": "main",
+        "release": "v1.19.1"
+      },
+      "analyzed_revision": {
+        "kind": "commit",
+        "id": "836e1ab6a5e2c7be70783805afcc8c8490a0af68",
+        "occurred_at": "2026-08-26T12:49:21Z",
+        "recorded_at": "2026-08-27",
+        "capture_quality": "reconstructed",
+        "basis": "The OPA source reached review at 2026-08-26T14:20:24Z and the research record directly captured release v1.19.1. This is the latest main-branch commit before that review timestamp. The commit SHA was not stored during the original analysis, so it is retained as a reconstructed branch baseline while v1.19.1 remains the directly captured release marker."
+      }
+    }
+  ]
+}
