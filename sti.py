@@ -70,6 +70,9 @@ def main() -> int:
     preflight.add_argument("--contract", help="Companion case-contract path; inferred when omitted")
     preflight.add_argument("--json", action="store_true")
 
+    evidence = sub.add_parser("evidence", help="Plan the next real human/private validation evidence")
+    evidence.add_argument("--json", action="store_true")
+
     validate = sub.add_parser("validate", help="Run deterministic core repository validation")
     validate.add_argument("--all", action="store_true", help="Also run extended evidence/freshness/history validators and acceptance tests")
 
@@ -119,6 +122,10 @@ def main() -> int:
             if args.json:
                 forwarded.append("--json")
             return run_script("preflight_case.py", forwarded)
+
+        if args.command == "evidence":
+            forwarded = ["--json"] if args.json else []
+            return run_script("evidence_plan.py", forwarded)
 
         if args.command == "validate":
             core = [

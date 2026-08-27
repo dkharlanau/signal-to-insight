@@ -129,6 +129,9 @@ jobs:
       - name: Test Source Decision calibration store
         run: python scripts/source_decision_benchmark.py self-test
 
+      - name: Test human evidence planner
+        run: python scripts/evidence_plan.py --self-test
+
       - name: Test explicit publication lifecycle boundaries
         run: |
           python scripts/publish_reviewed.py --self-test
