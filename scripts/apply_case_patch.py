@@ -12,6 +12,7 @@ INBOX = ROOT / "data" / "inbox.json"
 SOURCES = ROOT / "data" / "sources.json"
 INSIGHTS = ROOT / "data" / "insights.json"
 GRAPH = ROOT / "data" / "knowledge-graph.json"
+FROZEN_PUBLIC_REFERENCE_KEYS = {"id", "insight_ids", "public"}
 
 
 def load(path: Path) -> dict:
@@ -31,6 +32,30 @@ def upsert(items: list[dict], key: str, value: dict) -> None:
     items.append(value)
 
 
+def validate_public_freeze(existing: dict | None, patch: dict, published_ids: set[str], current_insight_id: str) -> None:
+    if existing is None:
+        raise SystemExit("frozen public projection requires an existing concept")
+    if set(patch) != FROZEN_PUBLIC_REFERENCE_KEYS:
+        raise SystemExit("public projection is only allowed on a reference-only existing concept patch")
+    public = patch.get("public")
+    if not isinstance(public, dict):
+        raise SystemExit("frozen public projection must be an object")
+    existing_public = existing.get("public")
+    if existing_public is not None and existing_public != public:
+        raise SystemExit("review case cannot change an existing public concept projection")
+    if public.get("summary") != existing.get("summary") or public.get("coverage") != existing.get("coverage"):
+        raise SystemExit("review case public projection must freeze existing summary and coverage")
+    evidence = public.get("evidence_insights")
+    if not isinstance(evidence, list) or not evidence:
+        raise SystemExit("review case public projection requires published evidence")
+    if current_insight_id in evidence:
+        raise SystemExit("current review insight cannot enter frozen public projection")
+    if any(item_id not in set(existing.get("insight_ids", [])) for item_id in evidence):
+        raise SystemExit("frozen public evidence must already support the existing concept")
+    if any(item_id not in published_ids for item_id in evidence):
+        raise SystemExit("frozen public evidence must already be published")
+
+
 def merge_concept(existing: dict, patch: dict) -> None:
     """Merge a concept patch without deleting evidence/public projection owned by other cases."""
     patch_ids = list(patch.get("insight_ids", []))
@@ -39,11 +64,18 @@ def merge_concept(existing: dict, patch: dict) -> None:
         if insight_id not in existing_ids:
             existing_ids.append(insight_id)
 
-    if set(patch) <= {"id", "insight_ids"}:
+    public = patch.get("public")
+    if public is not None:
+        existing_public = existing.get("public")
+        if existing_public is not None and existing_public != public:
+            raise SystemExit("review case cannot replace an existing public concept projection")
+        existing["public"] = public
+
+    if set(patch) <= FROZEN_PUBLIC_REFERENCE_KEYS:
         return
 
     for key, value in patch.items():
-        if key in {"id", "insight_ids"}:
+        if key in {"id", "insight_ids", "public"}:
             continue
         existing[key] = value
 
@@ -86,14 +118,11 @@ def main() -> int:
         None,
     )
 
-    # A case patch is a review snapshot. Explicit publication is terminal for this snapshot:
-    # materialization must never silently downgrade it back to review.
     if current_insight is not None and current_insight.get("status") == "published":
         raise SystemExit(
             f"refusing to overwrite published insight '{insight.get('id')}' with a review case patch"
         )
 
-    # Defense in depth: researched case patches can prepare review artifacts, never publish them.
     if patch.get("intake_status") != "review" or insight.get("status") != "review":
         raise SystemExit("case patches are review-only; publication requires a separate reviewed transition")
     if source.get("canonical_url") != intake.get("source_url"):
@@ -106,12 +135,24 @@ def main() -> int:
         raise SystemExit("source.derived_records must contain the current insight id")
 
     graph_patch = patch.get("graph") or {}
-    for concept in graph_patch.get("concepts", []):
-        if "public" in concept:
-            raise SystemExit("review case patches may not mutate public concept projection")
     for relation in graph_patch.get("relations", []):
         if "public" in relation:
             raise SystemExit("review case patches may not mutate public relation projection")
+
+    published_ids = {
+        item.get("id")
+        for item in insights.get("insights", [])
+        if isinstance(item, dict) and item.get("status") == "published"
+    }
+    concept_map = {item["id"]: item for item in graph.setdefault("concepts", [])}
+    for concept_patch in graph_patch.get("concepts", []):
+        if "public" in concept_patch:
+            validate_public_freeze(
+                concept_map.get(concept_patch.get("id")),
+                concept_patch,
+                published_ids,
+                insight["id"],
+            )
 
     upsert(sources.setdefault("sources", []), "id", source)
     upsert(insights.setdefault("insights", []), "id", insight)
@@ -120,7 +161,6 @@ def main() -> int:
     intake["source_id"] = source["id"]
     intake["insight_id"] = insight["id"]
 
-    concept_map = {item["id"]: item for item in graph.setdefault("concepts", [])}
     for concept_patch in graph_patch.get("concepts", []):
         concept_id = concept_patch["id"]
         existing = concept_map.get(concept_id)
