@@ -4039,6 +4039,181 @@
         "analysis_type": "direct official OpenTelemetry documentation analysis with explicit evidence-scope boundary",
         "reviewed_at": "2026-08-27"
       }
+    },
+    {
+      "id": "sre-symptom-cause-actionable-monitoring",
+      "source_id": "src-google-sre-monitoring-distributed-systems-2016",
+      "slug": "sre-symptom-cause-actionable-monitoring",
+      "status": "review",
+      "title": "Google SRE monitoring: page on symptoms, diagnose with causes",
+      "one_liner": "Useful monitoring separates what users experience from why it happens, combines black-box symptoms with white-box diagnosis, and treats every human page as an expensive actionable decision interface.",
+      "why_this_matters": "The source turns observability from a telemetry collection problem into an operator-decision problem: what should interrupt a human, which signal explains the symptom, and which metrics belong in a dashboard rather than a pager.",
+      "whole_source_map": {
+        "problem": "A monitoring stack can collect large volumes of internal telemetry yet still fail operators when it cannot separate user-visible symptoms from causes or when noisy alerts interrupt humans without a clear action.",
+        "thesis": "Design monitoring around symptom/cause questions, combine black-box and white-box perspectives, cover core service behavior with a small signal set, and reserve pages for urgent actionable conditions with high signal and low noise.",
+        "core_topics": [
+          "symptoms versus causes",
+          "black-box monitoring",
+          "white-box monitoring",
+          "actionable paging",
+          "four golden signals",
+          "simple high-signal alerting"
+        ]
+      },
+      "derived_model": {
+        "problem": "Telemetry volume is not operational usefulness: operators need to know whether users are affected, why, and what human action is required now.",
+        "mechanism": "Use black-box signals for active user-visible symptoms, white-box signals for internal diagnosis or imminent problems, keep service coverage centered on latency/traffic/errors/saturation, and promote a condition to paging only when it is urgent and actionable.",
+        "result": "Monitoring becomes a decision-support system with lower alert noise, faster symptom-to-cause reasoning and clearer separation between paging, dashboards and retrospective debugging."
+      },
+      "coherence_review": {
+        "central_chain": [
+          "Monitoring must answer what is broken and why rather than only expose raw metrics.",
+          "Black-box monitoring observes externally visible symptoms and is a strong basis for paging active user impact.",
+          "White-box monitoring exposes internal state needed to diagnose causes and detect imminent or retry-masked problems.",
+          "Latency, traffic, errors and saturation provide a compact service-level coverage baseline.",
+          "A pager rule is justified only when it represents an urgent actionable failure with enough signal to deserve human interruption."
+        ],
+        "prerequisites_complete": true,
+        "source_vs_enrichment_clear": true,
+        "open_gaps": [
+          "Later SRE practice adds more SLO/error-budget based alerting techniques that are outside this 2016 chapter.",
+          "The source does not prescribe one monitoring vendor or telemetry storage architecture."
+        ],
+        "scores": {
+          "coherence": 5,
+          "prerequisite_completeness": 5,
+          "evidence_confidence": 5,
+          "practical_leverage": 5
+        }
+      },
+      "visual_plan": {
+        "dominant": {
+          "type": "comparison",
+          "title": "Symptom detection and diagnosis need different views",
+          "nodes": [
+            {
+              "label": "BLACK BOX",
+              "title": "What users see",
+              "text": "Externally visible behavior tells you that a real symptom is happening now and disciplines paging toward user impact."
+            },
+            {
+              "label": "WHITE BOX",
+              "title": "Why it happens",
+              "text": "Internal metrics, logs and instrumentation expose causes, imminent failures and problems hidden by retries."
+            }
+          ]
+        },
+        "supporting": [
+          "sequence",
+          "concept_grid",
+          "examples",
+          "limitations",
+          "action_map",
+          "source_map"
+        ],
+        "image": {
+          "needed": false,
+          "reason": "The main learning is a two-view operational decision boundary; a black-box/white-box comparison is more precise than decorative imagery."
+        }
+      },
+      "concepts": [
+        {
+          "name": "Symptom/cause monitoring",
+          "depth": "learn",
+          "why_needed": "Monitoring should distinguish what is broken from why it is broken so detection and diagnosis do not become one noisy rule set."
+        },
+        {
+          "name": "Black-box monitoring",
+          "depth": "learn",
+          "why_needed": "External behavior is the strongest evidence that users are currently experiencing a symptom."
+        },
+        {
+          "name": "White-box monitoring",
+          "depth": "learn",
+          "why_needed": "Internal telemetry supplies diagnostic causes and early warning that external probes alone cannot provide."
+        },
+        {
+          "name": "Actionable alerting",
+          "depth": "learn",
+          "why_needed": "A page is a human interruption and should correspond to an urgent condition requiring judgment or action."
+        }
+      ],
+      "tool_map": [],
+      "examples": [
+        {
+          "domain": "web service",
+          "scenario": "Users receive HTTP 500 responses while database connection errors rise internally.",
+          "question": "Which signal should page on the symptom, and which white-box evidence helps isolate the cause?"
+        },
+        {
+          "domain": "cross-system business flow",
+          "scenario": "A workflow retries successfully but internal latency and queue depth are rising toward saturation.",
+          "question": "What belongs in white-box early-warning monitoring versus a page that claims current user impact?"
+        },
+        {
+          "domain": "alert review",
+          "scenario": "A pager fires several times per day and the response is always the same script.",
+          "question": "Should this stay a human page, become automation, or be demoted to non-paging monitoring?"
+        }
+      ],
+      "limitations": [
+        "Black-box monitoring is strong for active symptoms but may miss imminent failures before users are affected.",
+        "White-box monitoring can explain causes but becomes noisy when internal anomalies are promoted directly to pages without user-impact or action semantics.",
+        "The four golden signals are a starting point for user-facing services, not a complete domain-specific monitoring specification.",
+        "Monitoring and alerting do not replace durable business evidence, incident response or root-cause remediation."
+      ],
+      "action_map": {
+        "use_now": [
+          "Review every current pager rule by asking what user-visible symptom it represents and what human action is expected.",
+          "Separate dashboards/diagnostic telemetry from page-worthy conditions instead of treating every collected metric as an alert candidate."
+        ],
+        "try": [
+          "Take one service or business process and map its black-box symptom, likely white-box causes, four golden signals and the exact threshold for waking a human."
+        ],
+        "learn": [
+          "four golden signals",
+          "SLO-based alerting",
+          "alert fatigue",
+          "symptom versus cause modeling"
+        ],
+        "build": [
+          "A monitoring review checklist that scores each alert for user visibility, urgency, actionability and duplicate/noise risk."
+        ],
+        "watch": [
+          "Where modern SLO burn-rate alerting improves on simple threshold-based paging while preserving the same actionability principle."
+        ],
+        "ignore_for_now": [
+          "Adding more telemetry dimensions before existing pages have a clear symptom, owner and action."
+        ]
+      },
+      "connections": [
+        "observability: refined from collecting/reconstructing telemetry into an operator-facing symptom/cause/action model",
+        "OpenTelemetry distributed tracing: one important white-box diagnostic signal, but the tracing model does not decide when a human should be paged"
+      ],
+      "supporting_sources": [
+        {
+          "title": "Monitoring Distributed Systems",
+          "url": "https://sre.google/sre-book/monitoring-distributed-systems",
+          "publisher": "Google Site Reliability Engineering",
+          "purpose": "primary source for symptom/cause, black-box/white-box, golden signals and actionable paging principles",
+          "accessed_at": "2026-08-27"
+        }
+      ],
+      "tags": [
+        "sre",
+        "monitoring",
+        "observability",
+        "alerting",
+        "reliability",
+        "operations"
+      ],
+      "provenance": {
+        "source_linked": true,
+        "source_dates_recorded": true,
+        "full_transcript_stored": false,
+        "analysis_type": "direct official Google SRE chapter analysis focused on operator decision semantics",
+        "reviewed_at": "2026-08-27"
+      }
     }
   ]
 }

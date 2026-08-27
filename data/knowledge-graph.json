@@ -143,7 +143,8 @@
       "coverage": "introduced",
       "insight_ids": [
         "enterprise-agents-production-substrate",
-        "opentelemetry-distributed-trace-causality"
+        "opentelemetry-distributed-trace-causality",
+        "sre-symptom-cause-actionable-monitoring"
       ],
       "aliases": [],
       "tags": [
@@ -1381,6 +1382,78 @@
         "causality",
         "async"
       ]
+    },
+    {
+      "id": "symptom-cause-monitoring",
+      "label": "Symptom/cause monitoring",
+      "summary": "Structuring monitoring so externally meaningful symptoms answer what is broken while internal evidence helps explain why it is broken.",
+      "domain": "site reliability engineering",
+      "coverage": "explained",
+      "insight_ids": [
+        "sre-symptom-cause-actionable-monitoring"
+      ],
+      "aliases": [
+        "what-versus-why monitoring"
+      ],
+      "tags": [
+        "monitoring",
+        "diagnosis",
+        "signal"
+      ]
+    },
+    {
+      "id": "black-box-monitoring",
+      "label": "Black-box monitoring",
+      "summary": "Testing externally visible service behavior from the user perspective to detect active symptoms without depending on internal implementation details.",
+      "domain": "site reliability engineering",
+      "coverage": "explained",
+      "insight_ids": [
+        "sre-symptom-cause-actionable-monitoring"
+      ],
+      "aliases": [
+        "external symptom monitoring"
+      ],
+      "tags": [
+        "monitoring",
+        "symptoms",
+        "user-impact"
+      ]
+    },
+    {
+      "id": "white-box-monitoring",
+      "label": "White-box monitoring",
+      "summary": "Using internal metrics, logs, instrumentation or interfaces to diagnose causes and detect internal or imminent failure conditions.",
+      "domain": "site reliability engineering",
+      "coverage": "explained",
+      "insight_ids": [
+        "sre-symptom-cause-actionable-monitoring"
+      ],
+      "aliases": [
+        "internal instrumentation monitoring"
+      ],
+      "tags": [
+        "monitoring",
+        "telemetry",
+        "diagnosis"
+      ]
+    },
+    {
+      "id": "actionable-alerting",
+      "label": "Actionable alerting",
+      "summary": "Interrupting a human only for a clear urgent condition that requires meaningful action or judgment, while keeping signal high and noise low.",
+      "domain": "site reliability engineering",
+      "coverage": "explained",
+      "insight_ids": [
+        "sre-symptom-cause-actionable-monitoring"
+      ],
+      "aliases": [
+        "high-signal paging"
+      ],
+      "tags": [
+        "alerting",
+        "paging",
+        "operations"
+      ]
     }
   ],
   "relations": [
@@ -2030,6 +2103,46 @@
       "rationale": "Span links preserve causal associations across async operations or trace boundaries where a normal parent-child hierarchy cannot express the relationship cleanly.",
       "evidence_insights": [
         "opentelemetry-distributed-trace-causality"
+      ]
+    },
+    {
+      "id": "rel-symptom-cause-monitoring-refines-observability",
+      "from": "symptom-cause-monitoring",
+      "to": "observability",
+      "type": "refines",
+      "rationale": "The SRE model makes broad observability operational by separating user-visible symptoms, diagnostic causes and the decisions that monitoring should support.",
+      "evidence_insights": [
+        "sre-symptom-cause-actionable-monitoring"
+      ]
+    },
+    {
+      "id": "rel-black-box-monitoring-related-to-symptom-cause-monitoring",
+      "from": "black-box-monitoring",
+      "to": "symptom-cause-monitoring",
+      "type": "related_to",
+      "rationale": "Black-box monitoring supplies symptom-oriented evidence about externally visible service behavior.",
+      "evidence_insights": [
+        "sre-symptom-cause-actionable-monitoring"
+      ]
+    },
+    {
+      "id": "rel-white-box-monitoring-related-to-symptom-cause-monitoring",
+      "from": "white-box-monitoring",
+      "to": "symptom-cause-monitoring",
+      "type": "related_to",
+      "rationale": "White-box monitoring supplies internal evidence used to explain causes or detect imminent problems behind service symptoms.",
+      "evidence_insights": [
+        "sre-symptom-cause-actionable-monitoring"
+      ]
+    },
+    {
+      "id": "rel-actionable-alerting-depends-on-symptom-cause-monitoring",
+      "from": "actionable-alerting",
+      "to": "symptom-cause-monitoring",
+      "type": "depends_on",
+      "rationale": "A high-signal page needs a clear symptom or imminent failure and enough context to justify a specific urgent human action instead of reacting to arbitrary telemetry anomalies.",
+      "evidence_insights": [
+        "sre-symptom-cause-actionable-monitoring"
       ]
     }
   ]

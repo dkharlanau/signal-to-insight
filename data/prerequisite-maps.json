@@ -1066,6 +1066,82 @@
           }
         }
       ]
+    },
+    {
+      "insight_id": "sre-symptom-cause-actionable-monitoring",
+      "summary": "The chapter builds on an existing observability idea, then adds a compact operator model: symptom versus cause, external versus internal views, and an explicit actionability threshold for paging.",
+      "items": [
+        {
+          "id": "sre-prereq-observability",
+          "label": "Observability",
+          "concept_id": "observability",
+          "priority": "must_know_now",
+          "prior_coverage": "partial",
+          "state": "known_in_graph",
+          "reason": "The chapter is not about whether telemetry exists, but about how existing telemetry should support detection, diagnosis and operator decisions.",
+          "resolution": {
+            "kind": "existing_concept",
+            "insight_id": null,
+            "target": "observability"
+          }
+        },
+        {
+          "id": "sre-prereq-symptom-cause",
+          "label": "Symptom/cause monitoring",
+          "concept_id": "symptom-cause-monitoring",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "Separating what users experience from why it happens is the central structure for reducing alert noise and improving diagnosis.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "sre-symptom-cause-actionable-monitoring",
+            "target": null
+          }
+        },
+        {
+          "id": "sre-prereq-black-box",
+          "label": "Black-box monitoring",
+          "concept_id": "black-box-monitoring",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "User-perspective external signals explain why current symptoms are a disciplined default basis for human paging.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "sre-symptom-cause-actionable-monitoring",
+            "target": null
+          }
+        },
+        {
+          "id": "sre-prereq-white-box",
+          "label": "White-box monitoring",
+          "concept_id": "white-box-monitoring",
+          "priority": "learn_next",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "Internal instrumentation is required to diagnose causes and catch conditions that black-box symptom probes cannot yet see.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "sre-symptom-cause-actionable-monitoring",
+            "target": null
+          }
+        },
+        {
+          "id": "sre-prereq-actionable-alerting",
+          "label": "Actionable alerting",
+          "concept_id": "actionable-alerting",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "The monitoring model is incomplete unless it explains when a signal is important enough to interrupt a human and require urgent judgment.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "sre-symptom-cause-actionable-monitoring",
+            "target": null
+          }
+        }
+      ]
     }
   ]
 }

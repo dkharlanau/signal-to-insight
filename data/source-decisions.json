@@ -823,6 +823,65 @@
           ]
         }
       ]
+    },
+    {
+      "insight_id": "sre-symptom-cause-actionable-monitoring",
+      "decision": "skim_selected_parts",
+      "rationale": "The explainer preserves the monitoring philosophy, but the original chapter is worth a targeted skim for its concrete symptom/cause examples, black-box/white-box distinction, golden-signal definitions and page-action questions. The long historical case studies are optional for the current mental model.",
+      "novelty": {
+        "level": "high",
+        "reason": "The source adds operator decision semantics on top of existing observability and tracing concepts rather than repeating telemetry mechanics."
+      },
+      "source_quality": {
+        "level": "high",
+        "reason": "This is the original Google SRE chapter authored from production operations practice and hosted on the official SRE site."
+      },
+      "relevance": {
+        "level": "high",
+        "reason": "The model directly applies to cross-system monitoring, incident detection and reducing noisy enterprise support operations."
+      },
+      "practical_leverage": {
+        "level": "high",
+        "reason": "The symptom/cause/action framework can immediately change alert rules, dashboards and escalation design."
+      },
+      "compression_loss": {
+        "level": "medium",
+        "reason": "The causal model compresses well, but concrete examples and alert-review questions add useful judgment when applying it to real monitoring."
+      },
+      "selected_parts": [
+        {
+          "label": "Symptom versus cause",
+          "locator": "Symptoms Versus Causes",
+          "why": "Establishes the what-is-broken versus why distinction that structures the rest of monitoring design.",
+          "claim_refs": [
+            "sre-monitoring-what-and-why"
+          ]
+        },
+        {
+          "label": "Black-box versus white-box",
+          "locator": "Black-Box Versus White-Box",
+          "why": "Shows why user-visible symptom detection and internal diagnosis need complementary monitoring views.",
+          "claim_refs": [
+            "sre-black-white-complement"
+          ]
+        },
+        {
+          "label": "Actionable paging",
+          "locator": "Why Monitor?; Tying These Principles Together",
+          "why": "Makes the human-cost, urgency and actionability threshold for paging explicit.",
+          "claim_refs": [
+            "sre-pages-actionable-high-signal"
+          ]
+        },
+        {
+          "label": "Four golden signals",
+          "locator": "The Four Golden Signals",
+          "why": "Provides a compact service-level coverage baseline without turning every internal metric into a page.",
+          "claim_refs": [
+            "sre-four-golden-signals"
+          ]
+        }
+      ]
     }
   ]
 }

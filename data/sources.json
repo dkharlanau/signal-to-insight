@@ -629,6 +629,26 @@
       "derived_records": [
         "opentelemetry-distributed-trace-causality"
       ]
+    },
+    {
+      "id": "src-google-sre-monitoring-distributed-systems-2016",
+      "type": "article",
+      "title": "Monitoring Distributed Systems",
+      "canonical_url": "https://sre.google/sre-book/monitoring-distributed-systems",
+      "creators": [
+        "Rob Ewaschuk"
+      ],
+      "publisher": "Google Site Reliability Engineering",
+      "event": null,
+      "published_at": null,
+      "event_date": null,
+      "captured_at": "2026-08-27",
+      "analyzed_at": "2026-08-27",
+      "date_note": "Chapter 6 of Site Reliability Engineering (2016), written by Rob Ewaschuk and edited by Betsy Beyer; exact publication day is not asserted.",
+      "verification": [],
+      "derived_records": [
+        "sre-symptom-cause-actionable-monitoring"
+      ]
     }
   ]
 }

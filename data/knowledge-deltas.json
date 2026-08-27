@@ -822,6 +822,52 @@
         "open-policy-agent",
         "durable-execution"
       ]
+    },
+    {
+      "insight_id": "sre-symptom-cause-actionable-monitoring",
+      "summary": "Google SRE further refines observability from causal telemetry into operator decision semantics: separate symptoms from causes, combine external and internal views, and page only when a condition deserves urgent human action.",
+      "items": [
+        {
+          "relationship": "refines",
+          "concept_id": "observability",
+          "label": "Observability",
+          "source_basis": "The chapter defines monitoring as a system for answering what is broken and why, and distinguishes black-box symptoms, white-box diagnosis and human alerting decisions.",
+          "prior_basis": "The enterprise-agent case introduced observability broadly, and the OpenTelemetry case refined it into causal distributed trace telemetry.",
+          "interpretation": "This source adds the operator-facing layer: useful telemetry must support symptom detection, causal diagnosis and an explicit action/noise decision rather than merely exist.",
+          "evidence_insights": [
+            "enterprise-agents-production-substrate",
+            "opentelemetry-distributed-trace-causality"
+          ]
+        },
+        {
+          "relationship": "new",
+          "concept_id": "symptom-cause-monitoring",
+          "label": "Symptom/cause monitoring",
+          "source_basis": "The chapter says monitoring should answer what is broken (symptom) and why (cause) as separate questions.",
+          "prior_basis": "The graph contained telemetry and tracing concepts but no operator model separating detection from diagnosis.",
+          "interpretation": "This becomes the central monitoring review test: which signal proves user impact and which signal explains the likely cause?",
+          "evidence_insights": []
+        },
+        {
+          "relationship": "new",
+          "concept_id": "black-box-monitoring",
+          "label": "Black-box monitoring",
+          "source_basis": "Google SRE defines black-box monitoring as externally visible behavior and emphasizes its symptom-oriented paging value.",
+          "prior_basis": "No prior concept represented a user-perspective external probe as a distinct monitoring responsibility.",
+          "interpretation": "Black-box evidence becomes the strongest default basis for paging active user-visible failure without coupling the alert to one internal implementation cause.",
+          "evidence_insights": []
+        },
+        {
+          "relationship": "new",
+          "concept_id": "actionable-alerting",
+          "label": "Actionable alerting",
+          "source_basis": "The chapter repeatedly ties pages to urgent human response, warns about alert fatigue, and says every page should be actionable.",
+          "prior_basis": "The graph had observability signals but no concept for deciding when telemetry should interrupt a human.",
+          "interpretation": "Alerting becomes a decision interface with a high signal/noise bar rather than a direct consequence of collecting an anomalous metric.",
+          "evidence_insights": []
+        }
+      ],
+      "suppressed_prior_matches": []
     }
   ]
 }

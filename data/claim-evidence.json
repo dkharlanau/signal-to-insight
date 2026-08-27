@@ -1483,6 +1483,96 @@
           "note": "OpenTelemetry defines telemetry correlation semantics, while the distinction from authoritative execution evidence is project synthesis using the existing controlled-execution/execution-history model."
         }
       ]
+    },
+    {
+      "insight_id": "sre-symptom-cause-actionable-monitoring",
+      "claims": [
+        {
+          "id": "sre-monitoring-what-and-why",
+          "text": "Google SRE frames effective monitoring around two distinct questions: what is broken for the service and why that symptom is occurring.",
+          "impact": "high",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-google-sre-monitoring-distributed-systems-2016",
+              "url": "https://sre.google/sre-book/monitoring-distributed-systems",
+              "locator": "Symptoms Versus Causes"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "sre-black-white-complement",
+          "text": "Black-box monitoring focuses on externally visible symptoms while white-box monitoring uses internal instrumentation for diagnosis and for imminent or retry-masked failures.",
+          "impact": "high",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-google-sre-monitoring-distributed-systems-2016",
+              "url": "https://sre.google/sre-book/monitoring-distributed-systems",
+              "locator": "Black-Box Versus White-Box"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "sre-pages-actionable-high-signal",
+          "text": "Human paging should be reserved for clear urgent conditions that require meaningful action because frequent noisy pages degrade attention and can hide real incidents.",
+          "impact": "high",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-google-sre-monitoring-distributed-systems-2016",
+              "url": "https://sre.google/sre-book/monitoring-distributed-systems",
+              "locator": "Why Monitor?; Tying These Principles Together"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "sre-four-golden-signals",
+          "text": "The chapter recommends latency, traffic, errors and saturation as four core signals for baseline monitoring of a user-facing service.",
+          "impact": "medium",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-google-sre-monitoring-distributed-systems-2016",
+              "url": "https://sre.google/sre-book/monitoring-distributed-systems",
+              "locator": "The Four Golden Signals"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "sre-observability-needs-decision-semantics",
+          "text": "Telemetry becomes operationally useful only when it is connected to a symptom, diagnostic question or human decision instead of being promoted to alerting merely because it is available.",
+          "impact": "high",
+          "origin": "project_interpretation",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-google-sre-monitoring-distributed-systems-2016",
+              "url": "https://sre.google/sre-book/monitoring-distributed-systems",
+              "locator": "As Simple as Possible, No Simpler; Tying These Principles Together"
+            },
+            {
+              "kind": "prior_insight",
+              "insight_id": "opentelemetry-distributed-trace-causality",
+              "locator": "Distributed traces as causal observability telemetry"
+            }
+          ],
+          "note": "This wording is the project's synthesis connecting the SRE chapter's signal/noise/action guidance to the prior OpenTelemetry observability refinement."
+        }
+      ]
     }
   ]
 }

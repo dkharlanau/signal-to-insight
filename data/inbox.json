@@ -205,9 +205,9 @@
       "source_type": "article",
       "submitted_at": "2026-08-27",
       "requested_focus": "Understand what monitoring should tell operators, the difference between black-box and white-box signals, alerting boundaries and how to avoid turning telemetry volume into operational noise.",
-      "status": "queued",
-      "source_id": null,
-      "insight_id": null,
+      "status": "review",
+      "source_id": "src-google-sre-monitoring-distributed-systems-2016",
+      "insight_id": "sre-symptom-cause-actionable-monitoring",
       "notes": "GitHub source intake issue #66. Dogfood cohort: reliability/operations book chapter."
     },
     {

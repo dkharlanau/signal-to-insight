@@ -423,6 +423,30 @@
           "span-link"
         ]
       }
+    },
+    {
+      "insight_id": "sre-symptom-cause-actionable-monitoring",
+      "retention_prompt": "Without looking back, reconstruct the Google SRE monitoring model: distinguish symptom from cause, explain black-box versus white-box roles, name the four golden signals, and state the test that should be satisfied before telemetry is allowed to interrupt a human through a page.",
+      "answer_key": {
+        "problem_from": "whole_source_map.problem",
+        "mechanism_from": "whole_source_map.thesis",
+        "anchor_concept_ids": [
+          "symptom-cause-monitoring",
+          "black-box-monitoring",
+          "white-box-monitoring",
+          "actionable-alerting"
+        ],
+        "boundary_limitation_index": 1
+      },
+      "transfer_prompt": {
+        "prompt": "A cross-system customer process has hundreds of internal metrics but operators miss real failures among noisy alerts. Redesign the monitoring boundary: identify one black-box symptom, the white-box signals that help diagnose it, and the exact condition that deserves a human page.",
+        "expected_concept_ids": [
+          "symptom-cause-monitoring",
+          "black-box-monitoring",
+          "white-box-monitoring",
+          "actionable-alerting"
+        ]
+      }
     }
   ]
 }
