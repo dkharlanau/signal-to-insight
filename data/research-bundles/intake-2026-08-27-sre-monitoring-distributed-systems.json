@@ -1,57 +1,135 @@
 {
   "bundle_version": "1.1.0",
   "intake_id": "intake-2026-08-27-sre-monitoring-distributed-systems",
-  "source_id": null,
+  "source_id": "src-google-sre-monitoring-distributed-systems-2016",
   "source": {
     "type": "article",
     "canonical_url": "https://sre.google/sre-book/monitoring-distributed-systems",
-    "title": null,
-    "creators": [],
-    "publisher": null,
+    "title": "Monitoring Distributed Systems",
+    "creators": ["Rob Ewaschuk"],
+    "publisher": "Google Site Reliability Engineering",
     "published_at": null,
     "event_date": null,
-    "version": null,
-    "language": null,
+    "version": "Site Reliability Engineering, Chapter 6",
+    "language": "en",
     "duration": null,
-    "date_note": null
+    "date_note": "Chapter 6 of Site Reliability Engineering (2016), written by Rob Ewaschuk and edited by Betsy Beyer; exact chapter publication day is not asserted."
   },
   "inspection": {
-    "method": "not inspected",
-    "full_content_used_ephemerally": false,
+    "method": "Direct inspection of the official Google SRE chapter, including Why Monitor?, Symptoms Versus Causes, Black-Box Versus White-Box, The Four Golden Signals, simplicity guidance and Tying These Principles Together.",
+    "full_content_used_ephemerally": true,
     "full_content_committed": false,
-    "confidence": "metadata_only",
+    "confidence": "direct",
     "gaps": [
-      "Source content has not been mapped yet."
+      "This case preserves monitoring/alerting decision principles, not Google-specific monitoring-system implementation details.",
+      "SLO/error-budget alerting practices evolved further in later SRE material and are outside this source-focused model."
     ]
   },
   "prior_knowledge": {
     "captured_at": "2026-08-27",
     "query": "Understand what monitoring should tell operators, the difference between black-box and white-box signals, alerting boundaries and how to avoid turning telemetry volume into operational noise.",
-    "matches": [],
+    "matches": [
+      {
+        "concept_id": "observability",
+        "label": "Observability",
+        "coverage": "introduced",
+        "evidence_insights": [
+          {"id": "enterprise-agents-production-substrate", "status": "published", "title": "Why enterprise AI agents fail after the POC"},
+          {"id": "opentelemetry-distributed-trace-causality", "status": "review", "title": "OpenTelemetry traces: reconstruct observed causality, not business truth"}
+        ],
+        "relationship_to_source": "refinement"
+      }
+    ],
     "classification_required": true
   },
   "content_map": {
-    "problem": null,
-    "thesis": null,
-    "sections": [],
-    "concepts": [],
-    "mechanisms": [],
-    "tools": [],
-    "examples": [],
-    "claims": [],
-    "evidence": [],
-    "assumptions": [],
-    "limitations": [],
-    "open_questions": []
+    "problem": "Monitoring can collect enormous amounts of telemetry while still failing operators if it cannot distinguish user-visible symptoms from internal causes or if it pages humans on noisy, non-actionable conditions.",
+    "thesis": "Design monitoring around operator questions and human action: detect symptoms and causes separately, combine black-box and white-box views, focus on a small set of service signals, and reserve paging for urgent actionable conditions with high signal and low noise.",
+    "sections": [
+      "Definitions and Why Monitor?",
+      "Setting Reasonable Expectations for Monitoring",
+      "Symptoms Versus Causes",
+      "Black-Box Versus White-Box",
+      "The Four Golden Signals",
+      "As Simple as Possible, No Simpler",
+      "Tying These Principles Together"
+    ],
+    "concepts": [
+      "symptom versus cause monitoring",
+      "black-box monitoring",
+      "white-box monitoring",
+      "actionable alerting",
+      "four golden signals",
+      "signal-to-noise discipline"
+    ],
+    "mechanisms": [
+      "Use symptom-oriented external checks to answer what is broken from the user's perspective.",
+      "Use internal white-box telemetry to diagnose why a symptom exists and to detect imminent or masked failures.",
+      "Keep pager rules simple and tied to clear failures or imminent user impact.",
+      "Use latency, traffic, errors and saturation as a compact default coverage model for user-facing services.",
+      "Remove or demote monitoring signals that create human interruption without a useful decision/action."
+    ],
+    "tools": ["black-box probes", "white-box metrics/logs", "dashboards", "pager/ticket alerting"],
+    "examples": [
+      "HTTP 500s are a symptom while database connection refusal may be an underlying cause.",
+      "A user-visible black-box probe can page on an active outage while white-box metrics help identify database/network causes.",
+      "High page volume can hide a real incident in alert noise and consume engineering time without improving reliability."
+    ],
+    "claims": [
+      "Monitoring should answer both what is broken and why.",
+      "Black-box monitoring is primarily symptom-oriented while white-box monitoring exposes internal signals useful for diagnosis and imminent problems.",
+      "Pages should be urgent and actionable because frequent noisy pages degrade attention and reliability response.",
+      "Latency, traffic, errors and saturation form a compact set of golden signals for user-facing service monitoring."
+    ],
+    "evidence": [
+      "The chapter explicitly names what-is-broken versus why as the symptom/cause distinction.",
+      "The black-box/white-box section describes black-box as symptom-oriented and white-box as internal instrumentation.",
+      "Why Monitor? and the concluding alert questions connect pages to human action and warn about alert fatigue.",
+      "The Four Golden Signals section names latency, traffic, errors and saturation."
+    ],
+    "assumptions": [
+      "The monitoring system can measure at least some user-visible behavior and relevant internal state.",
+      "A human page is expensive and should be reserved for conditions requiring prompt human judgment/action.",
+      "Service-specific signals may supplement or refine the four golden signals."
+    ],
+    "limitations": [
+      "Black-box monitoring detects active user-visible symptoms well but is weak for some imminent failures.",
+      "White-box monitoring can explain causes but can generate huge noisy telemetry volumes if every internal anomaly becomes an alert.",
+      "The four golden signals are a starting coverage model, not a complete domain-specific monitoring specification.",
+      "Monitoring/alerting does not automatically repair root causes or replace incident-response and system-of-record evidence."
+    ],
+    "open_questions": [
+      "Which current alerts have no meaningful human action and should be removed, automated or demoted to dashboards?",
+      "Which business-level black-box symptoms should complement infrastructure white-box signals for cross-system workflows?"
+    ]
   },
   "selection": {
     "requested_focus": "Understand what monitoring should tell operators, the difference between black-box and white-box signals, alerting boundaries and how to avoid turning telemetry volume into operational noise.",
-    "coherent_core": [],
-    "prerequisites": [],
-    "drop_notes": [],
-    "connections": []
+    "coherent_core": [
+      "Monitoring is useful when it answers what is broken and why, not when it merely collects data.",
+      "Black-box and white-box monitoring are complementary: symptom detection versus internal diagnosis/imminent-risk visibility.",
+      "Paging is a human-decision interface and therefore needs high signal, low noise and a clear action.",
+      "The four golden signals give a compact service-level starting point without requiring every internal metric to become an alert."
+    ],
+    "prerequisites": ["observability as system telemetry", "user-visible service behavior", "human paging cost"],
+    "drop_notes": [
+      "Do not turn the source into a monitoring-vendor/tool comparison.",
+      "Do not collapse causal tracing and alerting policy: OpenTelemetry explains distributed causal telemetry, while this source explains operator-facing monitoring decisions."
+    ],
+    "connections": [
+      "observability is refined from causal telemetry into operator-facing symptom/cause and action semantics",
+      "OpenTelemetry traces can be white-box evidence used for diagnosis but do not by themselves define what should page a human"
+    ]
   },
-  "verification_candidates": [],
-  "source_locators": [],
+  "verification_candidates": [
+    {"question": "How should this symptom/action model be updated with modern SLO burn-rate alerting?", "reason": "Useful follow-up beyond the 2016 chapter; not required to preserve the source's core monitoring philosophy.", "priority": "medium"}
+  ],
+  "source_locators": [
+    {"label": "Alerting cost and signal/noise", "locator": "Why Monitor?; Setting Reasonable Expectations for Monitoring"},
+    {"label": "Symptom versus cause", "locator": "Symptoms Versus Causes"},
+    {"label": "Black-box versus white-box", "locator": "Black-Box Versus White-Box"},
+    {"label": "Golden signals", "locator": "The Four Golden Signals"},
+    {"label": "Actionable paging", "locator": "Tying These Principles Together"}
+  ],
   "created_at": "2026-08-27"
 }

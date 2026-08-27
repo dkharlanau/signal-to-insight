@@ -1,0 +1,195 @@
+{
+  "contract_version": "1.0.0",
+  "intake_id": "intake-2026-08-27-sre-monitoring-distributed-systems",
+  "insight_id": "sre-symptom-cause-actionable-monitoring",
+  "knowledge_delta": {
+    "insight_id": "sre-symptom-cause-actionable-monitoring",
+    "summary": "Google SRE further refines observability from causal telemetry into operator decision semantics: separate symptoms from causes, combine external and internal views, and page only when a condition deserves urgent human action.",
+    "items": [
+      {
+        "relationship": "refines",
+        "concept_id": "observability",
+        "label": "Observability",
+        "source_basis": "The chapter defines monitoring as a system for answering what is broken and why, and distinguishes black-box symptoms, white-box diagnosis and human alerting decisions.",
+        "prior_basis": "The enterprise-agent case introduced observability broadly, and the OpenTelemetry case refined it into causal distributed trace telemetry.",
+        "interpretation": "This source adds the operator-facing layer: useful telemetry must support symptom detection, causal diagnosis and an explicit action/noise decision rather than merely exist.",
+        "evidence_insights": ["enterprise-agents-production-substrate", "opentelemetry-distributed-trace-causality"]
+      },
+      {
+        "relationship": "new",
+        "concept_id": "symptom-cause-monitoring",
+        "label": "Symptom/cause monitoring",
+        "source_basis": "The chapter says monitoring should answer what is broken (symptom) and why (cause) as separate questions.",
+        "prior_basis": "The graph contained telemetry and tracing concepts but no operator model separating detection from diagnosis.",
+        "interpretation": "This becomes the central monitoring review test: which signal proves user impact and which signal explains the likely cause?",
+        "evidence_insights": []
+      },
+      {
+        "relationship": "new",
+        "concept_id": "black-box-monitoring",
+        "label": "Black-box monitoring",
+        "source_basis": "Google SRE defines black-box monitoring as externally visible behavior and emphasizes its symptom-oriented paging value.",
+        "prior_basis": "No prior concept represented a user-perspective external probe as a distinct monitoring responsibility.",
+        "interpretation": "Black-box evidence becomes the strongest default basis for paging active user-visible failure without coupling the alert to one internal implementation cause.",
+        "evidence_insights": []
+      },
+      {
+        "relationship": "new",
+        "concept_id": "actionable-alerting",
+        "label": "Actionable alerting",
+        "source_basis": "The chapter repeatedly ties pages to urgent human response, warns about alert fatigue, and says every page should be actionable.",
+        "prior_basis": "The graph had observability signals but no concept for deciding when telemetry should interrupt a human.",
+        "interpretation": "Alerting becomes a decision interface with a high signal/noise bar rather than a direct consequence of collecting an anomalous metric.",
+        "evidence_insights": []
+      }
+    ],
+    "suppressed_prior_matches": []
+  },
+  "claim_evidence": {
+    "insight_id": "sre-symptom-cause-actionable-monitoring",
+    "claims": [
+      {
+        "id": "sre-monitoring-what-and-why",
+        "text": "Google SRE frames effective monitoring around two distinct questions: what is broken for the service and why that symptom is occurring.",
+        "impact": "high",
+        "origin": "source",
+        "status": "supported",
+        "evidence": [
+          {"kind": "primary_source", "source_id": "src-google-sre-monitoring-distributed-systems-2016", "url": "https://sre.google/sre-book/monitoring-distributed-systems", "locator": "Symptoms Versus Causes"}
+        ],
+        "note": null
+      },
+      {
+        "id": "sre-black-white-complement",
+        "text": "Black-box monitoring focuses on externally visible symptoms while white-box monitoring uses internal instrumentation for diagnosis and for imminent or retry-masked failures.",
+        "impact": "high",
+        "origin": "source",
+        "status": "supported",
+        "evidence": [
+          {"kind": "primary_source", "source_id": "src-google-sre-monitoring-distributed-systems-2016", "url": "https://sre.google/sre-book/monitoring-distributed-systems", "locator": "Black-Box Versus White-Box"}
+        ],
+        "note": null
+      },
+      {
+        "id": "sre-pages-actionable-high-signal",
+        "text": "Human paging should be reserved for clear urgent conditions that require meaningful action because frequent noisy pages degrade attention and can hide real incidents.",
+        "impact": "high",
+        "origin": "source",
+        "status": "supported",
+        "evidence": [
+          {"kind": "primary_source", "source_id": "src-google-sre-monitoring-distributed-systems-2016", "url": "https://sre.google/sre-book/monitoring-distributed-systems", "locator": "Why Monitor?; Tying These Principles Together"}
+        ],
+        "note": null
+      },
+      {
+        "id": "sre-four-golden-signals",
+        "text": "The chapter recommends latency, traffic, errors and saturation as four core signals for baseline monitoring of a user-facing service.",
+        "impact": "medium",
+        "origin": "source",
+        "status": "supported",
+        "evidence": [
+          {"kind": "primary_source", "source_id": "src-google-sre-monitoring-distributed-systems-2016", "url": "https://sre.google/sre-book/monitoring-distributed-systems", "locator": "The Four Golden Signals"}
+        ],
+        "note": null
+      },
+      {
+        "id": "sre-observability-needs-decision-semantics",
+        "text": "Telemetry becomes operationally useful only when it is connected to a symptom, diagnostic question or human decision instead of being promoted to alerting merely because it is available.",
+        "impact": "high",
+        "origin": "project_interpretation",
+        "status": "supported",
+        "evidence": [
+          {"kind": "primary_source", "source_id": "src-google-sre-monitoring-distributed-systems-2016", "url": "https://sre.google/sre-book/monitoring-distributed-systems", "locator": "As Simple as Possible, No Simpler; Tying These Principles Together"},
+          {"kind": "prior_insight", "insight_id": "opentelemetry-distributed-trace-causality", "locator": "Distributed traces as causal observability telemetry"}
+        ],
+        "note": "This wording is the project's synthesis connecting the SRE chapter's signal/noise/action guidance to the prior OpenTelemetry observability refinement."
+      }
+    ]
+  },
+  "prerequisite_map": {
+    "insight_id": "sre-symptom-cause-actionable-monitoring",
+    "summary": "The chapter builds on an existing observability idea, then adds a compact operator model: symptom versus cause, external versus internal views, and an explicit actionability threshold for paging.",
+    "items": [
+      {
+        "id": "sre-prereq-observability",
+        "label": "Observability",
+        "concept_id": "observability",
+        "priority": "must_know_now",
+        "prior_coverage": "partial",
+        "state": "known_in_graph",
+        "reason": "The chapter is not about whether telemetry exists, but about how existing telemetry should support detection, diagnosis and operator decisions.",
+        "resolution": {"kind": "existing_concept", "insight_id": null, "target": "observability"}
+      },
+      {
+        "id": "sre-prereq-symptom-cause",
+        "label": "Symptom/cause monitoring",
+        "concept_id": "symptom-cause-monitoring",
+        "priority": "must_know_now",
+        "prior_coverage": "absent",
+        "state": "explained_here",
+        "reason": "Separating what users experience from why it happens is the central structure for reducing alert noise and improving diagnosis.",
+        "resolution": {"kind": "explained_here", "insight_id": "sre-symptom-cause-actionable-monitoring", "target": null}
+      },
+      {
+        "id": "sre-prereq-black-box",
+        "label": "Black-box monitoring",
+        "concept_id": "black-box-monitoring",
+        "priority": "must_know_now",
+        "prior_coverage": "absent",
+        "state": "explained_here",
+        "reason": "User-perspective external signals explain why current symptoms are a disciplined default basis for human paging.",
+        "resolution": {"kind": "explained_here", "insight_id": "sre-symptom-cause-actionable-monitoring", "target": null}
+      },
+      {
+        "id": "sre-prereq-white-box",
+        "label": "White-box monitoring",
+        "concept_id": "white-box-monitoring",
+        "priority": "learn_next",
+        "prior_coverage": "absent",
+        "state": "explained_here",
+        "reason": "Internal instrumentation is required to diagnose causes and catch conditions that black-box symptom probes cannot yet see.",
+        "resolution": {"kind": "explained_here", "insight_id": "sre-symptom-cause-actionable-monitoring", "target": null}
+      },
+      {
+        "id": "sre-prereq-actionable-alerting",
+        "label": "Actionable alerting",
+        "concept_id": "actionable-alerting",
+        "priority": "must_know_now",
+        "prior_coverage": "absent",
+        "state": "explained_here",
+        "reason": "The monitoring model is incomplete unless it explains when a signal is important enough to interrupt a human and require urgent judgment.",
+        "resolution": {"kind": "explained_here", "insight_id": "sre-symptom-cause-actionable-monitoring", "target": null}
+      }
+    ]
+  },
+  "learning_prompt": {
+    "insight_id": "sre-symptom-cause-actionable-monitoring",
+    "retention_prompt": "Without looking back, reconstruct the Google SRE monitoring model: distinguish symptom from cause, explain black-box versus white-box roles, name the four golden signals, and state the test that should be satisfied before telemetry is allowed to interrupt a human through a page.",
+    "answer_key": {
+      "problem_from": "whole_source_map.problem",
+      "mechanism_from": "whole_source_map.thesis",
+      "anchor_concept_ids": ["symptom-cause-monitoring", "black-box-monitoring", "white-box-monitoring", "actionable-alerting"],
+      "boundary_limitation_index": 1
+    },
+    "transfer_prompt": {
+      "prompt": "A cross-system customer process has hundreds of internal metrics but operators miss real failures among noisy alerts. Redesign the monitoring boundary: identify one black-box symptom, the white-box signals that help diagnose it, and the exact condition that deserves a human page.",
+      "expected_concept_ids": ["symptom-cause-monitoring", "black-box-monitoring", "white-box-monitoring", "actionable-alerting"]
+    }
+  },
+  "source_decision": {
+    "insight_id": "sre-symptom-cause-actionable-monitoring",
+    "decision": "skim_selected_parts",
+    "rationale": "The explainer preserves the monitoring philosophy, but the original chapter is worth a targeted skim for its concrete symptom/cause examples, black-box/white-box distinction, golden-signal definitions and page-action questions. The long historical case studies are optional for the current mental model.",
+    "novelty": {"level": "high", "reason": "The source adds operator decision semantics on top of existing observability and tracing concepts rather than repeating telemetry mechanics."},
+    "source_quality": {"level": "high", "reason": "This is the original Google SRE chapter authored from production operations practice and hosted on the official SRE site."},
+    "relevance": {"level": "high", "reason": "The model directly applies to cross-system monitoring, incident detection and reducing noisy enterprise support operations."},
+    "practical_leverage": {"level": "high", "reason": "The symptom/cause/action framework can immediately change alert rules, dashboards and escalation design."},
+    "compression_loss": {"level": "medium", "reason": "The causal model compresses well, but concrete examples and alert-review questions add useful judgment when applying it to real monitoring."},
+    "selected_parts": [
+      {"label": "Symptom versus cause", "locator": "Symptoms Versus Causes", "why": "Establishes the what-is-broken versus why distinction that structures the rest of monitoring design.", "claim_refs": ["sre-monitoring-what-and-why"]},
+      {"label": "Black-box versus white-box", "locator": "Black-Box Versus White-Box", "why": "Shows why user-visible symptom detection and internal diagnosis need complementary monitoring views.", "claim_refs": ["sre-black-white-complement"]},
+      {"label": "Actionable paging", "locator": "Why Monitor?; Tying These Principles Together", "why": "Makes the human-cost, urgency and actionability threshold for paging explicit.", "claim_refs": ["sre-pages-actionable-high-signal"]},
+      {"label": "Four golden signals", "locator": "The Four Golden Signals", "why": "Provides a compact service-level coverage baseline without turning every internal metric into a page.", "claim_refs": ["sre-four-golden-signals"]}
+    ]
+  }
+}
