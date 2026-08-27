@@ -16,7 +16,7 @@ from datetime import date, datetime, timezone
 from pathlib import Path
 
 from new_source import normalize_url, source_key
-from scaffold_bundle import build_bundle
+from scaffold_bundle import build_bundle, prior_snapshot
 
 ROOT = Path(__file__).resolve().parents[1]
 INBOX = ROOT / "data" / "inbox.json"
@@ -115,13 +115,54 @@ def get_intake(intake_id: str) -> dict:
     return item
 
 
-def ensure_bundle(item: dict) -> tuple[dict, Path, bool]:
+def bundle_can_refresh_prior(bundle: dict) -> bool:
+    """Return true only while the bundle is still an untouched research scaffold.
+
+    The prior snapshot may be refreshed while a source waits in the queue, because the graph
+    can evolve between scaffold time and analysis time. Once source inspection, whole-source
+    mapping, or relationship classification starts, the snapshot becomes research evidence and
+    must remain immutable unless a human deliberately edits the case.
+    """
+    inspection = bundle.get("inspection") or {}
+    content_map = bundle.get("content_map") or {}
+    prior = bundle.get("prior_knowledge") or {}
+    matches = prior.get("matches") or []
+
+    inspected = (
+        inspection.get("method") not in {None, "", "not inspected"}
+        and inspection.get("confidence") != "metadata_only"
+    )
+    mapped = bool(content_map.get("problem") or content_map.get("thesis"))
+    classified = any(
+        isinstance(item, dict)
+        and item.get("relationship_to_source") not in {None, "unclassified"}
+        for item in matches
+    )
+    return not inspected and not mapped and not classified
+
+
+def refresh_prior_if_uninspected(item: dict, bundle: dict, captured_at: str | None = None) -> bool:
+    """Refresh graph-aware prior context at actual research start, never after research begins."""
+    if not bundle_can_refresh_prior(bundle):
+        return False
+    refreshed = prior_snapshot(item, captured_at or date.today().isoformat())
+    if bundle.get("prior_knowledge") == refreshed:
+        return False
+    bundle["prior_knowledge"] = refreshed
+    return True
+
+
+def ensure_bundle(item: dict) -> tuple[dict, Path, bool, bool]:
     path = BUNDLES / f"{item['id']}.json"
     if path.exists():
-        return load(path), path, False
+        bundle = load(path)
+        refreshed = refresh_prior_if_uninspected(item, bundle)
+        if refreshed:
+            dump(path, bundle)
+        return bundle, path, False, refreshed
     bundle = build_bundle(item)
     dump(path, bundle)
-    return bundle, path, True
+    return bundle, path, True, False
 
 
 def index_by_id(path: Path, key: str) -> dict[str, dict]:
@@ -237,7 +278,13 @@ def expected_artifacts(item: dict) -> dict:
     }
 
 
-def write_manifest(item: dict, state: dict, bundle_path: Path, created_bundle: bool) -> dict:
+def write_manifest(
+    item: dict,
+    state: dict,
+    bundle_path: Path,
+    created_bundle: bool,
+    refreshed_prior: bool,
+) -> dict:
     target = MANIFESTS / f"{item['id']}.json"
     existing = load(target, default={})
     timestamp = now_iso()
@@ -255,6 +302,7 @@ def write_manifest(item: dict, state: dict, bundle_path: Path, created_bundle: b
         "current_context": snapshot,
         "research_bundle": str(bundle_path.relative_to(ROOT)),
         "bundle_created_this_run": created_bundle,
+        "bundle_prior_refreshed_this_run": refreshed_prior,
         "expected_artifacts": expected_artifacts(item),
         "state": state,
         "agent_handoff": {
@@ -320,8 +368,9 @@ def self_test() -> int:
 
     fixture = {
         "id": "intake-run-source-fixture",
-        "source_url": "https://example.com/new",
+        "source_url": "https://example.com/durable-workflow-retry",
         "source_type": "article",
+        "requested_focus": "durable workflow retry",
         "status": "queued",
         "source_id": None,
         "insight_id": None,
@@ -331,7 +380,42 @@ def self_test() -> int:
     if "Research the source" not in fixture_state["next_blocking_action"]:
         print(f"run_source self-test failed; unexpected first blocker: {fixture_state['next_blocking_action']}")
         return 1
-    print("run_source self-test passed; prepared and mature states expose deterministic next actions.")
+
+    fixture_bundle["prior_knowledge"] = {
+        "captured_at": "2026-01-01",
+        "query": "durable workflow retry",
+        "matches": [],
+        "classification_required": True,
+    }
+    if not refresh_prior_if_uninspected(fixture, fixture_bundle, "2026-08-27"):
+        print("run_source self-test failed; stale untouched scaffold did not refresh prior context")
+        return 1
+    refreshed_ids = {
+        match.get("concept_id")
+        for match in fixture_bundle.get("prior_knowledge", {}).get("matches", [])
+    }
+    if "durable-execution" not in refreshed_ids:
+        print(f"run_source self-test failed; refreshed prior context missed durable-execution: {sorted(refreshed_ids)}")
+        return 1
+
+    fixture_bundle["inspection"] = {
+        "method": "fixture direct inspection",
+        "full_content_used_ephemerally": True,
+        "full_content_committed": False,
+        "confidence": "direct",
+        "gaps": [],
+    }
+    fixture_bundle["content_map"]["problem"] = "Fixture problem already mapped."
+    fixture_bundle["content_map"]["thesis"] = "Fixture thesis already mapped."
+    frozen_prior = json.dumps(fixture_bundle["prior_knowledge"], sort_keys=True)
+    if refresh_prior_if_uninspected(fixture, fixture_bundle, "2026-08-28"):
+        print("run_source self-test failed; inspected bundle prior context must stay immutable")
+        return 1
+    if json.dumps(fixture_bundle["prior_knowledge"], sort_keys=True) != frozen_prior:
+        print("run_source self-test failed; inspected bundle prior context changed")
+        return 1
+
+    print("run_source self-test passed; prepared/mature states and analysis-time prior refresh are deterministic.")
     return 0
 
 
@@ -359,9 +443,9 @@ def main() -> int:
         else:
             item = get_intake(args.source)
 
-        bundle, bundle_path, created_bundle = ensure_bundle(item)
+        bundle, bundle_path, created_bundle, refreshed_prior = ensure_bundle(item)
         state = evaluate_state(item, bundle)
-        manifest = write_manifest(item, state, bundle_path, created_bundle)
+        manifest = write_manifest(item, state, bundle_path, created_bundle, refreshed_prior)
 
         checks = None
         mature = (
@@ -393,6 +477,8 @@ def main() -> int:
             print(f"Run manifest: data/run-manifests/{item['id']}.json")
             print(f"Bundle: {bundle_path.relative_to(ROOT)}")
             print(f"Context: profile {manifest['current_context']['profile_version']} · graph {manifest['current_context']['graph_version']}")
+            if manifest["bundle_prior_refreshed_this_run"]:
+                print("Prior knowledge: refreshed against the current graph before research")
             print(f"Next: {manifest['state']['next_blocking_action']}")
             if checks is not None:
                 print(f"Checks: {'green' if checks['ok'] else 'failed'}")
