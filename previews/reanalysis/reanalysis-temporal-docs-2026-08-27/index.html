@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>[REANALYSIS] Temporal Platform Documentation — Signal to Insight</title>
+  <style>
+    :root { font-family: Inter, ui-sans-serif, system-ui, sans-serif; color: #171713; background: #f3f1eb; }
+    * { box-sizing: border-box; } body { margin: 0; } main { width: min(1000px, calc(100% - 32px)); margin: 0 auto; padding: 44px 0 80px; }
+    .banner { border: 1px solid currentColor; padding: 10px 12px; font: 700 11px ui-monospace, monospace; letter-spacing: .08em; }
+    header { padding: 64px 0 42px; border-bottom: 1px solid #aaa69c; } .eyebrow { font: 700 11px ui-monospace, monospace; letter-spacing: .12em; }
+    h1 { max-width: 850px; font-size: clamp(40px, 7vw, 74px); line-height: .96; letter-spacing: -.05em; margin: 12px 0 22px; }
+    .lede { max-width: 780px; font-size: 18px; line-height: 1.55; } .meta { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: #aaa69c; border: 1px solid #aaa69c; margin-top: 34px; }
+    .meta div { background: #f3f1eb; padding: 16px; } dt { font: 700 10px ui-monospace, monospace; text-transform: uppercase; } dd { margin: 6px 0 0; overflow-wrap: anywhere; }
+    section { padding: 42px 0; border-bottom: 1px solid #aaa69c; } h2 { font-size: 30px; margin: 0 0 18px; } h3 { font-size: 16px; margin: 28px 0 10px; }
+    p, li { line-height: 1.55; } code { font-size: .88em; } .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; }
+    .impact { display: inline-block; border: 1px solid currentColor; padding: 7px 9px; font: 700 11px ui-monospace, monospace; text-transform: uppercase; }
+    .pending { background: #fff1a8; } .empty { opacity: .55; } a { color: inherit; }
+    @media (max-width: 760px) { .meta,.grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<main>
+  <div class="banner">REANALYSIS REVIEW · NOINDEX · NO AUTOMATIC PUBLIC KNOWLEDGE CHANGE</div>
+  <header>
+    <p class="eyebrow">LIVING SOURCE · review</p>
+    <h1>Temporal Platform Documentation</h1>
+    <p class="lede">The official documentation repository advanced by six commits. Changes are confined to repository maintenance, Cloud onboarding/pricing, AI-tooling guidance and SDK-version metadata; none of the core Workflow Execution, Event History, Worker, Task Queue, Activity or retry/idempotency evidence paths used by the current mental model changed in this diff.</p>
+    <dl class="meta">
+      <div><dt>Insight</dt><dd>Temporal: the mental model behind durable execution</dd></div>
+      <div><dt>From</dt><dd><code>6f46de944c41b1823331536a65356548b94578c7</code></dd></div>
+      <div><dt>To</dt><dd><code>bb17961301d0202bf0489a9273d17c7ae98a7921</code></dd></div>
+      <div><dt>Checked</dt><dd>2026-08-27</dd></div>
+    </dl>
+  </header>
+
+  <section>
+    <h2>What changed upstream</h2>
+    <p>6 commit(s) · 7 changed file(s).</p>
+    <details><summary>Changed files</summary><ul><li>.github/CODEOWNERS</li><li>.github/workflows/vale-ci.yml</li><li>docs/cloud/get-started/index.mdx</li><li>docs/evaluate/temporal-cloud/pricing.mdx</li><li>docs/with-ai.mdx</li><li>src/data/sdk-versions.json</li><li>vale/styles/Temporal/Headings.yml</li></ul></details>
+    <h3>Diff evidence</h3><ul><li><a href="https://github.com/temporalio/documentation/compare/6f46de944c41b1823331536a65356548b94578c7...bb17961301d0202bf0489a9273d17c7ae98a7921" target="_blank" rel="noreferrer">https://github.com/temporalio/documentation/compare/6f46de944c41b1823331536a65356548b94578c7...bb17961301d0202bf0489a9273d17c7ae98a7921</a></li></ul>
+  </section>
+
+  <section>
+    <h2>Mental-model impact</h2>
+    <p><span class="impact">stable</span></p>
+    <div class="grid">
+      <div><h3>Changed</h3><p class="empty">No mental-model change is currently identified.</p></div>
+      <div><h3>Still valid</h3><ul><li>Workflow progress is durable state outside any one Worker process.</li><li>Event History supports reconstruction of Workflow Execution state.</li><li>Workers poll Task Queues and execute Workflow or Activity work as replaceable executors.</li><li>External effects under retry still require safe/idempotent Activity design.</li></ul></div>
+    </div>
+    <h3>Unresolved</h3><ul><li>The changed AI-tooling and SDK-version pages may matter to future hands-on guidance, but they do not currently justify changing the central durable-execution model.</li></ul>
+  </section>
+
+  <section>
+    <h2>Publication boundary</h2>
+    <p class="pending">Human review pending</p>
+    <p>This event is provenance about source evolution. It does not mutate the existing insight, graph or public explainer. A model-changing decision must first be human-reviewed, then applied as a separate reviewed knowledge change.</p>
+    
+  </section>
+</main>
+</body>
+</html>

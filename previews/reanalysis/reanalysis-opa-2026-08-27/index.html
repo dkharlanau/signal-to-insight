@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>[REANALYSIS] Open Policy Agent (OPA) — Signal to Insight</title>
+  <style>
+    :root { font-family: Inter, ui-sans-serif, system-ui, sans-serif; color: #171713; background: #f3f1eb; }
+    * { box-sizing: border-box; } body { margin: 0; } main { width: min(1000px, calc(100% - 32px)); margin: 0 auto; padding: 44px 0 80px; }
+    .banner { border: 1px solid currentColor; padding: 10px 12px; font: 700 11px ui-monospace, monospace; letter-spacing: .08em; }
+    header { padding: 64px 0 42px; border-bottom: 1px solid #aaa69c; } .eyebrow { font: 700 11px ui-monospace, monospace; letter-spacing: .12em; }
+    h1 { max-width: 850px; font-size: clamp(40px, 7vw, 74px); line-height: .96; letter-spacing: -.05em; margin: 12px 0 22px; }
+    .lede { max-width: 780px; font-size: 18px; line-height: 1.55; } .meta { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: #aaa69c; border: 1px solid #aaa69c; margin-top: 34px; }
+    .meta div { background: #f3f1eb; padding: 16px; } dt { font: 700 10px ui-monospace, monospace; text-transform: uppercase; } dd { margin: 6px 0 0; overflow-wrap: anywhere; }
+    section { padding: 42px 0; border-bottom: 1px solid #aaa69c; } h2 { font-size: 30px; margin: 0 0 18px; } h3 { font-size: 16px; margin: 28px 0 10px; }
+    p, li { line-height: 1.55; } code { font-size: .88em; } .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; }
+    .impact { display: inline-block; border: 1px solid currentColor; padding: 7px 9px; font: 700 11px ui-monospace, monospace; text-transform: uppercase; }
+    .pending { background: #fff1a8; } .empty { opacity: .55; } a { color: inherit; }
+    @media (max-width: 760px) { .meta,.grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<main>
+  <div class="banner">REANALYSIS REVIEW · NOINDEX · NO AUTOMATIC PUBLIC KNOWLEDGE CHANGE</div>
+  <header>
+    <p class="eyebrow">LIVING SOURCE · review</p>
+    <h1>Open Policy Agent (OPA)</h1>
+    <p class="lede">OPA main advanced by three commits after the analyzed baseline while the latest release remains v1.19.1. The diff changes parser/formatter/compiler internals plus bundle and decision-log implementation code, but does not change the repository/docs evidence that OPA computes policy decisions and leaves enforcement to the integrating application.</p>
+    <dl class="meta">
+      <div><dt>Insight</dt><dd>Open Policy Agent: separate policy decisions from enforcement</dd></div>
+      <div><dt>From</dt><dd><code>836e1ab6a5e2c7be70783805afcc8c8490a0af68</code></dd></div>
+      <div><dt>To</dt><dd><code>ec9536cac3a202f29fa64d3c7307dc3c3092429a</code></dd></div>
+      <div><dt>Checked</dt><dd>2026-08-27</dd></div>
+    </dl>
+  </header>
+
+  <section>
+    <h2>What changed upstream</h2>
+    <p>3 commit(s) · 33 changed file(s).</p>
+    <details><summary>Changed files</summary><ul><li>internal/leb128/leb128.go</li><li>internal/presentation/presentation.go</li><li>internal/semver/semver.go</li><li>internal/strvals/parser.go</li><li>internal/wasm/encoding/reader.go</li><li>internal/wasm/sdk/examples/loaders/main.go</li><li>internal/wasm/sdk/internal/wasm/vm.go</li><li>v1/ast/capabilities_test.go</li><li>v1/ast/compile.go</li><li>v1/ast/compile_test.go</li><li>v1/ast/parser.go</li><li>v1/ast/parser_test.go</li><li>v1/ast/term.go</li><li>v1/ast/transform.go</li><li>v1/bundle/store.go</li><li>v1/format/format.go</li><li>v1/format/testfiles/v0/test_object_comprehension_multiline.rego</li><li>v1/format/testfiles/v0/test_object_comprehension_multiline.rego.formatted</li><li>v1/format/testfiles/v0/test_object_comprehension_parenthesized_value.rego</li><li>v1/format/testfiles/v0/test_object_comprehension_parenthesized_value.rego.formatted</li><li>v1/format/testfiles/v1/test_object_comprehension_multiline.rego</li><li>v1/format/testfiles/v1/test_object_comprehension_multiline.rego.formatted</li><li>v1/format/testfiles/v1/test_object_comprehension_parenthesized_value.rego</li><li>v1/format/testfiles/v1/test_object_comprehension_parenthesized_value.rego.formatted</li><li>v1/plugins/logs/eventBuffer.go</li><li>v1/plugins/logs/plugin.go</li><li>v1/plugins/logs/plugin_test.go</li><li>v1/plugins/rest/auth.go</li><li>v1/rego/rego.go</li><li>v1/storage/disk/disk.go</li><li>v1/test/cases/testdata/v1/negation/test-not-body.yaml</li><li>v1/topdown/time.go</li><li>v1/topdown/topdown_bench_test.go</li></ul></details>
+    <h3>Diff evidence</h3><ul><li><a href="https://github.com/open-policy-agent/opa/compare/836e1ab6a5e2c7be70783805afcc8c8490a0af68...ec9536cac3a202f29fa64d3c7307dc3c3092429a" target="_blank" rel="noreferrer">https://github.com/open-policy-agent/opa/compare/836e1ab6a5e2c7be70783805afcc8c8490a0af68...ec9536cac3a202f29fa64d3c7307dc3c3092429a</a></li><li><a href="https://github.com/open-policy-agent/opa/releases/tag/v1.19.1" target="_blank" rel="noreferrer">https://github.com/open-policy-agent/opa/releases/tag/v1.19.1</a></li></ul>
+  </section>
+
+  <section>
+    <h2>Mental-model impact</h2>
+    <p><span class="impact">stable</span></p>
+    <div class="grid">
+      <div><h3>Changed</h3><p class="empty">No mental-model change is currently identified.</p></div>
+      <div><h3>Still valid</h3><ul><li>OPA is a policy decision engine rather than the owner of the protected action.</li><li>The integrating application remains responsible for enforcement after receiving a policy decision.</li><li>Policy/data distribution and decision logging are operational concerns around the decision point rather than a replacement for enforcement.</li></ul></div>
+    </div>
+    <h3>Unresolved</h3><ul><li>Bundle-store and decision-log implementation changed on main; version-specific operational guidance should be rechecked before publication even though the high-level decision/enforcement model remains stable.</li></ul>
+  </section>
+
+  <section>
+    <h2>Publication boundary</h2>
+    <p class="pending">Human review pending</p>
+    <p>This event is provenance about source evolution. It does not mutate the existing insight, graph or public explainer. A model-changing decision must first be human-reviewed, then applied as a separate reviewed knowledge change.</p>
+    
+  </section>
+</main>
+</body>
+</html>
