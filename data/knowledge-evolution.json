@@ -1,0 +1,66 @@
+{
+  "version": "1.0.0",
+  "subjects": [
+    {
+      "subject_type": "concept",
+      "subject_id": "controlled-execution",
+      "active_state_id": "state-controlled-execution-2026-08-26-v1",
+      "states": [
+        {
+          "id": "state-controlled-execution-2026-08-26-v1",
+          "recorded_at": "2026-08-26",
+          "status": "active",
+          "snapshot": {
+            "summary": "A production work substrate that makes consequential execution authorized, observable, interruptible, reconstructable and testable.",
+            "coverage": "explained"
+          },
+          "evidence_insight_ids": [
+            "enterprise-agents-production-substrate"
+          ],
+          "review_ids": [],
+          "reanalysis_event_ids": []
+        }
+      ],
+      "events": [
+        {
+          "id": "evolution-controlled-execution-opa-boundary-2026-08-26",
+          "kind": "refined",
+          "recorded_at": "2026-08-26",
+          "material_state_change": false,
+          "from_state_id": "state-controlled-execution-2026-08-26-v1",
+          "to_state_id": null,
+          "evidence_lineage": "independent_source",
+          "trigger_insight_id": "open-policy-agent-decision-enforcement-model",
+          "trigger_reanalysis_event_id": null,
+          "review_ids": [
+            "review-opa-controlled-execution-component"
+          ],
+          "evidence_claim_ids": [
+            "opa-control-primitive-not-executor",
+            "enterprise-controlled-substrate-interpretation"
+          ],
+          "reason": "OPA narrows one production-control responsibility by separating policy decision from enforcement. Human review classified this as a refinement, but the active controlled-execution definition already expressed the broader production substrate, so no new material state was created."
+        },
+        {
+          "id": "evolution-controlled-execution-react-layer-2026-08-26",
+          "kind": "refined",
+          "recorded_at": "2026-08-26",
+          "material_state_change": false,
+          "from_state_id": "state-controlled-execution-2026-08-26-v1",
+          "to_state_id": null,
+          "evidence_lineage": "independent_source",
+          "trigger_insight_id": "react-reason-act-observe-loop",
+          "trigger_reanalysis_event_id": null,
+          "review_ids": [
+            "review-react-controlled-execution-layer"
+          ],
+          "evidence_claim_ids": [
+            "react-not-production-control-layer",
+            "enterprise-controlled-substrate-interpretation"
+          ],
+          "reason": "ReAct makes the model-level reasoning/action loop boundary explicit. Human review classified the comparison as a layer refinement rather than a contradiction; the existing production-substrate definition already preserved that boundary, so the active state remains unchanged."
+        }
+      ]
+    }
+  ]
+}
