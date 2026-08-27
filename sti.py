@@ -65,6 +65,11 @@ def main() -> int:
     context.add_argument("--limit", type=int, default=5)
     context.add_argument("--json", action="store_true")
 
+    preflight = sub.add_parser("preflight", help="Validate one researched review case in an isolated temporary workspace")
+    preflight.add_argument("patch", help="Candidate data/case-patches/*.json path")
+    preflight.add_argument("--contract", help="Companion case-contract path; inferred when omitted")
+    preflight.add_argument("--json", action="store_true")
+
     validate = sub.add_parser("validate", help="Run deterministic core repository validation")
     validate.add_argument("--all", action="store_true", help="Also run extended evidence/freshness/history validators and acceptance tests")
 
@@ -106,6 +111,14 @@ def main() -> int:
             if args.json:
                 forwarded.append("--json")
             return run_script("graph_context.py", forwarded)
+
+        if args.command == "preflight":
+            forwarded = [args.patch]
+            if args.contract:
+                forwarded += ["--contract", args.contract]
+            if args.json:
+                forwarded.append("--json")
+            return run_script("preflight_case.py", forwarded)
 
         if args.command == "validate":
             core = [
