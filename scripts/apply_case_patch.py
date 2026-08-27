@@ -31,6 +31,59 @@ def upsert(items: list[dict], key: str, value: dict) -> None:
     items.append(value)
 
 
+def freeze_public_concept_before_review(
+    existing: dict,
+    patch: dict,
+    status_by_insight: dict[str, str | None],
+) -> None:
+    """Freeze the published projection before review evidence is added.
+
+    Review case patches are forbidden from writing `public` themselves. When an existing
+    concept has only published evidence and a review case adds the first non-published
+    evidence, preserve the pre-review public state explicitly. If the concept already mixes
+    published and non-published support without a curated public projection, fail closed
+    rather than guessing what was safe to expose.
+    """
+    if existing.get("public") is not None:
+        return
+
+    incoming_ids = list(patch.get("insight_ids", []))
+    incoming_review_ids = [
+        insight_id
+        for insight_id in incoming_ids
+        if status_by_insight.get(insight_id) != "published"
+    ]
+    if not incoming_review_ids:
+        return
+
+    existing_ids = list(existing.get("insight_ids", []))
+    published_ids = [
+        insight_id
+        for insight_id in existing_ids
+        if status_by_insight.get(insight_id) == "published"
+    ]
+    non_published_ids = [
+        insight_id
+        for insight_id in existing_ids
+        if status_by_insight.get(insight_id) != "published"
+    ]
+
+    if published_ids and non_published_ids:
+        raise SystemExit(
+            f"concept '{existing.get('id')}' already mixes published and non-published "
+            "evidence without a public projection; curate that projection before adding "
+            "more review evidence"
+        )
+    if not published_ids:
+        return
+
+    existing["public"] = {
+        "summary": existing["summary"],
+        "coverage": existing["coverage"],
+        "evidence_insights": published_ids,
+    }
+
+
 def merge_concept(existing: dict, patch: dict) -> None:
     """Merge a concept patch without deleting evidence/public projection owned by other cases."""
     patch_ids = list(patch.get("insight_ids", []))
@@ -115,6 +168,11 @@ def main() -> int:
 
     upsert(sources.setdefault("sources", []), "id", source)
     upsert(insights.setdefault("insights", []), "id", insight)
+    status_by_insight = {
+        item["id"]: item.get("status")
+        for item in insights.get("insights", [])
+        if isinstance(item, dict) and item.get("id")
+    }
 
     intake["status"] = "review"
     intake["source_id"] = source["id"]
@@ -128,6 +186,7 @@ def main() -> int:
             graph["concepts"].append(concept_patch)
             concept_map[concept_id] = concept_patch
             continue
+        freeze_public_concept_before_review(existing, concept_patch, status_by_insight)
         merge_concept(existing, concept_patch)
 
     relation_map = {item["id"]: item for item in graph.setdefault("relations", [])}

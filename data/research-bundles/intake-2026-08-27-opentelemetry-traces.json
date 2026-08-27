@@ -5,139 +5,111 @@
   "source": {
     "type": "documentation",
     "canonical_url": "https://opentelemetry.io/docs/concepts/signals/traces",
-    "title": null,
-    "creators": [],
-    "publisher": null,
+    "title": "Traces",
+    "creators": ["OpenTelemetry documentation contributors"],
+    "publisher": "OpenTelemetry / CNCF",
     "published_at": null,
     "event_date": null,
     "version": null,
-    "language": null,
+    "language": "en",
     "duration": null,
-    "date_note": null
+    "date_note": "Living OpenTelemetry documentation inspected on 2026-08-27. The page reports a last modification on 2026-01-14; no original publication date is asserted."
   },
   "inspection": {
-    "method": "not inspected",
-    "full_content_used_ephemerally": false,
+    "method": "Direct inspection of the official OpenTelemetry Traces page, including trace hierarchy, spans, span context, context propagation, events, links and span kinds.",
+    "full_content_used_ephemerally": true,
     "full_content_committed": false,
-    "confidence": "metadata_only",
+    "confidence": "direct",
     "gaps": [
-      "Source content has not been mapped yet."
+      "Sampling/export-loss guarantees are outside this conceptual page and matter when asking whether a trace is complete evidence.",
+      "Vendor backend storage/query behavior is intentionally excluded."
     ]
   },
   "prior_knowledge": {
     "captured_at": "2026-08-27",
     "query": "Understand traces as a causal model of distributed work: spans, parent/child relationships, context propagation, links and what observability can reconstruct versus what business execution evidence must record separately.",
     "matches": [
-      {
-        "concept_id": "observability",
-        "label": "Observability",
-        "coverage": "introduced",
-        "evidence_insights": [
-          {
-            "id": "enterprise-agents-production-substrate",
-            "status": "published",
-            "title": "Why enterprise AI agents fail after the POC"
-          }
-        ],
-        "relationship_to_source": "unclassified"
-      },
-      {
-        "concept_id": "controlled-execution",
-        "label": "Controlled execution",
-        "coverage": "explained",
-        "evidence_insights": [
-          {
-            "id": "enterprise-agents-production-substrate",
-            "status": "published",
-            "title": "Why enterprise AI agents fail after the POC"
-          },
-          {
-            "id": "open-policy-agent-decision-enforcement-model",
-            "status": "review",
-            "title": "Open Policy Agent: separate policy decisions from enforcement"
-          },
-          {
-            "id": "react-reason-act-observe-loop",
-            "status": "review",
-            "title": "ReAct: reason, act, observe — then update the plan"
-          }
-        ],
-        "relationship_to_source": "unclassified"
-      },
-      {
-        "concept_id": "execution-history",
-        "label": "Execution history",
-        "coverage": "explained",
-        "evidence_insights": [
-          {
-            "id": "enterprise-agents-production-substrate",
-            "status": "published",
-            "title": "Why enterprise AI agents fail after the POC"
-          },
-          {
-            "id": "temporal-durable-execution-mental-model",
-            "status": "review",
-            "title": "Temporal: the mental model behind durable execution"
-          }
-        ],
-        "relationship_to_source": "unclassified"
-      },
-      {
-        "concept_id": "open-policy-agent",
-        "label": "Open Policy Agent (OPA)",
-        "coverage": "explained",
-        "evidence_insights": [
-          {
-            "id": "open-policy-agent-decision-enforcement-model",
-            "status": "review",
-            "title": "Open Policy Agent: separate policy decisions from enforcement"
-          }
-        ],
-        "relationship_to_source": "unclassified"
-      },
-      {
-        "concept_id": "durable-execution",
-        "label": "Durable execution",
-        "coverage": "explained",
-        "evidence_insights": [
-          {
-            "id": "enterprise-agents-production-substrate",
-            "status": "published",
-            "title": "Why enterprise AI agents fail after the POC"
-          },
-          {
-            "id": "temporal-durable-execution-mental-model",
-            "status": "review",
-            "title": "Temporal: the mental model behind durable execution"
-          }
-        ],
-        "relationship_to_source": "unclassified"
-      }
+      {"concept_id": "observability", "label": "Observability", "coverage": "introduced", "evidence_insights": [{"id": "enterprise-agents-production-substrate", "status": "published", "title": "Why enterprise AI agents fail after the POC"}], "relationship_to_source": "refinement"},
+      {"concept_id": "controlled-execution", "label": "Controlled execution", "coverage": "explained", "evidence_insights": [{"id": "enterprise-agents-production-substrate", "status": "published", "title": "Why enterprise AI agents fail after the POC"}, {"id": "open-policy-agent-decision-enforcement-model", "status": "review", "title": "Open Policy Agent: separate policy decisions from enforcement"}, {"id": "react-reason-act-observe-loop", "status": "review", "title": "ReAct: reason, act, observe — then update the plan"}], "relationship_to_source": "not_relevant"},
+      {"concept_id": "execution-history", "label": "Execution history", "coverage": "explained", "evidence_insights": [{"id": "enterprise-agents-production-substrate", "status": "published", "title": "Why enterprise AI agents fail after the POC"}, {"id": "temporal-durable-execution-mental-model", "status": "review", "title": "Temporal: the mental model behind durable execution"}], "relationship_to_source": "not_relevant"},
+      {"concept_id": "open-policy-agent", "label": "Open Policy Agent (OPA)", "coverage": "explained", "evidence_insights": [{"id": "open-policy-agent-decision-enforcement-model", "status": "review", "title": "Open Policy Agent: separate policy decisions from enforcement"}], "relationship_to_source": "not_relevant"},
+      {"concept_id": "durable-execution", "label": "Durable execution", "coverage": "explained", "evidence_insights": [{"id": "enterprise-agents-production-substrate", "status": "published", "title": "Why enterprise AI agents fail after the POC"}, {"id": "temporal-durable-execution-mental-model", "status": "review", "title": "Temporal: the mental model behind durable execution"}], "relationship_to_source": "not_relevant"}
     ],
     "classification_required": true
   },
   "content_map": {
-    "problem": null,
-    "thesis": null,
-    "sections": [],
-    "concepts": [],
-    "mechanisms": [],
-    "tools": [],
-    "examples": [],
-    "claims": [],
-    "evidence": [],
-    "assumptions": [],
-    "limitations": [],
-    "open_questions": []
+    "problem": "A request or job crosses process and service boundaries, so isolated logs from individual components do not preserve enough correlation and hierarchy to reconstruct the observed end-to-end path.",
+    "thesis": "Represent each operation as a span carrying trace/span identity and timing, propagate context across boundaries so child operations join the same trace, and use parent relationships or links to encode synchronous hierarchy and asynchronous causal association.",
+    "sections": ["Trace example and hierarchy", "Spans", "Span Context", "Span Events", "Span Links", "Span Kind", "Context Propagation"],
+    "concepts": ["distributed trace", "span", "trace/span context", "context propagation", "parent-child hierarchy", "span link", "telemetry versus execution evidence"],
+    "mechanisms": [
+      "Give spans in one distributed operation a shared trace ID and distinct span IDs.",
+      "Use parent IDs to build nested synchronous/sub-operation hierarchy.",
+      "Serialize and propagate trace context across process/network boundaries so downstream work joins the same causal trace.",
+      "Use span links when operations are causally related but do not fit a normal parent-child lifetime, such as queued asynchronous work.",
+      "Attach attributes/events/status to make observed operations diagnosable."
+    ],
+    "tools": ["OpenTelemetry Tracer", "OpenTelemetry SDK", "OpenTelemetry Collector", "W3C Trace Context propagator"],
+    "examples": [
+      "Frontend → product-service calls share trace context so the backend request becomes a child span of the frontend operation.",
+      "A producer queues work that executes later; a span link preserves causal association even when a direct parent-child lifetime is inappropriate.",
+      "A business write may have a successful trace yet still need separate authoritative evidence of authorization and durable business outcome."
+    ],
+    "claims": [
+      "A trace is assembled from spans correlated by trace identity and hierarchy, potentially across different processes and services.",
+      "Span context is propagated so downstream spans can join the same distributed trace.",
+      "Span links can express causal relationships between operations that are not represented well by ordinary parent-child nesting.",
+      "Trace telemetry is diagnostic observational evidence and should not automatically be treated as a complete authoritative execution ledger."
+    ],
+    "evidence": [
+      "The official Traces page shows spans sharing a trace_id with parent_id hierarchy.",
+      "The page states that Context Propagation lets spans be correlated regardless of where they are generated.",
+      "The Span Links section describes asynchronous operations linked across traces as causally associated."
+    ],
+    "assumptions": [
+      "Instrumentation creates and exports the relevant spans rather than omitting them through missing coverage or sampling.",
+      "Trace context is propagated across the boundaries whose causal path should be reconstructed.",
+      "Span attributes/events are modeled consistently enough for useful diagnostics."
+    ],
+    "limitations": [
+      "A missing span can mean missing instrumentation, sampling/export loss or genuinely absent work; a trace is not automatically a complete record of everything that happened.",
+      "Trace success/status does not prove business authorization, idempotent side effects or persistence in the system of record.",
+      "Parent-child hierarchy is not sufficient for every asynchronous topology; span links exist for causal relationships that cross normal tree boundaries.",
+      "High-cardinality or sensitive attributes still require deliberate telemetry design and governance."
+    ],
+    "open_questions": [
+      "Which business correlation IDs belong as span attributes versus separate durable execution evidence?",
+      "How should sampling be configured when traces are used for incident reconstruction rather than only performance analysis?",
+      "Which async messaging patterns should use links instead of parent-child relationships?"
+    ]
   },
   "selection": {
     "requested_focus": "Understand traces as a causal model of distributed work: spans, parent/child relationships, context propagation, links and what observability can reconstruct versus what business execution evidence must record separately.",
-    "coherent_core": [],
-    "prerequisites": [],
-    "drop_notes": [],
-    "connections": []
+    "coherent_core": [
+      "Spans are timed units of observed work; trace/span identity correlates them.",
+      "Parent IDs encode nested operation hierarchy while propagated context carries that identity across service boundaries.",
+      "Links preserve causal association for async work that is not naturally a direct child lifetime.",
+      "This refines the existing observability concept but does not replace controlled execution or durable business evidence."
+    ],
+    "prerequisites": ["operation/span", "distributed request boundary", "context propagation"],
+    "drop_notes": [
+      "Do not treat OPA, durable execution or controlled execution as trace mechanisms; retrieval overlap is contextual, not source equivalence.",
+      "Do not call traces an authoritative business ledger: coverage/sampling and telemetry semantics differ from system-of-record evidence."
+    ],
+    "connections": [
+      "observability is refined into a concrete causal telemetry model using trace identity, spans and propagation",
+      "execution history remains a separate responsibility when the system must prove authorization, durable side effects and authoritative outcomes"
+    ]
   },
-  "verification_candidates": [],
-  "source_locators": [],
+  "verification_candidates": [
+    {"question": "What completeness guarantees exist under head/tail sampling and exporter failure?", "reason": "The answer determines how strongly traces may be used for incident reconstruction.", "priority": "high"}
+  ],
+  "source_locators": [
+    {"label": "Trace hierarchy", "locator": "Traces → example trace and shared trace_id / parent_id hierarchy"},
+    {"label": "Span fields", "locator": "Traces → Spans"},
+    {"label": "Span context", "locator": "Traces → Span Context"},
+    {"label": "Context propagation", "locator": "Traces → Context Propagation"},
+    {"label": "Async causal links", "locator": "Traces → Span Links"}
+  ],
   "created_at": "2026-08-27"
 }

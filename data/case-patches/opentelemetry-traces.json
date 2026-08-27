@@ -1,0 +1,128 @@
+{
+  "patch_version": "1.0.0",
+  "intake_id": "intake-2026-08-27-opentelemetry-traces",
+  "intake_status": "review",
+  "updated_at": "2026-08-27",
+  "graph_version": "0.4.0",
+  "source": {
+    "id": "src-opentelemetry-traces-2026",
+    "type": "documentation",
+    "title": "Traces",
+    "canonical_url": "https://opentelemetry.io/docs/concepts/signals/traces",
+    "creators": ["OpenTelemetry documentation contributors"],
+    "publisher": "OpenTelemetry / CNCF",
+    "event": null,
+    "published_at": null,
+    "event_date": null,
+    "captured_at": "2026-08-27",
+    "analyzed_at": "2026-08-27",
+    "date_note": "Living OpenTelemetry documentation inspected on 2026-08-27; page reports last modification on 2026-01-14.",
+    "verification": [
+      {"title": "OpenTelemetry Traces", "url": "https://opentelemetry.io/docs/concepts/signals/traces", "accessed_at": "2026-08-27"},
+      {"title": "OpenTelemetry Context propagation", "url": "https://opentelemetry.io/docs/concepts/context-propagation/", "accessed_at": "2026-08-27"}
+    ],
+    "derived_records": ["opentelemetry-distributed-trace-causality"]
+  },
+  "insight": {
+    "id": "opentelemetry-distributed-trace-causality",
+    "source_id": "src-opentelemetry-traces-2026",
+    "slug": "opentelemetry-distributed-trace-causality",
+    "status": "review",
+    "title": "OpenTelemetry traces: reconstruct observed causality, not business truth",
+    "one_liner": "OpenTelemetry correlates timed spans through trace identity, propagated context, hierarchy and links so distributed work can be reconstructed diagnostically across service boundaries.",
+    "why_this_matters": "A trace is more than a list of logs: it carries correlation and causal structure across processes. But that structure is telemetry, not an automatic execution ledger. The distinction matters when observability data is used to debug work versus prove authorization, side effects or durable business outcomes.",
+    "whole_source_map": {
+      "problem": "Distributed operations cross service/process boundaries, making isolated component logs insufficient for reconstructing the observed end-to-end path and causal relationships.",
+      "thesis": "Represent operations as spans, propagate trace/span context across boundaries, assemble parent-child hierarchy under shared trace identity, and use span links for causal relationships that do not fit normal nesting.",
+      "core_topics": ["distributed trace", "span", "trace ID and span ID", "parent-child hierarchy", "context propagation", "span events and attributes", "span links", "producer/consumer async work", "telemetry versus authoritative execution evidence"]
+    },
+    "derived_model": {
+      "problem": "Without propagated correlation, a distributed request fragments into local records whose ordering and relationship must be guessed after failure.",
+      "mechanism": "Each operation emits a span with identity/timing/context; downstream boundaries propagate trace context so new spans join the same trace; parent relationships encode nested work and links associate async causal work across trace/lifetime boundaries.",
+      "result": "Operators can reconstruct an observed causal path across services and async work, while still needing separate system-of-record evidence for authority, completeness and business outcomes."
+    },
+    "coherence_review": {
+      "central_chain": [
+        "A span represents one observed unit of work with timing, identity and metadata.",
+        "Spans sharing a trace ID can be assembled into one distributed trace; parent IDs add nested operation hierarchy.",
+        "Context propagation carries trace identity across process/network boundaries so downstream spans remain correlated.",
+        "Span links encode causal association when asynchronous work does not fit a normal direct parent-child lifetime.",
+        "The resulting trace reconstructs observed telemetry causality, but its completeness and business authority depend on instrumentation/export semantics outside the trace model itself."
+      ],
+      "prerequisites_complete": true,
+      "source_vs_enrichment_clear": true,
+      "open_gaps": [
+        "Sampling/export failure can make a trace incomplete; the conceptual page does not establish authoritative completeness guarantees.",
+        "Business authorization and durable side-effect evidence remain outside OpenTelemetry trace semantics."
+      ],
+      "scores": {"coherence": 5, "prerequisite_completeness": 5, "evidence_confidence": 5, "practical_leverage": 5}
+    },
+    "visual_plan": {
+      "dominant": {
+        "type": "sequence",
+        "title": "Causality survives the service boundary",
+        "nodes": [
+          {"label": "01 · Start", "title": "Root span", "text": "A request begins with a trace ID and root span describing the first observed operation."},
+          {"label": "02 · Propagate", "title": "Carry trace context", "text": "Trace/span context crosses the network boundary with the downstream request."},
+          {"label": "03 · Continue", "title": "Child span", "text": "The downstream service creates a new span in the same trace and records the parent relationship."},
+          {"label": "04 · Decouple", "title": "Async span link", "text": "Queued work that starts later can be causally associated through a link even when direct nesting is inappropriate."}
+        ]
+      },
+      "supporting": ["comparison", "concept_grid", "examples", "limitations", "action_map", "source_map"],
+      "image": {"needed": false, "reason": "The teaching value is in correlation and causal flow across process boundaries, which a sequence shows more precisely than an illustration."}
+    },
+    "concepts": [
+      {"name": "Distributed trace", "depth": "learn", "why_needed": "The trace is the correlated end-to-end telemetry structure assembled from spans across boundaries."},
+      {"name": "Span", "depth": "learn", "why_needed": "A span is the timed unit of observed work from which a trace is constructed."},
+      {"name": "Trace context propagation", "depth": "learn", "why_needed": "Propagation carries trace identity across service/process boundaries so downstream work remains part of the same causal view."},
+      {"name": "Span link", "depth": "learn", "why_needed": "Links express causal association for async operations that do not fit a normal parent-child lifetime."}
+    ],
+    "tool_map": [
+      {"name": "OpenTelemetry SDK", "category": "instrumentation runtime", "why_explore": "Creates and propagates spans in application code once the conceptual trace model is clear.", "url": "https://opentelemetry.io/docs/languages/", "relationship": "Source-native implementation surface for tracing.", "status": "try"},
+      {"name": "OpenTelemetry Collector", "category": "telemetry pipeline", "why_explore": "Receives/processes/exports trace telemetry without making the application depend directly on one backend.", "url": "https://opentelemetry.io/docs/collector/", "relationship": "Source-native telemetry pipeline component.", "status": "learn"}
+    ],
+    "examples": [
+      {"domain": "synchronous request", "scenario": "A frontend calls a catalog service and then a payment service.", "question": "Does propagated trace context let the downstream spans join one hierarchy that explains where latency and failure occurred?"},
+      {"domain": "asynchronous work", "scenario": "A request enqueues a job that is processed minutes later by another consumer.", "question": "Should the later work be represented with a span link rather than pretending it has a normal synchronous parent-child lifetime?"},
+      {"domain": "business execution evidence", "scenario": "A trace shows a successful span for updating a customer record.", "question": "What separate evidence proves who authorized the change, which version actually committed and what the authoritative system now stores?"}
+    ],
+    "limitations": [
+      "Missing instrumentation, sampling or exporter loss can create gaps, so a trace should not automatically be treated as complete execution history.",
+      "Span status and attributes describe telemetry observations; they do not by themselves prove authorization, idempotent side effects or durable business truth.",
+      "Parent-child hierarchy is tree-shaped and cannot represent every async causal relationship; links are required for some producer/consumer flows.",
+      "Trace attributes can carry sensitive or high-cardinality data and need explicit governance rather than indiscriminate capture."
+    ],
+    "action_map": {
+      "use_now": ["When designing observability, distinguish correlation/diagnosis evidence from authoritative business execution evidence.", "For asynchronous boundaries, explicitly decide whether causal association belongs in parent-child context or a span link."],
+      "try": ["Instrument a two-service request, inspect trace/span IDs and parent relationships, then add one queued operation and compare direct parenting with a span-link model."],
+      "learn": ["context propagation", "span links", "sampling", "semantic conventions", "trace-log correlation"],
+      "build": ["A small request + queue demo showing one synchronous trace path and one asynchronously linked follow-up operation."],
+      "watch": ["Sampling/export policy when trace data is used for incident reconstruction rather than only performance analysis."],
+      "ignore_for_now": ["Treating successful spans as a substitute for system-of-record audit or business-state verification."]
+    },
+    "connections": [
+      "observability: OpenTelemetry makes the earlier broad observability concept concrete through distributed causal correlation",
+      "execution-history: related operationally but intentionally different evidence semantics — telemetry reconstruction is not automatically an authoritative ledger"
+    ],
+    "supporting_sources": [
+      {"title": "OpenTelemetry Traces", "url": "https://opentelemetry.io/docs/concepts/signals/traces", "publisher": "OpenTelemetry / CNCF", "purpose": "primary source for spans, trace hierarchy, context, links and span kinds", "accessed_at": "2026-08-27"},
+      {"title": "OpenTelemetry Context propagation", "url": "https://opentelemetry.io/docs/concepts/context-propagation/", "publisher": "OpenTelemetry / CNCF", "purpose": "source-linked depth for how trace context crosses process/network boundaries", "accessed_at": "2026-08-27"}
+    ],
+    "tags": ["opentelemetry", "tracing", "observability", "distributed-systems", "causality", "context-propagation"],
+    "provenance": {"source_linked": true, "source_dates_recorded": true, "full_transcript_stored": false, "analysis_type": "direct official OpenTelemetry documentation analysis with explicit evidence-scope boundary", "reviewed_at": "2026-08-27"}
+  },
+  "graph": {
+    "concepts": [
+      {"id": "observability", "insight_ids": ["opentelemetry-distributed-trace-causality"]},
+      {"id": "distributed-trace", "label": "Distributed trace", "summary": "A correlated telemetry view of distributed work assembled from spans sharing trace identity, hierarchy and causal associations across boundaries.", "domain": "observability", "coverage": "explained", "insight_ids": ["opentelemetry-distributed-trace-causality"], "aliases": ["trace"], "tags": ["tracing", "observability", "distributed-systems"]},
+      {"id": "telemetry-span", "label": "Telemetry span", "summary": "A timed unit of observed work carrying span identity, parent context, attributes, events, links and status within distributed tracing.", "domain": "observability", "coverage": "explained", "insight_ids": ["opentelemetry-distributed-trace-causality"], "aliases": ["span"], "tags": ["tracing", "operation", "telemetry"]},
+      {"id": "trace-context-propagation", "label": "Trace context propagation", "summary": "Serializing and carrying trace/span identity across process and network boundaries so downstream spans can join the same distributed causal view.", "domain": "observability", "coverage": "explained", "insight_ids": ["opentelemetry-distributed-trace-causality"], "aliases": ["distributed context propagation"], "tags": ["context", "propagation", "tracing"]},
+      {"id": "span-link", "label": "Span link", "summary": "A tracing association that records causal relationship between spans when direct parent-child hierarchy is not appropriate, especially for asynchronous work.", "domain": "observability", "coverage": "explained", "insight_ids": ["opentelemetry-distributed-trace-causality"], "aliases": ["trace link"], "tags": ["tracing", "causality", "async"]}
+    ],
+    "relations": [
+      {"id": "rel-distributed-trace-depends-on-telemetry-span", "from": "distributed-trace", "to": "telemetry-span", "type": "depends_on", "rationale": "A distributed trace is assembled from the spans that represent the observed operations in the traced path.", "evidence_insights": ["opentelemetry-distributed-trace-causality"]},
+      {"id": "rel-distributed-trace-depends-on-trace-context-propagation", "from": "distributed-trace", "to": "trace-context-propagation", "type": "depends_on", "rationale": "Distributed service boundaries require trace context to cross processes so downstream spans retain correlation with the original trace.", "evidence_insights": ["opentelemetry-distributed-trace-causality"]},
+      {"id": "rel-span-link-related-to-distributed-trace", "from": "span-link", "to": "distributed-trace", "type": "related_to", "rationale": "Span links preserve causal associations across async operations or trace boundaries where a normal parent-child hierarchy cannot express the relationship cleanly.", "evidence_insights": ["opentelemetry-distributed-trace-causality"]}
+    ]
+  }
+}
