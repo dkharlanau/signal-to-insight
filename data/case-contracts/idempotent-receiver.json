@@ -99,7 +99,7 @@
         "prior_coverage": "established",
         "state": "known_in_graph",
         "reason": "The receiver pattern solves a concrete instance of the broader problem that retrying a side effect must not create an unintended duplicate outcome.",
-        "resolution": {"kind": "existing_explainer", "insight_id": "temporal-durable-execution-mental-model", "target": null}
+        "resolution": {"kind": "existing_concept", "insight_id": null, "target": "idempotency-under-retry"}
       },
       {
         "id": "idempotent-receiver-prereq-pattern",
