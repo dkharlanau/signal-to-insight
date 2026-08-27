@@ -1,0 +1,154 @@
+{
+  "visual_extension_version": "1.0.0",
+  "records": [
+    {
+      "id": "visual-opa-policy-decision-tree",
+      "insight_id": "open-policy-agent-decision-enforcement-model",
+      "source_id": "src-open-policy-agent-opa-2026",
+      "primitive": "decision_tree",
+      "reason": "OPA is easier to understand as a branch in the enforcement path: the application reaches a policy question, OPA returns a decision, and the application must still take different enforcement actions for allowed versus denied outcomes. A branching visual makes the trusted enforcement responsibility visible in a way the existing layered overview does not.",
+      "replaces_base_dominant": true,
+      "decision_tree": {
+        "title": "A policy decision does not enforce itself",
+        "root_id": "request",
+        "nodes": [
+          {
+            "id": "request",
+            "label": "01 · Enforcement point",
+            "title": "Application reaches a protected action",
+            "text": "The service owns the real operation and needs a policy answer before it proceeds.",
+            "kind": "step"
+          },
+          {
+            "id": "opa-decision",
+            "label": "02 · Decision",
+            "title": "OPA evaluates input + Rego + data",
+            "text": "OPA computes an allow/deny or richer policy result; it does not perform the protected operation.",
+            "kind": "decision"
+          },
+          {
+            "id": "allow",
+            "label": "03A · Allow",
+            "title": "Application performs the operation",
+            "text": "The Policy Enforcement Point accepts the decision and executes the permitted behavior.",
+            "kind": "outcome"
+          },
+          {
+            "id": "deny",
+            "label": "03B · Deny",
+            "title": "Application blocks or changes behavior",
+            "text": "The Policy Enforcement Point rejects the operation or follows another explicitly permitted path.",
+            "kind": "outcome"
+          }
+        ],
+        "edges": [
+          {"from": "request", "to": "opa-decision", "label": "query with structured context"},
+          {"from": "opa-decision", "to": "allow", "label": "allow / permitted result"},
+          {"from": "opa-decision", "to": "deny", "label": "deny / non-permitted result"}
+        ]
+      },
+      "fallback": {
+        "title": "Policy decision branch",
+        "items": [
+          "Application reaches a protected action and queries OPA with structured context.",
+          "OPA evaluates Rego and policy data and returns a decision.",
+          "If permitted, the application still performs the operation itself.",
+          "If denied, the application itself blocks or changes behavior."
+        ]
+      }
+    },
+    {
+      "id": "visual-temporal-recovery-state-machine",
+      "insight_id": "temporal-durable-execution-mental-model",
+      "source_id": "src-temporal-docs-2026",
+      "primitive": "state_transition",
+      "reason": "Temporal's central value is not a linear happy-path sequence but what happens when an executor disappears and durable state still permits continuation. A state-transition view makes the failure/recovery loop explicit and shows why a Worker process is replaceable while Workflow Execution progress is not.",
+      "replaces_base_dominant": true,
+      "state_transition": {
+        "title": "Worker failure changes the executor, not the durable workflow identity",
+        "initial_state_id": "workflow-active",
+        "states": [
+          {
+            "id": "workflow-active",
+            "label": "Workflow",
+            "title": "Workflow Execution active",
+            "text": "Durable workflow identity and progress exist in Temporal rather than only inside one running process.",
+            "kind": "state"
+          },
+          {
+            "id": "task-ready",
+            "label": "Dispatch",
+            "title": "Task available on a Task Queue",
+            "text": "Workflow or Activity work is available for a Worker Process to poll.",
+            "kind": "state"
+          },
+          {
+            "id": "worker-running",
+            "label": "Execute",
+            "title": "Worker executes application code",
+            "text": "The current Worker performs Workflow/Activity work and reports progress back to the Temporal Service.",
+            "kind": "state"
+          },
+          {
+            "id": "worker-lost",
+            "label": "Failure",
+            "title": "Worker becomes unavailable",
+            "text": "The process can crash or disappear without deleting the persisted Workflow Execution history.",
+            "kind": "recovery"
+          },
+          {
+            "id": "history-replay",
+            "label": "Recover",
+            "title": "State reconstructed from Event History",
+            "text": "A Worker can reconstruct workflow state from durable history instead of starting unrelated work from scratch.",
+            "kind": "recovery"
+          }
+        ],
+        "transitions": [
+          {"from": "workflow-active", "to": "task-ready", "label": "work becomes ready"},
+          {"from": "task-ready", "to": "worker-running", "label": "Worker polls task"},
+          {"from": "worker-running", "to": "workflow-active", "label": "progress is recorded"},
+          {"from": "worker-running", "to": "worker-lost", "label": "process / Worker failure"},
+          {"from": "worker-lost", "to": "history-replay", "label": "durable history remains"},
+          {"from": "history-replay", "to": "task-ready", "label": "continue with a Worker"}
+        ]
+      },
+      "fallback": {
+        "title": "Durable recovery loop",
+        "items": [
+          "Workflow Execution progress exists durably outside the Worker.",
+          "A Worker polls and executes a task.",
+          "Normal progress returns to the durable workflow state.",
+          "If the Worker disappears, Event History remains.",
+          "Workflow state can be reconstructed and work becomes executable again."
+        ]
+      }
+    },
+    {
+      "id": "visual-react-author-diagram",
+      "insight_id": "react-reason-act-observe-loop",
+      "source_id": "src-react-paper-2210-03629",
+      "primitive": "source_figure",
+      "reason": "The ReAct authors' own project diagram directly compares reason-only, act-only and the combined ReAct feedback structure on one visual. That comparison teaches the method's defining combination more faithfully than redrawing an approximate decorative image, so the project embeds the source-hosted figure with attribution rather than copying it into this repository.",
+      "replaces_base_dominant": false,
+      "source_figure": {
+        "url": "https://react-lm.github.io/files/diagram.png",
+        "source_page": "https://react-lm.github.io/",
+        "alt": "Author diagram comparing a language model with reasoning traces only, a language model acting through an environment with observations only, and ReAct combining reasoning traces with actions and observations.",
+        "caption": "The authors' project diagram shows the core combination: ReAct keeps the reasoning-trace loop while also interacting with an environment through actions and returned observations.",
+        "attribution": "ReAct project / Shunyu Yao et al.",
+        "copy_policy": "remote_source_owned",
+        "rights_note": "Source-hosted author figure. Signal to Insight links/embeds the original asset and does not mirror or redistribute the image file in this repository.",
+        "placement": "after_dominant"
+      },
+      "fallback": {
+        "title": "ReAct author figure description",
+        "items": [
+          "Reason-only keeps reasoning traces around the language model but has no environment observation loop.",
+          "Act-only connects language-model actions to an environment and receives observations but lacks the explicit reasoning-trace loop.",
+          "ReAct combines both structures: reasoning traces guide actions and observations feed back into subsequent reasoning."
+        ]
+      }
+    }
+  ]
+}
