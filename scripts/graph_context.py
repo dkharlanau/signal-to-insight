@@ -137,6 +137,37 @@ def rank(query: str, limit: int = 5) -> dict:
                 neighbor_candidates[left]["via"].append({"seed": right, "type": relation["type"], "direction": "in"})
                 neighbor_candidates[left]["strength"] += score_map.get(right, 0)
 
+    # One hop is normally enough and keeps retrieval precise. Real dogfood exposed one
+    # important miss, though: a query can directly match several source-specific concepts
+    # whose shared parent/prior model is one more edge away. Allow that second hop only when
+    # the intermediate neighbor independently has a strong lexical match to the query.
+    # This makes the graph act as semantic context without opening arbitrary two-hop drift.
+    bridge_ids = {
+        concept_id
+        for concept_id in neighbor_candidates
+        if is_strong_seed(feature_map[concept_id])
+    }
+    direct_candidates = set(neighbor_candidates)
+    for relation in graph.get("relations", []):
+        left = relation["from"]
+        right = relation["to"]
+        bridge_id: str | None = None
+        target_id: str | None = None
+        direction: str | None = None
+        if left in bridge_ids:
+            bridge_id, target_id, direction = left, right, "out"
+        elif right in bridge_ids:
+            bridge_id, target_id, direction = right, left, "in"
+        if bridge_id is None or target_id is None or direction is None:
+            continue
+        if target_id in seeds or target_id in direct_candidates or target_id == bridge_id:
+            continue
+        bridge_strength = neighbor_candidates[bridge_id]["strength"]
+        neighbor_candidates[target_id] = {
+            "via": [{"seed": bridge_id, "type": relation["type"], "direction": direction, "hop": 2}],
+            "strength": max(1, bridge_strength // 2),
+        }
+
     remaining = max(0, limit - len(seeds))
     expanded = sorted(
         neighbor_candidates,

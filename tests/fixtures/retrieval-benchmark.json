@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "cases": [
     {
       "id": "durable-workflow-retry",
@@ -56,10 +56,30 @@
       "query": "durable execution retry external side effects duplicate outcomes idempotency exactly once boundary",
       "limit": 5,
       "required": ["durable-execution", "idempotency-under-retry"],
-      "acceptable": ["activity-execution", "execution-history", "event-history", "workflow-execution"],
+      "acceptable": ["activity-execution", "execution-history", "event-history", "workflow-execution", "idempotent-receiver", "request-identity"],
       "forbidden": ["open-policy-agent", "retrieval-practice", "react-loop"],
       "min_precision": 0.6,
       "classification_probe": "contradiction-review"
+    },
+    {
+      "id": "sre-monitoring-observability-recall",
+      "query": "what monitoring should tell operators black box white box signals alerting boundaries telemetry volume operational noise",
+      "limit": 5,
+      "required": ["observability"],
+      "acceptable": ["white-box-monitoring", "black-box-monitoring", "actionable-alerting", "symptom-cause-monitoring"],
+      "forbidden": ["execution-history", "event-history", "controlled-execution", "open-policy-agent"],
+      "min_precision": 0.8,
+      "classification_probe": "cohort-recall-regression"
+    },
+    {
+      "id": "sqlite-wal-history-noise",
+      "query": "WAL write ahead log read write concurrency checkpointing append persistence failure boundaries",
+      "limit": 5,
+      "required": ["write-ahead-log", "checkpointing", "wal-reader-snapshot"],
+      "acceptable": [],
+      "forbidden": ["execution-history", "event-history", "replayable-evaluation", "controlled-execution"],
+      "min_precision": 0.6,
+      "classification_probe": "cohort-precision-regression"
     }
   ]
 }
