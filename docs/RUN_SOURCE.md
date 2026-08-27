@@ -2,7 +2,7 @@
 
 `run_source.py` is the deterministic entry point for starting or resuming one source-to-insight run.
 
-It does not contain an LLM runtime, scraping service or publication agent. Its job is to prepare stable repository context, preserve the run's starting revision, detect what has already been completed and tell the external research agent the exact next blocking action.
+It does not contain an LLM runtime, scraping service or publication agent. Its job is to prepare stable repository context, preserve the run's research evidence, detect what has already been completed and tell the external research agent the exact next blocking action.
 
 ## Start from a URL
 
@@ -19,8 +19,9 @@ The command:
 2. reuses an equivalent intake when one already exists;
 3. otherwise creates a new intake;
 4. creates the graph-aware research bundle only when missing;
-5. writes `data/run-manifests/<intake-id>.json`;
-6. prints the exact next blocking action.
+5. refreshes prior knowledge against the current graph if an existing bundle is still an untouched metadata-only scaffold;
+6. writes `data/run-manifests/<intake-id>.json`;
+7. prints the exact next blocking action.
 
 ## Resume from an intake
 
@@ -28,7 +29,17 @@ The command:
 python scripts/run_source.py intake-2026-08-26-example-source
 ```
 
-The existing bundle is never overwritten just because the command was run again. The manifest preserves its original context snapshot and also records the currently observed profile/graph revision.
+The existing bundle is not generally overwritten just because the command was run again. There is one deliberate exception discovered during the 20-source dogfood cohort: a source may sit in the queue while the knowledge graph evolves, so its scaffold-time prior snapshot can become stale before research actually starts.
+
+`run_source.py` therefore refreshes `prior_knowledge` only while all of these remain true:
+
+- `inspection` is still metadata-only / not inspected;
+- the whole-source problem/thesis has not been mapped;
+- no prior-knowledge relationship has been classified yet.
+
+Once source inspection, mapping or relationship classification starts, the prior snapshot is research evidence and becomes immutable to automatic refresh. Later corrections require an explicit reviewed edit rather than silent context drift.
+
+The manifest records whether this run refreshed the prior snapshot in `bundle_prior_refreshed_this_run`.
 
 ## Manifest
 
@@ -41,6 +52,8 @@ A manifest records:
 - initial knowledge-graph version/date;
 - current profile/graph revision on resume;
 - research-bundle path;
+- whether the bundle was created this run;
+- whether untouched prior context was refreshed this run;
 - expected output paths;
 - current pipeline state;
 - exact next blocker;
@@ -54,7 +67,8 @@ The manifest intentionally contains no full third-party source text and no hidde
 The command checks the pipeline in order:
 
 ```text
-source inspected + whole-source map
+fresh prior context while the scaffold is untouched
+→ source inspected + whole-source map
 → prior knowledge classified
 → source registered
 → insight linked + review-ready
@@ -67,7 +81,7 @@ source inspected + whole-source map
 
 It stops conceptually at the first missing requirement and reports that as `next_blocking_action`.
 
-This lets a capable agent pick up an interrupted source without rereading the repository to rediscover the workflow.
+This lets a capable agent pick up an interrupted source without rereading the repository to rediscover the workflow, while still preserving the actual analysis-time knowledge state.
 
 ## Mature-run checks
 
@@ -109,4 +123,9 @@ The source-run command never auto-publishes.
 python scripts/run_source.py --self-test
 ```
 
-The self-test checks that an existing mature case exposes a deterministic state and that a synthetic fresh bundle correctly reports source research as the first blocker without changing repository data.
+The self-test checks that:
+
+- an existing mature case exposes a deterministic state;
+- a synthetic fresh bundle correctly reports source research as the first blocker;
+- a stale untouched scaffold refreshes against the current graph;
+- an inspected/mapped bundle keeps its prior snapshot immutable.
