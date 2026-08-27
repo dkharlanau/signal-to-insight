@@ -1,138 +1,111 @@
 {
   "bundle_version": "1.1.0",
   "intake_id": "intake-2026-08-27-research-mapreduce-simplified-data-processing-on-large-cl",
-  "source_id": null,
+  "source_id": "src-google-mapreduce-osdi-2004",
   "source": {
     "type": "paper",
     "canonical_url": "https://research.google/pubs/mapreduce-simplified-data-processing-on-large-clusters",
-    "title": null,
-    "creators": [],
-    "publisher": null,
+    "title": "MapReduce: Simplified Data Processing on Large Clusters",
+    "creators": ["Jeffrey Dean", "Sanjay Ghemawat"],
+    "publisher": "Google / OSDI'04",
     "published_at": null,
     "event_date": null,
-    "version": null,
-    "language": null,
+    "version": "OSDI 2004 paper",
+    "language": "en",
     "duration": null,
-    "date_note": null
+    "date_note": "Published in OSDI'04 (2004), pp. 137–150; the publication page does not provide a more precise publication date."
   },
   "inspection": {
-    "method": "not inspected",
-    "full_content_used_ephemerally": false,
+    "method": "Direct inspection of the official Google Research publication page and official OSDI paper PDF, including programming model, execution overview, fault tolerance, locality and conclusions.",
+    "full_content_used_ephemerally": true,
     "full_content_committed": false,
-    "confidence": "metadata_only",
+    "confidence": "direct",
     "gaps": [
-      "Source content has not been mapped yet."
+      "This case preserves the abstraction boundary and representative runtime mechanisms; it does not treat the 2004 Google cluster implementation as a current implementation prescription.",
+      "Later systems that generalize or replace MapReduce are outside the source claim."
     ]
   },
   "prior_knowledge": {
     "captured_at": "2026-08-27",
     "query": "Understand the MapReduce abstraction boundary: what map/reduce lets the programmer specify, what the runtime takes over, and why hiding partitioning, scheduling and failure recovery created leverage.",
     "matches": [
-      {
-        "concept_id": "durable-execution",
-        "label": "Durable execution",
-        "coverage": "explained",
-        "evidence_insights": [
-          {
-            "id": "enterprise-agents-production-substrate",
-            "status": "published",
-            "title": "Why enterprise AI agents fail after the POC"
-          },
-          {
-            "id": "temporal-durable-execution-mental-model",
-            "status": "review",
-            "title": "Temporal: the mental model behind durable execution"
-          }
-        ],
-        "relationship_to_source": "unclassified"
-      },
-      {
-        "concept_id": "activity-execution",
-        "label": "Activity Execution",
-        "coverage": "explained",
-        "evidence_insights": [
-          {
-            "id": "temporal-durable-execution-mental-model",
-            "status": "review",
-            "title": "Temporal: the mental model behind durable execution"
-          }
-        ],
-        "relationship_to_source": "unclassified"
-      },
-      {
-        "concept_id": "workflow-execution",
-        "label": "Workflow Execution",
-        "coverage": "explained",
-        "evidence_insights": [
-          {
-            "id": "temporal-durable-execution-mental-model",
-            "status": "review",
-            "title": "Temporal: the mental model behind durable execution"
-          }
-        ],
-        "relationship_to_source": "unclassified"
-      },
-      {
-        "concept_id": "controlled-execution",
-        "label": "Controlled execution",
-        "coverage": "explained",
-        "evidence_insights": [
-          {
-            "id": "enterprise-agents-production-substrate",
-            "status": "published",
-            "title": "Why enterprise AI agents fail after the POC"
-          },
-          {
-            "id": "open-policy-agent-decision-enforcement-model",
-            "status": "review",
-            "title": "Open Policy Agent: separate policy decisions from enforcement"
-          },
-          {
-            "id": "react-reason-act-observe-loop",
-            "status": "review",
-            "title": "ReAct: reason, act, observe — then update the plan"
-          }
-        ],
-        "relationship_to_source": "unclassified"
-      },
-      {
-        "concept_id": "idempotency-under-retry",
-        "label": "Idempotency under retry",
-        "coverage": "explained",
-        "evidence_insights": [
-          {
-            "id": "temporal-durable-execution-mental-model",
-            "status": "review",
-            "title": "Temporal: the mental model behind durable execution"
-          }
-        ],
-        "relationship_to_source": "unclassified"
-      }
+      {"concept_id":"durable-execution","label":"Durable execution","coverage":"explained","evidence_insights":[{"id":"enterprise-agents-production-substrate","status":"published","title":"Why enterprise AI agents fail after the POC"},{"id":"temporal-durable-execution-mental-model","status":"review","title":"Temporal: the mental model behind durable execution"},{"id":"langgraph-stateful-agent-orchestration","status":"review","title":"LangGraph: stateful orchestration is not the same as the agent loop"}],"relationship_to_source":"not_relevant"},
+      {"concept_id":"activity-execution","label":"Activity Execution","coverage":"explained","evidence_insights":[{"id":"temporal-durable-execution-mental-model","status":"review","title":"Temporal: the mental model behind durable execution"}],"relationship_to_source":"not_relevant"},
+      {"concept_id":"workflow-execution","label":"Workflow Execution","coverage":"explained","evidence_insights":[{"id":"temporal-durable-execution-mental-model","status":"review","title":"Temporal: the mental model behind durable execution"}],"relationship_to_source":"not_relevant"},
+      {"concept_id":"controlled-execution","label":"Controlled execution","coverage":"explained","evidence_insights":[{"id":"enterprise-agents-production-substrate","status":"published","title":"Why enterprise AI agents fail after the POC"},{"id":"open-policy-agent-decision-enforcement-model","status":"review","title":"Open Policy Agent: separate policy decisions from enforcement"},{"id":"react-reason-act-observe-loop","status":"review","title":"ReAct: reason, act, observe — then update the plan"},{"id":"langgraph-stateful-agent-orchestration","status":"review","title":"LangGraph: stateful orchestration is not the same as the agent loop"}],"relationship_to_source":"not_relevant"},
+      {"concept_id":"idempotency-under-retry","label":"Idempotency under retry","coverage":"explained","evidence_insights":[{"id":"temporal-durable-execution-mental-model","status":"review","title":"Temporal: the mental model behind durable execution"},{"id":"idempotent-receiver-retry-deduplication","status":"review","title":"Idempotent Receiver: retries need a stable logical request identity"}],"relationship_to_source":"not_relevant"}
     ],
     "classification_required": true
   },
   "content_map": {
-    "problem": null,
-    "thesis": null,
-    "sections": [],
-    "concepts": [],
-    "mechanisms": [],
-    "tools": [],
-    "examples": [],
-    "claims": [],
-    "evidence": [],
-    "assumptions": [],
-    "limitations": [],
-    "open_questions": []
+    "problem": "Straightforward large-data computations become dominated by distribution code when programmers must explicitly parallelize work, partition data, schedule machines, move intermediate data and recover from failures.",
+    "thesis": "Restrict the user program to Map and Reduce functions over key/value data so a runtime can automatically partition, schedule, move data and re-execute tasks across a cluster.",
+    "sections": ["Abstract and Introduction", "2 Programming Model", "3 Implementation and Execution Overview", "3.3 Fault Tolerance", "3.4 Locality", "8 Conclusions"],
+    "concepts": ["restricted programming model", "Map function", "Reduce function", "runtime-managed distribution", "task re-execution", "locality-aware scheduling"],
+    "mechanisms": [
+      "User code defines Map and Reduce transformations.",
+      "The library partitions input into map tasks and the intermediate key space into reduce partitions.",
+      "A master schedules work across workers and coordinates intermediate locations.",
+      "Failed worker tasks become eligible for rescheduling; map work may be re-executed.",
+      "Map tasks are preferentially scheduled near input replicas to reduce network traffic."
+    ],
+    "tools": ["MapReduce library", "master/worker runtime", "Google File System (implementation dependency in the paper)"],
+    "examples": ["word count", "distributed grep", "inverted index", "distributed sort"],
+    "claims": [
+      "Users specify Map and Reduce; the runtime handles parallelization and distribution.",
+      "The restricted model enables transparent fault tolerance through task re-execution.",
+      "Locality-aware scheduling reduces network transfer by moving computation toward input data.",
+      "The 2004 implementation details are one realization of the interface, not the definition of MapReduce itself."
+    ],
+    "evidence": [
+      "Google Research abstract separates user-specified functions from runtime-owned partitioning, scheduling, failures and communication.",
+      "Paper Figure 1 and Section 3 show the master/worker execution flow.",
+      "Section 3.3 describes worker failure and task rescheduling/re-execution.",
+      "Section 3.4 describes locality-aware map scheduling."
+    ],
+    "assumptions": [
+      "The workload can be expressed as map/reduce transformations over partitionable data.",
+      "Re-executing tasks is semantically safe for the computation model.",
+      "Batch throughput and large-scale data processing matter more than low-latency incremental updates."
+    ],
+    "limitations": [
+      "The programming model is intentionally restrictive and is not a fit for every distributed computation.",
+      "The paper's cluster, network, disk and GFS details are historical implementation context.",
+      "MapReduce is a batch model; later systems address interactive, streaming and iterative workloads differently."
+    ],
+    "open_questions": [
+      "Which modern workload classes still benefit from a similarly restrictive runtime abstraction?",
+      "Where should a framework expose control instead of hiding scheduling and failure recovery?"
+    ]
   },
   "selection": {
     "requested_focus": "Understand the MapReduce abstraction boundary: what map/reduce lets the programmer specify, what the runtime takes over, and why hiding partitioning, scheduling and failure recovery created leverage.",
-    "coherent_core": [],
-    "prerequisites": [],
-    "drop_notes": [],
-    "connections": []
+    "coherent_core": [
+      "The programmer specifies domain transformations, not distributed execution mechanics.",
+      "A restricted interface gives the runtime enough structure to partition and schedule work automatically.",
+      "The same restriction lets the runtime recover from worker failure by re-executing tasks.",
+      "Data locality is a runtime optimization that preserves the user-level model while reducing network cost."
+    ],
+    "prerequisites": ["key/value transformation", "task partitioning", "worker failure"],
+    "drop_notes": [
+      "Do not teach Hadoop or modern cloud products as if they were part of the 2004 source.",
+      "Do not equate MapReduce task re-execution with Temporal durable workflow execution or external-side-effect idempotency."
+    ],
+    "connections": [
+      "MapReduce illustrates a general abstraction principle: give a runtime fewer, clearer user-level responsibilities so it can own distribution and recovery.",
+      "This is adjacent to durable orchestration but the persisted unit and semantics are different."
+    ]
   },
-  "verification_candidates": [],
-  "source_locators": [],
+  "verification_candidates": [
+    {"question":"Which later systems retained the same abstraction ownership while relaxing the batch Map/Reduce model?","reason":"Useful historical follow-up, not required to understand this source.","priority":"low"}
+  ],
+  "source_locators": [
+    {"label":"Google Research abstract","locator":"Publication page → Abstract"},
+    {"label":"Programming model","locator":"PDF §2 Programming Model"},
+    {"label":"Execution overview","locator":"PDF Figure 1 and §3.1 Execution Overview"},
+    {"label":"Fault tolerance","locator":"PDF §3.3 Fault Tolerance"},
+    {"label":"Locality","locator":"PDF §3.4 Locality"},
+    {"label":"Conclusions","locator":"PDF §8 Conclusions"}
+  ],
   "created_at": "2026-08-27"
 }

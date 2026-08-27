@@ -1,0 +1,56 @@
+{
+  "contract_version": "1.0.0",
+  "intake_id": "intake-2026-08-27-research-mapreduce-simplified-data-processing-on-large-cl",
+  "insight_id": "mapreduce-runtime-abstraction-boundary",
+  "knowledge_delta": {
+    "insight_id": "mapreduce-runtime-abstraction-boundary",
+    "summary": "MapReduce adds a new abstraction-ownership model: a restricted user computation interface enables the runtime to own distribution, locality and task recovery. Existing workflow/durable-execution matches are suppressed because their persisted unit and semantics differ.",
+    "items": [
+      {"relationship":"new","concept_id":"restricted-programming-model","label":"Restricted programming model","source_basis":"The paper restricts user computation to Map and Reduce functions over key/value data.","prior_basis":"The graph contains domain-specific workflow and agent abstractions but no general concept for deliberately restricting a programming interface so the runtime can infer distributed execution.","interpretation":"The restriction is not merely API simplicity; it is what creates room for automatic parallelization and fault tolerance.","evidence_insights":[]},
+      {"relationship":"new","concept_id":"runtime-managed-distribution","label":"Runtime-managed distribution","source_basis":"The runtime handles input partitioning, scheduling, communication and intermediate-data movement.","prior_basis":"Existing orchestration concepts model other execution systems, not the MapReduce boundary that removes cluster mechanics from batch transformation code.","interpretation":"Distribution becomes a framework responsibility rather than application boilerplate.","evidence_insights":[]},
+      {"relationship":"new","concept_id":"task-reexecution-fault-recovery","label":"Task re-execution fault recovery","source_basis":"Failed worker tasks are reset/rescheduled, and map work may be re-executed as the primary recovery mechanism.","prior_basis":"Durable workflow progress and external-side-effect idempotency exist in the graph, but neither is the same as re-running deterministic batch tasks.","interpretation":"The source adds a distinct recovery model enabled by the restricted computation semantics.","evidence_insights":[]},
+      {"relationship":"new","concept_id":"data-locality-scheduling","label":"Data-locality scheduling","source_basis":"The master preferentially schedules map tasks on or near machines that hold input replicas.","prior_basis":"No existing graph concept represents scheduler-owned compute placement driven by data location.","interpretation":"The runtime can optimize physical placement while preserving the logical user program.","evidence_insights":[]}
+    ],
+    "suppressed_prior_matches": ["durable-execution", "activity-execution", "workflow-execution", "controlled-execution", "idempotency-under-retry"]
+  },
+  "claim_evidence": {
+    "insight_id": "mapreduce-runtime-abstraction-boundary",
+    "claims": [
+      {"id":"mapreduce-user-runtime-boundary","text":"MapReduce asks users to provide Map and Reduce functions while the runtime owns partitioning, scheduling, machine-failure handling and inter-machine communication.","impact":"high","origin":"source","status":"supported","evidence":[{"kind":"primary_source","source_id":"src-google-mapreduce-osdi-2004","url":"https://research.google/pubs/mapreduce-simplified-data-processing-on-large-clusters","locator":"Publication page → Abstract"},{"kind":"primary_source","source_id":"src-google-mapreduce-osdi-2004","url":"https://storage.googleapis.com/gweb-research2023-media/pubtools/4449.pdf","locator":"PDF §2 Programming Model and Figure 1 / §3.1 Execution Overview"}],"note":null},
+      {"id":"mapreduce-reexecution-fault-tolerance","text":"The Google implementation uses task rescheduling and re-execution as a primary mechanism for tolerating worker failures in large batch computations.","impact":"high","origin":"source","status":"supported","evidence":[{"kind":"primary_source","source_id":"src-google-mapreduce-osdi-2004","url":"https://storage.googleapis.com/gweb-research2023-media/pubtools/4449.pdf","locator":"PDF §3.3 Fault Tolerance → Worker Failure"}],"note":null},
+      {"id":"mapreduce-locality-scheduling","text":"The master uses input-location information to schedule map tasks on or near machines holding the required data, reducing network traffic.","impact":"medium","origin":"source","status":"supported","evidence":[{"kind":"primary_source","source_id":"src-google-mapreduce-osdi-2004","url":"https://storage.googleapis.com/gweb-research2023-media/pubtools/4449.pdf","locator":"PDF §3.4 Locality"}],"note":null},
+      {"id":"mapreduce-restriction-enables-runtime","text":"The transferable architectural lesson is that restricting the programming model gives the runtime enough structure to automate parallelization, distribution and fault recovery.","impact":"high","origin":"project_interpretation","status":"supported","evidence":[{"kind":"primary_source","source_id":"src-google-mapreduce-osdi-2004","url":"https://storage.googleapis.com/gweb-research2023-media/pubtools/4449.pdf","locator":"PDF Introduction and §8 Conclusions"}],"note":"This wording is the project's architecture synthesis of the authors' stated rationale, not a source-authored general framework law."}
+    ]
+  },
+  "prerequisite_map": {
+    "insight_id": "mapreduce-runtime-abstraction-boundary",
+    "summary": "The mental model needs the constrained user interface, runtime-owned distribution and re-execution recovery; locality is useful depth after those responsibilities are clear.",
+    "items": [
+      {"id":"mapreduce-prereq-restricted-model","label":"Restricted programming model","concept_id":"restricted-programming-model","priority":"must_know_now","prior_coverage":"absent","state":"explained_here","reason":"The source's leverage is impossible to understand if Map and Reduce are treated as mere convenience functions rather than a deliberate constraint.","resolution":{"kind":"explained_here","insight_id":"mapreduce-runtime-abstraction-boundary","target":null}},
+      {"id":"mapreduce-prereq-runtime-distribution","label":"Runtime-managed distribution","concept_id":"runtime-managed-distribution","priority":"must_know_now","prior_coverage":"absent","state":"explained_here","reason":"The user/runtime responsibility split is the central reason simple transformations can run across many machines without custom cluster code.","resolution":{"kind":"explained_here","insight_id":"mapreduce-runtime-abstraction-boundary","target":null}},
+      {"id":"mapreduce-prereq-reexecution","label":"Task re-execution fault recovery","concept_id":"task-reexecution-fault-recovery","priority":"must_know_now","prior_coverage":"absent","state":"explained_here","reason":"Failure handling demonstrates what the runtime can safely automate once tasks fit the constrained computation model.","resolution":{"kind":"explained_here","insight_id":"mapreduce-runtime-abstraction-boundary","target":null}},
+      {"id":"mapreduce-prereq-locality","label":"Data-locality scheduling","concept_id":"data-locality-scheduling","priority":"learn_next","prior_coverage":"absent","state":"explained_here","reason":"Locality shows how runtime ownership can optimize physical placement without expanding the user-facing abstraction.","resolution":{"kind":"explained_here","insight_id":"mapreduce-runtime-abstraction-boundary","target":null}}
+    ]
+  },
+  "learning_prompt": {
+    "insight_id": "mapreduce-runtime-abstraction-boundary",
+    "retention_prompt": "Without looking back, reconstruct the MapReduce responsibility boundary: what does the programmer specify, which distributed-execution responsibilities does the runtime take over, why does the restricted model make task re-execution practical, and what important workload boundary remains?",
+    "answer_key": {"problem_from":"whole_source_map.problem","mechanism_from":"whole_source_map.thesis","anchor_concept_ids":["restricted-programming-model","runtime-managed-distribution","task-reexecution-fault-recovery"],"boundary_limitation_index":0},
+    "transfer_prompt": {"prompt":"You are designing a framework for large repeatable file transformations. Which parts of the user API would you deliberately restrict so the runtime can own partitioning, scheduling and failure recovery, and where would that restriction become too limiting?","expected_concept_ids":["restricted-programming-model","runtime-managed-distribution","task-reexecution-fault-recovery"]}
+  },
+  "source_decision": {
+    "insight_id": "mapreduce-runtime-abstraction-boundary",
+    "decision": "skim_selected_parts",
+    "rationale": "The explainer preserves the abstraction boundary, but the original paper is worth a targeted skim because Figure 1 and the fault-tolerance/locality sections make the runtime responsibilities concrete. The historical performance sections are not required for the current architecture question.",
+    "novelty": {"level":"high","reason":"The source adds a general runtime-abstraction pattern not previously represented as a standalone concept in the graph."},
+    "source_quality": {"level":"high","reason":"This is the original Google OSDI paper and official Google Research publication page."},
+    "relevance": {"level":"high","reason":"The responsibility-boundary lesson transfers directly to data tooling, workflow runtimes and agent/framework design."},
+    "practical_leverage": {"level":"high","reason":"It provides a concrete design test for deciding which execution concerns should disappear behind a constrained framework interface."},
+    "compression_loss": {"level":"medium","reason":"The core model compresses well, but Figure 1 and failure/locality mechanisms add useful intuition about why the abstraction works."},
+    "selected_parts": [
+      {"label":"Programming model and execution overview","locator":"PDF §2 Programming Model and Figure 1 / §3.1 Execution Overview","why":"See the exact user/runtime split and how logical Map/Reduce becomes distributed tasks.","claim_refs":["mapreduce-user-runtime-boundary"]},
+      {"label":"Worker failure recovery","locator":"PDF §3.3 Fault Tolerance → Worker Failure","why":"Shows why runtime-owned scheduling can turn machine failure into task re-execution rather than application repair code.","claim_refs":["mapreduce-reexecution-fault-tolerance"]},
+      {"label":"Locality","locator":"PDF §3.4 Locality","why":"Shows the runtime optimizing physical placement without changing the user-level computation.","claim_refs":["mapreduce-locality-scheduling"]}
+    ]
+  }
+}
