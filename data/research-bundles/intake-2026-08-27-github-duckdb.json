@@ -10,19 +10,19 @@
     "publisher": "DuckDB Foundation / DuckDB project",
     "published_at": null,
     "event_date": null,
-    "version": null,
+    "version": "v1.5.5 stable observed; main is living",
     "language": "en",
     "duration": null,
-    "date_note": "Living repository and documentation inspected on 2026-08-27; no single publication date is asserted."
+    "date_note": "Living repository and documentation inspected on 2026-08-27. Latest stable release observed was v1.5.5, published 2026-07-22. DuckDB's 2026-08-17 v2.0 preview describes Quack/CONNECT as an emerging client-server mode, so in-process is treated as the foundational architecture rather than an eternal no-server constraint."
   },
   "inspection": {
-    "method": "Direct inspection of the official DuckDB GitHub repository README and official DuckDB documentation for deployment/concurrency boundaries.",
+    "method": "Direct inspection of the official DuckDB repository README, Why DuckDB, concurrency documentation, direct Parquet-query documentation and the current DuckDB v2.0 preview.",
     "full_content_used_ephemerally": true,
     "full_content_committed": false,
     "confidence": "direct",
     "gaps": [
       "This case focuses on the in-process composition model, not DuckDB's vectorized execution internals or storage engine implementation.",
-      "DuckDB's newer multi-process/client-server options are evolving; the core insight here remains the architectural leverage of embedding analytics directly in an application process."
+      "Quack is a fast-moving remote-access surface; exact production v2.0 protocol/deployment semantics should be rechecked when v2.0 stabilizes."
     ]
   },
   "prior_knowledge": {
@@ -63,72 +63,88 @@
         "coverage": "explained",
         "evidence_insights": [{"id": "temporal-durable-execution-mental-model", "status": "review", "title": "Temporal: the mental model behind durable execution"}],
         "relationship_to_source": "not_relevant"
+      },
+      {
+        "concept_id": "multiversion-concurrency-control",
+        "label": "Multiversion Concurrency Control (MVCC)",
+        "coverage": "explained",
+        "evidence_insights": [{"id": "postgresql-mvcc-snapshot-isolation", "status": "review", "title": "PostgreSQL MVCC: snapshots reduce blocking, isolation defines the boundary"}],
+        "relationship_to_source": "reinforcement"
       }
     ],
     "classification_required": true
   },
   "content_map": {
     "problem": "Analytical work inside scripts, notebooks and applications often pays integration cost to move data into a separate database service before SQL can be useful.",
-    "thesis": "DuckDB puts an analytical SQL database inside the host process so applications can query local or object-storage data directly through native language clients without requiring a separate database server for the common embedded workflow.",
+    "thesis": "DuckDB puts an analytical SQL database inside the host process so applications can query local, host-memory or file data through native clients without requiring a separate database server for the core embedded workflow; the same architecture centers stable read-write ownership in one process, while Quack is adding an explicit remote mode.",
     "sections": [
-      "Repository purpose and in-process positioning",
-      "Native clients and application embedding",
+      "Repository purpose and client surface",
+      "Why DuckDB: in-process deployment",
       "Direct CSV and Parquet querying",
       "Single-process concurrency model and limits",
-      "Boundary with client/server databases"
+      "MVCC plus optimistic concurrency within the writer process",
+      "DuckDB v2.0 preview: Quack/CONNECT remote mode"
     ],
     "concepts": [
       "in-process analytical database",
       "embedded query engine",
       "direct file querying",
       "process-local database state",
-      "client/server database boundary"
+      "MVCC inside one writer process",
+      "client/server boundary and Quack"
     ],
     "mechanisms": [
       "DuckDB runs inside the same process as the calling application rather than requiring a separate server process for its normal embedded use.",
       "Native clients let Python, R, Java, Wasm and other environments invoke the engine directly.",
-      "CSV and Parquet files can be queried directly from SQL, reducing the need for an explicit import step for many analytical workflows.",
-      "The core read/write concurrency model is process-centered; this is a deliberate trade-off rather than a universal replacement for multi-client transactional servers."
+      "CSV and Parquet files can be queried directly from SQL; Parquet scans can push projections and filters into the file read.",
+      "The core read/write model is process-centered and uses MVCC plus optimistic concurrency control among writer threads in that process.",
+      "Quack/CONNECT introduces a remote client-server option without erasing the local in-process mode."
     ],
-    "tools": ["DuckDB CLI", "DuckDB Python client", "DuckDB R client", "DuckDB Wasm", "DuckDB extensions"],
+    "tools": ["DuckDB CLI", "DuckDB Python client", "DuckDB R client", "DuckDB Wasm", "read_parquet", "Quack / CONNECT"],
     "examples": [
-      "A Python data pipeline can query Parquet directly with SQL without provisioning a remote analytical database.",
+      "A Python data pipeline can query a DataFrame or Parquet file with SQL without provisioning a remote analytical database.",
       "A desktop or embedded application can ship analytical SQL capability as a library inside the application process.",
-      "A multi-service transactional application with many independent writers may still fit a client/server database better than the core embedded model."
+      "Multiple writer threads can operate inside the read-write process using MVCC/OCC, while unrelated writer processes require another coordination or remote architecture.",
+      "A future/shared deployment can add Quack remote access instead of pretending every DuckDB workload must remain local forever."
     ],
     "claims": [
-      "DuckDB describes itself as a high-performance analytical in-process database system.",
-      "DuckDB provides native clients for multiple programming languages and integrates with data tools such as pandas and dplyr.",
-      "DuckDB can query CSV and Parquet files directly from SQL.",
-      "DuckDB's core writable concurrency model is optimized around one process, which marks an important boundary with traditional multi-client database-server deployments."
+      "DuckDB's core architecture is an analytical in-process database system.",
+      "In-process deployment makes host/database data transfer cheap and some host integrations can avoid explicit import/copy.",
+      "DuckDB can query CSV and Parquet files directly from SQL and push filters/projections into Parquet scans.",
+      "DuckDB's stable writable concurrency model is centered on one process and uses MVCC plus optimistic concurrency control within it.",
+      "DuckDB is adding Quack/CONNECT as a client-server mode for v2.0, so in-process is foundational rather than exclusive."
     ],
     "evidence": [
-      "Official GitHub README inspected on 2026-08-27.",
-      "Official DuckDB concurrency documentation inspected on 2026-08-27."
+      "Official GitHub README and Why DuckDB page inspected on 2026-08-27.",
+      "Official DuckDB concurrency and Parquet-query documentation inspected on 2026-08-27.",
+      "Official DuckDB v2.0 preview dated 2026-08-17 inspected for the current remote-mode boundary."
     ],
     "assumptions": [
       "The workload is analytical rather than dominated by many tiny concurrent OLTP transactions.",
       "Embedding the database in the application process reduces operational or data-movement friction for the target workflow.",
-      "The application can accept the lifecycle and concurrency implications of a process-local engine."
+      "The application can accept the lifecycle and concurrency implications of a process-local engine or explicitly choose a remote mode when sharing requires it."
     ],
     "limitations": [
       "In-process deployment reduces service boundaries but also couples database lifecycle and resource use more closely to the host process.",
-      "The core embedded model is not automatically the right fit for many independent processes performing concurrent writes to one database.",
-      "Direct file querying does not remove data-governance, consistency or data-quality requirements.",
-      "Using DuckDB does not by itself make an analytical workflow reproducible, governed or observable."
+      "The core embedded read-write model is not automatically the right fit for many independent writer processes or OLTP-heavy workloads.",
+      "Direct file querying does not remove data-governance, consistency or data-quality requirements and is not always faster than loading data into DuckDB.",
+      "MVCC inside DuckDB reinforces a known concurrency primitive but does not make DuckDB's process ownership equivalent to PostgreSQL's deployment model.",
+      "Quack/client-server support is actively evolving toward v2.0 and should be re-analyzed after stabilization."
     ],
     "open_questions": [
       "Which local data-processing utilities become materially simpler when SQL execution is embedded instead of provisioned as a service?",
-      "Where does a DuckDB-based tool need an explicit boundary before scaling into a shared multi-user service?"
+      "When does loading Parquet into DuckDB outperform querying it directly for repeated workloads?",
+      "How should Quack change the boundary between embedded local analytics and shared database-service architecture once stable?"
     ]
   },
   "selection": {
     "requested_focus": "Understand the architectural value of an in-process analytical database, how this changes data-tool composition, and where the model differs from client/server databases.",
     "coherent_core": [
       "In-process is the architectural boundary: the analytical engine lives in the application process.",
-      "Native clients and direct file querying make SQL a composable library capability rather than necessarily a remote service.",
+      "Native clients and direct file/host-object querying make SQL a composable library capability rather than necessarily a remote service.",
       "That composition reduces setup and data-movement friction for analytical tools.",
-      "The trade-off is that process-local lifecycle and concurrency assumptions differ from a general shared client/server database."
+      "The trade-off is process-centered write ownership, even though MVCC/OCC supports concurrent writer threads inside that process.",
+      "Quack extends DuckDB toward remote access as an additional mode rather than invalidating the embedded model."
     ],
     "prerequisites": [
       "difference between in-process and client/server software",
@@ -138,23 +154,32 @@
     "drop_notes": [
       "Vectorized execution internals are outside this source-focused architectural model.",
       "Benchmark claims are excluded because the product value here is composition, not a speed ranking.",
-      "Quack/DuckLake evolution is noted only as a boundary update, not as the core mental model."
+      "Retrieved workflow/process concepts are rejected as unrelated; only the already-known MVCC concept is reused because DuckDB explicitly documents it in the single-process concurrency model."
     ],
     "connections": [
-      "PostgreSQL MVCC is not the same concept: PostgreSQL's snapshot/concurrency model belongs to a shared database server, while this case is about embedding an analytical engine in a host process.",
+      "PostgreSQL MVCC is reinforced as a general concurrency primitive, but DuckDB applies it inside a different process-ownership and analytical deployment model.",
       "SQLite is an adjacent embedded-database comparison, but DuckDB's primary design center is analytical SQL/OLAP rather than general-purpose application transactions."
     ]
   },
   "verification_candidates": [
     {
-      "question": "Which current DuckDB mechanisms support multi-process write scenarios beyond the classic single-writer-process model?",
-      "reason": "The ecosystem is evolving; this matters for the client/server boundary but should not blur the core in-process model.",
+      "question": "What production guarantees will Quack/CONNECT expose when DuckDB v2.0 is stable?",
+      "reason": "The client/server surface is moving quickly and materially affects the multi-process boundary.",
+      "priority": "high"
+    },
+    {
+      "question": "When does loading Parquet into DuckDB outperform direct querying?",
+      "reason": "The official performance guidance treats this as workload-dependent rather than a universal direct-file rule.",
       "priority": "medium"
     }
   ],
   "source_locators": [
-    {"label": "DuckDB repository README", "locator": "https://github.com/duckdb/duckdb#readme"},
-    {"label": "DuckDB concurrency documentation", "locator": "https://duckdb.org/docs/current/connect/concurrency"}
+    {"label": "DuckDB repository README", "locator": "README → DuckDB / clients"},
+    {"label": "DuckDB direct file examples", "locator": "README → Data Import"},
+    {"label": "DuckDB in-process architecture", "locator": "Why DuckDB → In-process"},
+    {"label": "DuckDB concurrency", "locator": "Handling Concurrency → Single Process / Multiple Processes"},
+    {"label": "DuckDB Parquet pushdown", "locator": "Querying Parquet Files → read_parquet and pushdown"},
+    {"label": "DuckDB v2.0 remote mode", "locator": "DuckDB v2.0 preview → DuckDB as a Server: Quack and CONNECT"}
   ],
   "created_at": "2026-08-27"
 }
