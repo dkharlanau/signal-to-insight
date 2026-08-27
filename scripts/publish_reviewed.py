@@ -205,34 +205,50 @@ def publish(
 
 def self_test() -> int:
     insights = load(INSIGHTS)
-    review = next((item for item in insights.get("insights", []) if item.get("status") == "review"), None)
-    if review is None:
+    reviews = [item for item in insights.get("insights", []) if item.get("status") == "review"]
+    if not reviews:
         print("Publish self-test requires at least one review insight.")
         return 1
-    insight_id = review["id"]
 
+    # Wrong confirmation must always be rejected, independently of whether the selected
+    # review item would otherwise pass all publication safety gates.
+    first_id = reviews[0]["id"]
     try:
-        preflight(insight_id, "WRONG", "self-test", "self-test review")
+        preflight(first_id, "WRONG", "self-test", "self-test review")
     except PublishError:
         pass
     else:
         print("Publish self-test failed: incorrect confirmation was accepted.")
         return 1
 
-    try:
-        publish(
-            insight_id,
-            f"PUBLISH:{insight_id}",
-            "self-test",
-            "Validated source, model, limitations and public projection.",
-            dry_run=True,
-        )
-    except PublishError as exc:
-        print(f"Publish self-test failed: {exc}")
-        return 1
+    # Repository state can legitimately contain review items that are not publishable yet
+    # (for example, a concept with mixed published/review evidence and no curated public
+    # projection). Do not make the self-test depend on which review record appears first.
+    blocked: list[str] = []
+    for review in reviews:
+        insight_id = review["id"]
+        try:
+            publish(
+                insight_id,
+                f"PUBLISH:{insight_id}",
+                "self-test",
+                "Validated source, model, limitations and public projection.",
+                dry_run=True,
+            )
+        except PublishError as exc:
+            blocked.append(f"{insight_id}: {exc}")
+            continue
 
-    print("Publish self-test passed; review-only and explicit-confirmation boundaries hold.")
-    return 0
+        print(
+            "Publish self-test passed; wrong confirmation is rejected and at least one "
+            f"review item ({insight_id}) passes all explicit publication safety gates."
+        )
+        return 0
+
+    print("Publish self-test failed: no current review insight passes the positive dry-run path.")
+    for item in blocked:
+        print(f"- {item}")
+    return 1
 
 
 def main() -> int:
