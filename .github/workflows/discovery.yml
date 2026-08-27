@@ -1,0 +1,79 @@
+name: Sync public discovery bundle
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "data/insights.json"
+      - "data/sources.json"
+      - "knowledge/concepts/index.json"
+      - "knowledge/history.json"
+      - "scripts/build_discovery.py"
+      - "scripts/build_sitemap.py"
+      - "atom.xml"
+      - "discovery.json"
+      - "llms.txt"
+      - ".github/workflows/discovery.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "data/insights.json"
+      - "data/sources.json"
+      - "knowledge/concepts/index.json"
+      - "knowledge/history.json"
+      - "scripts/build_discovery.py"
+      - "scripts/build_sitemap.py"
+      - "atom.xml"
+      - "discovery.json"
+      - "llms.txt"
+      - ".github/workflows/discovery.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  discovery:
+    if: github.actor != 'github-actions[bot]' || github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || 'main' }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Test published-only projection
+        run: python scripts/build_discovery.py --self-test
+
+      - name: Rebuild discovery and sitemap
+        run: |
+          python scripts/build_discovery.py
+          python scripts/build_sitemap.py
+
+      - name: Verify generated discovery on pull requests
+        if: github.event_name == 'pull_request'
+        run: |
+          python scripts/build_discovery.py --check
+          python scripts/build_sitemap.py --check
+          if [ -n "$(git status --porcelain -- atom.xml discovery.json llms.txt sitemap.xml)" ]; then
+            git status --short -- atom.xml discovery.json llms.txt sitemap.xml
+            echo "Generated public discovery outputs are missing or stale."
+            exit 1
+          fi
+
+      - name: Commit synced discovery on main
+        if: github.event_name == 'push'
+        run: |
+          if [ -z "$(git status --porcelain -- atom.xml discovery.json llms.txt sitemap.xml)" ]; then
+            echo "Public discovery bundle already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add atom.xml discovery.json llms.txt sitemap.xml
+          git commit -m "build: sync public discovery bundle"
+          git push origin HEAD:main
