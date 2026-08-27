@@ -67,8 +67,22 @@ jobs:
       - name: Test private personal knowledge baseline
         run: python scripts/personal_baseline.py self-test
 
+      - name: Validate private/public projection boundary
+        run: |
+          python scripts/validate_private_boundary.py
+          python scripts/validate_private_boundary.py --self-test
+
       - name: Test learning utility local loop
         run: python scripts/learning_utility.py self-test
+
+      - name: Test private action outcome loop
+        run: python scripts/action_outcomes.py self-test
+
+      - name: Test portable local state
+        run: python scripts/local_state.py self-test
+
+      - name: Test evidence-driven next research queue
+        run: python scripts/next_research.py self-test
 
       - name: Test dogfood cohort evidence store
         run: python scripts/dogfood.py self-test
