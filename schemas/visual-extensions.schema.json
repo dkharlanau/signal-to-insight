@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dkharlanau.github.io/signal-to-insight/schemas/visual-extensions.schema.json",
+  "title": "Signal to Insight real-case visual extensions",
+  "type": "object",
+  "required": ["visual_extension_version", "records"],
+  "properties": {
+    "visual_extension_version": {"type": "string"},
+    "records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "insight_id", "source_id", "primitive", "reason", "fallback"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^visual-[a-z0-9-]+$"},
+          "insight_id": {"type": "string", "minLength": 1},
+          "source_id": {"type": "string", "pattern": "^src-[a-z0-9-]+$"},
+          "primitive": {"enum": ["decision_tree", "state_transition", "source_figure"]},
+          "reason": {"type": "string", "minLength": 40},
+          "replaces_base_dominant": {"type": "boolean"},
+          "decision_tree": {"$ref": "#/$defs/decision_tree"},
+          "state_transition": {"$ref": "#/$defs/state_transition"},
+          "source_figure": {"$ref": "#/$defs/source_figure"},
+          "fallback": {
+            "type": "object",
+            "required": ["title", "items"],
+            "properties": {
+              "title": {"type": "string", "minLength": 1},
+              "items": {"type": "array", "minItems": 2, "items": {"type": "string", "minLength": 1}}
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "$defs": {
+    "node": {
+      "type": "object",
+      "required": ["id", "label", "title", "text"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+        "label": {"type": "string", "minLength": 1},
+        "title": {"type": "string", "minLength": 1},
+        "text": {"type": "string", "minLength": 1},
+        "kind": {"enum": ["step", "decision", "outcome", "state", "recovery"]}
+      },
+      "additionalProperties": false
+    },
+    "edge": {
+      "type": "object",
+      "required": ["from", "to", "label"],
+      "properties": {
+        "from": {"type": "string", "minLength": 1},
+        "to": {"type": "string", "minLength": 1},
+        "label": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "decision_tree": {
+      "type": "object",
+      "required": ["title", "root_id", "nodes", "edges"],
+      "properties": {
+        "title": {"type": "string", "minLength": 1},
+        "root_id": {"type": "string"},
+        "nodes": {"type": "array", "minItems": 4, "items": {"$ref": "#/$defs/node"}},
+        "edges": {"type": "array", "minItems": 3, "items": {"$ref": "#/$defs/edge"}}
+      },
+      "additionalProperties": false
+    },
+    "state_transition": {
+      "type": "object",
+      "required": ["title", "initial_state_id", "states", "transitions"],
+      "properties": {
+        "title": {"type": "string", "minLength": 1},
+        "initial_state_id": {"type": "string"},
+        "states": {"type": "array", "minItems": 4, "items": {"$ref": "#/$defs/node"}},
+        "transitions": {"type": "array", "minItems": 4, "items": {"$ref": "#/$defs/edge"}}
+      },
+      "additionalProperties": false
+    },
+    "source_figure": {
+      "type": "object",
+      "required": ["url", "source_page", "alt", "caption", "attribution", "copy_policy", "rights_note", "placement"],
+      "properties": {
+        "url": {"type": "string", "format": "uri"},
+        "source_page": {"type": "string", "format": "uri"},
+        "alt": {"type": "string", "minLength": 20},
+        "caption": {"type": "string", "minLength": 20},
+        "attribution": {"type": "string", "minLength": 1},
+        "copy_policy": {"const": "remote_source_owned"},
+        "rights_note": {"type": "string", "minLength": 20},
+        "placement": {"enum": ["after_dominant", "before_examples"]}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
