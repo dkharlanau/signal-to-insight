@@ -1,0 +1,672 @@
+{
+  "version": "1.0.0",
+  "projection": "published-evidence-only",
+  "records": [
+    {
+      "id": "controlled-execution",
+      "label": "Controlled execution",
+      "summary": "A production work substrate that makes consequential execution authorized, observable, interruptible, reconstructable and testable.",
+      "domain": "agent architecture",
+      "coverage": "explained",
+      "tags": [
+        "agents",
+        "execution",
+        "governance"
+      ],
+      "supporting_explainers": [
+        {
+          "insight_id": "enterprise-agents-production-substrate",
+          "title": "Why enterprise AI agents fail after the POC",
+          "slug": "why-enterprise-ai-agents-fail-after-the-poc",
+          "one_liner": "A production agent needs a controlled execution environment around the model, not just a model connected to tools.",
+          "source_title": "Why Your Enterprise Tech Stack Isn't Ready for AI Agents - And What to Build Instead",
+          "source_url": "https://www.youtube.com/watch?v=mav15aW9lLM"
+        }
+      ],
+      "supporting_insight_ids": [
+        "enterprise-agents-production-substrate"
+      ],
+      "relations": [
+        {
+          "relation_id": "rel-durable-execution-related-to-controlled-execution",
+          "type": "related_to",
+          "label": "related to",
+          "direction": "in",
+          "neighbor_id": "durable-execution",
+          "neighbor_label": "Durable execution",
+          "rationale": "Durability addresses continuity of work; controlled execution additionally requires authority, evidence, intervention and other governance controls."
+        },
+        {
+          "relation_id": "rel-controlled-execution-depends-on-execution-history",
+          "type": "depends_on",
+          "label": "depends on",
+          "direction": "out",
+          "neighbor_id": "execution-history",
+          "neighbor_label": "Execution history",
+          "rationale": "Consequential work cannot be reconstructed or evaluated later without a durable history of execution."
+        },
+        {
+          "relation_id": "rel-controlled-execution-depends-on-human-agent-task-equivalence",
+          "type": "depends_on",
+          "label": "depends on",
+          "direction": "out",
+          "neighbor_id": "human-agent-task-equivalence",
+          "neighbor_label": "Human-agent task equivalence",
+          "rationale": "Production work needs a stable task model when execution moves between an agent and a human reviewer."
+        },
+        {
+          "relation_id": "rel-controlled-execution-depends-on-observability",
+          "type": "depends_on",
+          "label": "depends on",
+          "direction": "out",
+          "neighbor_id": "observability",
+          "neighbor_label": "Observability",
+          "rationale": "Operators need structured telemetry to inspect execution health even when business evidence lives in a separate durable record."
+        },
+        {
+          "relation_id": "rel-controlled-execution-depends-on-policy-as-code",
+          "type": "depends_on",
+          "label": "depends on",
+          "direction": "out",
+          "neighbor_id": "policy-as-code",
+          "neighbor_label": "Policy as code",
+          "rationale": "Explicit policy decisions make authorization boundaries reviewable and testable instead of implicit in application code."
+        },
+        {
+          "relation_id": "rel-controlled-execution-depends-on-protected-data-separation",
+          "type": "depends_on",
+          "label": "depends on",
+          "direction": "out",
+          "neighbor_id": "protected-data-separation",
+          "neighbor_label": "Protected data separation",
+          "rationale": "Governed orchestration should not require broad access to protected data simply to observe or control work."
+        }
+      ],
+      "learning_next": [
+        {
+          "kind": "Learn before",
+          "concept_id": "execution-history",
+          "label": "Execution history",
+          "relation_id": "rel-controlled-execution-depends-on-execution-history"
+        },
+        {
+          "kind": "Learn before",
+          "concept_id": "human-agent-task-equivalence",
+          "label": "Human-agent task equivalence",
+          "relation_id": "rel-controlled-execution-depends-on-human-agent-task-equivalence"
+        },
+        {
+          "kind": "Learn before",
+          "concept_id": "observability",
+          "label": "Observability",
+          "relation_id": "rel-controlled-execution-depends-on-observability"
+        },
+        {
+          "kind": "Learn before",
+          "concept_id": "policy-as-code",
+          "label": "Policy as code",
+          "relation_id": "rel-controlled-execution-depends-on-policy-as-code"
+        },
+        {
+          "kind": "Learn before",
+          "concept_id": "protected-data-separation",
+          "label": "Protected data separation",
+          "relation_id": "rel-controlled-execution-depends-on-protected-data-separation"
+        },
+        {
+          "kind": "Related concept",
+          "concept_id": "durable-execution",
+          "label": "Durable execution",
+          "relation_id": "rel-durable-execution-related-to-controlled-execution"
+        }
+      ],
+      "limitations": [
+        {
+          "text": "An append-only history still needs identity evidence, policy and component versions, retention, tamper protection and meaningful event semantics.",
+          "insight_id": "enterprise-agents-production-substrate",
+          "insight_title": "Why enterprise AI agents fail after the POC",
+          "insight_slug": "why-enterprise-ai-agents-fail-after-the-poc"
+        },
+        {
+          "text": "Separating data and orchestration reduces exposure but does not automatically eliminate prompt injection or data exfiltration.",
+          "insight_id": "enterprise-agents-production-substrate",
+          "insight_title": "Why enterprise AI agents fail after the POC",
+          "insight_slug": "why-enterprise-ai-agents-fail-after-the-poc"
+        },
+        {
+          "text": "Human handoff still requires ownership, locking, idempotency, approval authority, timeout and recovery rules.",
+          "insight_id": "enterprise-agents-production-substrate",
+          "insight_title": "Why enterprise AI agents fail after the POC",
+          "insight_slug": "why-enterprise-ai-agents-fail-after-the-poc"
+        },
+        {
+          "text": "Replay is only useful when reconstructed context and evaluation criteria are trustworthy.",
+          "insight_id": "enterprise-agents-production-substrate",
+          "insight_title": "Why enterprise AI agents fail after the POC",
+          "insight_slug": "why-enterprise-ai-agents-fail-after-the-poc"
+        }
+      ],
+      "related_explainers": [],
+      "canonical": "https://dkharlanau.github.io/signal-to-insight/knowledge/concepts/controlled-execution/"
+    },
+    {
+      "id": "durable-execution",
+      "label": "Durable execution",
+      "summary": "A reliability pattern for long-running work where progress can survive interruptions instead of depending only on one running process.",
+      "domain": "workflow systems",
+      "coverage": "introduced",
+      "tags": [
+        "recovery",
+        "state",
+        "workflow"
+      ],
+      "supporting_explainers": [
+        {
+          "insight_id": "enterprise-agents-production-substrate",
+          "title": "Why enterprise AI agents fail after the POC",
+          "slug": "why-enterprise-ai-agents-fail-after-the-poc",
+          "one_liner": "A production agent needs a controlled execution environment around the model, not just a model connected to tools.",
+          "source_title": "Why Your Enterprise Tech Stack Isn't Ready for AI Agents - And What to Build Instead",
+          "source_url": "https://www.youtube.com/watch?v=mav15aW9lLM"
+        }
+      ],
+      "supporting_insight_ids": [
+        "enterprise-agents-production-substrate"
+      ],
+      "relations": [
+        {
+          "relation_id": "rel-durable-execution-related-to-controlled-execution",
+          "type": "related_to",
+          "label": "related to",
+          "direction": "out",
+          "neighbor_id": "controlled-execution",
+          "neighbor_label": "Controlled execution",
+          "rationale": "Durability addresses continuity of work; controlled execution additionally requires authority, evidence, intervention and other governance controls."
+        }
+      ],
+      "learning_next": [
+        {
+          "kind": "Related concept",
+          "concept_id": "controlled-execution",
+          "label": "Controlled execution",
+          "relation_id": "rel-durable-execution-related-to-controlled-execution"
+        }
+      ],
+      "limitations": [
+        {
+          "text": "An append-only history still needs identity evidence, policy and component versions, retention, tamper protection and meaningful event semantics.",
+          "insight_id": "enterprise-agents-production-substrate",
+          "insight_title": "Why enterprise AI agents fail after the POC",
+          "insight_slug": "why-enterprise-ai-agents-fail-after-the-poc"
+        },
+        {
+          "text": "Separating data and orchestration reduces exposure but does not automatically eliminate prompt injection or data exfiltration.",
+          "insight_id": "enterprise-agents-production-substrate",
+          "insight_title": "Why enterprise AI agents fail after the POC",
+          "insight_slug": "why-enterprise-ai-agents-fail-after-the-poc"
+        },
+        {
+          "text": "Human handoff still requires ownership, locking, idempotency, approval authority, timeout and recovery rules.",
+          "insight_id": "enterprise-agents-production-substrate",
+          "insight_title": "Why enterprise AI agents fail after the POC",
+          "insight_slug": "why-enterprise-ai-agents-fail-after-the-poc"
+        },
+        {
+          "text": "Replay is only useful when reconstructed context and evaluation criteria are trustworthy.",
+          "insight_id": "enterprise-agents-production-substrate",
+          "insight_title": "Why enterprise AI agents fail after the POC",
+          "insight_slug": "why-enterprise-ai-agents-fail-after-the-poc"
+        }
+      ],
+      "related_explainers": [],
+      "canonical": "https://dkharlanau.github.io/signal-to-insight/knowledge/concepts/durable-execution/"
+    },
+    {
+      "id": "execution-history",
+      "label": "Execution history",
+      "summary": "A durable record of what happened during work so state, decisions and actions can be reconstructed later.",
+      "domain": "execution architecture",
+      "coverage": "explained",
+      "tags": [
+        "audit",
+        "history",
+        "replay"
+      ],
+      "supporting_explainers": [
+        {
+          "insight_id": "enterprise-agents-production-substrate",
+          "title": "Why enterprise AI agents fail after the POC",
+          "slug": "why-enterprise-ai-agents-fail-after-the-poc",
+          "one_liner": "A production agent needs a controlled execution environment around the model, not just a model connected to tools.",
+          "source_title": "Why Your Enterprise Tech Stack Isn't Ready for AI Agents - And What to Build Instead",
+          "source_url": "https://www.youtube.com/watch?v=mav15aW9lLM"
+        }
+      ],
+      "supporting_insight_ids": [
+        "enterprise-agents-production-substrate"
+      ],
+      "relations": [
+        {
+          "relation_id": "rel-controlled-execution-depends-on-execution-history",
+          "type": "depends_on",
+          "label": "depends on",
+          "direction": "in",
+          "neighbor_id": "controlled-execution",
+          "neighbor_label": "Controlled execution",
+          "rationale": "Consequential work cannot be reconstructed or evaluated later without a durable history of execution."
+        },
+        {
+          "relation_id": "rel-execution-history-enables-replayable-evaluation",
+          "type": "enables",
+          "label": "enables",
+          "direction": "out",
+          "neighbor_id": "replayable-evaluation",
+          "neighbor_label": "Replayable evaluation",
+          "rationale": "Historical execution state becomes reusable evaluation material only when enough context can be reconstructed reliably."
+        }
+      ],
+      "learning_next": [
+        {
+          "kind": "Then explore",
+          "concept_id": "controlled-execution",
+          "label": "Controlled execution",
+          "relation_id": "rel-controlled-execution-depends-on-execution-history"
+        },
+        {
+          "kind": "Then explore",
+          "concept_id": "replayable-evaluation",
+          "label": "Replayable evaluation",
+          "relation_id": "rel-execution-history-enables-replayable-evaluation"
+        }
+      ],
+      "limitations": [
+        {
+          "text": "An append-only history still needs identity evidence, policy and component versions, retention, tamper protection and meaningful event semantics.",
+          "insight_id": "enterprise-agents-production-substrate",
+          "insight_title": "Why enterprise AI agents fail after the POC",
+          "insight_slug": "why-enterprise-ai-agents-fail-after-the-poc"
+        },
+        {
+          "text": "Separating data and orchestration reduces exposure but does not automatically eliminate prompt injection or data exfiltration.",
+          "insight_id": "enterprise-agents-production-substrate",
+          "insight_title": "Why enterprise AI agents fail after the POC",
+          "insight_slug": "why-enterprise-ai-agents-fail-after-the-poc"
+        },
+        {
+          "text": "Human handoff still requires ownership, locking, idempotency, approval authority, timeout and recovery rules.",
+          "insight_id": "enterprise-agents-production-substrate",
+          "insight_title": "Why enterprise AI agents fail after the POC",
+          "insight_slug": "why-enterprise-ai-agents-fail-after-the-poc"
+        },
+        {
+          "text": "Replay is only useful when reconstructed context and evaluation criteria are trustworthy.",
+          "insight_id": "enterprise-agents-production-substrate",
+          "insight_title": "Why enterprise AI agents fail after the POC",
+          "insight_slug": "why-enterprise-ai-agents-fail-after-the-poc"
+        }
+      ],
+      "related_explainers": [],
+      "canonical": "https://dkharlanau.github.io/signal-to-insight/knowledge/concepts/execution-history/"
+    },
+    {
+      "id": "human-agent-task-equivalence",
+      "label": "Human-agent task equivalence",
+      "summary": "Modeling work so the executor can move between an AI agent and a person without creating a separate exception process.",
+      "domain": "work orchestration",
+      "coverage": "explained",
+      "tags": [
+        "agents",
+        "human-in-the-loop",
+        "workflow"
+      ],
+      "supporting_explainers": [
+        {
+          "insight_id": "enterprise-agents-production-substrate",
+          "title": "Why enterprise AI agents fail after the POC",
+          "slug": "why-enterprise-ai-agents-fail-after-the-poc",
+          "one_liner": "A production agent needs a controlled execution environment around the model, not just a model connected to tools.",
+          "source_title": "Why Your Enterprise Tech Stack Isn't Ready for AI Agents - And What to Build Instead",
+          "source_url": "https://www.youtube.com/watch?v=mav15aW9lLM"
+        }
+      ],
+      "supporting_insight_ids": [
+        "enterprise-agents-production-substrate"
+      ],
+      "relations": [
+        {
+          "relation_id": "rel-controlled-execution-depends-on-human-agent-task-equivalence",
+          "type": "depends_on",
+          "label": "depends on",
+          "direction": "in",
+          "neighbor_id": "controlled-execution",
+          "neighbor_label": "Controlled execution",
+          "rationale": "Production work needs a stable task model when execution moves between an agent and a human reviewer."
+        }
+      ],
+      "learning_next": [
+        {
+          "kind": "Then explore",
+          "concept_id": "controlled-execution",
+          "label": "Controlled execution",
+          "relation_id": "rel-controlled-execution-depends-on-human-agent-task-equivalence"
+        }
+      ],
+      "limitations": [
+        {
+          "text": "An append-only history still needs identity evidence, policy and component versions, retention, tamper protection and meaningful event semantics.",
+          "insight_id": "enterprise-agents-production-substrate",
+          "insight_title": "Why enterprise AI agents fail after the POC",
+          "insight_slug": "why-enterprise-ai-agents-fail-after-the-poc"
+        },
+        {
+          "text": "Separating data and orchestration reduces exposure but does not automatically eliminate prompt injection or data exfiltration.",
+          "insight_id": "enterprise-agents-production-substrate",
+          "insight_title": "Why enterprise AI agents fail after the POC",
+          "insight_slug": "why-enterprise-ai-agents-fail-after-the-poc"
+        },
+        {
+          "text": "Human handoff still requires ownership, locking, idempotency, approval authority, timeout and recovery rules.",
+          "insight_id": "enterprise-agents-production-substrate",
+          "insight_title": "Why enterprise AI agents fail after the POC",
+          "insight_slug": "why-enterprise-ai-agents-fail-after-the-poc"
+        },
+        {
+          "text": "Replay is only useful when reconstructed context and evaluation criteria are trustworthy.",
+          "insight_id": "enterprise-agents-production-substrate",
+          "insight_title": "Why enterprise AI agents fail after the POC",
+          "insight_slug": "why-enterprise-ai-agents-fail-after-the-poc"
+        }
+      ],
+      "related_explainers": [],
+      "canonical": "https://dkharlanau.github.io/signal-to-insight/knowledge/concepts/human-agent-task-equivalence/"
+    },
+    {
+      "id": "observability",
+      "label": "Observability",
+      "summary": "Structured traces, metrics and logs that make distributed execution inspectable without becoming the source of business truth itself.",
+      "domain": "operations",
+      "coverage": "introduced",
+      "tags": [
+        "execution",
+        "operations",
+        "telemetry"
+      ],
+      "supporting_explainers": [
+        {
+          "insight_id": "enterprise-agents-production-substrate",
+          "title": "Why enterprise AI agents fail after the POC",
+          "slug": "why-enterprise-ai-agents-fail-after-the-poc",
+          "one_liner": "A production agent needs a controlled execution environment around the model, not just a model connected to tools.",
+          "source_title": "Why Your Enterprise Tech Stack Isn't Ready for AI Agents - And What to Build Instead",
+          "source_url": "https://www.youtube.com/watch?v=mav15aW9lLM"
+        }
+      ],
+      "supporting_insight_ids": [
+        "enterprise-agents-production-substrate"
+      ],
+      "relations": [
+        {
+          "relation_id": "rel-controlled-execution-depends-on-observability",
+          "type": "depends_on",
+          "label": "depends on",
+          "direction": "in",
+          "neighbor_id": "controlled-execution",
+          "neighbor_label": "Controlled execution",
+          "rationale": "Operators need structured telemetry to inspect execution health even when business evidence lives in a separate durable record."
+        }
+      ],
+      "learning_next": [
+        {
+          "kind": "Then explore",
+          "concept_id": "controlled-execution",
+          "label": "Controlled execution",
+          "relation_id": "rel-controlled-execution-depends-on-observability"
+        }
+      ],
+      "limitations": [
+        {
+          "text": "An append-only history still needs identity evidence, policy and component versions, retention, tamper protection and meaningful event semantics.",
+          "insight_id": "enterprise-agents-production-substrate",
+          "insight_title": "Why enterprise AI agents fail after the POC",
+          "insight_slug": "why-enterprise-ai-agents-fail-after-the-poc"
+        },
+        {
+          "text": "Separating data and orchestration reduces exposure but does not automatically eliminate prompt injection or data exfiltration.",
+          "insight_id": "enterprise-agents-production-substrate",
+          "insight_title": "Why enterprise AI agents fail after the POC",
+          "insight_slug": "why-enterprise-ai-agents-fail-after-the-poc"
+        },
+        {
+          "text": "Human handoff still requires ownership, locking, idempotency, approval authority, timeout and recovery rules.",
+          "insight_id": "enterprise-agents-production-substrate",
+          "insight_title": "Why enterprise AI agents fail after the POC",
+          "insight_slug": "why-enterprise-ai-agents-fail-after-the-poc"
+        },
+        {
+          "text": "Replay is only useful when reconstructed context and evaluation criteria are trustworthy.",
+          "insight_id": "enterprise-agents-production-substrate",
+          "insight_title": "Why enterprise AI agents fail after the POC",
+          "insight_slug": "why-enterprise-ai-agents-fail-after-the-poc"
+        }
+      ],
+      "related_explainers": [],
+      "canonical": "https://dkharlanau.github.io/signal-to-insight/knowledge/concepts/observability/"
+    },
+    {
+      "id": "policy-as-code",
+      "label": "Policy as code",
+      "summary": "Representing authorization and policy decisions as explicit, reviewable rules rather than scattered application logic.",
+      "domain": "governance",
+      "coverage": "introduced",
+      "tags": [
+        "authorization",
+        "governance",
+        "policy"
+      ],
+      "supporting_explainers": [
+        {
+          "insight_id": "enterprise-agents-production-substrate",
+          "title": "Why enterprise AI agents fail after the POC",
+          "slug": "why-enterprise-ai-agents-fail-after-the-poc",
+          "one_liner": "A production agent needs a controlled execution environment around the model, not just a model connected to tools.",
+          "source_title": "Why Your Enterprise Tech Stack Isn't Ready for AI Agents - And What to Build Instead",
+          "source_url": "https://www.youtube.com/watch?v=mav15aW9lLM"
+        }
+      ],
+      "supporting_insight_ids": [
+        "enterprise-agents-production-substrate"
+      ],
+      "relations": [
+        {
+          "relation_id": "rel-controlled-execution-depends-on-policy-as-code",
+          "type": "depends_on",
+          "label": "depends on",
+          "direction": "in",
+          "neighbor_id": "controlled-execution",
+          "neighbor_label": "Controlled execution",
+          "rationale": "Explicit policy decisions make authorization boundaries reviewable and testable instead of implicit in application code."
+        }
+      ],
+      "learning_next": [
+        {
+          "kind": "Then explore",
+          "concept_id": "controlled-execution",
+          "label": "Controlled execution",
+          "relation_id": "rel-controlled-execution-depends-on-policy-as-code"
+        }
+      ],
+      "limitations": [
+        {
+          "text": "An append-only history still needs identity evidence, policy and component versions, retention, tamper protection and meaningful event semantics.",
+          "insight_id": "enterprise-agents-production-substrate",
+          "insight_title": "Why enterprise AI agents fail after the POC",
+          "insight_slug": "why-enterprise-ai-agents-fail-after-the-poc"
+        },
+        {
+          "text": "Separating data and orchestration reduces exposure but does not automatically eliminate prompt injection or data exfiltration.",
+          "insight_id": "enterprise-agents-production-substrate",
+          "insight_title": "Why enterprise AI agents fail after the POC",
+          "insight_slug": "why-enterprise-ai-agents-fail-after-the-poc"
+        },
+        {
+          "text": "Human handoff still requires ownership, locking, idempotency, approval authority, timeout and recovery rules.",
+          "insight_id": "enterprise-agents-production-substrate",
+          "insight_title": "Why enterprise AI agents fail after the POC",
+          "insight_slug": "why-enterprise-ai-agents-fail-after-the-poc"
+        },
+        {
+          "text": "Replay is only useful when reconstructed context and evaluation criteria are trustworthy.",
+          "insight_id": "enterprise-agents-production-substrate",
+          "insight_title": "Why enterprise AI agents fail after the POC",
+          "insight_slug": "why-enterprise-ai-agents-fail-after-the-poc"
+        }
+      ],
+      "related_explainers": [],
+      "canonical": "https://dkharlanau.github.io/signal-to-insight/knowledge/concepts/policy-as-code/"
+    },
+    {
+      "id": "protected-data-separation",
+      "label": "Protected data separation",
+      "summary": "Separating orchestration visibility from broad access to protected business data and secrets.",
+      "domain": "security architecture",
+      "coverage": "introduced",
+      "tags": [
+        "data",
+        "governance",
+        "security"
+      ],
+      "supporting_explainers": [
+        {
+          "insight_id": "enterprise-agents-production-substrate",
+          "title": "Why enterprise AI agents fail after the POC",
+          "slug": "why-enterprise-ai-agents-fail-after-the-poc",
+          "one_liner": "A production agent needs a controlled execution environment around the model, not just a model connected to tools.",
+          "source_title": "Why Your Enterprise Tech Stack Isn't Ready for AI Agents - And What to Build Instead",
+          "source_url": "https://www.youtube.com/watch?v=mav15aW9lLM"
+        }
+      ],
+      "supporting_insight_ids": [
+        "enterprise-agents-production-substrate"
+      ],
+      "relations": [
+        {
+          "relation_id": "rel-controlled-execution-depends-on-protected-data-separation",
+          "type": "depends_on",
+          "label": "depends on",
+          "direction": "in",
+          "neighbor_id": "controlled-execution",
+          "neighbor_label": "Controlled execution",
+          "rationale": "Governed orchestration should not require broad access to protected data simply to observe or control work."
+        }
+      ],
+      "learning_next": [
+        {
+          "kind": "Then explore",
+          "concept_id": "controlled-execution",
+          "label": "Controlled execution",
+          "relation_id": "rel-controlled-execution-depends-on-protected-data-separation"
+        }
+      ],
+      "limitations": [
+        {
+          "text": "An append-only history still needs identity evidence, policy and component versions, retention, tamper protection and meaningful event semantics.",
+          "insight_id": "enterprise-agents-production-substrate",
+          "insight_title": "Why enterprise AI agents fail after the POC",
+          "insight_slug": "why-enterprise-ai-agents-fail-after-the-poc"
+        },
+        {
+          "text": "Separating data and orchestration reduces exposure but does not automatically eliminate prompt injection or data exfiltration.",
+          "insight_id": "enterprise-agents-production-substrate",
+          "insight_title": "Why enterprise AI agents fail after the POC",
+          "insight_slug": "why-enterprise-ai-agents-fail-after-the-poc"
+        },
+        {
+          "text": "Human handoff still requires ownership, locking, idempotency, approval authority, timeout and recovery rules.",
+          "insight_id": "enterprise-agents-production-substrate",
+          "insight_title": "Why enterprise AI agents fail after the POC",
+          "insight_slug": "why-enterprise-ai-agents-fail-after-the-poc"
+        },
+        {
+          "text": "Replay is only useful when reconstructed context and evaluation criteria are trustworthy.",
+          "insight_id": "enterprise-agents-production-substrate",
+          "insight_title": "Why enterprise AI agents fail after the POC",
+          "insight_slug": "why-enterprise-ai-agents-fail-after-the-poc"
+        }
+      ],
+      "related_explainers": [],
+      "canonical": "https://dkharlanau.github.io/signal-to-insight/knowledge/concepts/protected-data-separation/"
+    },
+    {
+      "id": "replayable-evaluation",
+      "label": "Replayable evaluation",
+      "summary": "Using reconstructed historical execution state to evaluate models, prompts, policies and tools against past work.",
+      "domain": "agent evaluation",
+      "coverage": "explained",
+      "tags": [
+        "agents",
+        "evals",
+        "replay"
+      ],
+      "supporting_explainers": [
+        {
+          "insight_id": "enterprise-agents-production-substrate",
+          "title": "Why enterprise AI agents fail after the POC",
+          "slug": "why-enterprise-ai-agents-fail-after-the-poc",
+          "one_liner": "A production agent needs a controlled execution environment around the model, not just a model connected to tools.",
+          "source_title": "Why Your Enterprise Tech Stack Isn't Ready for AI Agents - And What to Build Instead",
+          "source_url": "https://www.youtube.com/watch?v=mav15aW9lLM"
+        }
+      ],
+      "supporting_insight_ids": [
+        "enterprise-agents-production-substrate"
+      ],
+      "relations": [
+        {
+          "relation_id": "rel-execution-history-enables-replayable-evaluation",
+          "type": "enables",
+          "label": "enables",
+          "direction": "in",
+          "neighbor_id": "execution-history",
+          "neighbor_label": "Execution history",
+          "rationale": "Historical execution state becomes reusable evaluation material only when enough context can be reconstructed reliably."
+        }
+      ],
+      "learning_next": [
+        {
+          "kind": "Learn before",
+          "concept_id": "execution-history",
+          "label": "Execution history",
+          "relation_id": "rel-execution-history-enables-replayable-evaluation"
+        }
+      ],
+      "limitations": [
+        {
+          "text": "An append-only history still needs identity evidence, policy and component versions, retention, tamper protection and meaningful event semantics.",
+          "insight_id": "enterprise-agents-production-substrate",
+          "insight_title": "Why enterprise AI agents fail after the POC",
+          "insight_slug": "why-enterprise-ai-agents-fail-after-the-poc"
+        },
+        {
+          "text": "Separating data and orchestration reduces exposure but does not automatically eliminate prompt injection or data exfiltration.",
+          "insight_id": "enterprise-agents-production-substrate",
+          "insight_title": "Why enterprise AI agents fail after the POC",
+          "insight_slug": "why-enterprise-ai-agents-fail-after-the-poc"
+        },
+        {
+          "text": "Human handoff still requires ownership, locking, idempotency, approval authority, timeout and recovery rules.",
+          "insight_id": "enterprise-agents-production-substrate",
+          "insight_title": "Why enterprise AI agents fail after the POC",
+          "insight_slug": "why-enterprise-ai-agents-fail-after-the-poc"
+        },
+        {
+          "text": "Replay is only useful when reconstructed context and evaluation criteria are trustworthy.",
+          "insight_id": "enterprise-agents-production-substrate",
+          "insight_title": "Why enterprise AI agents fail after the POC",
+          "insight_slug": "why-enterprise-ai-agents-fail-after-the-poc"
+        }
+      ],
+      "related_explainers": [],
+      "canonical": "https://dkharlanau.github.io/signal-to-insight/knowledge/concepts/replayable-evaluation/"
+    }
+  ]
+}

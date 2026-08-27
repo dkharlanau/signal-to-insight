@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Execution history — Signal to Insight</title>
+  <meta name="description" content="A durable record of what happened during work so state, decisions and actions can be reconstructed later.">
+  <meta property="og:title" content="Execution history — Signal to Insight">
+  <meta property="og:description" content="A durable record of what happened during work so state, decisions and actions can be reconstructed later.">
+  <meta property="og:type" content="article">
+  <link rel="canonical" href="https://dkharlanau.github.io/signal-to-insight/knowledge/concepts/execution-history/">
+  <link rel="stylesheet" href="../../../styles.css">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "DefinedTerm", "name": "Execution history", "description": "A durable record of what happened during work so state, decisions and actions can be reconstructed later.", "url": "https://dkharlanau.github.io/signal-to-insight/knowledge/concepts/execution-history/", "inDefinedTermSet": "https://dkharlanau.github.io/signal-to-insight/knowledge/"}</script>
+  <style>
+    body{background:#f3f0e9;color:#111}.wrap{width:min(1080px,calc(100% - 36px));margin:auto}header{padding:34px 0;border-bottom:1px solid #aaa69c;display:flex;justify-content:space-between;gap:20px}header a{color:inherit;font-weight:700}
+    main{padding-bottom:90px}.hero{padding:88px 0 58px;border-bottom:1px solid #aaa69c}.meta{font:700 10px ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#5f5b55}h1{font-size:clamp(48px,9vw,96px);line-height:.9;letter-spacing:-.06em;margin:.12em 0 .28em;max-width:10ch}.lede{font-size:20px;line-height:1.55;max-width:780px}
+    .tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:24px}.tags span{border:1px solid #111;padding:7px 9px;font:700 10px ui-monospace,monospace}section{padding:54px 0;border-bottom:1px solid #aaa69c}.section-head{display:grid;grid-template-columns:.42fr 1.58fr;gap:30px;align-items:end;margin-bottom:24px}h2{font-size:clamp(30px,5vw,52px);letter-spacing:-.045em;margin:0}h3{font-size:21px;margin:8px 0 12px}p,li{line-height:1.55}a{color:inherit;text-underline-offset:3px}
+    .card-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.support-card,.relation-card,.related-card{border:1px solid #111;padding:22px;min-height:220px;display:flex;flex-direction:column}.source-link{margin-top:auto;padding-top:20px;font-size:13px}.relation-card p:last-child{margin-top:auto}.boundary-list,.learning-list{list-style:none;padding:0;margin:0;border-top:1px solid #111}.boundary-list li,.learning-list li{display:grid;grid-template-columns:1fr auto;gap:18px;padding:16px 0;border-bottom:1px solid #aaa69c}.learning-list li{grid-template-columns:160px 1fr}.learning-kind{font:700 10px ui-monospace,monospace;text-transform:uppercase}
+    footer{padding:30px 0 50px;font:700 10px ui-monospace,monospace;display:flex;justify-content:space-between;gap:20px}@media(max-width:720px){.section-head,.card-grid{grid-template-columns:1fr}.boundary-list li,.learning-list li{grid-template-columns:1fr}header,footer{flex-direction:column}}
+  </style>
+</head>
+<body>
+<header class="wrap"><a href="../../../knowledge/">← Knowledge graph</a><a href="../../../library/">Explainer library</a></header>
+<main>
+  <section class="hero"><div class="wrap"><p class="meta">CONCEPT · execution architecture · explained</p><h1>Execution history</h1><p class="lede">A durable record of what happened during work so state, decisions and actions can be reconstructed later.</p><div class="tags"><span>audit</span><span>history</span><span>replay</span></div></div></section>
+  <div class="wrap">
+    <section><div class="section-head"><p class="meta">EVIDENCE</p><h2>Why this concept exists here.</h2></div><div class="card-grid"><article class="support-card">
+          <p class="meta">PUBLISHED EXPLAINER</p>
+          <h3><a href="../../../explainers/why-enterprise-ai-agents-fail-after-the-poc/">Why enterprise AI agents fail after the POC</a></h3>
+          <p>A production agent needs a controlled execution environment around the model, not just a model connected to tools.</p>
+          <div class="source-link">Source: <a href="https://www.youtube.com/watch?v=mav15aW9lLM" target="_blank" rel="noreferrer">Why Your Enterprise Tech Stack Isn&#x27;t Ready for AI Agents - And What to Build Instead ↗</a></div>
+        </article></div></section>
+    <section><div class="section-head"><p class="meta">RELATIONS</p><h2>What it depends on and connects to.</h2></div><div class="card-grid"><article class="relation-card">
+          <p class="meta">DEPENDS ON</p>
+          <h3><a href="../controlled-execution/">Controlled execution</a></h3>
+          <p>Consequential work cannot be reconstructed or evaluated later without a durable history of execution.</p>
+        </article><article class="relation-card">
+          <p class="meta">ENABLES</p>
+          <h3><a href="../replayable-evaluation/">Replayable evaluation</a></h3>
+          <p>Historical execution state becomes reusable evaluation material only when enough context can be reconstructed reliably.</p>
+        </article></div></section>
+    <section><div class="section-head"><p class="meta">BOUNDARIES</p><h2>Where supporting models are incomplete.</h2></div><ul class="boundary-list"><li><span>An append-only history still needs identity evidence, policy and component versions, retention, tamper protection and meaningful event semantics.</span><a href="../../../explainers/why-enterprise-ai-agents-fail-after-the-poc/">Evidence →</a></li><li><span>Separating data and orchestration reduces exposure but does not automatically eliminate prompt injection or data exfiltration.</span><a href="../../../explainers/why-enterprise-ai-agents-fail-after-the-poc/">Evidence →</a></li><li><span>Human handoff still requires ownership, locking, idempotency, approval authority, timeout and recovery rules.</span><a href="../../../explainers/why-enterprise-ai-agents-fail-after-the-poc/">Evidence →</a></li><li><span>Replay is only useful when reconstructed context and evaluation criteria are trustworthy.</span><a href="../../../explainers/why-enterprise-ai-agents-fail-after-the-poc/">Evidence →</a></li></ul></section>
+    <section><div class="section-head"><p class="meta">LEARN NEXT</p><h2>Navigate by graph semantics.</h2></div><ul class="learning-list"><li><span class="learning-kind">Then explore</span><a href="../controlled-execution/">Controlled execution</a></li><li><span class="learning-kind">Then explore</span><a href="../replayable-evaluation/">Replayable evaluation</a></li></ul></section>
+    
+  </div>
+</main>
+<footer class="wrap"><span>Signal to Insight</span><span>Concept: execution-history</span></footer>
+</body>
+</html>
