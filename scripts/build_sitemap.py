@@ -46,6 +46,7 @@ def render() -> str:
 
     blocks = [
         url_block(f"{BASE}/", today, "weekly", "1.0"),
+        url_block(f"{BASE}/walkthrough/", today, "monthly", "0.95"),
         url_block(f"{BASE}/library/", today, "weekly", "0.9"),
         url_block(f"{BASE}/knowledge/", today, "weekly", "0.9"),
     ]
