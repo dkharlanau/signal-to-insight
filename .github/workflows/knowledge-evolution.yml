@@ -1,0 +1,76 @@
+name: Sync knowledge evolution timelines
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "data/knowledge-evolution.json"
+      - "data/knowledge-graph.json"
+      - "data/insights.json"
+      - "data/reanalysis-events.json"
+      - "schemas/knowledge-evolution.schema.json"
+      - "scripts/validate_knowledge_evolution.py"
+      - "scripts/knowledge_evolution.py"
+      - "scripts/build_evolution.py"
+      - ".github/workflows/knowledge-evolution.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "data/knowledge-evolution.json"
+      - "data/knowledge-graph.json"
+      - "data/insights.json"
+      - "data/reanalysis-events.json"
+      - "schemas/knowledge-evolution.schema.json"
+      - "scripts/validate_knowledge_evolution.py"
+      - "scripts/knowledge_evolution.py"
+      - "scripts/build_evolution.py"
+      - ".github/workflows/knowledge-evolution.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  evolution:
+    if: github.actor != 'github-actions[bot]' || github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || 'main' }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate evolution contracts
+        run: |
+          python scripts/validate_knowledge_evolution.py
+          python scripts/validate_knowledge_evolution.py --self-test
+          python scripts/build_evolution.py --self-test
+
+      - name: Rebuild public-safe evolution timelines
+        run: python scripts/build_evolution.py
+
+      - name: Verify generated timelines on pull requests
+        if: github.event_name == 'pull_request'
+        run: |
+          if [ -n "$(git status --porcelain -- knowledge/evolution)" ]; then
+            git status --short -- knowledge/evolution
+            echo "Generated knowledge evolution timelines are missing or stale."
+            exit 1
+          fi
+
+      - name: Commit synced timelines on main
+        if: github.event_name == 'push'
+        run: |
+          if [ -z "$(git status --porcelain -- knowledge/evolution)" ]; then
+            echo "Knowledge evolution timelines already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add knowledge/evolution
+          git commit -m "build: sync knowledge evolution timelines"
+          git push origin HEAD:main
