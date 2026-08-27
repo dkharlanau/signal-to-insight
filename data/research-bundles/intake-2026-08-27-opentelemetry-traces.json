@@ -1,0 +1,143 @@
+{
+  "bundle_version": "1.1.0",
+  "intake_id": "intake-2026-08-27-opentelemetry-traces",
+  "source_id": null,
+  "source": {
+    "type": "documentation",
+    "canonical_url": "https://opentelemetry.io/docs/concepts/signals/traces",
+    "title": null,
+    "creators": [],
+    "publisher": null,
+    "published_at": null,
+    "event_date": null,
+    "version": null,
+    "language": null,
+    "duration": null,
+    "date_note": null
+  },
+  "inspection": {
+    "method": "not inspected",
+    "full_content_used_ephemerally": false,
+    "full_content_committed": false,
+    "confidence": "metadata_only",
+    "gaps": [
+      "Source content has not been mapped yet."
+    ]
+  },
+  "prior_knowledge": {
+    "captured_at": "2026-08-27",
+    "query": "Understand traces as a causal model of distributed work: spans, parent/child relationships, context propagation, links and what observability can reconstruct versus what business execution evidence must record separately.",
+    "matches": [
+      {
+        "concept_id": "observability",
+        "label": "Observability",
+        "coverage": "introduced",
+        "evidence_insights": [
+          {
+            "id": "enterprise-agents-production-substrate",
+            "status": "published",
+            "title": "Why enterprise AI agents fail after the POC"
+          }
+        ],
+        "relationship_to_source": "unclassified"
+      },
+      {
+        "concept_id": "controlled-execution",
+        "label": "Controlled execution",
+        "coverage": "explained",
+        "evidence_insights": [
+          {
+            "id": "enterprise-agents-production-substrate",
+            "status": "published",
+            "title": "Why enterprise AI agents fail after the POC"
+          },
+          {
+            "id": "open-policy-agent-decision-enforcement-model",
+            "status": "review",
+            "title": "Open Policy Agent: separate policy decisions from enforcement"
+          },
+          {
+            "id": "react-reason-act-observe-loop",
+            "status": "review",
+            "title": "ReAct: reason, act, observe — then update the plan"
+          }
+        ],
+        "relationship_to_source": "unclassified"
+      },
+      {
+        "concept_id": "execution-history",
+        "label": "Execution history",
+        "coverage": "explained",
+        "evidence_insights": [
+          {
+            "id": "enterprise-agents-production-substrate",
+            "status": "published",
+            "title": "Why enterprise AI agents fail after the POC"
+          },
+          {
+            "id": "temporal-durable-execution-mental-model",
+            "status": "review",
+            "title": "Temporal: the mental model behind durable execution"
+          }
+        ],
+        "relationship_to_source": "unclassified"
+      },
+      {
+        "concept_id": "open-policy-agent",
+        "label": "Open Policy Agent (OPA)",
+        "coverage": "explained",
+        "evidence_insights": [
+          {
+            "id": "open-policy-agent-decision-enforcement-model",
+            "status": "review",
+            "title": "Open Policy Agent: separate policy decisions from enforcement"
+          }
+        ],
+        "relationship_to_source": "unclassified"
+      },
+      {
+        "concept_id": "durable-execution",
+        "label": "Durable execution",
+        "coverage": "explained",
+        "evidence_insights": [
+          {
+            "id": "enterprise-agents-production-substrate",
+            "status": "published",
+            "title": "Why enterprise AI agents fail after the POC"
+          },
+          {
+            "id": "temporal-durable-execution-mental-model",
+            "status": "review",
+            "title": "Temporal: the mental model behind durable execution"
+          }
+        ],
+        "relationship_to_source": "unclassified"
+      }
+    ],
+    "classification_required": true
+  },
+  "content_map": {
+    "problem": null,
+    "thesis": null,
+    "sections": [],
+    "concepts": [],
+    "mechanisms": [],
+    "tools": [],
+    "examples": [],
+    "claims": [],
+    "evidence": [],
+    "assumptions": [],
+    "limitations": [],
+    "open_questions": []
+  },
+  "selection": {
+    "requested_focus": "Understand traces as a causal model of distributed work: spans, parent/child relationships, context propagation, links and what observability can reconstruct versus what business execution evidence must record separately.",
+    "coherent_core": [],
+    "prerequisites": [],
+    "drop_notes": [],
+    "connections": []
+  },
+  "verification_candidates": [],
+  "source_locators": [],
+  "created_at": "2026-08-27"
+}

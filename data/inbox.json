@@ -187,6 +187,17 @@
       "source_id": null,
       "insight_id": null,
       "notes": "GitHub source intake issue #64. Dogfood cohort: infrastructure-as-code documentation."
+    },
+    {
+      "id": "intake-2026-08-27-opentelemetry-traces",
+      "source_url": "https://opentelemetry.io/docs/concepts/signals/traces",
+      "source_type": "documentation",
+      "submitted_at": "2026-08-27",
+      "requested_focus": "Understand traces as a causal model of distributed work: spans, parent/child relationships, context propagation, links and what observability can reconstruct versus what business execution evidence must record separately.",
+      "status": "queued",
+      "source_id": null,
+      "insight_id": null,
+      "notes": "GitHub source intake issue #65. Dogfood cohort: observability documentation."
     }
   ]
 }
