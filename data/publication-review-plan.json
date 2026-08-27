@@ -8,7 +8,7 @@
     "react-reason-act-observe-loop"
   ],
   "synthesis_candidates": [
-    "agent-production-control-stack"
+    "production-agent-stack-beyond-model"
   ],
   "required_checks": [
     "central_model",
