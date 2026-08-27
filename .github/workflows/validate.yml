@@ -47,6 +47,13 @@ jobs:
       - name: Validate authored learning prompts
         run: python scripts/validate_learning_prompts.py
 
+      - name: Validate living-source freshness
+        run: |
+          python scripts/validate_freshness.py
+          python scripts/validate_freshness.py --self-test
+          python scripts/source_freshness.py --self-test
+          python scripts/build_reanalysis.py --self-test
+
       - name: Validate research bundles
         run: python scripts/validate_bundles.py
 
