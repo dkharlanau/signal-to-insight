@@ -13,7 +13,11 @@
           "prior_coverage": "absent",
           "state": "explained_here",
           "reason": "The central production argument depends on being able to reconstruct consequential work after it happened.",
-          "resolution": {"kind": "explained_here", "insight_id": "enterprise-agents-production-substrate", "target": null}
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "enterprise-agents-production-substrate",
+            "target": null
+          }
         },
         {
           "id": "enterprise-prereq-data-boundary",
@@ -23,7 +27,11 @@
           "prior_coverage": "absent",
           "state": "explained_here",
           "reason": "The control layer is incomplete if observing orchestration implicitly grants broad access to protected business data.",
-          "resolution": {"kind": "explained_here", "insight_id": "enterprise-agents-production-substrate", "target": null}
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "enterprise-agents-production-substrate",
+            "target": null
+          }
         },
         {
           "id": "enterprise-prereq-human-agent",
@@ -33,7 +41,11 @@
           "prior_coverage": "absent",
           "state": "explained_here",
           "reason": "Executor-independent tasks make escalation and handoff understandable without turning human review into an unrelated exception process.",
-          "resolution": {"kind": "explained_here", "insight_id": "enterprise-agents-production-substrate", "target": null}
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "enterprise-agents-production-substrate",
+            "target": null
+          }
         }
       ]
     },
@@ -49,7 +61,11 @@
           "prior_coverage": "absent",
           "state": "explained_here",
           "reason": "The reader needs a stable unit of long-running orchestration before Worker failure and recovery can make sense.",
-          "resolution": {"kind": "explained_here", "insight_id": "temporal-durable-execution-mental-model", "target": null}
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "temporal-durable-execution-mental-model",
+            "target": null
+          }
         },
         {
           "id": "temporal-prereq-event-history",
@@ -59,7 +75,11 @@
           "prior_coverage": "absent",
           "state": "explained_here",
           "reason": "Durable recovery depends on understanding where workflow progress is represented independently of one Worker process.",
-          "resolution": {"kind": "explained_here", "insight_id": "temporal-durable-execution-mental-model", "target": null}
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "temporal-durable-execution-mental-model",
+            "target": null
+          }
         },
         {
           "id": "temporal-prereq-activity",
@@ -69,7 +89,11 @@
           "prior_coverage": "absent",
           "state": "explained_here",
           "reason": "Side-effecting work must be separated from deterministic orchestration to understand retry behavior and failure boundaries.",
-          "resolution": {"kind": "explained_here", "insight_id": "temporal-durable-execution-mental-model", "target": null}
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "temporal-durable-execution-mental-model",
+            "target": null
+          }
         },
         {
           "id": "temporal-prereq-idempotency",
@@ -79,7 +103,11 @@
           "prior_coverage": "absent",
           "state": "explained_here",
           "reason": "The practical boundary of durable execution is missed if repeated external effects are assumed to become exactly-once automatically.",
-          "resolution": {"kind": "explained_here", "insight_id": "temporal-durable-execution-mental-model", "target": null}
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "temporal-durable-execution-mental-model",
+            "target": null
+          }
         }
       ]
     },
@@ -95,7 +123,11 @@
           "prior_coverage": "partial",
           "state": "known_in_graph",
           "reason": "OPA only makes sense once policy is treated as explicit, reviewable decision logic rather than hidden application branching.",
-          "resolution": {"kind": "existing_concept", "insight_id": null, "target": "policy-as-code"}
+          "resolution": {
+            "kind": "existing_concept",
+            "insight_id": null,
+            "target": "policy-as-code"
+          }
         },
         {
           "id": "opa-prereq-decision-enforcement",
@@ -105,7 +137,11 @@
           "prior_coverage": "absent",
           "state": "explained_here",
           "reason": "The architecture is misread if the policy engine is treated as the component that performs the protected business action.",
-          "resolution": {"kind": "explained_here", "insight_id": "open-policy-agent-decision-enforcement-model", "target": null}
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "open-policy-agent-decision-enforcement-model",
+            "target": null
+          }
         },
         {
           "id": "opa-prereq-policy-distribution",
@@ -115,7 +151,11 @@
           "prior_coverage": "absent",
           "state": "explained_here",
           "reason": "Operational use becomes clearer when policy and data lifecycle are separated from application deployment through bundles or equivalent mechanisms.",
-          "resolution": {"kind": "explained_here", "insight_id": "open-policy-agent-decision-enforcement-model", "target": null}
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "open-policy-agent-decision-enforcement-model",
+            "target": null
+          }
         }
       ]
     },
@@ -131,7 +171,11 @@
           "prior_coverage": "absent",
           "state": "explained_here",
           "reason": "The paper's mechanism is the repeated relationship between reasoning, environment action and returned observation.",
-          "resolution": {"kind": "explained_here", "insight_id": "react-reason-act-observe-loop", "target": null}
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "react-reason-act-observe-loop",
+            "target": null
+          }
         },
         {
           "id": "react-prereq-reasoning-trace",
@@ -141,7 +185,11 @@
           "prior_coverage": "absent",
           "state": "explained_here",
           "reason": "A reasoning step must be distinguished from an external action because only the latter changes or queries the environment.",
-          "resolution": {"kind": "explained_here", "insight_id": "react-reason-act-observe-loop", "target": null}
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "react-reason-act-observe-loop",
+            "target": null
+          }
         },
         {
           "id": "react-prereq-observation",
@@ -151,7 +199,11 @@
           "prior_coverage": "absent",
           "state": "explained_here",
           "reason": "The value of acting is not only execution; returned evidence changes what the model can reason about next.",
-          "resolution": {"kind": "explained_here", "insight_id": "react-reason-act-observe-loop", "target": null}
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "react-reason-act-observe-loop",
+            "target": null
+          }
         },
         {
           "id": "react-prereq-production-boundary",
@@ -161,7 +213,11 @@
           "prior_coverage": "established",
           "state": "known_in_graph",
           "reason": "This prior model is useful for separating ReAct's cognitive loop from authorization, durability and outcome verification in production.",
-          "resolution": {"kind": "existing_explainer", "insight_id": "enterprise-agents-production-substrate", "target": null}
+          "resolution": {
+            "kind": "existing_explainer",
+            "insight_id": "enterprise-agents-production-substrate",
+            "target": null
+          }
         }
       ]
     },
@@ -177,7 +233,11 @@
           "prior_coverage": "absent",
           "state": "explained_here",
           "reason": "The testing effect cannot be understood unless retrieval is treated as a learning event rather than only an assessment event.",
-          "resolution": {"kind": "explained_here", "insight_id": "retrieval-practice-delayed-retention", "target": null}
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "retrieval-practice-delayed-retention",
+            "target": null
+          }
         },
         {
           "id": "retrieval-prereq-performance-retention",
@@ -187,7 +247,11 @@
           "prior_coverage": "absent",
           "state": "explained_here",
           "reason": "The study's central result depends on ranking learning conditions differently immediately and after a meaningful delay.",
-          "resolution": {"kind": "explained_here", "insight_id": "retrieval-practice-delayed-retention", "target": null}
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "retrieval-practice-delayed-retention",
+            "target": null
+          }
         },
         {
           "id": "retrieval-prereq-confidence",
@@ -197,7 +261,59 @@
           "prior_coverage": "absent",
           "state": "explained_here",
           "reason": "Confidence matters as a secondary concept because feeling fluent immediately can diverge from what is retrievable later.",
-          "resolution": {"kind": "explained_here", "insight_id": "retrieval-practice-delayed-retention", "target": null}
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "retrieval-practice-delayed-retention",
+            "target": null
+          }
+        }
+      ]
+    },
+    {
+      "insight_id": "kubernetes-reconciliation-controller-loop",
+      "summary": "The controller model needs only three tightly related pieces before the larger implications make sense: the reconciliation loop itself, a declared desired state and feedback about observed state.",
+      "items": [
+        {
+          "id": "kubernetes-prereq-reconciliation",
+          "label": "Reconciliation loop",
+          "concept_id": "reconciliation-loop",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "The source is fundamentally about repeated comparison and correction rather than one-shot procedural execution.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "kubernetes-reconciliation-controller-loop",
+            "target": null
+          }
+        },
+        {
+          "id": "kubernetes-prereq-desired-state",
+          "label": "Desired state",
+          "concept_id": "desired-state",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "A controller cannot reconcile anything unless there is an explicit target condition separate from current reality.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "kubernetes-reconciliation-controller-loop",
+            "target": null
+          }
+        },
+        {
+          "id": "kubernetes-prereq-observed-state",
+          "label": "Observed state",
+          "concept_id": "observed-state",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "Feedback about actual state is what lets the controller decide whether the target has drifted and whether corrective work is needed.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "kubernetes-reconciliation-controller-loop",
+            "target": null
+          }
         }
       ]
     }

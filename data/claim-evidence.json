@@ -281,6 +281,64 @@
           "note": "The product implication is intentionally narrower than a spaced-repetition prescription; spacing, feedback and transfer require additional evidence."
         }
       ]
+    },
+    {
+      "insight_id": "kubernetes-reconciliation-controller-loop",
+      "claims": [
+        {
+          "id": "kubernetes-controller-reconciliation-loop",
+          "text": "Kubernetes controllers are continuing control loops that observe cluster or external state and make or request changes when current state differs from desired state.",
+          "impact": "high",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-kubernetes-controllers-2026",
+              "url": "https://kubernetes.io/docs/concepts/architecture/controller/",
+              "locator": "Controllers → Controller pattern; Desired versus current state"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "kubernetes-focused-controllers",
+          "text": "Kubernetes favors multiple simple controllers that manage particular aspects of cluster state rather than one monolithic controller responsible for every state transition.",
+          "impact": "medium",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-kubernetes-controllers-2026",
+              "url": "https://kubernetes.io/docs/concepts/architecture/controller/",
+              "locator": "Controllers → Design"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "kubernetes-reconciliation-not-durable-workflow",
+          "text": "Reconciliation and durable workflow execution solve different problems: reconciliation repeatedly converges a state invariant, while durable workflow execution preserves progress of a particular long-running execution.",
+          "impact": "high",
+          "origin": "project_interpretation",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-kubernetes-controllers-2026",
+              "url": "https://kubernetes.io/docs/concepts/architecture/controller/",
+              "locator": "Controllers → Controller pattern; Desired versus current state"
+            },
+            {
+              "kind": "prior_insight",
+              "insight_id": "temporal-durable-execution-mental-model",
+              "locator": "Workflow Execution and Event History model"
+            }
+          ],
+          "note": "This boundary is project synthesis comparing the Kubernetes reconciliation model with the existing Temporal durable-execution model; Kubernetes documentation does not make this cross-product comparison."
+        }
+      ]
     }
   ]
 }

@@ -7,12 +7,19 @@
       "answer_key": {
         "problem_from": "whole_source_map.problem",
         "mechanism_from": "whole_source_map.thesis",
-        "anchor_concept_ids": ["controlled-execution", "execution-history"],
+        "anchor_concept_ids": [
+          "controlled-execution",
+          "execution-history"
+        ],
         "boundary_limitation_index": 0
       },
       "transfer_prompt": {
         "prompt": "An agent can update a customer master record directly after an LLM tool call. What must exist around that call before you would treat the workflow as production-ready, and what evidence would you want after the change?",
-        "expected_concept_ids": ["controlled-execution", "execution-history", "policy-as-code"]
+        "expected_concept_ids": [
+          "controlled-execution",
+          "execution-history",
+          "policy-as-code"
+        ]
       }
     },
     {
@@ -21,12 +28,20 @@
       "answer_key": {
         "problem_from": "whole_source_map.problem",
         "mechanism_from": "whole_source_map.thesis",
-        "anchor_concept_ids": ["event-history", "worker-process", "activity-execution"],
+        "anchor_concept_ids": [
+          "event-history",
+          "worker-process",
+          "activity-execution"
+        ],
         "boundary_limitation_index": 1
       },
       "transfer_prompt": {
         "prompt": "A three-day onboarding flow waits for approvals, calls two external systems and must survive service restarts. Which state should be durable orchestration, which work should be side-effecting Activities, and what must be made safe under retry?",
-        "expected_concept_ids": ["durable-execution", "activity-execution", "idempotency-under-retry"]
+        "expected_concept_ids": [
+          "durable-execution",
+          "activity-execution",
+          "idempotency-under-retry"
+        ]
       }
     },
     {
@@ -35,12 +50,20 @@
       "answer_key": {
         "problem_from": "whole_source_map.problem",
         "mechanism_from": "whole_source_map.thesis",
-        "anchor_concept_ids": ["policy-decision-enforcement-separation", "policy-as-code", "open-policy-agent"],
+        "anchor_concept_ids": [
+          "policy-decision-enforcement-separation",
+          "policy-as-code",
+          "open-policy-agent"
+        ],
         "boundary_limitation_index": 0
       },
       "transfer_prompt": {
         "prompt": "A service asks whether an agent may approve a refund. Sketch the smallest decision/enforcement split: what goes into the policy decision, what comes back, and which component must still own the actual refund side effect?",
-        "expected_concept_ids": ["policy-decision-enforcement-separation", "policy-as-code", "controlled-execution"]
+        "expected_concept_ids": [
+          "policy-decision-enforcement-separation",
+          "policy-as-code",
+          "controlled-execution"
+        ]
       }
     },
     {
@@ -49,12 +72,20 @@
       "answer_key": {
         "problem_from": "whole_source_map.problem",
         "mechanism_from": "whole_source_map.thesis",
-        "anchor_concept_ids": ["react-loop", "reasoning-trace", "observation-grounding"],
+        "anchor_concept_ids": [
+          "react-loop",
+          "reasoning-trace",
+          "observation-grounding"
+        ],
         "boundary_limitation_index": 0
       },
       "transfer_prompt": {
         "prompt": "An agent searches an external system, receives evidence that contradicts its initial plan, and then wants to perform a consequential write. Which part is the ReAct-style reasoning loop, and which controls belong outside that loop?",
-        "expected_concept_ids": ["react-loop", "observation-grounding", "controlled-execution"]
+        "expected_concept_ids": [
+          "react-loop",
+          "observation-grounding",
+          "controlled-execution"
+        ]
       }
     },
     {
@@ -63,12 +94,42 @@
       "answer_key": {
         "problem_from": "whole_source_map.problem",
         "mechanism_from": "whole_source_map.thesis",
-        "anchor_concept_ids": ["retrieval-practice", "performance-retention-gap", "metacognitive-confidence-gap"],
+        "anchor_concept_ids": [
+          "retrieval-practice",
+          "performance-retention-gap",
+          "metacognitive-confidence-gap"
+        ],
         "boundary_limitation_index": 0
       },
       "transfer_prompt": {
         "prompt": "Two explainers both feel clear immediately. One reader rereads the first; another tries to reconstruct the second before looking back. What later observation would actually tell you which learning path worked better?",
-        "expected_concept_ids": ["retrieval-practice", "performance-retention-gap", "metacognitive-confidence-gap"]
+        "expected_concept_ids": [
+          "retrieval-practice",
+          "performance-retention-gap",
+          "metacognitive-confidence-gap"
+        ]
+      }
+    },
+    {
+      "insight_id": "kubernetes-reconciliation-controller-loop",
+      "retention_prompt": "Without looking back, reconstruct the Kubernetes controller model: distinguish desired state from observed state, explain the compare-and-correct loop, state why the loop does not terminate after one successful action, and name one failure mode that reconciliation does not solve automatically.",
+      "answer_key": {
+        "problem_from": "whole_source_map.problem",
+        "mechanism_from": "whole_source_map.thesis",
+        "anchor_concept_ids": [
+          "reconciliation-loop",
+          "desired-state",
+          "observed-state"
+        ],
+        "boundary_limitation_index": 0
+      },
+      "transfer_prompt": {
+        "prompt": "A customer record is expected to exist consistently in three systems. An overnight workflow created all three copies successfully, but one downstream copy can later disappear or drift. Which part of the problem is better modeled as a reconciliation loop, what becomes desired versus observed state, and what side-effect safety question must still be answered separately?",
+        "expected_concept_ids": [
+          "reconciliation-loop",
+          "desired-state",
+          "observed-state"
+        ]
       }
     }
   ]

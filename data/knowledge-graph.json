@@ -1,6 +1,6 @@
 {
   "graph_version": "0.4.0",
-  "updated_at": "2026-08-26",
+  "updated_at": "2026-08-27",
   "concepts": [
     {
       "id": "controlled-execution",
@@ -452,6 +452,62 @@
         "memory",
         "calibration"
       ]
+    },
+    {
+      "id": "reconciliation-loop",
+      "label": "Reconciliation loop",
+      "summary": "A continuing control loop that observes current state, compares it with desired state and performs bounded corrective actions to reduce the difference.",
+      "domain": "distributed systems",
+      "coverage": "explained",
+      "insight_ids": [
+        "kubernetes-reconciliation-controller-loop"
+      ],
+      "aliases": [
+        "controller reconciliation",
+        "desired-state reconciliation"
+      ],
+      "tags": [
+        "controllers",
+        "desired-state",
+        "automation",
+        "convergence"
+      ]
+    },
+    {
+      "id": "desired-state",
+      "label": "Desired state",
+      "summary": "A declarative representation of what a managed system or resource should look like, kept separate from observed reality.",
+      "domain": "distributed systems",
+      "coverage": "explained",
+      "insight_ids": [
+        "kubernetes-reconciliation-controller-loop"
+      ],
+      "aliases": [
+        "target state"
+      ],
+      "tags": [
+        "declarative",
+        "controllers",
+        "state"
+      ]
+    },
+    {
+      "id": "observed-state",
+      "label": "Observed state",
+      "summary": "The controller's current view of what is actually true, used as feedback for deciding whether corrective action is required.",
+      "domain": "distributed systems",
+      "coverage": "explained",
+      "insight_ids": [
+        "kubernetes-reconciliation-controller-loop"
+      ],
+      "aliases": [
+        "current state"
+      ],
+      "tags": [
+        "controllers",
+        "feedback",
+        "state"
+      ]
     }
   ],
   "relations": [
@@ -701,6 +757,26 @@
       "rationale": "Repeated-study participants predicted stronger one-week memory despite later recalling less, showing that immediate fluency/confidence can misrepresent delayed retention.",
       "evidence_insights": [
         "retrieval-practice-delayed-retention"
+      ]
+    },
+    {
+      "id": "rel-reconciliation-loop-depends-on-desired-state",
+      "from": "reconciliation-loop",
+      "to": "desired-state",
+      "type": "depends_on",
+      "rationale": "A controller needs an explicit target state in order to know what condition it should converge toward.",
+      "evidence_insights": [
+        "kubernetes-reconciliation-controller-loop"
+      ]
+    },
+    {
+      "id": "rel-reconciliation-loop-depends-on-observed-state",
+      "from": "reconciliation-loop",
+      "to": "observed-state",
+      "type": "depends_on",
+      "rationale": "Reconciliation requires feedback about current reality so the controller can determine whether corrective work is necessary.",
+      "evidence_insights": [
+        "kubernetes-reconciliation-controller-loop"
       ]
     }
   ]

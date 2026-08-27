@@ -62,9 +62,9 @@
       "source_type": "documentation",
       "submitted_at": "2026-08-27",
       "requested_focus": "Understand reconciliation/control loops: desired state vs current state, why many small controllers are preferable to one monolith, and what this teaches about resilient automation.",
-      "status": "queued",
-      "source_id": null,
-      "insight_id": null,
+      "status": "review",
+      "source_id": "src-kubernetes-controllers-2026",
+      "insight_id": "kubernetes-reconciliation-controller-loop",
       "notes": "GitHub source intake issue #53. Dogfood cohort: distributed systems / orchestration documentation."
     },
     {

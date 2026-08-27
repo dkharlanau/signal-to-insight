@@ -37,7 +37,9 @@
           "source_basis": "Temporal persists Workflow Execution progress as Event History while replaceable Workers execute tasks from Task Queues.",
           "prior_basis": "The enterprise-agent case introduced durable execution as a desirable production property but did not explain a concrete runtime mechanism.",
           "interpretation": "Temporal narrows the abstract property into a specific mechanism: state survives outside any one Worker process and can be reconstructed from history.",
-          "evidence_insights": ["enterprise-agents-production-substrate"]
+          "evidence_insights": [
+            "enterprise-agents-production-substrate"
+          ]
         },
         {
           "relationship": "refines",
@@ -46,7 +48,9 @@
           "source_basis": "Temporal defines Event History as an append-only record representing Workflow Execution state and progress.",
           "prior_basis": "Execution history was already present as a general governance and replay concept.",
           "interpretation": "The source makes the concept operational by showing one system where history is also the mechanism for workflow-state reconstruction.",
-          "evidence_insights": ["enterprise-agents-production-substrate"]
+          "evidence_insights": [
+            "enterprise-agents-production-substrate"
+          ]
         },
         {
           "relationship": "new",
@@ -71,7 +75,9 @@
           "source_basis": "OPA evaluates declarative Rego policy and data against structured input and returns a decision to the integrating application.",
           "prior_basis": "Policy as code was previously introduced only as one useful control around agent execution.",
           "interpretation": "OPA turns the broad idea into a concrete architecture with a policy engine, policy/data lifecycle and an explicit decision interface.",
-          "evidence_insights": ["enterprise-agents-production-substrate"]
+          "evidence_insights": [
+            "enterprise-agents-production-substrate"
+          ]
         },
         {
           "relationship": "reinforces",
@@ -80,7 +86,9 @@
           "source_basis": "The application keeps ownership of the protected action while OPA computes a policy decision from explicit input, policy and data.",
           "prior_basis": "Controlled execution already required explicit authority around consequential work.",
           "interpretation": "OPA supplies a concrete authorization component compatible with that model without pretending the policy engine itself executes or verifies the business action.",
-          "evidence_insights": ["enterprise-agents-production-substrate"]
+          "evidence_insights": [
+            "enterprise-agents-production-substrate"
+          ]
         },
         {
           "relationship": "new",
@@ -92,7 +100,10 @@
           "evidence_insights": []
         }
       ],
-      "suppressed_prior_matches": ["execution-history", "protected-data-separation"]
+      "suppressed_prior_matches": [
+        "execution-history",
+        "protected-data-separation"
+      ]
     },
     {
       "insight_id": "react-reason-act-observe-loop",
@@ -105,7 +116,9 @@
           "source_basis": "ReAct interleaves reasoning, environment actions and observations inside the model's task trajectory.",
           "prior_basis": "Controlled execution describes authorization, safe execution, reconstruction and verification around consequential work.",
           "interpretation": "The source refines the boundary by separating a cognitive/action-selection loop from the production substrate that governs whether and how selected actions may execute.",
-          "evidence_insights": ["enterprise-agents-production-substrate"]
+          "evidence_insights": [
+            "enterprise-agents-production-substrate"
+          ]
         },
         {
           "relationship": "new",
@@ -126,7 +139,9 @@
           "evidence_insights": []
         }
       ],
-      "suppressed_prior_matches": ["execution-history"]
+      "suppressed_prior_matches": [
+        "execution-history"
+      ]
     },
     {
       "insight_id": "retrieval-practice-delayed-retention",
@@ -160,7 +175,53 @@
           "evidence_insights": []
         }
       ],
-      "suppressed_prior_matches": ["open-policy-agent", "observation-grounding", "controlled-execution", "policy-as-code", "policy-decision-enforcement-separation"]
+      "suppressed_prior_matches": [
+        "open-policy-agent",
+        "observation-grounding",
+        "controlled-execution",
+        "policy-as-code",
+        "policy-decision-enforcement-separation"
+      ]
+    },
+    {
+      "insight_id": "kubernetes-reconciliation-controller-loop",
+      "summary": "Kubernetes adds a distinct state-convergence model rather than another durable-workflow mechanism: the source introduces reconciliation, desired state and observed state while the retrieved Temporal/control concepts are deliberately suppressed as different responsibilities.",
+      "items": [
+        {
+          "relationship": "new",
+          "concept_id": "reconciliation-loop",
+          "label": "Reconciliation loop",
+          "source_basis": "The Kubernetes controller pattern repeatedly observes current state and makes or requests changes that move the system toward desired state.",
+          "prior_basis": "The existing graph models durable workflow progress, execution control and agent loops, but it does not model persistent convergence of a declared state invariant.",
+          "interpretation": "Reconciliation becomes a separate reusable automation model: success is not one completed run but continued correction whenever reality drifts from the target.",
+          "evidence_insights": []
+        },
+        {
+          "relationship": "new",
+          "concept_id": "desired-state",
+          "label": "Desired state",
+          "source_basis": "A Kubernetes resource specification declares what state should be true independently of what is currently true.",
+          "prior_basis": "No prior concept explicitly represented a declarative target state as the reference point for continuous corrective automation.",
+          "interpretation": "Separating target state from execution history makes it possible to reason about drift after any individual workflow or command has finished.",
+          "evidence_insights": []
+        },
+        {
+          "relationship": "new",
+          "concept_id": "observed-state",
+          "label": "Observed state",
+          "source_basis": "Controllers use feedback about current reality to determine whether corrective action is required before observing again.",
+          "prior_basis": "Earlier graph concepts record execution state or observations inside other mechanisms, but not the current-state side of a desired-versus-observed convergence loop.",
+          "interpretation": "Observed state becomes the feedback half of reconciliation and prevents declarative intent from being mistaken for proof that the system is actually correct.",
+          "evidence_insights": []
+        }
+      ],
+      "suppressed_prior_matches": [
+        "durable-execution",
+        "workflow-execution",
+        "controlled-execution",
+        "event-history",
+        "worker-process"
+      ]
     }
   ]
 }

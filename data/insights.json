@@ -1194,6 +1194,206 @@
         "analysis_type": "direct research-article/PDF analysis with narrow product-learning application",
         "reviewed_at": "2026-08-26"
       }
+    },
+    {
+      "id": "kubernetes-reconciliation-controller-loop",
+      "source_id": "src-kubernetes-controllers-2026",
+      "slug": "kubernetes-reconciliation-controller-loop",
+      "status": "review",
+      "title": "Kubernetes controllers: reconcile desired state, do not script the happy path",
+      "one_liner": "A Kubernetes controller is a continuing reconciliation loop: observe current state, compare it with declared desired state, make or request a change, then observe again.",
+      "why_this_matters": "The controller model is a compact way to understand resilient automation under constant change. It replaces one-shot procedural assumptions with repeated convergence toward a declared target, while keeping each controller focused on a bounded responsibility.",
+      "whole_source_map": {
+        "problem": "A distributed system is continuously changing: resources fail, external systems drift, and one successful command does not guarantee that the intended state remains true.",
+        "thesis": "Represent desired state declaratively and use independent control loops that repeatedly observe current state and act to move it closer to the desired state.",
+        "core_topics": [
+          "desired state versus current state",
+          "non-terminating reconciliation loop",
+          "control through the Kubernetes API",
+          "direct control of external systems",
+          "small focused controllers instead of one monolithic control loop",
+          "continuous convergence rather than stable completion"
+        ]
+      },
+      "derived_model": {
+        "problem": "A one-shot automation can succeed once and still leave the system wrong later when reality changes.",
+        "mechanism": "A controller watches a resource whose spec expresses desired state, observes relevant current state, makes or requests bounded changes, reports state back, and repeats the loop.",
+        "result": "Automation becomes convergence-oriented: failures or drift can be corrected by later iterations without requiring one perfect end-to-end execution path."
+      },
+      "coherence_review": {
+        "central_chain": [
+          "The API object expresses a desired state while the real system has a current state that may differ.",
+          "A controller repeatedly observes the relevant state rather than assuming one command permanently solved the problem.",
+          "When it detects a difference, it makes or requests a bounded change through the API server or an external system.",
+          "The changed state is observed again, so reconciliation continues as the environment changes.",
+          "Kubernetes composes many focused controllers, reducing the need for one tightly coupled monolithic control loop."
+        ],
+        "prerequisites_complete": true,
+        "source_vs_enrichment_clear": true,
+        "open_gaps": [
+          "The conceptual page explains the controller pattern but not implementation-level controller-runtime mechanics such as work queues, rate limiting or generation handling.",
+          "The page does not claim that every controller action is automatically idempotent; safe repeated reconciliation still depends on controller and external-system design."
+        ],
+        "scores": {
+          "coherence": 5,
+          "prerequisite_completeness": 5,
+          "evidence_confidence": 5,
+          "practical_leverage": 5
+        }
+      },
+      "visual_plan": {
+        "dominant": {
+          "type": "sequence",
+          "title": "Reconciliation is a loop, not a one-time workflow",
+          "nodes": [
+            {
+              "label": "01 · Declare",
+              "title": "Desired state",
+              "text": "A resource spec states what should be true."
+            },
+            {
+              "label": "02 · Observe",
+              "title": "Current state",
+              "text": "The controller inspects what is actually true now."
+            },
+            {
+              "label": "03 · Compare",
+              "title": "Find the delta",
+              "text": "The controller determines whether reality is close enough to the desired state."
+            },
+            {
+              "label": "04 · Act",
+              "title": "Make a bounded change",
+              "text": "The controller changes an API object or an external system to reduce the delta."
+            },
+            {
+              "label": "05 · Repeat",
+              "title": "Observe again",
+              "text": "The loop continues because the system can change again after any successful action."
+            }
+          ]
+        },
+        "supporting": [
+          "comparison",
+          "concept_grid",
+          "examples",
+          "limitations",
+          "action_map",
+          "source_map"
+        ],
+        "image": {
+          "needed": false,
+          "reason": "The source itself teaches the mechanism through a control-loop analogy; a generated loop/sequence diagram preserves the causal structure more directly than decorative imagery."
+        }
+      },
+      "concepts": [
+        {
+          "name": "Reconciliation loop",
+          "depth": "learn",
+          "why_needed": "The controller is defined by repeated observation and convergence, not by executing a fixed sequence once."
+        },
+        {
+          "name": "Desired state",
+          "depth": "know",
+          "why_needed": "The resource spec gives the controller a declarative target that is separate from the current state of the world."
+        },
+        {
+          "name": "Current state",
+          "depth": "know",
+          "why_needed": "Controllers need feedback about reality; desired state alone cannot tell whether corrective work is needed."
+        },
+        {
+          "name": "Focused controller responsibility",
+          "depth": "learn",
+          "why_needed": "Kubernetes prefers many controllers managing particular aspects of state rather than one interlinked monolithic control loop."
+        }
+      ],
+      "tool_map": [
+        {
+          "name": "Kubernetes API server",
+          "category": "declarative system API",
+          "why_explore": "Built-in controllers commonly observe resources and request changes through the API server instead of directly performing every downstream action.",
+          "url": "https://kubernetes.io/docs/concepts/overview/components/",
+          "relationship": "Source-native Kubernetes component used by the controller pattern.",
+          "status": "learn"
+        }
+      ],
+      "examples": [
+        {
+          "domain": "Kubernetes Job",
+          "scenario": "A Job object declares that work should complete, while Pods are the resources that actually run the work.",
+          "question": "Can the Job controller keep creating or observing the required Pods until current state reflects the Job's desired outcome?"
+        },
+        {
+          "domain": "external infrastructure",
+          "scenario": "A controller manages something outside the cluster such as node capacity.",
+          "question": "Can it observe desired state from the API, change the external system, and then report/observe the resulting state without assuming the first external call is final?"
+        },
+        {
+          "domain": "business automation",
+          "scenario": "A record should exist in several systems, but one downstream copy can disappear or lag after an earlier successful run.",
+          "question": "Would expressing the target state and periodically reconciling observed state be safer than treating the original workflow run as permanent proof of correctness?"
+        }
+      ],
+      "limitations": [
+        "Reconciliation does not remove the need for safe repeated side effects; a controller can still cause duplicates or oscillation if its actions are not designed for repetition.",
+        "Desired state can be wrong. A controller faithfully converging on a bad specification is still a failure.",
+        "Multiple controllers can interact through shared resources, so bounded responsibility reduces coupling but does not eliminate coordination problems.",
+        "The controller pattern is not the same as durable workflow execution: it focuses on continuously converging state, whereas a workflow engine may preserve the progress of a particular long-running execution."
+      ],
+      "action_map": {
+        "use_now": [
+          "When designing automation, distinguish a target condition that must remain true from a one-time sequence that merely attempted to create it.",
+          "For long-lived invariants, ask what observes drift after the original workflow finishes."
+        ],
+        "try": [
+          "Model one operational invariant as desired state + observed state + reconciliation action instead of a procedural retry script."
+        ],
+        "learn": [
+          "controller reconciliation",
+          "desired-state systems",
+          "safe repeated side effects",
+          "control-loop decomposition"
+        ],
+        "build": [
+          "A tiny reconciler that compares a declarative JSON target with observed state and emits only the corrective action required to close the delta."
+        ],
+        "watch": [
+          "How controller-runtime implementations handle retries, backoff, event coalescing and stale observations."
+        ],
+        "ignore_for_now": [
+          "Treating every business workflow as a Kubernetes-style controller; use reconciliation only where a persistent target state exists."
+        ]
+      },
+      "connections": [
+        "durable execution: complementary but different — durable execution preserves progress of a workflow; reconciliation repeatedly converges a state invariant",
+        "controlled execution: a controller still needs authority and safe execution boundaries when corrective actions are consequential",
+        "idempotency under retry: repeated reconciliation makes duplicate-safe side effects an important implementation concern"
+      ],
+      "supporting_sources": [
+        {
+          "title": "Kubernetes Controllers",
+          "url": "https://kubernetes.io/docs/concepts/architecture/controller/",
+          "publisher": "Kubernetes",
+          "purpose": "primary source for desired/current state, controller loop, API/direct control and controller decomposition",
+          "accessed_at": "2026-08-27"
+        }
+      ],
+      "tags": [
+        "kubernetes",
+        "controllers",
+        "reconciliation",
+        "desired-state",
+        "automation",
+        "distributed-systems"
+      ],
+      "provenance": {
+        "source_linked": true,
+        "source_dates_recorded": true,
+        "full_transcript_stored": false,
+        "analysis_type": "direct official-documentation analysis with explicitly labeled cross-domain application",
+        "reviewed_at": "2026-08-27"
+      }
     }
   ]
 }

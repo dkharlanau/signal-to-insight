@@ -190,6 +190,32 @@
       "derived_records": [
         "retrieval-practice-delayed-retention"
       ]
+    },
+    {
+      "id": "src-kubernetes-controllers-2026",
+      "type": "documentation",
+      "title": "Controllers",
+      "canonical_url": "https://kubernetes.io/docs/concepts/architecture/controller",
+      "creators": [
+        "Kubernetes documentation contributors"
+      ],
+      "publisher": "Kubernetes",
+      "event": null,
+      "published_at": null,
+      "event_date": null,
+      "captured_at": "2026-08-27",
+      "analyzed_at": "2026-08-27",
+      "date_note": "Living documentation. The page reports last modification on 2024-09-01; analysis used the version accessed on 2026-08-27.",
+      "verification": [
+        {
+          "title": "Kubernetes Controllers",
+          "url": "https://kubernetes.io/docs/concepts/architecture/controller/",
+          "accessed_at": "2026-08-27"
+        }
+      ],
+      "derived_records": [
+        "kubernetes-reconciliation-controller-loop"
+      ]
     }
   ]
 }
