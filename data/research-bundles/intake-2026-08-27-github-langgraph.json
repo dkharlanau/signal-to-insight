@@ -1,138 +1,109 @@
 {
   "bundle_version": "1.1.0",
   "intake_id": "intake-2026-08-27-github-langgraph",
-  "source_id": null,
+  "source_id": "src-langgraph-repository-2026",
   "source": {
     "type": "repository",
     "canonical_url": "https://github.com/langchain-ai/langgraph",
-    "title": null,
-    "creators": [],
-    "publisher": null,
+    "title": "LangGraph",
+    "creators": ["LangChain Inc. / LangGraph contributors"],
+    "publisher": "LangChain Inc.",
     "published_at": null,
     "event_date": null,
     "version": null,
-    "language": null,
+    "language": "en",
     "duration": null,
-    "date_note": null
+    "date_note": "Living repository and official documentation inspected on 2026-08-27; no single publication date is asserted."
   },
   "inspection": {
-    "method": "not inspected",
-    "full_content_used_ephemerally": false,
+    "method": "Direct inspection of the official LangGraph repository README plus official LangGraph overview and persistence documentation.",
+    "full_content_used_ephemerally": true,
     "full_content_committed": false,
-    "confidence": "metadata_only",
+    "confidence": "direct",
     "gaps": [
-      "Source content has not been mapped yet."
+      "This case focuses on the orchestration/runtime mental model rather than API-level graph construction details or LangSmith deployment products.",
+      "The product evolves quickly; implementation-specific persistence and deployment behavior should be re-verified before production design."
     ]
   },
   "prior_knowledge": {
     "captured_at": "2026-08-27",
     "query": "Understand LangGraph's model for resilient agent orchestration, state, control flow and durable execution; compare the responsibilities with the existing ReAct/Temporal/controlled-execution model without forcing equivalence.",
     "matches": [
-      {
-        "concept_id": "controlled-execution",
-        "label": "Controlled execution",
-        "coverage": "explained",
-        "evidence_insights": [
-          {
-            "id": "enterprise-agents-production-substrate",
-            "status": "published",
-            "title": "Why enterprise AI agents fail after the POC"
-          },
-          {
-            "id": "open-policy-agent-decision-enforcement-model",
-            "status": "review",
-            "title": "Open Policy Agent: separate policy decisions from enforcement"
-          },
-          {
-            "id": "react-reason-act-observe-loop",
-            "status": "review",
-            "title": "ReAct: reason, act, observe — then update the plan"
-          }
-        ],
-        "relationship_to_source": "unclassified"
-      },
-      {
-        "concept_id": "durable-execution",
-        "label": "Durable execution",
-        "coverage": "explained",
-        "evidence_insights": [
-          {
-            "id": "enterprise-agents-production-substrate",
-            "status": "published",
-            "title": "Why enterprise AI agents fail after the POC"
-          },
-          {
-            "id": "temporal-durable-execution-mental-model",
-            "status": "review",
-            "title": "Temporal: the mental model behind durable execution"
-          }
-        ],
-        "relationship_to_source": "unclassified"
-      },
-      {
-        "concept_id": "activity-execution",
-        "label": "Activity Execution",
-        "coverage": "explained",
-        "evidence_insights": [
-          {
-            "id": "temporal-durable-execution-mental-model",
-            "status": "review",
-            "title": "Temporal: the mental model behind durable execution"
-          }
-        ],
-        "relationship_to_source": "unclassified"
-      },
-      {
-        "concept_id": "human-agent-task-equivalence",
-        "label": "Human-agent task equivalence",
-        "coverage": "explained",
-        "evidence_insights": [
-          {
-            "id": "enterprise-agents-production-substrate",
-            "status": "published",
-            "title": "Why enterprise AI agents fail after the POC"
-          }
-        ],
-        "relationship_to_source": "unclassified"
-      },
-      {
-        "concept_id": "react-loop",
-        "label": "ReAct loop",
-        "coverage": "explained",
-        "evidence_insights": [
-          {
-            "id": "react-reason-act-observe-loop",
-            "status": "review",
-            "title": "ReAct: reason, act, observe — then update the plan"
-          }
-        ],
-        "relationship_to_source": "unclassified"
-      }
+      {"concept_id": "controlled-execution", "label": "Controlled execution", "coverage": "explained", "evidence_insights": [{"id": "enterprise-agents-production-substrate", "status": "published", "title": "Why enterprise AI agents fail after the POC"}], "relationship_to_source": "refinement"},
+      {"concept_id": "durable-execution", "label": "Durable execution", "coverage": "explained", "evidence_insights": [{"id": "enterprise-agents-production-substrate", "status": "published", "title": "Why enterprise AI agents fail after the POC"}, {"id": "temporal-durable-execution-mental-model", "status": "review", "title": "Temporal: the mental model behind durable execution"}], "relationship_to_source": "refinement"},
+      {"concept_id": "activity-execution", "label": "Activity Execution", "coverage": "explained", "evidence_insights": [{"id": "temporal-durable-execution-mental-model", "status": "review", "title": "Temporal: the mental model behind durable execution"}], "relationship_to_source": "not_relevant"},
+      {"concept_id": "human-agent-task-equivalence", "label": "Human-agent task equivalence", "coverage": "explained", "evidence_insights": [{"id": "enterprise-agents-production-substrate", "status": "published", "title": "Why enterprise AI agents fail after the POC"}], "relationship_to_source": "not_relevant"},
+      {"concept_id": "react-loop", "label": "ReAct loop", "coverage": "explained", "evidence_insights": [{"id": "react-reason-act-observe-loop", "status": "review", "title": "ReAct: reason, act, observe — then update the plan"}], "relationship_to_source": "not_relevant"}
     ],
     "classification_required": true
   },
   "content_map": {
-    "problem": null,
-    "thesis": null,
-    "sections": [],
-    "concepts": [],
-    "mechanisms": [],
-    "tools": [],
-    "examples": [],
-    "claims": [],
-    "evidence": [],
-    "assumptions": [],
-    "limitations": [],
-    "open_questions": []
+    "problem": "Agent applications often need explicit control flow, persisted state, failure recovery and human intervention around model/tool calls; a simple model loop does not provide those orchestration guarantees by itself.",
+    "thesis": "LangGraph provides a low-level graph-oriented orchestration runtime where deterministic and agentic steps operate over explicit state, while checkpointers persist thread-scoped graph state for interruption, recovery and continuation.",
+    "sections": ["Low-level orchestration positioning", "StateGraph nodes and edges", "Deterministic plus agentic control flow", "Persistence through checkpointers", "Long-term stores", "Human-in-the-loop and interruptions", "Boundary with higher-level agent frameworks and deployment tooling"],
+    "concepts": ["stateful agent orchestration", "graph control flow", "graph state", "checkpointer", "thread-scoped checkpoint", "store", "human-in-the-loop interrupt"],
+    "mechanisms": [
+      "A StateGraph defines explicit nodes and edges over application state so deterministic code and LLM-driven steps can coexist in one orchestration graph.",
+      "Checkpointers persist graph-state snapshots scoped to a thread, supporting continuity, interruption, time travel and fault recovery.",
+      "Stores persist application-defined data across threads and therefore solve a different persistence problem from thread checkpoints.",
+      "Human-in-the-loop capabilities operate by pausing around graph state so a person can inspect or modify state before execution continues."
+    ],
+    "tools": ["LangGraph", "StateGraph", "checkpointers", "stores", "LangSmith"],
+    "examples": [
+      "An agent graph routes between deterministic validation, an LLM planning node and a tool-execution node while keeping explicit shared state.",
+      "A long-running agent pauses for human approval, persists its thread state and later resumes instead of reconstructing the entire run from conversational text.",
+      "A workflow stores user preferences across threads in a Store while thread-specific execution state remains in checkpoints."
+    ],
+    "claims": [
+      "LangGraph describes itself as a low-level orchestration framework/runtime for long-running, stateful agents.",
+      "LangGraph supports mixing deterministic hand-coded steps with LLM-driven agentic steps in one graph.",
+      "LangGraph persistence uses checkpointers for thread-scoped graph-state snapshots and Stores for longer-lived application-defined data across threads.",
+      "Persistence enables continuation after interruptions/failures and supports human-in-the-loop workflows."
+    ],
+    "evidence": ["Official LangGraph repository README inspected 2026-08-27.", "Official LangGraph overview and persistence documentation inspected 2026-08-27."],
+    "assumptions": [
+      "The agent application benefits from explicit orchestration rather than only a prebuilt model/tool loop.",
+      "Execution state must survive interruptions or be inspected across steps.",
+      "The application owner is willing to model state and control-flow boundaries explicitly."
+    ],
+    "limitations": [
+      "LangGraph orchestration does not by itself provide authorization policy, protected-data boundaries or the broader governance semantics represented by the project's controlled-execution concept.",
+      "A graph/checkpoint runtime is not the same abstraction as the ReAct reasoning/action/observation method; a ReAct-style loop can be implemented inside an orchestration graph but they answer different questions.",
+      "LangGraph durable execution/persistence overlaps with Temporal at a reliability goal level, but the products expose different runtime models and should not be treated as interchangeable implementations.",
+      "Persistence still requires selecting and operating a suitable checkpointer/store; an in-memory saver does not survive process restart."
+    ],
+    "open_questions": [
+      "Which agent workflows genuinely need low-level graph control rather than a higher-level agent abstraction?",
+      "Where should an application use LangGraph persistence versus an external workflow engine or system-of-record state?"
+    ]
   },
   "selection": {
     "requested_focus": "Understand LangGraph's model for resilient agent orchestration, state, control flow and durable execution; compare the responsibilities with the existing ReAct/Temporal/controlled-execution model without forcing equivalence.",
-    "coherent_core": [],
-    "prerequisites": [],
-    "drop_notes": [],
-    "connections": []
+    "coherent_core": [
+      "LangGraph is primarily an orchestration runtime: explicit graph state and control flow around agent work.",
+      "Deterministic and agentic steps can be composed in one graph instead of forcing every transition through an LLM loop.",
+      "Checkpoints persist thread-scoped graph state while Stores retain application-defined data across threads.",
+      "This refines the project's controlled/durable execution knowledge but does not collapse into ReAct or Temporal."
+    ],
+    "prerequisites": ["graph nodes and edges", "explicit application state", "difference between thread execution state and cross-thread memory", "difference between orchestration runtime and agent reasoning strategy"],
+    "drop_notes": [
+      "LangSmith tracing/deployment features are adjacent ecosystem capabilities, not part of the minimal open-source LangGraph mental model.",
+      "API syntax and higher-level LangChain/Deep Agents abstractions are omitted from the central model.",
+      "Marketing adoption claims are not needed for the architectural insight."
+    ],
+    "connections": [
+      "Controlled execution is refined only at the orchestration/persistence layer; policy and authority remain separate concerns.",
+      "Durable execution is reinforced/refined as a goal, but LangGraph checkpointed graph state and Temporal Workflow/Event History remain different runtime abstractions.",
+      "ReAct remains a reasoning/action strategy that may run inside a graph rather than an equivalent orchestration model."
+    ]
   },
-  "verification_candidates": [],
-  "source_locators": [],
+  "verification_candidates": [
+    {"question": "Which persistence/checkpointer implementations are currently recommended for production LangGraph deployments?", "reason": "The conceptual model is stable enough for this explainer, but operational choices evolve and should be checked before implementation.", "priority": "medium"}
+  ],
+  "source_locators": [
+    {"label": "LangGraph repository README", "locator": "https://github.com/langchain-ai/langgraph#readme"},
+    {"label": "LangGraph overview", "locator": "https://docs.langchain.com/oss/python/langgraph/overview"},
+    {"label": "LangGraph persistence", "locator": "https://docs.langchain.com/oss/python/langgraph/persistence"}
+  ],
   "created_at": "2026-08-27"
 }
