@@ -954,6 +954,97 @@
         "response",
         "prioritization"
       ]
+    },
+    {
+      "id": "transformer-sequence-transduction",
+      "label": "Transformer sequence-transduction architecture",
+      "summary": "The original attention-only encoder-decoder architecture for sequence transduction, built from self-attention, encoder-decoder attention and position-wise feed-forward layers without recurrence or convolution.",
+      "domain": "neural sequence architecture",
+      "coverage": "explained",
+      "insight_ids": [
+        "transformer-self-attention-sequence-model"
+      ],
+      "aliases": [
+        "original Transformer"
+      ],
+      "tags": [
+        "transformer",
+        "encoder-decoder",
+        "sequence",
+        "attention"
+      ]
+    },
+    {
+      "id": "self-attention",
+      "label": "Self-attention",
+      "summary": "An attention operation where queries, keys and values come from the same sequence representation so each position can combine information from other positions directly.",
+      "domain": "neural sequence architecture",
+      "coverage": "explained",
+      "insight_ids": [
+        "transformer-self-attention-sequence-model"
+      ],
+      "aliases": [
+        "intra-attention"
+      ],
+      "tags": [
+        "attention",
+        "sequence",
+        "neural-network"
+      ]
+    },
+    {
+      "id": "sequence-computation-parallelism",
+      "label": "Sequence-computation parallelism",
+      "summary": "Computing known sequence positions within a layer without an O(n) recurrent dependency chain, reducing the minimum sequential operations required by the layer.",
+      "domain": "neural computation",
+      "coverage": "explained",
+      "insight_ids": [
+        "transformer-self-attention-sequence-model"
+      ],
+      "aliases": [
+        "parallel sequence layer computation"
+      ],
+      "tags": [
+        "parallelism",
+        "sequence",
+        "compute"
+      ]
+    },
+    {
+      "id": "attention-dependency-path",
+      "label": "Attention dependency path",
+      "summary": "The network path connecting information between sequence positions; full self-attention provides constant maximum path length between positions within a layer stack comparison.",
+      "domain": "neural sequence architecture",
+      "coverage": "explained",
+      "insight_ids": [
+        "transformer-self-attention-sequence-model"
+      ],
+      "aliases": [
+        "constant self-attention path"
+      ],
+      "tags": [
+        "attention",
+        "dependencies",
+        "sequence"
+      ]
+    },
+    {
+      "id": "positional-encoding",
+      "label": "Positional encoding",
+      "summary": "An explicit position signal added to token embeddings so an attention-only model can represent sequence order after recurrence and convolution are removed.",
+      "domain": "neural sequence architecture",
+      "coverage": "explained",
+      "insight_ids": [
+        "transformer-self-attention-sequence-model"
+      ],
+      "aliases": [
+        "position encoding"
+      ],
+      "tags": [
+        "position",
+        "sequence",
+        "transformer"
+      ]
     }
   ],
   "relations": [
@@ -1433,6 +1524,46 @@
       "rationale": "Measurement and assessment results provide the evidence used by MANAGE to prioritize risks and select responses.",
       "evidence_insights": [
         "nist-ai-rmf-operating-model"
+      ]
+    },
+    {
+      "id": "rel-transformer-sequence-transduction-realized-by-self-attention",
+      "from": "transformer-sequence-transduction",
+      "to": "self-attention",
+      "type": "realized_by",
+      "rationale": "The Transformer replaces recurrent/convolutional sequence layers with self-attention as a core mechanism in both encoder and decoder stacks.",
+      "evidence_insights": [
+        "transformer-self-attention-sequence-model"
+      ]
+    },
+    {
+      "id": "rel-self-attention-enables-sequence-computation-parallelism",
+      "from": "self-attention",
+      "to": "sequence-computation-parallelism",
+      "type": "enables",
+      "rationale": "Without recurrent state dependencies, self-attention over known positions can be evaluated with a constant number of sequential operations per layer in the paper's comparison.",
+      "evidence_insights": [
+        "transformer-self-attention-sequence-model"
+      ]
+    },
+    {
+      "id": "rel-self-attention-enables-attention-dependency-path",
+      "from": "self-attention",
+      "to": "attention-dependency-path",
+      "type": "enables",
+      "rationale": "Full self-attention directly connects sequence positions, producing constant maximum path length between positions in Table 1.",
+      "evidence_insights": [
+        "transformer-self-attention-sequence-model"
+      ]
+    },
+    {
+      "id": "rel-transformer-sequence-transduction-depends-on-positional-encoding",
+      "from": "transformer-sequence-transduction",
+      "to": "positional-encoding",
+      "type": "depends_on",
+      "rationale": "Because the architecture removes recurrence and convolution, the paper injects positional encodings so the model can use token order.",
+      "evidence_insights": [
+        "transformer-self-attention-sequence-model"
       ]
     }
   ]

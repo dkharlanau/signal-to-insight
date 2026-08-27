@@ -2871,6 +2871,196 @@
         "analysis_type": "direct official NIST publication/PDF and AIRC analysis with current revision-status boundary",
         "reviewed_at": "2026-08-27"
       }
+    },
+    {
+      "id": "transformer-self-attention-sequence-model",
+      "source_id": "src-attention-is-all-you-need-2017",
+      "slug": "transformer-self-attention-sequence-model",
+      "status": "review",
+      "title": "The original Transformer: shorter dependency paths, more parallel sequence computation",
+      "one_liner": "The 2017 Transformer replaced recurrent/convolutional sequence layers with attention-based encoder-decoder blocks, trading O(n) recurrent dependencies for parallel self-attention and constant path length while paying O(n²) attention cost and making position explicit.",
+      "why_this_matters": "The durable idea is more precise than 'attention won.' Removing recurrence changes the computational graph: known sequence positions can be processed in parallel inside a layer, distant positions connect through a short attention path, and sequence order has to be injected explicitly. The same paper also exposes the trade-off—self-attention compares all positions—and its evidence belongs to 2017 sequence transduction, not to every later LLM design.",
+      "whole_source_map": {
+        "problem": "Recurrent and convolutional sequence-transduction architectures impose sequential computation or longer network paths between distant sequence positions, limiting parallelism and making long-range dependencies harder to learn.",
+        "thesis": "The Transformer removes recurrence and convolution and uses attention-based encoder-decoder layers so positions interact directly through self-attention, reducing sequential operations and dependency path length while adding explicit positional encoding to represent sequence order.",
+        "core_topics": [
+          "attention-only encoder-decoder architecture",
+          "self-attention",
+          "parallel sequence-layer computation",
+          "constant maximum attention dependency path",
+          "quadratic sequence-length attention cost",
+          "positional encoding",
+          "masked autoregressive decoder attention",
+          "WMT 2014 machine-translation scope"
+        ]
+      },
+      "derived_model": {
+        "problem": "If every sequence position depends on the previous recurrent state, one layer cannot compute all positions simultaneously and distant dependencies traverse many sequential transformations.",
+        "mechanism": "Use self-attention so each position can directly combine information from other positions, process sequence positions in parallel within the layer, mask future decoder positions for autoregressive generation, and add positional encodings because recurrence/convolution no longer carry order implicitly.",
+        "result": "Sequence representation becomes more parallelizable and long-range dependency paths become shorter, at the cost of all-pairs attention complexity that grows quadratically with sequence length in the original design."
+      },
+      "coherence_review": {
+        "central_chain": [
+          "The dominant sequence-transduction baseline used recurrent/convolutional encoder-decoder networks, which create sequential or longer dependency paths.",
+          "The Transformer replaces those sequence layers with self-attention plus feed-forward blocks, while encoder-decoder attention connects the two stacks.",
+          "Self-attention lets all known positions in a layer interact with O(1) sequential operations and O(1) maximum path length in the paper's comparison, versus O(n) for recurrence.",
+          "That advantage is not free: full self-attention has O(n²·d) per-layer complexity, and the paper already discusses restricted attention for long sequences.",
+          "Because recurrence/convolution are removed, positional encodings carry order; the decoder still masks future positions so output generation remains autoregressive."
+        ],
+        "prerequisites_complete": true,
+        "source_vs_enrichment_clear": true,
+        "open_gaps": [
+          "This case deliberately stops before later decoder-only language-model architecture and long-context attention variants.",
+          "The paper's WMT BLEU and training-time numbers are historical task/hardware evidence and should not be used as current universal model rankings."
+        ],
+        "scores": {
+          "coherence": 5,
+          "prerequisite_completeness": 5,
+          "evidence_confidence": 5,
+          "practical_leverage": 5
+        }
+      },
+      "visual_plan": {
+        "dominant": {
+          "type": "comparison",
+          "title": "Parallelism and path length change — but attention cost grows with sequence length",
+          "nodes": [
+            {
+              "label": "RECURRENT LAYER",
+              "title": "Sequential dependency chain",
+              "text": "Table 1: O(n·d²) complexity, O(n) sequential operations and O(n) maximum path length between sequence positions."
+            },
+            {
+              "label": "SELF-ATTENTION LAYER",
+              "title": "All positions interact in one layer",
+              "text": "Table 1: O(n²·d) complexity, O(1) sequential operations and O(1) maximum path length — more parallel, but quadratic in sequence length."
+            }
+          ]
+        },
+        "supporting": [
+          "sequence",
+          "concept_grid",
+          "examples",
+          "limitations",
+          "action_map",
+          "source_map"
+        ],
+        "image": {
+          "needed": false,
+          "reason": "Table 1's computation/path trade-off is the key learning. A two-sided comparison is more useful than reproducing the familiar Transformer architecture figure."
+        }
+      },
+      "concepts": [
+        {
+          "name": "Transformer sequence-transduction architecture",
+          "depth": "learn",
+          "why_needed": "The original model is an encoder-decoder architecture for sequence transduction, not a synonym for every later decoder-only language model."
+        },
+        {
+          "name": "Self-attention",
+          "depth": "learn",
+          "why_needed": "Self-attention is the mechanism that lets each sequence position combine information from other positions without a recurrent state chain."
+        },
+        {
+          "name": "Sequence-computation parallelism",
+          "depth": "learn",
+          "why_needed": "Removing recurrent dependencies lets known positions within a layer be computed with a constant number of sequential operations in the paper's comparison."
+        },
+        {
+          "name": "Attention dependency path",
+          "depth": "learn",
+          "why_needed": "Direct all-position attention gives a constant maximum path between positions, one of the paper's arguments for learning long-range dependencies."
+        },
+        {
+          "name": "Positional encoding",
+          "depth": "learn",
+          "why_needed": "When recurrence/convolution no longer encode sequence order structurally, position must be injected into token representations explicitly."
+        }
+      ],
+      "tool_map": [],
+      "examples": [
+        {
+          "domain": "machine translation",
+          "scenario": "An encoder must represent a source sentence while allowing distant words to influence each other without traversing a long recurrent chain.",
+          "question": "Can self-attention connect the relevant positions directly while the layer computes positions in parallel?"
+        },
+        {
+          "domain": "autoregressive decoding",
+          "scenario": "A decoder generates the next target token but self-attention would otherwise expose future target positions during training.",
+          "question": "Why does the decoder mask future positions even though the architecture has removed recurrence?"
+        },
+        {
+          "domain": "long sequence",
+          "scenario": "Sequence length grows far beyond the sentence lengths common in the original translation experiments.",
+          "question": "Does the O(1) dependency path still justify full all-pairs attention when O(n²) sequence cost becomes dominant?"
+        }
+      ],
+      "limitations": [
+        "Full self-attention has O(n²·d) per-layer complexity in sequence length, so the parallelism and constant path length are not free for long sequences.",
+        "The original Transformer is an encoder-decoder sequence-transduction model; later decoder-only LLMs are descendants, not the exact architecture established by this source.",
+        "Masked decoder self-attention preserves autoregressive output dependence, so O(1) sequential operations per layer should not be read as fully parallel autoregressive generation.",
+        "The WMT 2014 BLEU/training results are historical evidence from the paper's tasks and hardware, not a universal statement that attention-only architectures dominate every current sequence problem."
+      ],
+      "action_map": {
+        "use_now": [
+          "When explaining why Transformers displaced recurrent sequence layers, use three separate dimensions—parallelizable layer computation, dependency path length and per-layer sequence complexity—instead of saying only 'attention is better'.",
+          "When reading modern LLM material, distinguish inheritance from the 2017 Transformer from claims actually demonstrated in the original encoder-decoder paper."
+        ],
+        "try": [
+          "For a sequence length n and representation dimension d, compare the Table 1 recurrent versus self-attention complexity/path terms and identify where n² attention cost becomes the limiting dimension."
+        ],
+        "learn": [
+          "scaled dot-product attention",
+          "multi-head attention",
+          "masked decoder self-attention",
+          "positional encoding",
+          "later decoder-only Transformer evolution"
+        ],
+        "build": [
+          "A minimal visualization that lets sequence length change and shows recurrent sequential depth versus self-attention pair count/path length without claiming one is always cheaper."
+        ],
+        "watch": [
+          "Long-context attention mechanisms that change the original quadratic sequence-length cost while preserving useful dependency paths."
+        ],
+        "ignore_for_now": [
+          "Retrospective claims that the 2017 paper directly proved the architecture or scaling behavior of present-day decoder-only LLMs."
+        ]
+      },
+      "connections": [
+        "ReAct is an agent-level reason/action/observation loop built on later language models and is intentionally not merged with Transformer self-attention.",
+        "Controlled execution is a production-system boundary around model actions and is intentionally separate from neural sequence architecture."
+      ],
+      "supporting_sources": [
+        {
+          "title": "arXiv record for Attention Is All You Need",
+          "url": "https://arxiv.org/abs/1706.03762",
+          "publisher": "arXiv",
+          "purpose": "authors, submission history, abstract and original WMT claims",
+          "accessed_at": "2026-08-27"
+        },
+        {
+          "title": "Attention Is All You Need PDF",
+          "url": "https://arxiv.org/pdf/1706.03762",
+          "publisher": "arXiv / NeurIPS 2017",
+          "purpose": "architecture, masking, positional encoding, Table 1 / Why Self-Attention and experiment scope",
+          "accessed_at": "2026-08-27"
+        }
+      ],
+      "tags": [
+        "transformer",
+        "self-attention",
+        "sequence-modeling",
+        "machine-translation",
+        "neural-networks",
+        "architecture"
+      ],
+      "provenance": {
+        "source_linked": true,
+        "source_dates_recorded": true,
+        "full_transcript_stored": false,
+        "analysis_type": "direct arXiv paper/PDF analysis with explicit 2017 scope boundary",
+        "reviewed_at": "2026-08-27"
+      }
     }
   ]
 }

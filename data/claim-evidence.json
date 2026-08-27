@@ -1009,6 +1009,135 @@
           "note": "The distinction between framework outcomes and implementation controls is the project's synthesis of NIST's explicit non-checklist and tailoring guidance."
         }
       ]
+    },
+    {
+      "insight_id": "transformer-self-attention-sequence-model",
+      "claims": [
+        {
+          "id": "transformer-attention-only-proposal",
+          "text": "The 2017 paper proposes the Transformer as an encoder-decoder sequence-transduction architecture based on attention mechanisms rather than recurrent or convolutional sequence layers.",
+          "impact": "high",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-attention-is-all-you-need-2017",
+              "url": "https://arxiv.org/abs/1706.03762",
+              "locator": "arXiv abstract / paper Abstract"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "transformer-encoder-decoder-attention-roles",
+          "text": "The original Transformer uses encoder self-attention, masked decoder self-attention and encoder-decoder attention as distinct attention roles inside an encoder-decoder model.",
+          "impact": "high",
+          "origin": "verification",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "verification",
+              "source_id": "src-attention-is-all-you-need-2017",
+              "url": "https://arxiv.org/pdf/1706.03762",
+              "locator": "PDF §3.1–§3.2.3 pp.3–5"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "transformer-table1-tradeoff",
+          "text": "In Table 1, full self-attention has O(1) sequential operations and O(1) maximum path length versus O(n) and O(n) for recurrence, while self-attention's per-layer sequence cost is O(n²·d) rather than recurrent O(n·d²).",
+          "impact": "high",
+          "origin": "verification",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "verification",
+              "source_id": "src-attention-is-all-you-need-2017",
+              "url": "https://arxiv.org/pdf/1706.03762",
+              "locator": "PDF Table 1 and §4 Why Self-Attention p.6"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "transformer-positional-encoding-required",
+          "text": "Because the Transformer contains neither recurrence nor convolution, the paper adds positional encodings to token embeddings so the model can use sequence order.",
+          "impact": "high",
+          "origin": "verification",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "verification",
+              "source_id": "src-attention-is-all-you-need-2017",
+              "url": "https://arxiv.org/pdf/1706.03762",
+              "locator": "PDF §3.5 p.6"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "transformer-decoder-remains-autoregressive",
+          "text": "Decoder self-attention is masked to prevent positions from attending to future output positions, preserving the autoregressive property despite removal of recurrent layers.",
+          "impact": "medium",
+          "origin": "verification",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "verification",
+              "source_id": "src-attention-is-all-you-need-2017",
+              "url": "https://arxiv.org/pdf/1706.03762",
+              "locator": "PDF §3.1–§3.2.3 pp.3–5"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "transformer-original-wmt-scope",
+          "text": "The paper's primary empirical evidence is WMT 2014 English-to-German and English-to-French machine translation, with additional constituency-parsing experiments rather than modern decoder-only LLM benchmarks.",
+          "impact": "high",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-attention-is-all-you-need-2017",
+              "url": "https://arxiv.org/abs/1706.03762",
+              "locator": "arXiv abstract / paper Abstract"
+            },
+            {
+              "kind": "verification",
+              "source_id": "src-attention-is-all-you-need-2017",
+              "url": "https://arxiv.org/pdf/1706.03762",
+              "locator": "PDF §6.1 Machine Translation pp.8–9"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "transformer-not-modern-llm-proof",
+          "text": "The original paper should not be treated as direct evidence for every later decoder-only LLM architecture or current performance claim; those are later developments beyond the encoder-decoder translation architecture and 2017 experiments reported here.",
+          "impact": "high",
+          "origin": "project_interpretation",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-attention-is-all-you-need-2017",
+              "url": "https://arxiv.org/abs/1706.03762",
+              "locator": "arXiv abstract / paper Abstract"
+            },
+            {
+              "kind": "verification",
+              "source_id": "src-attention-is-all-you-need-2017",
+              "url": "https://arxiv.org/pdf/1706.03762",
+              "locator": "PDF §3.1–§3.2.3 pp.3–5"
+            }
+          ],
+          "note": "This is the project's scope boundary: it compares what the 2017 source actually specifies and evaluates with later terminology, without attributing later LLM developments to the paper."
+        }
+      ]
     }
   ]
 }

@@ -708,6 +708,82 @@
           }
         }
       ]
+    },
+    {
+      "insight_id": "transformer-self-attention-sequence-model",
+      "summary": "The model is reconstructable once the reader understands the original Transformer architecture, self-attention, the parallelism/path-length argument and why removing recurrence makes position an explicit input.",
+      "items": [
+        {
+          "id": "transformer-prereq-architecture",
+          "label": "Transformer sequence-transduction architecture",
+          "concept_id": "transformer-sequence-transduction",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "Without the original encoder-decoder scope, later decoder-only LLM architecture is easily projected backward into claims the paper did not make.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "transformer-self-attention-sequence-model",
+            "target": null
+          }
+        },
+        {
+          "id": "transformer-prereq-self-attention",
+          "label": "Self-attention",
+          "concept_id": "self-attention",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "This is the central sequence mechanism that replaces recurrent state propagation inside the Transformer encoder and masked decoder layers.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "transformer-self-attention-sequence-model",
+            "target": null
+          }
+        },
+        {
+          "id": "transformer-prereq-parallelism",
+          "label": "Sequence-computation parallelism",
+          "concept_id": "sequence-computation-parallelism",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "The paper's architectural leverage depends on understanding which recurrent sequential dependencies disappear from layer computation.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "transformer-self-attention-sequence-model",
+            "target": null
+          }
+        },
+        {
+          "id": "transformer-prereq-path",
+          "label": "Attention dependency path",
+          "concept_id": "attention-dependency-path",
+          "priority": "learn_next",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "Short paths between distant positions are a separate motivation from parallelism and explain why attention changes long-range dependency modeling.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "transformer-self-attention-sequence-model",
+            "target": null
+          }
+        },
+        {
+          "id": "transformer-prereq-position",
+          "label": "Positional encoding",
+          "concept_id": "positional-encoding",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "Once recurrence and convolution disappear, order no longer comes from the sequence-processing structure and must be represented explicitly.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "transformer-self-attention-sequence-model",
+            "target": null
+          }
+        }
+      ]
     }
   ]
 }

@@ -288,6 +288,30 @@
           "ai-risk-prioritization-response"
         ]
       }
+    },
+    {
+      "insight_id": "transformer-self-attention-sequence-model",
+      "retention_prompt": "Without looking back, reconstruct the original Transformer argument: what recurrent sequence dependency it removes, how self-attention changes layer parallelism and maximum dependency path, what quadratic sequence-length cost remains, why positional encoding is required, and which parts of the model/evidence belong specifically to the 2017 encoder-decoder translation context.",
+      "answer_key": {
+        "problem_from": "whole_source_map.problem",
+        "mechanism_from": "whole_source_map.thesis",
+        "anchor_concept_ids": [
+          "transformer-sequence-transduction",
+          "self-attention",
+          "sequence-computation-parallelism",
+          "positional-encoding"
+        ],
+        "boundary_limitation_index": 0
+      },
+      "transfer_prompt": {
+        "prompt": "A colleague says 'Transformers are faster because attention is O(1) and all generation is parallel.' Use the 2017 paper's own comparison to correct the statement: which sequential dependency is O(1), what O(n²) cost remains, and why the masked decoder is still autoregressive?",
+        "expected_concept_ids": [
+          "self-attention",
+          "sequence-computation-parallelism",
+          "attention-dependency-path",
+          "positional-encoding"
+        ]
+      }
     }
   ]
 }

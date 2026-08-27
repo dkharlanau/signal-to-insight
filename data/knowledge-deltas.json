@@ -542,6 +542,64 @@
         }
       ],
       "suppressed_prior_matches": []
+    },
+    {
+      "insight_id": "transformer-self-attention-sequence-model",
+      "summary": "The Transformer source opens a new neural sequence-architecture branch. All five scaffold-retrieved project concepts are rejected as cross-domain noise rather than forcing later learning/agent/governance ideas into the 2017 paper.",
+      "items": [
+        {
+          "relationship": "new",
+          "concept_id": "transformer-sequence-transduction",
+          "label": "Transformer sequence-transduction architecture",
+          "source_basis": "The paper proposes an encoder-decoder architecture based solely on attention mechanisms, dispensing with recurrence and convolution for sequence transduction.",
+          "prior_basis": "The graph had agent/runtime, learning and data-system concepts but no neural sequence-transduction architecture.",
+          "interpretation": "The original Transformer is modeled as its 2017 encoder-decoder architecture rather than being retroactively collapsed into the broader modern LLM category.",
+          "evidence_insights": []
+        },
+        {
+          "relationship": "new",
+          "concept_id": "self-attention",
+          "label": "Self-attention",
+          "source_basis": "Encoder self-attention lets each encoder position attend to all positions in the previous layer; decoder self-attention does the same under a future-position mask.",
+          "prior_basis": "No prior project concept represents neural attention among sequence positions.",
+          "interpretation": "Self-attention becomes a neural sequence mechanism, separate from ReAct observation feedback or human attention/retrieval concepts.",
+          "evidence_insights": []
+        },
+        {
+          "relationship": "new",
+          "concept_id": "sequence-computation-parallelism",
+          "label": "Sequence-computation parallelism",
+          "source_basis": "Table 1 compares full self-attention at O(1) sequential operations per layer with recurrent layers at O(n), one of the paper's main motivations for attention-only sequence layers.",
+          "prior_basis": "No prior concept models neural sequence parallelism created by removing recurrent layer dependencies.",
+          "interpretation": "Parallelism is retained as a specific computational-graph advantage, not as a claim that autoregressive output generation becomes fully parallel.",
+          "evidence_insights": []
+        },
+        {
+          "relationship": "new",
+          "concept_id": "attention-dependency-path",
+          "label": "Attention dependency path",
+          "source_basis": "Table 1 gives full self-attention O(1) maximum path length between positions versus O(n) for recurrent layers.",
+          "prior_basis": "The graph has causal/process relations but no neural-network path-length model for sequence dependencies.",
+          "interpretation": "Short dependency paths are kept as a separate reason self-attention can help long-range dependency learning rather than merged with generic performance claims.",
+          "evidence_insights": []
+        },
+        {
+          "relationship": "new",
+          "concept_id": "positional-encoding",
+          "label": "Positional encoding",
+          "source_basis": "Because the model contains no recurrence and no convolution, the paper adds positional encodings to input embeddings so sequence order is represented.",
+          "prior_basis": "No prior project concept describes explicit positional information in an attention-only neural sequence model.",
+          "interpretation": "Removing recurrence creates a new responsibility: order is no longer supplied by the recurrence structure and must be injected explicitly.",
+          "evidence_insights": []
+        }
+      ],
+      "suppressed_prior_matches": [
+        "retrieval-practice",
+        "observation-grounding",
+        "policy-as-code",
+        "performance-retention-gap",
+        "controlled-execution"
+      ]
     }
   ]
 }
