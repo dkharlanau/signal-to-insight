@@ -1,0 +1,50 @@
+{
+  "contract_version": "1.0.0",
+  "intake_id": "intake-2026-08-27-docs-optimize",
+  "insight_id": "docker-cache-dependency-invalidation",
+  "knowledge_delta": {
+    "insight_id": "docker-cache-dependency-invalidation",
+    "summary": "Docker build caching adds a new build-systems domain to the graph. Prior retrieval correctly found no close concepts, so the case introduces cache dependency boundaries and invalidation cascades without merging them into workflow checkpoints, database checkpoints or agent memory.",
+    "items": [
+      {"relationship": "new", "concept_id": "build-cache-dependency-boundary", "label": "Build-cache dependency boundary", "source_basis": "Docker reuses a layer only while its instruction and dependent files remain unchanged, making cache reuse depend on explicit inputs.", "prior_basis": "The graph has persistence and checkpoint concepts in other domains, but no concept for build-result reuse controlled by instruction/input stability.", "interpretation": "Layer ordering and build-context design are best understood as editing the dependency boundary around expensive work.", "evidence_insights": []},
+      {"relationship": "new", "concept_id": "cache-invalidation-cascade", "label": "Cache invalidation cascade", "source_basis": "Docker documentation states that a changed step causes following steps to rebuild, so frequent changes early in a Dockerfile amplify downstream work.", "prior_basis": "No current concept captures downstream build-cost fan-out caused by an upstream cache miss.", "interpretation": "The optimization target is not maximal caching in general; it is minimizing unnecessary invalidation fan-out from volatile inputs.", "evidence_insights": []},
+      {"relationship": "new", "concept_id": "persistent-build-cache", "label": "Persistent build cache", "source_basis": "Cache mounts retain package caches across layer rebuilds, and external caches allow cache reuse across different builders/environments.", "prior_basis": "Existing durable-state concepts have different semantics and should not be reused merely because data persists across runs.", "interpretation": "Persistent build cache is a cost-reduction mechanism for recomputation/downloads, not authoritative workflow or business state.", "evidence_insights": []}
+    ],
+    "suppressed_prior_matches": []
+  },
+  "claim_evidence": {
+    "insight_id": "docker-cache-dependency-invalidation",
+    "claims": [
+      {"id": "docker-cache-reuse-rule", "text": "Docker reuses a build layer when the instruction and files it depends on have not changed since the previous build.", "impact": "high", "origin": "source", "status": "supported", "evidence": [{"kind": "primary_source", "source_id": "src-docker-build-cache-2026", "url": "https://docs.docker.com/build/cache/optimize", "locator": "Optimize cache usage → cache reuse rule"}], "note": null},
+      {"id": "docker-layer-order-cascade", "text": "Because a changed step causes following steps to rebuild, stable expensive steps should generally precede frequently changing source steps when their true dependencies allow it.", "impact": "high", "origin": "source", "status": "supported", "evidence": [{"kind": "primary_source", "source_id": "src-docker-build-cache-2026", "url": "https://docs.docker.com/build/cache/optimize", "locator": "Order your layers → change causes following steps to rebuild"}], "note": null},
+      {"id": "docker-cache-mount-behavior", "text": "BuildKit cache mounts persist reusable package cache data so a rebuilt layer can reuse unchanged packages instead of downloading everything again.", "impact": "medium", "origin": "source", "status": "supported", "evidence": [{"kind": "primary_source", "source_id": "src-docker-build-cache-2026", "url": "https://docs.docker.com/build/cache/optimize", "locator": "Use cache mounts → persistent cache across builds"}], "note": null},
+      {"id": "docker-external-cache-ci", "text": "External build caches allow cache data to be reused across builders and are particularly useful when CI builders are ephemeral.", "impact": "medium", "origin": "source", "status": "supported", "evidence": [{"kind": "primary_source", "source_id": "src-docker-build-cache-2026", "url": "https://docs.docker.com/build/cache/optimize", "locator": "Use an external cache → reuse across builders and CI"}], "note": null}
+    ]
+  },
+  "prerequisite_map": {
+    "insight_id": "docker-cache-dependency-invalidation",
+    "summary": "The cache model requires three ideas: what belongs to a cache dependency boundary, how invalidation propagates downstream, and how persistent build caches reduce rebuild cost without becoming authoritative state.",
+    "items": [
+      {"id": "docker-prereq-cache-boundary", "label": "Build-cache dependency boundary", "concept_id": "build-cache-dependency-boundary", "priority": "must_know_now", "prior_coverage": "absent", "state": "explained_here", "reason": "This explains why a file change affects some cached work and not other work.", "resolution": {"kind": "explained_here", "insight_id": "docker-cache-dependency-invalidation", "target": null}},
+      {"id": "docker-prereq-invalidation", "label": "Cache invalidation cascade", "concept_id": "cache-invalidation-cascade", "priority": "must_know_now", "prior_coverage": "absent", "state": "explained_here", "reason": "The cascade explains why an upstream volatile dependency multiplies downstream build cost.", "resolution": {"kind": "explained_here", "insight_id": "docker-cache-dependency-invalidation", "target": null}},
+      {"id": "docker-prereq-persistent-cache", "label": "Persistent build cache", "concept_id": "persistent-build-cache", "priority": "learn_next", "prior_coverage": "absent", "state": "explained_here", "reason": "Cache mounts and external caches solve reuse beyond exact layer hits and clarify the difference between cache and durable application state.", "resolution": {"kind": "explained_here", "insight_id": "docker-cache-dependency-invalidation", "target": null}}
+    ]
+  },
+  "learning_prompt": {
+    "insight_id": "docker-cache-dependency-invalidation",
+    "retention_prompt": "Without looking back, explain Docker build caching as a dependency problem: what makes a layer reusable, why can one early change cascade into expensive downstream work, and how do context, mounts and external caches change the dependency/reuse boundary?",
+    "answer_key": {"problem_from": "whole_source_map.problem", "mechanism_from": "whole_source_map.thesis", "anchor_concept_ids": ["build-cache-dependency-boundary", "cache-invalidation-cascade", "persistent-build-cache"], "boundary_limitation_index": 0},
+    "transfer_prompt": {"prompt": "A Dockerfile copies an entire repository before installing dependencies, and a one-line source change triggers a ten-minute dependency install. Redesign the dependency boundary and explain when a cache mount or external cache would solve a different part of the problem.", "expected_concept_ids": ["build-cache-dependency-boundary", "cache-invalidation-cascade", "persistent-build-cache"]}
+  },
+  "source_decision": {
+    "insight_id": "docker-cache-dependency-invalidation",
+    "decision": "explainer_is_enough",
+    "rationale": "For the requested mental model, the explainer preserves the source's complete dependency logic: exact layer reuse, invalidation cascade, context control and persistent/external caches. The original guide becomes useful when implementing Dockerfile syntax for a concrete package manager or CI environment, but additional reading is not required to reconstruct the central model.",
+    "novelty": {"level": "high", "reason": "The source introduces a build-cache dependency and invalidation model that has no close concept in the current knowledge graph."},
+    "source_quality": {"level": "high", "reason": "The source is official Docker documentation and directly explains the cache mechanisms retained in the explainer."},
+    "relevance": {"level": "medium", "reason": "The model is broadly useful for engineering/build workflows even though it is not central to every source-to-understanding or enterprise-systems task."},
+    "practical_leverage": {"level": "high", "reason": "The dependency model can immediately reduce build time by changing Dockerfile structure or cache boundaries in real projects."},
+    "compression_loss": {"level": "low", "reason": "The omitted material is mainly command/package-manager detail; the source's central causal model and important boundaries are retained."},
+    "selected_parts": []
+  }
+}

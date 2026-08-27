@@ -1,27 +1,28 @@
 {
   "bundle_version": "1.1.0",
   "intake_id": "intake-2026-08-27-docs-optimize",
-  "source_id": null,
+  "source_id": "src-docker-build-cache-2026",
   "source": {
     "type": "documentation",
     "canonical_url": "https://docs.docker.com/build/cache/optimize",
-    "title": null,
+    "title": "Optimize cache usage in builds",
     "creators": [],
-    "publisher": null,
+    "publisher": "Docker Inc.",
     "published_at": null,
     "event_date": null,
     "version": null,
-    "language": null,
+    "language": "en",
     "duration": null,
-    "date_note": null
+    "date_note": "Living official Docker documentation inspected on 2026-08-27; no single publication date is asserted."
   },
   "inspection": {
-    "method": "not inspected",
-    "full_content_used_ephemerally": false,
+    "method": "Direct inspection of the official Docker build-cache optimization guide, including layer ordering, build context, bind/cache mounts and external caches.",
+    "full_content_used_ephemerally": true,
     "full_content_committed": false,
-    "confidence": "metadata_only",
+    "confidence": "direct",
     "gaps": [
-      "Source content has not been mapped yet."
+      "This case explains cache-dependency structure rather than Docker/BuildKit cache-key implementation details for every instruction type.",
+      "BuildKit features and cache exporters can evolve; command-level implementation details should be checked against current Docker docs before automation."
     ]
   },
   "prior_knowledge": {
@@ -31,27 +32,74 @@
     "classification_required": true
   },
   "content_map": {
-    "problem": null,
-    "thesis": null,
-    "sections": [],
-    "concepts": [],
-    "mechanisms": [],
-    "tools": [],
-    "examples": [],
-    "claims": [],
-    "evidence": [],
-    "assumptions": [],
-    "limitations": [],
-    "open_questions": []
+    "problem": "A small file or instruction change can invalidate a Docker build layer and force later expensive steps to rebuild even when their real logical inputs did not change.",
+    "thesis": "Treat build caching as dependency design: isolate stable expensive inputs early, keep volatile inputs late, minimize what enters the build context/cache key, and use specialized mounts or external caches for reusable data that should survive layer rebuilds.",
+    "sections": ["Cache reuse rule", "Order layers", "Keep build context small", "Bind mounts", "Cache mounts", "External cache"],
+    "concepts": ["cache dependency boundary", "invalidation cascade", "build context", "bind mount during build", "cache mount", "external build cache"],
+    "mechanisms": [
+      "A cached layer can be reused when its instruction and dependent files have not changed.",
+      "When a changed step invalidates a layer, following steps rebuild, so frequently changing inputs placed early amplify rebuild cost.",
+      "Reducing build context and using bind mounts can keep irrelevant or transient inputs out of persistent image/cache layers.",
+      "Cache mounts persist package/download caches independently so a rebuilt layer can still reuse unchanged packages.",
+      "External caches move cache reuse beyond one builder and are especially useful for ephemeral CI builders."
+    ],
+    "tools": ["Dockerfile", ".dockerignore", "BuildKit bind mounts", "BuildKit cache mounts", "buildx cache-from/cache-to"],
+    "examples": [
+      "Copy package manifests and install dependencies before copying frequently changed application source files.",
+      "Exclude node_modules, temp files and build artifacts from context when they are not build inputs.",
+      "Mount a package-manager cache so a layer rebuild downloads only new or changed packages.",
+      "Export cache to a registry so ephemeral CI builders can reuse previous build work."
+    ],
+    "claims": [
+      "Docker reuses a cached layer when the instruction and files it depends on have not changed.",
+      "A changed step causes later steps to rebuild, so expensive stable steps should generally precede frequently changing steps.",
+      "A smaller build context reduces transferred data and the chance that irrelevant file changes invalidate cache.",
+      "Cache mounts persist reusable package caches across layer rebuilds, while external caches allow reuse across builders/environments."
+    ],
+    "evidence": ["Official Docker build-cache optimization documentation inspected on 2026-08-27."],
+    "assumptions": [
+      "Build time is meaningfully affected by repeated dependency installation, compilation or artifact generation.",
+      "The Dockerfile can separate stable dependency inputs from frequently changing application inputs.",
+      "Cache reuse is desirable and does not conflict with intentional rebuild/freshness requirements."
+    ],
+    "limitations": [
+      "Cache optimization is not a reason to hide dependencies: every reused result must still be valid for the inputs that semantically affect it.",
+      "Moving steps earlier only helps when their true dependencies are stable; incorrect dependency boundaries can create stale or surprising build behavior.",
+      "External caches add storage, access and lifecycle concerns and may not be worth operating for small local builds.",
+      "Cache mounts have tool-specific concurrency and locking requirements; package-manager behavior must be respected."
+    ],
+    "open_questions": [
+      "Which expensive project steps currently rebuild because volatile files enter their dependency boundary too early?",
+      "Would an external cache save enough CI time to justify its storage and access complexity?"
+    ]
   },
   "selection": {
     "requested_focus": "Understand cache invalidation as a dependency problem: layer ordering, build context, mounts and why small input changes can amplify build cost.",
-    "coherent_core": [],
-    "prerequisites": [],
-    "drop_notes": [],
-    "connections": []
+    "coherent_core": [
+      "A Docker layer cache is dependency-sensitive, not merely chronological reuse.",
+      "Invalidating an early layer can cascade rebuild cost through later steps.",
+      "Layer order and context size determine which changes enter expensive cache boundaries.",
+      "Bind/cache mounts and external cache separate reusable/transient data from ordinary image-layer caching."
+    ],
+    "prerequisites": ["Dockerfile layers", "build context", "dependency invalidation", "difference between image layers and build-time mounts"],
+    "drop_notes": [
+      "Individual package-manager cache syntax is example-level detail rather than the central model.",
+      "OCI registry configuration and CI-provider specifics are deferred until external cache is actually needed.",
+      "General Docker image optimization outside build caching is out of scope."
+    ],
+    "connections": [
+      "The generalizable pattern is dependency-boundary design: reduce accidental fan-out from volatile inputs to expensive downstream work.",
+      "No existing graph concept was close enough to reuse; build-cache state is intentionally not conflated with workflow checkpoints or database WAL/checkpoints."
+    ]
   },
-  "verification_candidates": [],
-  "source_locators": [],
+  "verification_candidates": [
+    {"question": "Which project build steps dominate rebuild time and what exact files invalidate them today?", "reason": "The source provides the design model; measuring a real build is needed before choosing optimizations.", "priority": "medium"}
+  ],
+  "source_locators": [
+    {"label": "Cache reuse and layer ordering", "locator": "https://docs.docker.com/build/cache/optimize/#order-your-layers"},
+    {"label": "Build context", "locator": "https://docs.docker.com/build/cache/optimize/#keep-the-context-small"},
+    {"label": "Cache mounts", "locator": "https://docs.docker.com/build/cache/optimize/#use-cache-mounts"},
+    {"label": "External cache", "locator": "https://docs.docker.com/build/cache/optimize/#use-an-external-cache"}
+  ],
   "created_at": "2026-08-27"
 }
