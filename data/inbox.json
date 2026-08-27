@@ -161,9 +161,9 @@
       "source_type": "article",
       "submitted_at": "2026-08-27",
       "requested_focus": "Understand duplicate delivery under retries and the idempotent receiver pattern; connect it carefully to the existing idempotency-under-retry concept and identify where deduplication IDs are insufficient.",
-      "status": "queued",
-      "source_id": null,
-      "insight_id": null,
+      "status": "review",
+      "source_id": "src-idempotent-receiver-2023",
+      "insight_id": "idempotent-receiver-retry-deduplication",
       "notes": "GitHub source intake issue #62. Dogfood cohort: distributed systems pattern article."
     },
     {

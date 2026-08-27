@@ -216,6 +216,37 @@
       "derived_records": [
         "kubernetes-reconciliation-controller-loop"
       ]
+    },
+    {
+      "id": "src-idempotent-receiver-2023",
+      "type": "article",
+      "title": "Idempotent Receiver",
+      "canonical_url": "https://martinfowler.com/articles/patterns-of-distributed-systems/idempotent-receiver.html",
+      "creators": [
+        "Unmesh Joshi"
+      ],
+      "publisher": "martinfowler.com / Patterns of Distributed Systems",
+      "event": null,
+      "published_at": "2023-11-23",
+      "event_date": null,
+      "captured_at": "2026-08-27",
+      "analyzed_at": "2026-08-27",
+      "date_note": "Primary pattern page dated 23 November 2023. AWS Builders' Library guidance was inspected separately as verification for production idempotency boundaries.",
+      "verification": [
+        {
+          "title": "Idempotent Receiver",
+          "url": "https://martinfowler.com/articles/patterns-of-distributed-systems/idempotent-receiver.html",
+          "accessed_at": "2026-08-27"
+        },
+        {
+          "title": "Making retries safe with idempotent APIs",
+          "url": "https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/",
+          "accessed_at": "2026-08-27"
+        }
+      ],
+      "derived_records": [
+        "idempotent-receiver-retry-deduplication"
+      ]
     }
   ]
 }

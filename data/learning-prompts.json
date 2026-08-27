@@ -131,6 +131,28 @@
           "observed-state"
         ]
       }
+    },
+    {
+      "insight_id": "idempotent-receiver-retry-deduplication",
+      "retention_prompt": "Without looking back, reconstruct the Idempotent Receiver model: explain why a missing response creates an ambiguous outcome, how stable logical request identity changes a retry, what the receiver stores or reuses, and why a deduplication token alone is still not a complete production guarantee.",
+      "answer_key": {
+        "problem_from": "whole_source_map.problem",
+        "mechanism_from": "whole_source_map.thesis",
+        "anchor_concept_ids": [
+          "idempotency-under-retry",
+          "idempotent-receiver",
+          "request-identity"
+        ],
+        "boundary_limitation_index": 0
+      },
+      "transfer_prompt": {
+        "prompt": "An integration sends a create request, times out, and retries. Design the minimum receiver contract that prevents a second business object from being created: what identity must survive the retry, what does the receiver do when it sees that identity again, and what consistency question must be answered around the mutation?",
+        "expected_concept_ids": [
+          "idempotency-under-retry",
+          "idempotent-receiver",
+          "request-identity"
+        ]
+      }
     }
   ]
 }

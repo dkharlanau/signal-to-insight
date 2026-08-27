@@ -256,6 +256,32 @@
         "reason": "The source page is conceptual and compact; the explainer retains the central mechanism, examples, design principle and boundaries without omitting implementation details that the source itself does not teach."
       },
       "selected_parts": []
+    },
+    {
+      "insight_id": "idempotent-receiver-retry-deduplication",
+      "decision": "explainer_is_enough",
+      "rationale": "The primary pattern page is intentionally very short. The explainer preserves its complete problem/solution mechanism and adds clearly labeled production verification around request intent and atomic token/mutation handling, so rereading the original adds little unless the reader wants the canonical pattern entry itself.",
+      "novelty": {
+        "level": "medium",
+        "reason": "The broad need for idempotency under retry already existed in the graph; the novelty is the concrete receiver-side request-identity and prior-outcome reuse mechanism."
+      },
+      "source_quality": {
+        "level": "high",
+        "reason": "This is the primary Patterns of Distributed Systems entry by Unmesh Joshi, used directly for the pattern definition and dated provenance."
+      },
+      "relevance": {
+        "level": "high",
+        "reason": "Duplicate-safe retries are directly applicable to APIs, integrations and agent/tool side effects where timeout does not reveal the true remote outcome."
+      },
+      "practical_leverage": {
+        "level": "high",
+        "reason": "The model turns a vague 'make it idempotent' requirement into concrete API design questions about logical request identity, duplicate detection and outcome reuse."
+      },
+      "compression_loss": {
+        "level": "low",
+        "reason": "The original source contains a compact problem/solution statement; the explainer preserves that entire model while keeping AWS production details explicitly separate as verification."
+      },
+      "selected_parts": []
     }
   ]
 }

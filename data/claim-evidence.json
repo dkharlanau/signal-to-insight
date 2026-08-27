@@ -339,6 +339,86 @@
           "note": "This boundary is project synthesis comparing the Kubernetes reconciliation model with the existing Temporal durable-execution model; Kubernetes documentation does not make this cross-product comparison."
         }
       ]
+    },
+    {
+      "insight_id": "idempotent-receiver-retry-deduplication",
+      "claims": [
+        {
+          "id": "idempotent-receiver-ambiguous-retry",
+          "text": "When a client receives no response, it cannot reliably distinguish response loss from server failure before processing, so retrying can deliver a duplicate of an operation that already completed.",
+          "impact": "high",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-idempotent-receiver-2023",
+              "url": "https://martinfowler.com/articles/patterns-of-distributed-systems/idempotent-receiver.html",
+              "locator": "Idempotent Receiver → Problem"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "idempotent-receiver-reuse-outcome",
+          "text": "A receiver can recognize the same client and request number, detect that the request was already processed, and return the saved response without executing the logical operation again.",
+          "impact": "high",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-idempotent-receiver-2023",
+              "url": "https://martinfowler.com/articles/patterns-of-distributed-systems/idempotent-receiver.html",
+              "locator": "Idempotent Receiver → Solution"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "idempotent-receiver-atomic-token-boundary",
+          "text": "For a production idempotent API, recording the request token and performing the protected mutation must be kept consistent so a crash cannot persist one without the other; caller-provided request identity also preserves intent better than inferring duplicates only from matching parameters.",
+          "impact": "high",
+          "origin": "verification",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "verification",
+              "source_id": "src-idempotent-receiver-2023",
+              "url": "https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/",
+              "locator": "Reducing client complexity: caller-provided request identifier and atomic/ACID token + mutating operations"
+            }
+          ],
+          "note": "AWS Builders' Library is verification/enrichment for production boundaries; these details are not claimed by the short Idempotent Receiver pattern page."
+        },
+        {
+          "id": "idempotent-receiver-refines-retry-idempotency",
+          "text": "Idempotent Receiver is a concrete receiver-side mechanism for the existing idempotency-under-retry requirement, but it should not be interpreted as a universal exactly-once guarantee across downstream side effects.",
+          "impact": "high",
+          "origin": "project_interpretation",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-idempotent-receiver-2023",
+              "url": "https://martinfowler.com/articles/patterns-of-distributed-systems/idempotent-receiver.html",
+              "locator": "Idempotent Receiver → Problem and Solution"
+            },
+            {
+              "kind": "verification",
+              "source_id": "src-idempotent-receiver-2023",
+              "url": "https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/",
+              "locator": "Retrying and side effects; idempotent session and atomic mutation boundary"
+            },
+            {
+              "kind": "prior_insight",
+              "insight_id": "temporal-durable-execution-mental-model",
+              "locator": "Idempotency-under-retry boundary for retryable external effects"
+            }
+          ],
+          "note": "The source supplies the receiver pattern, AWS supplies production implementation boundaries, and the refinement relationship to the existing Temporal-derived concept is project synthesis."
+        }
+      ]
     }
   ]
 }

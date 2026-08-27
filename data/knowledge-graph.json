@@ -269,7 +269,8 @@
       "domain": "reliability engineering",
       "coverage": "explained",
       "insight_ids": [
-        "temporal-durable-execution-mental-model"
+        "temporal-durable-execution-mental-model",
+        "idempotent-receiver-retry-deduplication"
       ],
       "aliases": [
         "idempotent activity design"
@@ -507,6 +508,46 @@
         "controllers",
         "feedback",
         "state"
+      ]
+    },
+    {
+      "id": "idempotent-receiver",
+      "label": "Idempotent Receiver",
+      "summary": "A receiver-side pattern that recognizes a repeated logical request and reuses its prior outcome instead of repeating the protected side effect.",
+      "domain": "distributed systems",
+      "coverage": "explained",
+      "insight_ids": [
+        "idempotent-receiver-retry-deduplication"
+      ],
+      "aliases": [
+        "idempotent request receiver",
+        "duplicate-safe receiver"
+      ],
+      "tags": [
+        "idempotency",
+        "retry",
+        "deduplication",
+        "api"
+      ]
+    },
+    {
+      "id": "request-identity",
+      "label": "Logical request identity",
+      "summary": "A stable identifier reused across retries to express that several deliveries represent the same intended logical operation.",
+      "domain": "distributed systems",
+      "coverage": "explained",
+      "insight_ids": [
+        "idempotent-receiver-retry-deduplication"
+      ],
+      "aliases": [
+        "idempotency key",
+        "client request identifier"
+      ],
+      "tags": [
+        "idempotency",
+        "identity",
+        "retry",
+        "api"
       ]
     }
   ],
@@ -777,6 +818,26 @@
       "rationale": "Reconciliation requires feedback about current reality so the controller can determine whether corrective work is necessary.",
       "evidence_insights": [
         "kubernetes-reconciliation-controller-loop"
+      ]
+    },
+    {
+      "id": "rel-idempotent-receiver-refines-idempotency-under-retry",
+      "from": "idempotent-receiver",
+      "to": "idempotency-under-retry",
+      "type": "refines",
+      "rationale": "The receiver pattern turns the broad requirement for duplicate-safe retries into a concrete request-identity and prior-outcome reuse mechanism.",
+      "evidence_insights": [
+        "idempotent-receiver-retry-deduplication"
+      ]
+    },
+    {
+      "id": "rel-idempotent-receiver-depends-on-request-identity",
+      "from": "idempotent-receiver",
+      "to": "request-identity",
+      "type": "depends_on",
+      "rationale": "The receiver must distinguish a retry of the same intended operation from a genuinely new operation before it can suppress duplicate execution.",
+      "evidence_insights": [
+        "idempotent-receiver-retry-deduplication"
       ]
     }
   ]

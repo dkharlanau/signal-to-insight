@@ -222,6 +222,44 @@
         "event-history",
         "worker-process"
       ]
+    },
+    {
+      "insight_id": "idempotent-receiver-retry-deduplication",
+      "summary": "The source does not create a second idempotency concept; it refines the existing idempotency-under-retry model with a concrete receiver-side protocol based on stable logical request identity, duplicate detection and prior-outcome reuse.",
+      "items": [
+        {
+          "relationship": "refines",
+          "concept_id": "idempotency-under-retry",
+          "label": "Idempotency under retry",
+          "source_basis": "Idempotent Receiver identifies repeated client requests and avoids processing the same logical operation again when a retry follows an ambiguous failure.",
+          "prior_basis": "The Temporal case already established that retried external effects need duplicate-safe/idempotent semantics, but it did not specify a receiver protocol for recognizing the same logical mutation.",
+          "interpretation": "The source makes the earlier boundary operational: safe retry needs a receiver-visible identity for the logical request plus durable knowledge of the prior outcome.",
+          "evidence_insights": [
+            "temporal-durable-execution-mental-model"
+          ]
+        },
+        {
+          "relationship": "new",
+          "concept_id": "idempotent-receiver",
+          "label": "Idempotent Receiver",
+          "source_basis": "The receiver checks whether the same client/request identity was already processed and returns the saved response instead of processing the mutation again.",
+          "prior_basis": "No earlier graph concept represented a concrete receiver-side duplicate-detection and response-reuse pattern.",
+          "interpretation": "This becomes one implementation pattern for achieving the broader idempotency-under-retry requirement at an API/service boundary.",
+          "evidence_insights": []
+        },
+        {
+          "relationship": "new",
+          "concept_id": "request-identity",
+          "label": "Logical request identity",
+          "source_basis": "The pattern identifies both the client and each request so a retry can be recognized as the same logical operation.",
+          "prior_basis": "The existing retry model did not yet represent identity as a first-class part of duplicate-safe execution.",
+          "interpretation": "Request identity separates repeated delivery of one intended operation from a new operation that merely looks similar.",
+          "evidence_insights": []
+        }
+      ],
+      "suppressed_prior_matches": [
+        "activity-execution"
+      ]
     }
   ]
 }

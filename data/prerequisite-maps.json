@@ -316,6 +316,54 @@
           }
         }
       ]
+    },
+    {
+      "insight_id": "idempotent-receiver-retry-deduplication",
+      "summary": "The pattern is easiest to understand by starting from the existing retry-idempotency problem, then adding the source's two concrete pieces: a receiver that remembers prior requests and a stable identity for the logical operation.",
+      "items": [
+        {
+          "id": "idempotent-receiver-prereq-idempotency",
+          "label": "Idempotency under retry",
+          "concept_id": "idempotency-under-retry",
+          "priority": "must_know_now",
+          "prior_coverage": "established",
+          "state": "known_in_graph",
+          "reason": "The receiver pattern solves a concrete instance of the broader problem that retrying a side effect must not create an unintended duplicate outcome.",
+          "resolution": {
+            "kind": "existing_concept",
+            "insight_id": null,
+            "target": "idempotency-under-retry"
+          }
+        },
+        {
+          "id": "idempotent-receiver-prereq-pattern",
+          "label": "Idempotent Receiver",
+          "concept_id": "idempotent-receiver",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "The receiver-side lookup and response-reuse behavior is the concrete mechanism introduced by the source.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "idempotent-receiver-retry-deduplication",
+            "target": null
+          }
+        },
+        {
+          "id": "idempotent-receiver-prereq-request-identity",
+          "label": "Logical request identity",
+          "concept_id": "request-identity",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "Without a stable identity reused by retries, the receiver cannot know whether a delivery represents the same intended operation or a new one.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "idempotent-receiver-retry-deduplication",
+            "target": null
+          }
+        }
+      ]
     }
   ]
 }
