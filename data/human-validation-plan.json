@@ -1,0 +1,39 @@
+{
+  "version": "1.0.0",
+  "reconstruction": {
+    "issue": 19,
+    "purpose": "Delayed reconstruction and transfer benchmark on three source types without reopening the source or explainer during the delayed attempt.",
+    "recommended_delay_days": 2,
+    "delay_note": "Two days is a project benchmark interval for repeatability, not a claim that two days is an optimal learning schedule.",
+    "cases": [
+      "enterprise-agents-production-substrate",
+      "react-reason-act-observe-loop",
+      "sqlite-write-ahead-log-checkpointing"
+    ]
+  },
+  "source_decision": {
+    "issue": 39,
+    "purpose": "Calibrate consume / skim / explainer-is-enough / skip decisions against later full-source consumption on one case from each source type.",
+    "required_source_types": [
+      "video",
+      "documentation",
+      "repository",
+      "paper",
+      "article"
+    ],
+    "cases": [
+      "enterprise-agents-production-substrate",
+      "terraform-state-identity-binding",
+      "duckdb-in-process-analytics",
+      "transformer-self-attention-sequence-model",
+      "retrieval-practice-delayed-retention"
+    ]
+  },
+  "guardrails": [
+    "The committed plan contains selection only; no human outcome, score, elapsed time or verdict is committed.",
+    "Reconstruction prompts are shown before scoring anchors so the benchmark does not reveal its own answer key during the attempt.",
+    "Source Decision calibration records are accepted only after the user explicitly confirms the original source was consumed.",
+    "All human observations are written under .local/ through the existing learning_utility and source_decision_benchmark stores.",
+    "Review status does not imply publication approval; review previews remain local/repository review surfaces."
+  ]
+}
