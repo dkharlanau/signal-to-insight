@@ -121,6 +121,17 @@
       "source_id": null,
       "insight_id": null,
       "notes": "GitHub source intake issue #58. Dogfood cohort: developer productivity documentation."
+    },
+    {
+      "id": "intake-2026-08-27-nist-artificial-intelligence-risk-management-framewor",
+      "source_url": "https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-ai-rmf-10",
+      "source_type": "paper",
+      "submitted_at": "2026-08-27",
+      "requested_focus": "Understand the AI RMF operating model, its core functions and how risk management should shape practical AI system decisions; distinguish framework guidance from specific technical controls.",
+      "status": "queued",
+      "source_id": null,
+      "insight_id": null,
+      "notes": "GitHub source intake issue #59. Dogfood cohort: standard/framework / AI governance."
     }
   ]
 }
