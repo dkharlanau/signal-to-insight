@@ -1,0 +1,101 @@
+{
+  "patch_version": "1.0.0",
+  "intake_id": "intake-2026-08-27-sqlite-wal-html",
+  "intake_status": "review",
+  "updated_at": "2026-08-27",
+  "graph_version": "0.4.0",
+  "source": {
+    "id": "src-sqlite-wal-docs-2026",
+    "type": "documentation",
+    "title": "Write-Ahead Logging",
+    "canonical_url": "https://www.sqlite.org/wal.html",
+    "creators": ["SQLite project"],
+    "publisher": "SQLite",
+    "event": null,
+    "published_at": null,
+    "event_date": null,
+    "captured_at": "2026-08-27",
+    "analyzed_at": "2026-08-27",
+    "date_note": "Living documentation. WAL mode was introduced in SQLite 3.7.0 on 2010-07-21; page publication date is not asserted.",
+    "verification": [{"title": "SQLite Write-Ahead Logging", "url": "https://www.sqlite.org/wal.html", "accessed_at": "2026-08-27"}],
+    "derived_records": ["sqlite-write-ahead-log-checkpointing"]
+  },
+  "insight": {
+    "id": "sqlite-write-ahead-log-checkpointing",
+    "source_id": "src-sqlite-wal-docs-2026",
+    "slug": "sqlite-write-ahead-log-checkpointing",
+    "status": "review",
+    "title": "SQLite WAL: commit by append, consolidate by checkpoint",
+    "one_liner": "SQLite WAL keeps the database file stable during commit, appends changed pages to a log, gives readers fixed end marks, and moves committed changes back later through checkpointing.",
+    "why_this_matters": "WAL is a useful mental model for separating foreground commit from later consolidation. The separation improves reader/writer concurrency but introduces a third operation—checkpointing—with its own blocking, durability and file-growth trade-offs.",
+    "whole_source_map": {
+      "problem": "Rollback journaling writes old pages aside and then changes the database file, coupling commit behavior to the main database and limiting concurrency.",
+      "thesis": "Append changed pages and a commit record to a WAL, let each reader read through a stable end mark, and checkpoint committed WAL pages back into the database later.",
+      "core_topics": ["append-first WAL commit", "checkpointing", "reader end marks", "reader/writer concurrency", "single writer", "checkpoint starvation", "durability and performance trade-offs"]
+    },
+    "derived_model": {
+      "problem": "Foreground writes, concurrent reads and durable consolidation compete when every commit immediately mutates the primary database file.",
+      "mechanism": "SQLite records committed changes sequentially in a WAL while readers keep stable snapshot boundaries; checkpointing later transfers committed pages into the database when readers allow it.",
+      "result": "Readers and a writer can overlap and commits can be fast, but the system must manage checkpoint cost, WAL growth and a one-writer-at-a-time boundary."
+    },
+    "coherence_review": {
+      "central_chain": ["WAL preserves the original database file while a writer appends changed pages and a commit marker.", "Each reader records an end mark and therefore sees a stable point-in-time view even as later commits are appended.", "Because the writer only appends, readers and one writer can proceed concurrently.", "Checkpointing later copies committed WAL pages back to the database and may have to stop at pages still needed by readers.", "The design shifts cost rather than eliminating it: checkpoint frequency trades read performance, write latency, durability work and WAL growth."],
+      "prerequisites_complete": true,
+      "source_vs_enrichment_clear": true,
+      "open_gaps": ["Binary WAL format, locking/VFS internals and application-specific checkpoint tuning are outside this first model.", "The word 'log' here describes transaction storage and recovery state; it should not be conflated with the project's execution-history/audit concepts."],
+      "scores": {"coherence": 5, "prerequisite_completeness": 5, "evidence_confidence": 5, "practical_leverage": 4}
+    },
+    "visual_plan": {
+      "dominant": {
+        "type": "sequence",
+        "title": "Commit now, checkpoint later",
+        "nodes": [
+          {"label": "01 · Write", "title": "Append changed pages", "text": "The writer appends new page versions to the WAL instead of overwriting the database file."},
+          {"label": "02 · Commit", "title": "Append commit record", "text": "The transaction becomes committed when the WAL receives its commit marker."},
+          {"label": "03 · Read", "title": "Freeze an end mark", "text": "Each reader uses a fixed end mark and sees page versions no newer than that snapshot boundary."},
+          {"label": "04 · Consolidate", "title": "Checkpoint", "text": "Committed WAL pages are copied back to the database when active readers permit it."},
+          {"label": "05 · Reuse", "title": "Recycle WAL space", "text": "After checkpoint progress and reader release allow it, SQLite can rewind/reuse the WAL instead of growing forever."}
+        ]
+      },
+      "supporting": ["comparison", "concept_grid", "examples", "limitations", "action_map", "source_map"],
+      "image": {"needed": false, "reason": "The key learning is the ordering and concurrency relationship among database file, WAL, readers and checkpointing; a data-flow sequence is more precise than decorative imagery."}
+    },
+    "concepts": [
+      {"name": "Write-ahead log", "depth": "learn", "why_needed": "Committed changes live first in an append-only WAL rather than immediately overwriting the database file."},
+      {"name": "Checkpointing", "depth": "learn", "why_needed": "Checkpointing is the separate maintenance operation that transfers committed WAL content back into the database."},
+      {"name": "Reader end mark", "depth": "learn", "why_needed": "A fixed end mark gives each read transaction a stable snapshot while newer commits continue to append."}
+    ],
+    "tool_map": [
+      {"name": "PRAGMA journal_mode=WAL", "category": "SQLite configuration", "why_explore": "Enables WAL mode and makes the mental model concrete on a local database.", "url": "https://www.sqlite.org/pragma.html#pragma_journal_mode", "relationship": "Source-native SQLite configuration entry point.", "status": "try"},
+      {"name": "sqlite3_wal_checkpoint_v2", "category": "checkpoint control", "why_explore": "Useful after the conceptual model when an application needs explicit checkpoint policy beyond the default auto-checkpoint.", "url": "https://www.sqlite.org/c3ref/wal_checkpoint_v2.html", "relationship": "Source-native SQLite checkpoint interface.", "status": "learn"}
+    ],
+    "examples": [
+      {"domain": "embedded application", "scenario": "A UI reads data while a background task commits small updates.", "question": "Can readers keep stable snapshots while the writer appends commits, and what checkpoint policy prevents the WAL from becoming the new latency problem?"},
+      {"domain": "long-running report", "scenario": "A read transaction stays open while writes continue.", "question": "Will the reader's end mark prevent checkpoint completion and cause WAL growth or slower later reads?"}
+    ],
+    "limitations": ["WAL requires shared-memory coordination and therefore normally keeps all database processes on the same host rather than a network filesystem.", "Readers do not block the writer, but SQLite still has one writer at a time.", "Long-running readers can starve checkpoint completion and let the WAL grow.", "Checkpoint and synchronous settings trade foreground latency against durability after power loss; WAL is not a free universal speed-up."],
+    "action_map": {
+      "use_now": ["When evaluating SQLite concurrency, separate transaction commit from checkpoint work instead of treating them as one write path.", "Look for long-lived reads before blaming WAL growth on write volume alone."],
+      "try": ["Enable WAL on a disposable SQLite database and observe concurrent read/write behavior plus WAL size before and after checkpoints."],
+      "learn": ["WAL reader end marks", "checkpoint modes", "checkpoint starvation", "SQLite synchronous durability settings"],
+      "build": ["A small benchmark that varies reader duration and checkpoint frequency while measuring commit latency and WAL size."],
+      "watch": ["Whether workload shape makes checkpoint policy a visible operational concern rather than relying on the default threshold."],
+      "ignore_for_now": ["Treating SQLite WAL as an application audit log or business execution ledger."]
+    },
+    "connections": ["execution-history: deliberately different scope — SQLite WAL stores transactional page changes, not human-readable evidence of business execution", "event-history: different mechanism — Temporal history reconstructs workflow state, whereas SQLite WAL is database commit/recovery machinery"],
+    "supporting_sources": [{"title": "SQLite Write-Ahead Logging", "url": "https://www.sqlite.org/wal.html", "publisher": "SQLite", "purpose": "primary source for WAL commit, checkpoints, reader end marks, concurrency and operational trade-offs", "accessed_at": "2026-08-27"}],
+    "tags": ["sqlite", "wal", "database", "checkpointing", "concurrency", "storage"],
+    "provenance": {"source_linked": true, "source_dates_recorded": true, "full_transcript_stored": false, "analysis_type": "direct official SQLite documentation analysis", "reviewed_at": "2026-08-27"}
+  },
+  "graph": {
+    "concepts": [
+      {"id": "write-ahead-log", "label": "Write-ahead log", "summary": "A commit mechanism where changed data is appended to a separate log before later consolidation into the primary data store.", "domain": "database storage", "coverage": "explained", "insight_ids": ["sqlite-write-ahead-log-checkpointing"], "aliases": ["WAL"], "tags": ["database", "storage", "commit", "append"]},
+      {"id": "checkpointing", "label": "Checkpointing", "summary": "Moving committed changes from the write-ahead log back into the primary database while respecting active readers and durability constraints.", "domain": "database storage", "coverage": "explained", "insight_ids": ["sqlite-write-ahead-log-checkpointing"], "aliases": ["WAL checkpoint"], "tags": ["database", "wal", "maintenance", "consolidation"]},
+      {"id": "wal-reader-snapshot", "label": "WAL reader snapshot", "summary": "A read transaction's stable end mark that limits which WAL commits it can observe for the duration of that transaction.", "domain": "database concurrency", "coverage": "explained", "insight_ids": ["sqlite-write-ahead-log-checkpointing"], "aliases": ["reader end mark"], "tags": ["sqlite", "snapshot", "reader", "concurrency"]}
+    ],
+    "relations": [
+      {"id": "rel-write-ahead-log-depends-on-checkpointing", "from": "write-ahead-log", "to": "checkpointing", "type": "depends_on", "rationale": "SQLite's WAL lifecycle requires committed pages to be transferred back into the database so the WAL can be bounded and reused over time.", "evidence_insights": ["sqlite-write-ahead-log-checkpointing"]},
+      {"id": "rel-write-ahead-log-enables-wal-reader-snapshot", "from": "write-ahead-log", "to": "wal-reader-snapshot", "type": "enables", "rationale": "Appending newer commits to WAL lets an existing reader keep its own end mark and stable snapshot without blocking the writer.", "evidence_insights": ["sqlite-write-ahead-log-checkpointing"]}
+    ]
+  }
+}
