@@ -1213,6 +1213,75 @@
           "note": "This wording is the project's architecture synthesis of the authors' stated rationale, not a source-authored general framework law."
         }
       ]
+    },
+    {
+      "insight_id": "pydantic-ai-typed-agent-contracts",
+      "claims": [
+        {
+          "id": "pydantic-typed-agent-loop",
+          "text": "Pydantic AI positions its core as a typed extensible agent loop with typed structured outputs and dependencies.",
+          "impact": "high",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-pydantic-ai-repository-2026",
+              "url": "https://github.com/pydantic/pydantic-ai",
+              "locator": "README → opening product definition / Why Pydantic AI"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "pydantic-tool-validation",
+          "text": "Pydantic AI derives tool schemas from Python functions and validates tool arguments before application tool code runs.",
+          "impact": "high",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-pydantic-ai-repository-2026",
+              "url": "https://github.com/pydantic/pydantic-ai",
+              "locator": "README → Data extraction / @agent.tool"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "pydantic-runcontext-dependencies",
+          "text": "RunContext carries typed runtime dependencies into agent tools and instructions during execution.",
+          "impact": "medium",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-pydantic-ai-repository-2026",
+              "url": "https://github.com/pydantic/pydantic-ai",
+              "locator": "README → Data extraction / RunContext"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "pydantic-evals-separate-quality-layer",
+          "text": "Pydantic AI exposes evaluation and instrumentation as separate quality/observability surfaces rather than treating typed output as evidence that agent behavior is correct.",
+          "impact": "high",
+          "origin": "project_interpretation",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-pydantic-ai-repository-2026",
+              "url": "https://github.com/pydantic/pydantic-ai",
+              "locator": "README → Why Pydantic AI → Measured, not vibes"
+            }
+          ],
+          "note": "This is the project's architecture interpretation of the repository's separate typing, instrumentation and eval surfaces."
+        }
+      ]
     }
   ]
 }

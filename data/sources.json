@@ -515,6 +515,32 @@
       "derived_records": [
         "mapreduce-runtime-abstraction-boundary"
       ]
+    },
+    {
+      "id": "src-pydantic-ai-repository-2026",
+      "type": "repository",
+      "title": "Pydantic AI",
+      "canonical_url": "https://github.com/pydantic/pydantic-ai",
+      "creators": [
+        "Pydantic project contributors"
+      ],
+      "publisher": "Pydantic",
+      "event": null,
+      "published_at": null,
+      "event_date": null,
+      "captured_at": "2026-08-27",
+      "analyzed_at": "2026-08-27",
+      "date_note": "Living repository inspected on 2026-08-27; latest release v2.35.1 was published on 2026-08-27.",
+      "verification": [
+        {
+          "title": "Pydantic AI v2.35.1 release",
+          "url": "https://github.com/pydantic/pydantic-ai/releases/tag/v2.35.1",
+          "accessed_at": "2026-08-27"
+        }
+      ],
+      "derived_records": [
+        "pydantic-ai-typed-agent-contracts"
+      ]
     }
   ]
 }

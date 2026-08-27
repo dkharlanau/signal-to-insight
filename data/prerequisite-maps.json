@@ -846,6 +846,68 @@
           }
         }
       ]
+    },
+    {
+      "insight_id": "pydantic-ai-typed-agent-contracts",
+      "summary": "The model needs four related boundaries: typed result contracts, explicit RunContext dependencies, validated tools and a separate behavioral evaluation surface.",
+      "items": [
+        {
+          "id": "pydantic-prereq-contract",
+          "label": "Typed agent contract",
+          "concept_id": "typed-agent-contract",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "The central value disappears if typed output is treated as only developer ergonomics rather than a runtime application boundary.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "pydantic-ai-typed-agent-contracts",
+            "target": null
+          }
+        },
+        {
+          "id": "pydantic-prereq-context",
+          "label": "RunContext dependency injection",
+          "concept_id": "run-context-dependency-injection",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "Explicit dependencies explain how tools receive application services and data without hiding them in global state or prompts.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "pydantic-ai-typed-agent-contracts",
+            "target": null
+          }
+        },
+        {
+          "id": "pydantic-prereq-tool",
+          "label": "Validated tool boundary",
+          "concept_id": "validated-tool-boundary",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "Tool schema validation is the concrete boundary where model-generated arguments enter application code.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "pydantic-ai-typed-agent-contracts",
+            "target": null
+          }
+        },
+        {
+          "id": "pydantic-prereq-evals",
+          "label": "Agent evaluation surface",
+          "concept_id": "agent-evaluation-surface",
+          "priority": "learn_next",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "Type correctness cannot establish behavioral quality, so a separate eval surface is needed to complete the model.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "pydantic-ai-typed-agent-contracts",
+            "target": null
+          }
+        }
+      ]
     }
   ]
 }

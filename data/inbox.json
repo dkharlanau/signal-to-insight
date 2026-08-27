@@ -172,9 +172,9 @@
       "source_type": "repository",
       "submitted_at": "2026-08-27",
       "requested_focus": "Understand Pydantic AI's typed agent-loop model, dependency/context handling, tool execution and evaluation surface; compare responsibilities with existing agent-loop and production-control concepts without treating framework features as universal architecture.",
-      "status": "queued",
-      "source_id": null,
-      "insight_id": null,
+      "status": "review",
+      "source_id": "src-pydantic-ai-repository-2026",
+      "insight_id": "pydantic-ai-typed-agent-contracts",
       "notes": "GitHub source intake issue #63. Dogfood cohort: AI framework repository."
     },
     {

@@ -649,6 +649,55 @@
         "controlled-execution",
         "idempotency-under-retry"
       ]
+    },
+    {
+      "insight_id": "pydantic-ai-typed-agent-contracts",
+      "summary": "Pydantic AI adds a typed application-boundary model for agent outputs, dependencies, tools and behavioral evaluation. Existing ReAct/controlled-execution/history concepts are suppressed because typing is narrower than those reasoning or production-control responsibilities.",
+      "items": [
+        {
+          "relationship": "new",
+          "concept_id": "typed-agent-contract",
+          "label": "Typed agent contract",
+          "source_basis": "The repository emphasizes typed structured outputs and a typed agent API.",
+          "prior_basis": "Existing graph concepts describe reasoning, orchestration and governance but not a schema-validated application contract around an agent result.",
+          "interpretation": "Typing turns model output into an explicit runtime boundary for downstream code without claiming semantic correctness.",
+          "evidence_insights": []
+        },
+        {
+          "relationship": "new",
+          "concept_id": "run-context-dependency-injection",
+          "label": "RunContext dependency injection",
+          "source_basis": "RunContext carries typed dependencies into tools/instructions during an agent run.",
+          "prior_basis": "The graph has execution/runtime concepts but no general agent-application concept for explicit typed dependency injection.",
+          "interpretation": "Runtime services and context become inspectable application dependencies rather than hidden global state.",
+          "evidence_insights": []
+        },
+        {
+          "relationship": "new",
+          "concept_id": "validated-tool-boundary",
+          "label": "Validated tool boundary",
+          "source_basis": "Tool signatures/docstrings form schemas and arguments are validated before tool code runs.",
+          "prior_basis": "Existing controlled-execution concepts govern consequential work more broadly; they do not represent this code-level schema boundary.",
+          "interpretation": "Tool validation reduces structural interface errors but does not supply authorization or side-effect safety by itself.",
+          "evidence_insights": []
+        },
+        {
+          "relationship": "new",
+          "concept_id": "agent-evaluation-surface",
+          "label": "Agent evaluation surface",
+          "source_basis": "The repository positions Pydantic Evals as a dedicated way to test agent behavior, alongside OpenTelemetry instrumentation.",
+          "prior_basis": "Replayable evaluation in the existing graph is specifically historical execution replay and should not be reused for a generic eval framework.",
+          "interpretation": "Behavioral evaluation remains a separate quality layer after type correctness is established.",
+          "evidence_insights": []
+        }
+      ],
+      "suppressed_prior_matches": [
+        "controlled-execution",
+        "react-loop",
+        "replayable-evaluation",
+        "execution-history",
+        "human-agent-task-equivalence"
+      ]
     }
   ]
 }

@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>[PREVIEW] Pydantic AI: make the agent boundary typed before making it bigger — Signal to Insight</title>
+  <meta name="description" content="Pydantic AI makes agent I/O, dependencies and tools explicit typed contracts; evals, observability and durable execution remain adjacent quality/runtime capabilities rather than properties of typing itself.">
+  <meta property="og:title" content="Pydantic AI: make the agent boundary typed before making it bigger">
+  <meta property="og:description" content="Pydantic AI makes agent I/O, dependencies and tools explicit typed contracts; evals, observability and durable execution remain adjacent quality/runtime capabilities rather than properties of typing itself.">
+  <meta property="og:type" content="article">
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="generated-page preview-page">
+  <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+  <header class="site-header wrap">
+    <a class="brand" href="../../"><span class="brand-mark">S→I</span><span>Signal to Insight</span></a>
+    <nav aria-label="Explainer navigation">
+      <a href="#delta">Delta</a><a href="#model">Model</a><a href="#concepts">Concepts</a><a href="#tools">Tools</a><a href="#actions">Actions</a><a href="#sources">Sources</a>
+    </nav>
+  </header>
+
+  <div class="preview-banner">REVIEW PREVIEW · NOT INDEXED · NOT PUBLISHED</div>
+  <main>
+    <section class="detail-hero wrap">
+      <a class="back-link" href="../../">← Research engine</a>
+      <p class="eyebrow">EXPLAINER · review</p>
+      <h1>Pydantic AI: make the agent boundary typed before making it bigger</h1>
+      <div class="detail-lede">
+        <p>Pydantic AI makes agent I/O, dependencies and tools explicit typed contracts; evals, observability and durable execution remain adjacent quality/runtime capabilities rather than properties of typing itself.</p>
+        <dl class="detail-meta">
+          <div><dt>Original source</dt><dd><a href="https://github.com/pydantic/pydantic-ai" target="_blank" rel="noreferrer">Pydantic AI ↗</a></dd></div>
+          <div><dt>Creator</dt><dd>Pydantic project contributors</dd></div>
+          <div><dt>Source status</dt><dd>living source · accessed 2026-08-27</dd></div>
+          <div><dt>Captured</dt><dd>2026-08-27</dd></div>
+          <div><dt>Analyzed</dt><dd>2026-08-27</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="detail-section wrap">
+      <p class="kicker">WHY THIS MATTERS</p>
+      <p class="big-statement">Typed boundaries are a practical way to reduce ambiguity in agent applications without pretending a Python framework alone provides authorization, durable state or production governance.</p>
+    </section>
+
+    <section id="delta" class="detail-section wrap knowledge-delta-section">
+      <p class="kicker">KNOWLEDGE DELTA</p>
+      <h2>What this source changes in the existing model.</h2>
+      <p class="big-statement">Pydantic AI adds a typed application-boundary model for agent outputs, dependencies, tools and behavioral evaluation. Existing ReAct/controlled-execution/history concepts are suppressed because typing is narrower than those reasoning or production-control responsibilities.</p>
+      <div class="concept-grid"><article class="concept-card delta-card">
+          <span>New</span>
+          <h3>Typed agent contract</h3>
+          <p><strong>Source says:</strong> The repository emphasizes typed structured outputs and a typed agent API.</p>
+          <p><strong>Previously:</strong> Existing graph concepts describe reasoning, orchestration and governance but not a schema-validated application contract around an agent result.</p>
+          <p><strong>Project interpretation:</strong> Typing turns model output into an explicit runtime boundary for downstream code without claiming semantic correctness.</p>
+          <small>Prior evidence: <span class="delta-baseline">No prior project evidence — baseline/new knowledge.</span></small>
+        </article><article class="concept-card delta-card">
+          <span>New</span>
+          <h3>RunContext dependency injection</h3>
+          <p><strong>Source says:</strong> RunContext carries typed dependencies into tools/instructions during an agent run.</p>
+          <p><strong>Previously:</strong> The graph has execution/runtime concepts but no general agent-application concept for explicit typed dependency injection.</p>
+          <p><strong>Project interpretation:</strong> Runtime services and context become inspectable application dependencies rather than hidden global state.</p>
+          <small>Prior evidence: <span class="delta-baseline">No prior project evidence — baseline/new knowledge.</span></small>
+        </article><article class="concept-card delta-card">
+          <span>New</span>
+          <h3>Validated tool boundary</h3>
+          <p><strong>Source says:</strong> Tool signatures/docstrings form schemas and arguments are validated before tool code runs.</p>
+          <p><strong>Previously:</strong> Existing controlled-execution concepts govern consequential work more broadly; they do not represent this code-level schema boundary.</p>
+          <p><strong>Project interpretation:</strong> Tool validation reduces structural interface errors but does not supply authorization or side-effect safety by itself.</p>
+          <small>Prior evidence: <span class="delta-baseline">No prior project evidence — baseline/new knowledge.</span></small>
+        </article><article class="concept-card delta-card">
+          <span>New</span>
+          <h3>Agent evaluation surface</h3>
+          <p><strong>Source says:</strong> The repository positions Pydantic Evals as a dedicated way to test agent behavior, alongside OpenTelemetry instrumentation.</p>
+          <p><strong>Previously:</strong> Replayable evaluation in the existing graph is specifically historical execution replay and should not be reused for a generic eval framework.</p>
+          <p><strong>Project interpretation:</strong> Behavioral evaluation remains a separate quality layer after type correctness is established.</p>
+          <small>Prior evidence: <span class="delta-baseline">No prior project evidence — baseline/new knowledge.</span></small>
+        </article></div>
+      <p class="section-note"><strong>Noise rejected:</strong> prior concepts retrieved but deliberately classified as not relevant: controlled-execution, react-loop, replayable-evaluation, execution-history, human-agent-task-equivalence.</p>
+    </section>
+
+    <section id="model" class="detail-section wrap">
+      <p class="kicker">MENTAL MODEL</p>
+      <div class="visual-layers" aria-label="Typed core, surrounding runtime concerns"><article>
+          <span>CONTRACT</span>
+          <h3>Typed input / output</h3>
+          <p>Declare the structure the agent is allowed to return and the schemas tools accept.</p>
+        </article><article>
+          <span>CONTEXT</span>
+          <h3>Dependencies + tools</h3>
+          <p>RunContext supplies explicit runtime dependencies while validated tools cross the application boundary.</p>
+        </article><article>
+          <span>QUALITY / RUNTIME</span>
+          <h3>Evals + telemetry + durability</h3>
+          <p>Test, observe or persist the same agent through separate integrations and capabilities.</p>
+        </article></div>
+      <div class="core-map">
+        <div><span>Source problem</span><p>Agent applications often rely on loosely specified model outputs, tool arguments and runtime context, so interface failures appear late and are difficult to reason about.</p></div>
+        <div><span>Source thesis</span><p>Use a typed agent object with validated outputs/tools and explicit RunContext dependencies, then compose evaluation, observability and durability around that core contract.</p></div>
+        <div><span>Core topics</span><ul><li>typed extensible agent loop</li><li>structured output</li><li>validated tool schemas</li><li>RunContext dependencies</li><li>capability composition</li><li>evaluation and instrumentation</li></ul></div>
+      </div>
+    </section>
+
+    <section id="concepts" class="detail-section wrap">
+      <p class="kicker">CONCEPTS TO KNOW</p>
+      <h2>Learn only the prerequisites that preserve the model.</h2>
+      <div class="concept-grid"><article class="concept-card">
+          <span>learn</span>
+          <h3>Typed agent contract</h3>
+          <p>Structured outputs give downstream code a validated application boundary instead of free-form model text.</p>
+        </article><article class="concept-card">
+          <span>learn</span>
+          <h3>RunContext dependency injection</h3>
+          <p>Runtime services/data can be explicit typed dependencies rather than hidden globals or ad-hoc prompt state.</p>
+        </article><article class="concept-card">
+          <span>learn</span>
+          <h3>Validated tool boundary</h3>
+          <p>Tool signatures become schemas and arguments are validated before side-effecting application code executes.</p>
+        </article><article class="concept-card">
+          <span>know</span>
+          <h3>Agent evaluation surface</h3>
+          <p>Behavior still needs examples/evals and instrumentation after structural typing is correct.</p>
+        </article></div>
+    </section>
+
+    <section id="tools" class="detail-section wrap">
+      <p class="kicker">TOOLS / SYSTEMS</p>
+      <h2>Concrete systems worth knowing.</h2>
+      <p class="section-note">Tool connections may be project enrichment rather than recommendations from the original source. Each card states the relationship.</p>
+      <div class="tool-grid"><a class="tool-card" href="https://github.com/pydantic/pydantic-ai" target="_blank" rel="noreferrer">
+          <span>try</span>
+          <strong>Pydantic AI Agent</strong>
+          <p>Use one small output_type + tool example to see how output, tool schema and RunContext contracts fit together.</p>
+          <small>typed agent SDK · Primary source framework surface.</small>
+        </a><a class="tool-card" href="https://pydantic.dev/docs/ai/evals/evals/" target="_blank" rel="noreferrer">
+          <span>learn</span>
+          <strong>Pydantic Evals</strong>
+          <p>Separates behavioral testing from the typed runtime contract instead of treating type correctness as quality evidence.</p>
+          <small>agent evaluation · Official adjacent evaluation surface referenced by the repository.</small>
+        </a></div>
+    </section>
+
+    <section class="detail-section wrap">
+      <p class="kicker">EXAMPLES</p>
+      <div class="example-grid"><article class="example-card">
+          <span>data extraction</span>
+          <h3>An agent must return sentiment with a bounded numeric score and may call a review lookup tool.</h3>
+          <p>Can output and tool boundaries reject structurally invalid results before application code relies on them?</p>
+        </article><article class="example-card">
+          <span>enterprise tool call</span>
+          <h3>An agent prepares a customer update using injected service dependencies.</h3>
+          <p>Which errors are prevented by typed RunContext/tool schemas, and which authorization/side-effect controls still belong outside the SDK?</p>
+        </article></div>
+    </section>
+
+    <section class="detail-section wrap limitation-section">
+      <p class="kicker">WHERE THE MODEL BREAKS</p>
+      <h2>Useful does not mean sufficient.</h2>
+      <ol class="limitation-list"><li>Type validation checks structure, not truth, policy compliance or semantic quality.</li><li>Validated tool arguments do not make a consequential side effect authorized or idempotent.</li><li>Pydantic Evals is an evaluation surface but is not identical to historical replay evaluation in the existing production-agent model.</li><li>Durable execution is provided through integrations/capabilities and should not be attributed to the core typed loop by default.</li></ol>
+    </section>
+
+    <section id="actions" class="detail-section wrap">
+      <p class="kicker">PERSONAL ACTION MAP</p>
+      <h2>Convert understanding into a decision.</h2>
+      <div class="action-grid"><article class="action-card action-use_now">
+          <span>Use now</span>
+          <ul><li>Define explicit output types and tool argument schemas for any agent result that downstream application code will trust.</li></ul>
+        </article><article class="action-card action-try">
+          <span>Try</span>
+          <ul><li>Build a small Agent with output_type, one RunContext dependency and one tool, then deliberately send invalid tool/output shapes and observe where validation fails.</li></ul>
+        </article><article class="action-card action-learn">
+          <span>Learn</span>
+          <ul><li>structured output contracts</li><li>dependency injection for agents</li><li>tool schema validation</li><li>behavioral evals</li></ul>
+        </article><article class="action-card action-build">
+          <span>Build</span>
+          <ul><li>A typed extraction or decision-support agent whose runtime dependencies and outputs have no implicit dictionaries/string parsing.</li></ul>
+        </article><article class="action-card action-watch">
+          <span>Watch</span>
+          <ul><li>Which Pydantic AI capabilities remain stable as the framework expands across voice, durable execution and harness features.</li></ul>
+        </article><article class="action-card action-ignore_for_now">
+          <span>Ignore for now</span>
+          <ul><li>Treating every Pydantic AI capability as a universal requirement for agent architecture.</li></ul>
+        </article></div>
+    </section>
+
+    <section id="sources" class="detail-section wrap source-section">
+      <p class="kicker">SOURCES + DATES</p>
+      <div class="source-grid">
+        <div>
+          <h3>Primary source</h3>
+          <a href="https://github.com/pydantic/pydantic-ai" target="_blank" rel="noreferrer">Pydantic AI ↗</a>
+          <p>Pydantic project contributors · Source status: living source · accessed 2026-08-27</p>
+          <p>Living repository inspected on 2026-08-27; latest release v2.35.1 was published on 2026-08-27.</p>
+        </div>
+        <div>
+          <h3>Verification / enrichment</h3>
+          <ul class="supporting-sources"><li>
+          <a href="https://github.com/pydantic/pydantic-ai" target="_blank" rel="noreferrer">Pydantic AI repository README</a>
+          <span>primary source for typed loop, RunContext, tools, capabilities and eval positioning · accessed 2026-08-27</span>
+        </li><li>
+          <a href="https://github.com/pydantic/pydantic-ai/releases/tag/v2.35.1" target="_blank" rel="noreferrer">Pydantic AI v2.35.1 release</a>
+          <span>version boundary for this living-repository analysis · accessed 2026-08-27</span>
+        </li></ul>
+        </div>
+      </div>
+      <p class="provenance-note">Analyzed 2026-08-27. Full third-party transcript is not stored. Source claims and project enrichment are kept distinguishable.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer wrap">
+    <span>Signal to Insight</span><span>Explainer: pydantic-ai-typed-agent-contracts</span><span>Reviewed 2026-08-27</span>
+  </footer>
+  <script src="../../app.js"></script>
+</body>
+</html>

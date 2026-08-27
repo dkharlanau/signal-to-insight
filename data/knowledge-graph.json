@@ -1117,6 +1117,78 @@
         "scheduling",
         "network"
       ]
+    },
+    {
+      "id": "typed-agent-contract",
+      "label": "Typed agent contract",
+      "summary": "A runtime-validated schema boundary for agent inputs/outputs that downstream application code can rely on structurally.",
+      "domain": "agent application architecture",
+      "coverage": "explained",
+      "insight_ids": [
+        "pydantic-ai-typed-agent-contracts"
+      ],
+      "aliases": [
+        "typed agent output contract"
+      ],
+      "tags": [
+        "typing",
+        "agents",
+        "schema"
+      ]
+    },
+    {
+      "id": "run-context-dependency-injection",
+      "label": "RunContext dependency injection",
+      "summary": "Passing typed runtime dependencies and context explicitly into agent instructions and tools rather than relying on hidden global state.",
+      "domain": "agent application architecture",
+      "coverage": "explained",
+      "insight_ids": [
+        "pydantic-ai-typed-agent-contracts"
+      ],
+      "aliases": [
+        "typed agent dependencies"
+      ],
+      "tags": [
+        "dependencies",
+        "context",
+        "python"
+      ]
+    },
+    {
+      "id": "validated-tool-boundary",
+      "label": "Validated tool boundary",
+      "summary": "Deriving tool schemas from typed functions and validating arguments before application-side tool code executes.",
+      "domain": "agent tool execution",
+      "coverage": "explained",
+      "insight_ids": [
+        "pydantic-ai-typed-agent-contracts"
+      ],
+      "aliases": [
+        "typed tool schema"
+      ],
+      "tags": [
+        "tools",
+        "validation",
+        "agents"
+      ]
+    },
+    {
+      "id": "agent-evaluation-surface",
+      "label": "Agent evaluation surface",
+      "summary": "A dedicated test/evaluation layer for measuring agent behavior beyond structural type correctness.",
+      "domain": "agent evaluation",
+      "coverage": "explained",
+      "insight_ids": [
+        "pydantic-ai-typed-agent-contracts"
+      ],
+      "aliases": [
+        "behavioral agent evals"
+      ],
+      "tags": [
+        "evals",
+        "testing",
+        "agents"
+      ]
     }
   ],
   "relations": [
@@ -1666,6 +1738,36 @@
       "rationale": "The scheduler can use input-location metadata to place map tasks near their data while preserving the same user-facing program.",
       "evidence_insights": [
         "mapreduce-runtime-abstraction-boundary"
+      ]
+    },
+    {
+      "id": "rel-typed-agent-contract-related-to-run-context-dependency-injection",
+      "from": "typed-agent-contract",
+      "to": "run-context-dependency-injection",
+      "type": "related_to",
+      "rationale": "Typed outputs and typed runtime dependencies form complementary boundaries around one agent application run.",
+      "evidence_insights": [
+        "pydantic-ai-typed-agent-contracts"
+      ]
+    },
+    {
+      "id": "rel-run-context-dependency-injection-enables-validated-tool-boundary",
+      "from": "run-context-dependency-injection",
+      "to": "validated-tool-boundary",
+      "type": "enables",
+      "rationale": "Tools can receive explicit typed runtime dependencies through RunContext while their call arguments are validated against function schemas.",
+      "evidence_insights": [
+        "pydantic-ai-typed-agent-contracts"
+      ]
+    },
+    {
+      "id": "rel-typed-agent-contract-related-to-agent-evaluation-surface",
+      "from": "typed-agent-contract",
+      "to": "agent-evaluation-surface",
+      "type": "related_to",
+      "rationale": "Structural correctness is necessary but behavioral quality requires a separate evaluation/test surface.",
+      "evidence_insights": [
+        "pydantic-ai-typed-agent-contracts"
       ]
     }
   ]

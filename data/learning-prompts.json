@@ -334,6 +334,28 @@
           "task-reexecution-fault-recovery"
         ]
       }
+    },
+    {
+      "insight_id": "pydantic-ai-typed-agent-contracts",
+      "retention_prompt": "Without looking back, reconstruct the Pydantic AI application boundary: what becomes typed, how RunContext carries dependencies, what is validated before a tool runs, and which production/quality concerns still require separate controls or evals?",
+      "answer_key": {
+        "problem_from": "whole_source_map.problem",
+        "mechanism_from": "whole_source_map.thesis",
+        "anchor_concept_ids": [
+          "typed-agent-contract",
+          "run-context-dependency-injection",
+          "validated-tool-boundary"
+        ],
+        "boundary_limitation_index": 0
+      },
+      "transfer_prompt": {
+        "prompt": "An agent prepares a customer update using a typed output model and a typed tool. Which failures can those contracts prevent, what belongs in RunContext, and which authorization or side-effect controls must still live outside this typed SDK boundary?",
+        "expected_concept_ids": [
+          "typed-agent-contract",
+          "run-context-dependency-injection",
+          "validated-tool-boundary"
+        ]
+      }
     }
   ]
 }

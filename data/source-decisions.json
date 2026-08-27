@@ -669,6 +669,57 @@
           ]
         }
       ]
+    },
+    {
+      "insight_id": "pydantic-ai-typed-agent-contracts",
+      "decision": "skim_selected_parts",
+      "rationale": "The explainer preserves the typed-boundary mental model, but the README examples are worth a targeted skim because they show output_type, RunContext and tool validation in a small amount of code. Provider/capability catalogs are not required for the current goal.",
+      "novelty": {
+        "level": "high",
+        "reason": "The source adds explicit typed agent-application boundaries not represented as standalone concepts in the current graph."
+      },
+      "source_quality": {
+        "level": "high",
+        "reason": "The official repository is the primary source for the framework's API/positioning and is version-bounded to v2.35.1."
+      },
+      "relevance": {
+        "level": "high",
+        "reason": "Typed outputs, dependencies and tools are directly applicable to building reliable Python agent applications."
+      },
+      "practical_leverage": {
+        "level": "high",
+        "reason": "The model can immediately change how agent tools and downstream result handling are implemented."
+      },
+      "compression_loss": {
+        "level": "medium",
+        "reason": "The core model compresses well, but the short code examples are useful for seeing exactly where validation and RunContext enter execution."
+      },
+      "selected_parts": [
+        {
+          "label": "Typed loop and positioning",
+          "locator": "README → opening product definition / Why Pydantic AI",
+          "why": "Establishes typed end-to-end as the framework's core application boundary.",
+          "claim_refs": [
+            "pydantic-typed-agent-loop"
+          ]
+        },
+        {
+          "label": "Data extraction example",
+          "locator": "README → Data extraction / @agent.tool",
+          "why": "Shows output_type and tool schema validation in executable form.",
+          "claim_refs": [
+            "pydantic-tool-validation"
+          ]
+        },
+        {
+          "label": "RunContext dependencies",
+          "locator": "README → Data extraction / RunContext",
+          "why": "Shows how runtime dependencies enter tools without being hidden global state.",
+          "claim_refs": [
+            "pydantic-runcontext-dependencies"
+          ]
+        }
+      ]
     }
   ]
 }

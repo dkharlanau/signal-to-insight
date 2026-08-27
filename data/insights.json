@@ -3242,6 +3242,206 @@
         "analysis_type": "direct official publication/PDF analysis focused on abstraction ownership",
         "reviewed_at": "2026-08-27"
       }
+    },
+    {
+      "id": "pydantic-ai-typed-agent-contracts",
+      "source_id": "src-pydantic-ai-repository-2026",
+      "slug": "pydantic-ai-typed-agent-contracts",
+      "status": "review",
+      "title": "Pydantic AI: make the agent boundary typed before making it bigger",
+      "one_liner": "Pydantic AI makes agent I/O, dependencies and tools explicit typed contracts; evals, observability and durable execution remain adjacent quality/runtime capabilities rather than properties of typing itself.",
+      "why_this_matters": "Typed boundaries are a practical way to reduce ambiguity in agent applications without pretending a Python framework alone provides authorization, durable state or production governance.",
+      "whole_source_map": {
+        "problem": "Agent applications often rely on loosely specified model outputs, tool arguments and runtime context, so interface failures appear late and are difficult to reason about.",
+        "thesis": "Use a typed agent object with validated outputs/tools and explicit RunContext dependencies, then compose evaluation, observability and durability around that core contract.",
+        "core_topics": [
+          "typed extensible agent loop",
+          "structured output",
+          "validated tool schemas",
+          "RunContext dependencies",
+          "capability composition",
+          "evaluation and instrumentation"
+        ]
+      },
+      "derived_model": {
+        "problem": "An agent can be functionally capable while its application boundaries remain implicit and fragile.",
+        "mechanism": "Declare output types, tool signatures and dependencies as runtime-validated contracts; add capabilities and evals around the same agent object for adjacent concerns.",
+        "result": "Application code becomes easier to type-check, test and inspect, while broader production controls remain separate responsibilities."
+      },
+      "coherence_review": {
+        "central_chain": [
+          "The agent has an explicit typed output contract.",
+          "Tool signatures become schemas and arguments are validated before tool code runs.",
+          "RunContext carries typed runtime dependencies into tools/instructions.",
+          "Capabilities compose additional behavior without redefining the core contract.",
+          "Evals/instrumentation test and observe behavior, while durability/governance remain separate runtime concerns."
+        ],
+        "prerequisites_complete": true,
+        "source_vs_enrichment_clear": true,
+        "open_gaps": [
+          "Typing cannot prove semantic correctness or business authorization.",
+          "The framework evolves quickly; provider/capability breadth is not the durable mental model."
+        ],
+        "scores": {
+          "coherence": 5,
+          "prerequisite_completeness": 5,
+          "evidence_confidence": 5,
+          "practical_leverage": 5
+        }
+      },
+      "visual_plan": {
+        "dominant": {
+          "type": "layers",
+          "title": "Typed core, surrounding runtime concerns",
+          "nodes": [
+            {
+              "label": "CONTRACT",
+              "title": "Typed input / output",
+              "text": "Declare the structure the agent is allowed to return and the schemas tools accept."
+            },
+            {
+              "label": "CONTEXT",
+              "title": "Dependencies + tools",
+              "text": "RunContext supplies explicit runtime dependencies while validated tools cross the application boundary."
+            },
+            {
+              "label": "QUALITY / RUNTIME",
+              "title": "Evals + telemetry + durability",
+              "text": "Test, observe or persist the same agent through separate integrations and capabilities."
+            }
+          ]
+        },
+        "supporting": [
+          "comparison",
+          "concept_grid",
+          "tool_map",
+          "examples",
+          "limitations",
+          "action_map",
+          "source_map"
+        ],
+        "image": {
+          "needed": false,
+          "reason": "The important distinction is responsibility layering; a compact contract/context/runtime diagram is clearer than decorative framework imagery."
+        }
+      },
+      "concepts": [
+        {
+          "name": "Typed agent contract",
+          "depth": "learn",
+          "why_needed": "Structured outputs give downstream code a validated application boundary instead of free-form model text."
+        },
+        {
+          "name": "RunContext dependency injection",
+          "depth": "learn",
+          "why_needed": "Runtime services/data can be explicit typed dependencies rather than hidden globals or ad-hoc prompt state."
+        },
+        {
+          "name": "Validated tool boundary",
+          "depth": "learn",
+          "why_needed": "Tool signatures become schemas and arguments are validated before side-effecting application code executes."
+        },
+        {
+          "name": "Agent evaluation surface",
+          "depth": "know",
+          "why_needed": "Behavior still needs examples/evals and instrumentation after structural typing is correct."
+        }
+      ],
+      "tool_map": [
+        {
+          "name": "Pydantic AI Agent",
+          "category": "typed agent SDK",
+          "why_explore": "Use one small output_type + tool example to see how output, tool schema and RunContext contracts fit together.",
+          "url": "https://github.com/pydantic/pydantic-ai",
+          "relationship": "Primary source framework surface.",
+          "status": "try"
+        },
+        {
+          "name": "Pydantic Evals",
+          "category": "agent evaluation",
+          "why_explore": "Separates behavioral testing from the typed runtime contract instead of treating type correctness as quality evidence.",
+          "url": "https://pydantic.dev/docs/ai/evals/evals/",
+          "relationship": "Official adjacent evaluation surface referenced by the repository.",
+          "status": "learn"
+        }
+      ],
+      "examples": [
+        {
+          "domain": "data extraction",
+          "scenario": "An agent must return sentiment with a bounded numeric score and may call a review lookup tool.",
+          "question": "Can output and tool boundaries reject structurally invalid results before application code relies on them?"
+        },
+        {
+          "domain": "enterprise tool call",
+          "scenario": "An agent prepares a customer update using injected service dependencies.",
+          "question": "Which errors are prevented by typed RunContext/tool schemas, and which authorization/side-effect controls still belong outside the SDK?"
+        }
+      ],
+      "limitations": [
+        "Type validation checks structure, not truth, policy compliance or semantic quality.",
+        "Validated tool arguments do not make a consequential side effect authorized or idempotent.",
+        "Pydantic Evals is an evaluation surface but is not identical to historical replay evaluation in the existing production-agent model.",
+        "Durable execution is provided through integrations/capabilities and should not be attributed to the core typed loop by default."
+      ],
+      "action_map": {
+        "use_now": [
+          "Define explicit output types and tool argument schemas for any agent result that downstream application code will trust."
+        ],
+        "try": [
+          "Build a small Agent with output_type, one RunContext dependency and one tool, then deliberately send invalid tool/output shapes and observe where validation fails."
+        ],
+        "learn": [
+          "structured output contracts",
+          "dependency injection for agents",
+          "tool schema validation",
+          "behavioral evals"
+        ],
+        "build": [
+          "A typed extraction or decision-support agent whose runtime dependencies and outputs have no implicit dictionaries/string parsing."
+        ],
+        "watch": [
+          "Which Pydantic AI capabilities remain stable as the framework expands across voice, durable execution and harness features."
+        ],
+        "ignore_for_now": [
+          "Treating every Pydantic AI capability as a universal requirement for agent architecture."
+        ]
+      },
+      "connections": [
+        "controlled execution: broader production governance remains outside the typed SDK boundary",
+        "ReAct: a specific reasoning/action method, not equivalent to Pydantic AI's generic agent loop",
+        "durable execution: attachable integration responsibility, not evidence that the core typed loop persists progress itself"
+      ],
+      "supporting_sources": [
+        {
+          "title": "Pydantic AI repository README",
+          "url": "https://github.com/pydantic/pydantic-ai",
+          "publisher": "Pydantic",
+          "purpose": "primary source for typed loop, RunContext, tools, capabilities and eval positioning",
+          "accessed_at": "2026-08-27"
+        },
+        {
+          "title": "Pydantic AI v2.35.1 release",
+          "url": "https://github.com/pydantic/pydantic-ai/releases/tag/v2.35.1",
+          "publisher": "Pydantic",
+          "purpose": "version boundary for this living-repository analysis",
+          "accessed_at": "2026-08-27"
+        }
+      ],
+      "tags": [
+        "pydantic-ai",
+        "agents",
+        "python",
+        "typing",
+        "tools",
+        "evals"
+      ],
+      "provenance": {
+        "source_linked": true,
+        "source_dates_recorded": true,
+        "full_transcript_stored": false,
+        "analysis_type": "direct official repository analysis focused on typed application boundaries",
+        "reviewed_at": "2026-08-27"
+      }
     }
   ]
 }
