@@ -75,8 +75,10 @@ jobs:
       - name: Validate research bundles
         run: python scripts/validate_bundles.py
 
-      - name: Validate researched case patches
-        run: python scripts/validate_case_patches.py
+      - name: Validate researched review cases
+        run: |
+          python scripts/validate_case_patches.py
+          python scripts/validate_case_contracts.py
 
       - name: Test prior-knowledge retrieval
         run: |
