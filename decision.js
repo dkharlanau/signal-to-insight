@@ -1,4 +1,22 @@
 (() => {
+  // `decision.js` is already loaded as a generated-page enhancement by app.js. Keep the
+  // concept navigation as a separate module, but bootstrap it here so generated HTML never
+  // needs hand editing and the page shell remains provider/data agnostic.
+  function loadConceptNavigation() {
+    if (document.querySelector('script[data-concept-navigation]')) return;
+    const styles = document.createElement('link');
+    styles.rel = 'stylesheet';
+    styles.href = '../../concept-links.css';
+    styles.dataset.conceptNavigation = 'true';
+    document.head.appendChild(styles);
+
+    const script = document.createElement('script');
+    script.src = '../../concept-links.js';
+    script.async = true;
+    script.dataset.conceptNavigation = 'true';
+    document.head.appendChild(script);
+  }
+
   const DECISION_LABELS = {
     consume: 'Consume the original',
     skim_selected_parts: 'Skim selected parts',
@@ -138,5 +156,6 @@
     }
   }
 
+  loadConceptNavigation();
   buildSourceDecision();
 })();
