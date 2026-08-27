@@ -46,8 +46,8 @@
     "practical_leverage": {"level": "high", "reason": "The model can immediately change architecture choices for small data-processing applications and utilities."},
     "compression_loss": {"level": "medium", "reason": "The explainer intentionally omits the breadth of DuckDB clients/extensions and evolving concurrency options; those details are useful when choosing a concrete implementation."},
     "selected_parts": [
-      {"label": "Repository README", "locator": "https://github.com/duckdb/duckdb#readme", "why": "See the official in-process positioning, language clients and direct CSV/Parquet examples."},
-      {"label": "Concurrency", "locator": "https://duckdb.org/docs/current/connect/concurrency", "why": "Understand the process-centered read/write boundary and current multi-process options before choosing an architecture."}
+      {"label": "Repository README", "locator": "README → DuckDB / clients", "why": "See the official in-process positioning and native client breadth before choosing the embedded boundary.", "claim_refs": ["duckdb-in-process-positioning"]},
+      {"label": "Concurrency", "locator": "Handling Concurrency → Single Process / Multiple Processes", "why": "Understand the process-centered read/write boundary and current multi-process options before choosing an architecture.", "claim_refs": ["duckdb-process-boundary"]}
     ]
   }
 }
