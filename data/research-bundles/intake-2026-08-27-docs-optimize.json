@@ -1,0 +1,57 @@
+{
+  "bundle_version": "1.1.0",
+  "intake_id": "intake-2026-08-27-docs-optimize",
+  "source_id": null,
+  "source": {
+    "type": "documentation",
+    "canonical_url": "https://docs.docker.com/build/cache/optimize",
+    "title": null,
+    "creators": [],
+    "publisher": null,
+    "published_at": null,
+    "event_date": null,
+    "version": null,
+    "language": null,
+    "duration": null,
+    "date_note": null
+  },
+  "inspection": {
+    "method": "not inspected",
+    "full_content_used_ephemerally": false,
+    "full_content_committed": false,
+    "confidence": "metadata_only",
+    "gaps": [
+      "Source content has not been mapped yet."
+    ]
+  },
+  "prior_knowledge": {
+    "captured_at": "2026-08-27",
+    "query": "Understand cache invalidation as a dependency problem: layer ordering, build context, mounts and why small input changes can amplify build cost.",
+    "matches": [],
+    "classification_required": true
+  },
+  "content_map": {
+    "problem": null,
+    "thesis": null,
+    "sections": [],
+    "concepts": [],
+    "mechanisms": [],
+    "tools": [],
+    "examples": [],
+    "claims": [],
+    "evidence": [],
+    "assumptions": [],
+    "limitations": [],
+    "open_questions": []
+  },
+  "selection": {
+    "requested_focus": "Understand cache invalidation as a dependency problem: layer ordering, build context, mounts and why small input changes can amplify build cost.",
+    "coherent_core": [],
+    "prerequisites": [],
+    "drop_notes": [],
+    "connections": []
+  },
+  "verification_candidates": [],
+  "source_locators": [],
+  "created_at": "2026-08-27"
+}
