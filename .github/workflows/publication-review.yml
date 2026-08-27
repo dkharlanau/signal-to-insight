@@ -1,0 +1,67 @@
+name: Validate publication review kit
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "data/publication-review-plan.json"
+      - "data/inbox.json"
+      - "data/sources.json"
+      - "data/insights.json"
+      - "data/syntheses.json"
+      - "data/knowledge-deltas.json"
+      - "data/claim-evidence.json"
+      - "data/prerequisite-maps.json"
+      - "data/source-decisions.json"
+      - "data/research-bundles/**.json"
+      - "previews/**"
+      - "explainers/**"
+      - "scripts/publication_review.py"
+      - "scripts/publish_reviewed.py"
+      - "scripts/publish_synthesis.py"
+      - "docs/PUBLICATION_REVIEW.md"
+      - ".github/workflows/publication-review.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "data/publication-review-plan.json"
+      - "data/inbox.json"
+      - "data/sources.json"
+      - "data/insights.json"
+      - "data/syntheses.json"
+      - "data/knowledge-deltas.json"
+      - "data/claim-evidence.json"
+      - "data/prerequisite-maps.json"
+      - "data/source-decisions.json"
+      - "data/research-bundles/**.json"
+      - "previews/**"
+      - "explainers/**"
+      - "scripts/publication_review.py"
+      - "scripts/publish_reviewed.py"
+      - "scripts/publish_synthesis.py"
+      - "docs/PUBLICATION_REVIEW.md"
+      - ".github/workflows/publication-review.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate fixed proof-corpus review chain
+        run: python scripts/publication_review.py validate-plan
+
+      - name: Test local-only review dispositions and publication command gates
+        run: python scripts/publication_review.py self-test
+
+      - name: Compile review runner
+        run: python -m py_compile scripts/publication_review.py
