@@ -27,6 +27,13 @@ jobs:
       - name: Validate cumulative knowledge graph
         run: python scripts/validate_graph.py
 
+      - name: Validate temporal knowledge evolution
+        run: |
+          python scripts/validate_knowledge_evolution.py
+          python scripts/validate_knowledge_evolution.py --self-test
+          python scripts/build_evolution.py --self-test
+          python scripts/build_evolution.py --check
+
       - name: Validate curated Knowledge Delta
         run: python scripts/validate_knowledge_deltas.py
 
