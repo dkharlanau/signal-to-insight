@@ -187,7 +187,7 @@ def self_test() -> int:
     fixture_insights = {
         "insights": [
             {"id": "pub", "source_id": "s1", "slug": "published", "status": "published", "title": "Published", "one_liner": "Visible", "tags": ["z"], "provenance": {"reviewed_at": "2026-08-27"}},
-            {"id": "review", "source_id": "s2", "slug": "secret-review", "status": "review", "title": "Review", "one_liner": "Must not leak", "tags": [], "provenance": {"reviewed_at": null}},
+            {"id": "review", "source_id": "s2", "slug": "secret-review", "status": "review", "title": "Review", "one_liner": "Must not leak", "tags": [], "provenance": {"reviewed_at": None}},
         ]
     }
     fixture_sources = {"sources": [
