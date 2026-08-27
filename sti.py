@@ -102,13 +102,9 @@ def main() -> int:
             return run_script("run_source.py", forwarded)
 
         if args.command == "context":
-            forwarded = [args.query]
+            forwarded = [args.query, "--limit", str(max(1, args.limit))]
             if args.json:
                 forwarded.append("--json")
-            # graph_context currently owns ranking defaults; --limit is accepted by this wrapper
-            # for CLI stability and applied only when the underlying script exposes it later.
-            if args.limit != 5:
-                print("note: graph_context currently uses its own result limit; --limit is reserved for CLI compatibility")
             return run_script("graph_context.py", forwarded)
 
         if args.command == "validate":
