@@ -1,0 +1,137 @@
+{
+  "event_version": "1.0.0",
+  "events": [
+    {
+      "id": "reanalysis-temporal-docs-2026-08-27",
+      "source_id": "src-temporal-docs-2026",
+      "insight_id": "temporal-durable-execution-mental-model",
+      "status": "review",
+      "checked_at": "2026-08-27",
+      "from_revision": {
+        "kind": "commit",
+        "id": "6f46de944c41b1823331536a65356548b94578c7"
+      },
+      "to_revision": {
+        "kind": "commit",
+        "id": "bb17961301d0202bf0489a9273d17c7ae98a7921",
+        "occurred_at": "2026-08-27T02:56:35Z"
+      },
+      "source_change": {
+        "changed": true,
+        "commit_count": 6,
+        "changed_files": [
+          ".github/CODEOWNERS",
+          ".github/workflows/vale-ci.yml",
+          "docs/cloud/get-started/index.mdx",
+          "docs/evaluate/temporal-cloud/pricing.mdx",
+          "docs/with-ai.mdx",
+          "src/data/sdk-versions.json",
+          "vale/styles/Temporal/Headings.yml"
+        ],
+        "summary": "The official documentation repository advanced by six commits. Changes are confined to repository maintenance, Cloud onboarding/pricing, AI-tooling guidance and SDK-version metadata; none of the core Workflow Execution, Event History, Worker, Task Queue, Activity or retry/idempotency evidence paths used by the current mental model changed in this diff.",
+        "evidence_urls": [
+          "https://github.com/temporalio/documentation/compare/6f46de944c41b1823331536a65356548b94578c7...bb17961301d0202bf0489a9273d17c7ae98a7921"
+        ]
+      },
+      "mental_model": {
+        "impact": "stable",
+        "changed": [],
+        "still_valid": [
+          "Workflow progress is durable state outside any one Worker process.",
+          "Event History supports reconstruction of Workflow Execution state.",
+          "Workers poll Task Queues and execute Workflow or Activity work as replaceable executors.",
+          "External effects under retry still require safe/idempotent Activity design."
+        ],
+        "unresolved": [
+          "The changed AI-tooling and SDK-version pages may matter to future hands-on guidance, but they do not currently justify changing the central durable-execution model."
+        ]
+      },
+      "review": {
+        "required": true,
+        "reviewed_by": null,
+        "reviewed_at": null,
+        "decision": "pending",
+        "note": null
+      }
+    },
+    {
+      "id": "reanalysis-opa-2026-08-27",
+      "source_id": "src-open-policy-agent-opa-2026",
+      "insight_id": "open-policy-agent-decision-enforcement-model",
+      "status": "review",
+      "checked_at": "2026-08-27",
+      "from_revision": {
+        "kind": "commit",
+        "id": "836e1ab6a5e2c7be70783805afcc8c8490a0af68"
+      },
+      "to_revision": {
+        "kind": "commit",
+        "id": "ec9536cac3a202f29fa64d3c7307dc3c3092429a",
+        "occurred_at": "2026-08-26T22:11:00Z"
+      },
+      "source_change": {
+        "changed": true,
+        "commit_count": 3,
+        "changed_files": [
+          "internal/leb128/leb128.go",
+          "internal/presentation/presentation.go",
+          "internal/semver/semver.go",
+          "internal/strvals/parser.go",
+          "internal/wasm/encoding/reader.go",
+          "internal/wasm/sdk/examples/loaders/main.go",
+          "internal/wasm/sdk/internal/wasm/vm.go",
+          "v1/ast/capabilities_test.go",
+          "v1/ast/compile.go",
+          "v1/ast/compile_test.go",
+          "v1/ast/parser.go",
+          "v1/ast/parser_test.go",
+          "v1/ast/term.go",
+          "v1/ast/transform.go",
+          "v1/bundle/store.go",
+          "v1/format/format.go",
+          "v1/format/testfiles/v0/test_object_comprehension_multiline.rego",
+          "v1/format/testfiles/v0/test_object_comprehension_multiline.rego.formatted",
+          "v1/format/testfiles/v0/test_object_comprehension_parenthesized_value.rego",
+          "v1/format/testfiles/v0/test_object_comprehension_parenthesized_value.rego.formatted",
+          "v1/format/testfiles/v1/test_object_comprehension_multiline.rego",
+          "v1/format/testfiles/v1/test_object_comprehension_multiline.rego.formatted",
+          "v1/format/testfiles/v1/test_object_comprehension_parenthesized_value.rego",
+          "v1/format/testfiles/v1/test_object_comprehension_parenthesized_value.rego.formatted",
+          "v1/plugins/logs/eventBuffer.go",
+          "v1/plugins/logs/plugin.go",
+          "v1/plugins/logs/plugin_test.go",
+          "v1/plugins/rest/auth.go",
+          "v1/rego/rego.go",
+          "v1/storage/disk/disk.go",
+          "v1/test/cases/testdata/v1/negation/test-not-body.yaml",
+          "v1/topdown/time.go",
+          "v1/topdown/topdown_bench_test.go"
+        ],
+        "summary": "OPA main advanced by three commits after the analyzed baseline while the latest release remains v1.19.1. The diff changes parser/formatter/compiler internals plus bundle and decision-log implementation code, but does not change the repository/docs evidence that OPA computes policy decisions and leaves enforcement to the integrating application.",
+        "evidence_urls": [
+          "https://github.com/open-policy-agent/opa/compare/836e1ab6a5e2c7be70783805afcc8c8490a0af68...ec9536cac3a202f29fa64d3c7307dc3c3092429a",
+          "https://github.com/open-policy-agent/opa/releases/tag/v1.19.1"
+        ]
+      },
+      "mental_model": {
+        "impact": "stable",
+        "changed": [],
+        "still_valid": [
+          "OPA is a policy decision engine rather than the owner of the protected action.",
+          "The integrating application remains responsible for enforcement after receiving a policy decision.",
+          "Policy/data distribution and decision logging are operational concerns around the decision point rather than a replacement for enforcement."
+        ],
+        "unresolved": [
+          "Bundle-store and decision-log implementation changed on main; version-specific operational guidance should be rechecked before publication even though the high-level decision/enforcement model remains stable."
+        ]
+      },
+      "review": {
+        "required": true,
+        "reviewed_by": null,
+        "reviewed_at": null,
+        "decision": "pending",
+        "note": null
+      }
+    }
+  ]
+}
