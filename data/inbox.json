@@ -117,9 +117,9 @@
       "source_type": "documentation",
       "submitted_at": "2026-08-27",
       "requested_focus": "Understand cache invalidation as a dependency problem: layer ordering, build context, mounts and why small input changes can amplify build cost.",
-      "status": "queued",
-      "source_id": null,
-      "insight_id": null,
+      "status": "review",
+      "source_id": "src-docker-build-cache-2026",
+      "insight_id": "docker-cache-dependency-invalidation",
       "notes": "GitHub source intake issue #58. Dogfood cohort: developer productivity documentation."
     },
     {

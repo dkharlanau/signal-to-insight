@@ -456,6 +456,40 @@
         "human-agent-task-equivalence",
         "react-loop"
       ]
+    },
+    {
+      "insight_id": "docker-cache-dependency-invalidation",
+      "summary": "Docker build caching adds a new build-systems domain to the graph. Prior retrieval correctly found no close concepts, so the case introduces cache dependency boundaries and invalidation cascades without merging them into workflow checkpoints, database checkpoints or agent memory.",
+      "items": [
+        {
+          "relationship": "new",
+          "concept_id": "build-cache-dependency-boundary",
+          "label": "Build-cache dependency boundary",
+          "source_basis": "Docker reuses a layer only while its instruction and dependent files remain unchanged, making cache reuse depend on explicit inputs.",
+          "prior_basis": "The graph has persistence and checkpoint concepts in other domains, but no concept for build-result reuse controlled by instruction/input stability.",
+          "interpretation": "Layer ordering and build-context design are best understood as editing the dependency boundary around expensive work.",
+          "evidence_insights": []
+        },
+        {
+          "relationship": "new",
+          "concept_id": "cache-invalidation-cascade",
+          "label": "Cache invalidation cascade",
+          "source_basis": "Docker documentation states that a changed step causes following steps to rebuild, so frequent changes early in a Dockerfile amplify downstream work.",
+          "prior_basis": "No current concept captures downstream build-cost fan-out caused by an upstream cache miss.",
+          "interpretation": "The optimization target is not maximal caching in general; it is minimizing unnecessary invalidation fan-out from volatile inputs.",
+          "evidence_insights": []
+        },
+        {
+          "relationship": "new",
+          "concept_id": "persistent-build-cache",
+          "label": "Persistent build cache",
+          "source_basis": "Cache mounts retain package caches across layer rebuilds, and external caches allow cache reuse across different builders/environments.",
+          "prior_basis": "Existing durable-state concepts have different semantics and should not be reused merely because data persists across runs.",
+          "interpretation": "Persistent build cache is a cost-reduction mechanism for recomputation/downloads, not authoritative workflow or business state.",
+          "evidence_insights": []
+        }
+      ],
+      "suppressed_prior_matches": []
     }
   ]
 }

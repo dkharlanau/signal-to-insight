@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>[PREVIEW] Docker build cache: invalidation is a dependency-graph problem — Signal to Insight</title>
+  <meta name="description" content="Fast Docker builds come from drawing better dependency boundaries: keep stable expensive inputs early, volatile inputs late, and reusable/transient data out of ordinary layer invalidation when possible.">
+  <meta property="og:title" content="Docker build cache: invalidation is a dependency-graph problem">
+  <meta property="og:description" content="Fast Docker builds come from drawing better dependency boundaries: keep stable expensive inputs early, volatile inputs late, and reusable/transient data out of ordinary layer invalidation when possible.">
+  <meta property="og:type" content="article">
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="generated-page preview-page">
+  <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+  <header class="site-header wrap">
+    <a class="brand" href="../../"><span class="brand-mark">S→I</span><span>Signal to Insight</span></a>
+    <nav aria-label="Explainer navigation">
+      <a href="#delta">Delta</a><a href="#model">Model</a><a href="#concepts">Concepts</a><a href="#tools">Tools</a><a href="#actions">Actions</a><a href="#sources">Sources</a>
+    </nav>
+  </header>
+
+  <div class="preview-banner">REVIEW PREVIEW · NOT INDEXED · NOT PUBLISHED</div>
+  <main>
+    <section class="detail-hero wrap">
+      <a class="back-link" href="../../">← Research engine</a>
+      <p class="eyebrow">EXPLAINER · review</p>
+      <h1>Docker build cache: invalidation is a dependency-graph problem</h1>
+      <div class="detail-lede">
+        <p>Fast Docker builds come from drawing better dependency boundaries: keep stable expensive inputs early, volatile inputs late, and reusable/transient data out of ordinary layer invalidation when possible.</p>
+        <dl class="detail-meta">
+          <div><dt>Original source</dt><dd><a href="https://docs.docker.com/build/cache/optimize" target="_blank" rel="noreferrer">Optimize cache usage in builds ↗</a></dd></div>
+          <div><dt>Creator</dt><dd>Unknown creator</dd></div>
+          <div><dt>Source status</dt><dd>living source · accessed 2026-08-27</dd></div>
+          <div><dt>Captured</dt><dd>2026-08-27</dd></div>
+          <div><dt>Analyzed</dt><dd>2026-08-27</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="detail-section wrap">
+      <p class="kicker">WHY THIS MATTERS</p>
+      <p class="big-statement">Build caching is often treated as a list of tricks. The stronger mental model is dependency propagation: each layer depends on an instruction and inputs, and an early invalidation can fan out into expensive downstream rebuilds. Once seen this way, layer order, context size and mounts become different ways to control the same dependency boundary.</p>
+    </section>
+
+    <section id="delta" class="detail-section wrap knowledge-delta-section">
+      <p class="kicker">KNOWLEDGE DELTA</p>
+      <h2>What this source changes in the existing model.</h2>
+      <p class="big-statement">Docker build caching adds a new build-systems domain to the graph. Prior retrieval correctly found no close concepts, so the case introduces cache dependency boundaries and invalidation cascades without merging them into workflow checkpoints, database checkpoints or agent memory.</p>
+      <div class="concept-grid"><article class="concept-card delta-card">
+          <span>New</span>
+          <h3>Build-cache dependency boundary</h3>
+          <p><strong>Source says:</strong> Docker reuses a layer only while its instruction and dependent files remain unchanged, making cache reuse depend on explicit inputs.</p>
+          <p><strong>Previously:</strong> The graph has persistence and checkpoint concepts in other domains, but no concept for build-result reuse controlled by instruction/input stability.</p>
+          <p><strong>Project interpretation:</strong> Layer ordering and build-context design are best understood as editing the dependency boundary around expensive work.</p>
+          <small>Prior evidence: <span class="delta-baseline">No prior project evidence — baseline/new knowledge.</span></small>
+        </article><article class="concept-card delta-card">
+          <span>New</span>
+          <h3>Cache invalidation cascade</h3>
+          <p><strong>Source says:</strong> Docker documentation states that a changed step causes following steps to rebuild, so frequent changes early in a Dockerfile amplify downstream work.</p>
+          <p><strong>Previously:</strong> No current concept captures downstream build-cost fan-out caused by an upstream cache miss.</p>
+          <p><strong>Project interpretation:</strong> The optimization target is not maximal caching in general; it is minimizing unnecessary invalidation fan-out from volatile inputs.</p>
+          <small>Prior evidence: <span class="delta-baseline">No prior project evidence — baseline/new knowledge.</span></small>
+        </article><article class="concept-card delta-card">
+          <span>New</span>
+          <h3>Persistent build cache</h3>
+          <p><strong>Source says:</strong> Cache mounts retain package caches across layer rebuilds, and external caches allow cache reuse across different builders/environments.</p>
+          <p><strong>Previously:</strong> Existing durable-state concepts have different semantics and should not be reused merely because data persists across runs.</p>
+          <p><strong>Project interpretation:</strong> Persistent build cache is a cost-reduction mechanism for recomputation/downloads, not authoritative workflow or business state.</p>
+          <small>Prior evidence: <span class="delta-baseline">No prior project evidence — baseline/new knowledge.</span></small>
+        </article></div>
+      
+    </section>
+
+    <section id="model" class="detail-section wrap">
+      <p class="kicker">MENTAL MODEL</p>
+      <div class="model-flow">
+        <article><span>01 · Change</span><p>An instruction or file dependency changes, so that cached layer can no longer be reused.</p></article>
+        <b>→</b>
+        <article><span>02 · Cascade</span><p>Every downstream layer must execute again even when much of its logical work is unchanged.</p></article>
+        <b>→</b>
+        <article><span>03 · Design</span><p>Reorder stable work, shrink context and move reusable/transient data into appropriate mounts or external caches.</p></article>
+      </div>
+      <div class="core-map">
+        <div><span>Source problem</span><p>Small or irrelevant input changes can invalidate a cached layer and amplify rebuild cost through later expensive Dockerfile steps.</p></div>
+        <div><span>Source thesis</span><p>Design cache boundaries around dependency stability: isolate stable expensive work, minimize volatile inputs, and use build mounts/external caches when reusable data should outlive ordinary layer rebuilds.</p></div>
+        <div><span>Core topics</span><ul><li>layer cache reuse</li><li>invalidation cascade</li><li>layer ordering</li><li>build context</li><li>bind mounts</li><li>cache mounts</li><li>external cache</li></ul></div>
+      </div>
+    </section>
+
+    <section id="concepts" class="detail-section wrap">
+      <p class="kicker">CONCEPTS TO KNOW</p>
+      <h2>Learn only the prerequisites that preserve the model.</h2>
+      <div class="concept-grid"><article class="concept-card">
+          <span>learn</span>
+          <h3>Build-cache dependency boundary</h3>
+          <p>Cache reuse is determined by an instruction and its dependent inputs, so the useful unit is a dependency boundary rather than a vague notion of previous build output.</p>
+        </article><article class="concept-card">
+          <span>learn</span>
+          <h3>Invalidation cascade</h3>
+          <p>A changed upstream layer forces downstream work to rebuild, explaining why layer ordering matters economically.</p>
+        </article><article class="concept-card">
+          <span>know</span>
+          <h3>Persistent build cache</h3>
+          <p>Cache mounts and external caches preserve reusable state outside exact image-layer reuse and therefore solve a different cache problem.</p>
+        </article></div>
+    </section>
+
+    <section id="tools" class="detail-section wrap">
+      <p class="kicker">TOOLS / SYSTEMS</p>
+      <h2>Concrete systems worth knowing.</h2>
+      <p class="section-note">Tool connections may be project enrichment rather than recommendations from the original source. Each card states the relationship.</p>
+      <div class="tool-grid"><a class="tool-card" href="https://docs.docker.com/build/cache/optimize/#keep-the-context-small" target="_blank" rel="noreferrer">
+          <span>use_now</span>
+          <strong>.dockerignore</strong>
+          <p>Keeps irrelevant files out of the build context so they cannot create avoidable transfer and invalidation pressure.</p>
+          <small>build-context control · Source-native Docker mechanism.</small>
+        </a><a class="tool-card" href="https://docs.docker.com/build/cache/optimize/#use-cache-mounts" target="_blank" rel="noreferrer">
+          <span>try</span>
+          <strong>BuildKit cache mounts</strong>
+          <p>Lets package-manager caches survive layer rebuilds so only new/changed dependencies need downloading.</p>
+          <small>persistent build dependency cache · Source-native Docker/BuildKit mechanism.</small>
+        </a><a class="tool-card" href="https://docs.docker.com/build/cache/optimize/#use-an-external-cache" target="_blank" rel="noreferrer">
+          <span>watch</span>
+          <strong>buildx external cache</strong>
+          <p>Useful when CI builders are ephemeral and cache should be shared across runs/environments.</p>
+          <small>cross-builder cache · Source-native Docker/BuildKit mechanism.</small>
+        </a></div>
+    </section>
+
+    <section class="detail-section wrap">
+      <p class="kicker">EXAMPLES</p>
+      <div class="example-grid"><article class="example-card">
+          <span>Node.js image</span>
+          <h3>COPY . . occurs before npm install, so editing one source file invalidates dependency installation.</h3>
+          <p>Can package manifests be copied and dependencies installed before volatile application source is copied?</p>
+        </article><article class="example-card">
+          <span>large build context</span>
+          <h3>Temporary files, logs or node_modules are sent to the builder although they are not real inputs.</h3>
+          <p>Can .dockerignore or a bind mount remove these files from persistent cache dependencies?</p>
+        </article><article class="example-card">
+          <span>CI</span>
+          <h3>Every build runs on a fresh builder with no local cache.</h3>
+          <p>Would a remote cache reduce repeated compilation/download cost enough to justify the extra cache lifecycle?</p>
+        </article></div>
+    </section>
+
+    <section class="detail-section wrap limitation-section">
+      <p class="kicker">WHERE THE MODEL BREAKS</p>
+      <h2>Useful does not mean sufficient.</h2>
+      <ol class="limitation-list"><li>A cache optimization is valid only if the cache boundary still includes every input that semantically affects the result.</li><li>Layer reordering can create stale or confusing results if hidden dependencies are omitted merely to preserve cache hits.</li><li>External caches add access-control, storage and retention concerns and may be unnecessary for small local builds.</li><li>Package-manager cache mounts have tool-specific sharing and locking requirements.</li></ol>
+    </section>
+
+    <section id="actions" class="detail-section wrap">
+      <p class="kicker">PERSONAL ACTION MAP</p>
+      <h2>Convert understanding into a decision.</h2>
+      <div class="action-grid"><article class="action-card action-use_now">
+          <span>Use now</span>
+          <ul><li>Inspect Dockerfiles as dependency graphs: identify which volatile inputs currently invalidate expensive downstream steps.</li></ul>
+        </article><article class="action-card action-try">
+          <span>Try</span>
+          <ul><li>Split dependency manifests from application source in one slow Dockerfile and measure the second build after a source-only change.</li><li>Add a cache mount to one package-install step and compare bytes/time on a layer rebuild.</li></ul>
+        </article><article class="action-card action-learn">
+          <span>Learn</span>
+          <ul><li>Docker build context</li><li>layer cache invalidation</li><li>BuildKit bind mounts</li><li>cache mounts</li><li>external cache exporters/importers</li></ul>
+        </article><article class="action-card action-build">
+          <span>Build</span>
+          <ul><li>A small build-cache diagnostic that explains which dependency boundary caused an expensive rebuild.</li></ul>
+        </article><article class="action-card action-watch">
+          <span>Watch</span>
+          <ul><li>Whether CI build duration is high enough to justify a remote external cache.</li></ul>
+        </article><article class="action-card action-ignore_for_now">
+          <span>Ignore for now</span>
+          <ul><li>Adding remote cache infrastructure before measuring repeated build cost.</li></ul>
+        </article></div>
+    </section>
+
+    <section id="sources" class="detail-section wrap source-section">
+      <p class="kicker">SOURCES + DATES</p>
+      <div class="source-grid">
+        <div>
+          <h3>Primary source</h3>
+          <a href="https://docs.docker.com/build/cache/optimize" target="_blank" rel="noreferrer">Optimize cache usage in builds ↗</a>
+          <p>Unknown creator · Source status: living source · accessed 2026-08-27</p>
+          <p>Living official Docker documentation inspected on 2026-08-27; no single publication date is asserted.</p>
+        </div>
+        <div>
+          <h3>Verification / enrichment</h3>
+          <ul class="supporting-sources"><li>
+          <a href="https://docs.docker.com/build/cache/optimize" target="_blank" rel="noreferrer">Optimize cache usage in builds</a>
+          <span>primary source for layer ordering, context, bind/cache mounts and external cache · accessed 2026-08-27</span>
+        </li></ul>
+        </div>
+      </div>
+      <p class="provenance-note">Analyzed 2026-08-27. Full third-party transcript is not stored. Source claims and project enrichment are kept distinguishable.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer wrap">
+    <span>Signal to Insight</span><span>Explainer: docker-cache-dependency-invalidation</span><span>Reviewed 2026-08-27</span>
+  </footer>
+  <script src="../../app.js"></script>
+</body>
+</html>

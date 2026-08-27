@@ -811,6 +811,75 @@
           "note": "This is project synthesis comparing two durability models rather than a claim made by either vendor."
         }
       ]
+    },
+    {
+      "insight_id": "docker-cache-dependency-invalidation",
+      "claims": [
+        {
+          "id": "docker-cache-reuse-rule",
+          "text": "Docker reuses a build layer when the instruction and files it depends on have not changed since the previous build.",
+          "impact": "high",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-docker-build-cache-2026",
+              "url": "https://docs.docker.com/build/cache/optimize",
+              "locator": "Optimize cache usage → cache reuse rule"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "docker-layer-order-cascade",
+          "text": "Because a changed step causes following steps to rebuild, stable expensive steps should generally precede frequently changing source steps when their true dependencies allow it.",
+          "impact": "high",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-docker-build-cache-2026",
+              "url": "https://docs.docker.com/build/cache/optimize",
+              "locator": "Order your layers → change causes following steps to rebuild"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "docker-cache-mount-behavior",
+          "text": "BuildKit cache mounts persist reusable package cache data so a rebuilt layer can reuse unchanged packages instead of downloading everything again.",
+          "impact": "medium",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-docker-build-cache-2026",
+              "url": "https://docs.docker.com/build/cache/optimize",
+              "locator": "Use cache mounts → persistent cache across builds"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "docker-external-cache-ci",
+          "text": "External build caches allow cache data to be reused across builders and are particularly useful when CI builders are ephemeral.",
+          "impact": "medium",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-docker-build-cache-2026",
+              "url": "https://docs.docker.com/build/cache/optimize",
+              "locator": "Use an external cache → reuse across builders and CI"
+            }
+          ],
+          "note": null
+        }
+      ]
     }
   ]
 }

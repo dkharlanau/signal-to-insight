@@ -391,6 +391,24 @@
       "derived_records": [
         "langgraph-stateful-agent-orchestration"
       ]
+    },
+    {
+      "id": "src-docker-build-cache-2026",
+      "type": "documentation",
+      "title": "Optimize cache usage in builds",
+      "canonical_url": "https://docs.docker.com/build/cache/optimize",
+      "creators": [],
+      "publisher": "Docker Inc.",
+      "event": null,
+      "published_at": null,
+      "event_date": null,
+      "captured_at": "2026-08-27",
+      "analyzed_at": "2026-08-27",
+      "date_note": "Living official Docker documentation inspected on 2026-08-27; no single publication date is asserted.",
+      "verification": [],
+      "derived_records": [
+        "docker-cache-dependency-invalidation"
+      ]
     }
   ]
 }

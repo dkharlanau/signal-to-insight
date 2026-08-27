@@ -489,6 +489,32 @@
           ]
         }
       ]
+    },
+    {
+      "insight_id": "docker-cache-dependency-invalidation",
+      "decision": "explainer_is_enough",
+      "rationale": "For the requested mental model, the explainer preserves the source's complete dependency logic: exact layer reuse, invalidation cascade, context control and persistent/external caches. The original guide becomes useful when implementing Dockerfile syntax for a concrete package manager or CI environment, but additional reading is not required to reconstruct the central model.",
+      "novelty": {
+        "level": "high",
+        "reason": "The source introduces a build-cache dependency and invalidation model that has no close concept in the current knowledge graph."
+      },
+      "source_quality": {
+        "level": "high",
+        "reason": "The source is official Docker documentation and directly explains the cache mechanisms retained in the explainer."
+      },
+      "relevance": {
+        "level": "medium",
+        "reason": "The model is broadly useful for engineering/build workflows even though it is not central to every source-to-understanding or enterprise-systems task."
+      },
+      "practical_leverage": {
+        "level": "high",
+        "reason": "The dependency model can immediately reduce build time by changing Dockerfile structure or cache boundaries in real projects."
+      },
+      "compression_loss": {
+        "level": "low",
+        "reason": "The omitted material is mainly command/package-manager detail; the source's central causal model and important boundaries are retained."
+      },
+      "selected_parts": []
     }
   ]
 }

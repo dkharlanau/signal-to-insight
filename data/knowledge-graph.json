@@ -802,6 +802,63 @@
         "persistence",
         "agents"
       ]
+    },
+    {
+      "id": "build-cache-dependency-boundary",
+      "label": "Build-cache dependency boundary",
+      "summary": "The set of instruction and input dependencies whose stability determines whether a build result can be reused from cache.",
+      "domain": "build systems",
+      "coverage": "explained",
+      "insight_ids": [
+        "docker-cache-dependency-invalidation"
+      ],
+      "aliases": [
+        "cache dependency boundary"
+      ],
+      "tags": [
+        "build",
+        "cache",
+        "dependencies"
+      ]
+    },
+    {
+      "id": "cache-invalidation-cascade",
+      "label": "Cache invalidation cascade",
+      "summary": "Downstream rebuild work triggered when an upstream build step or dependency changes and later cached steps can no longer be reused.",
+      "domain": "build systems",
+      "coverage": "explained",
+      "insight_ids": [
+        "docker-cache-dependency-invalidation"
+      ],
+      "aliases": [
+        "downstream cache invalidation"
+      ],
+      "tags": [
+        "build",
+        "cache",
+        "invalidation",
+        "cost"
+      ]
+    },
+    {
+      "id": "persistent-build-cache",
+      "label": "Persistent build cache",
+      "summary": "Reusable build-time data kept outside exact image-layer cache hits, such as package cache mounts or cache exported for use by other builders.",
+      "domain": "build systems",
+      "coverage": "explained",
+      "insight_ids": [
+        "docker-cache-dependency-invalidation"
+      ],
+      "aliases": [
+        "build cache mount",
+        "external build cache"
+      ],
+      "tags": [
+        "buildkit",
+        "cache",
+        "ci",
+        "dependencies"
+      ]
     }
   ],
   "relations": [
@@ -1201,6 +1258,26 @@
       "rationale": "Persisting thread graph state supports continuation after interruption or failure and therefore realizes a LangGraph-specific durability mechanism without collapsing it into another runtime's state model.",
       "evidence_insights": [
         "langgraph-stateful-agent-orchestration"
+      ]
+    },
+    {
+      "id": "rel-build-cache-boundary-enables-invalidation-cascade",
+      "from": "build-cache-dependency-boundary",
+      "to": "cache-invalidation-cascade",
+      "type": "enables",
+      "rationale": "When an input inside a cache boundary changes, that step becomes a new execution point and invalidates downstream layer reuse.",
+      "evidence_insights": [
+        "docker-cache-dependency-invalidation"
+      ]
+    },
+    {
+      "id": "rel-persistent-build-cache-related-to-invalidation-cascade",
+      "from": "persistent-build-cache",
+      "to": "cache-invalidation-cascade",
+      "type": "related_to",
+      "rationale": "Persistent cache mounts or external caches reduce the cost of required rebuilds even when an exact layer cache hit is lost.",
+      "evidence_insights": [
+        "docker-cache-dependency-invalidation"
       ]
     }
   ]

@@ -584,6 +584,54 @@
           }
         }
       ]
+    },
+    {
+      "insight_id": "docker-cache-dependency-invalidation",
+      "summary": "The cache model requires three ideas: what belongs to a cache dependency boundary, how invalidation propagates downstream, and how persistent build caches reduce rebuild cost without becoming authoritative state.",
+      "items": [
+        {
+          "id": "docker-prereq-cache-boundary",
+          "label": "Build-cache dependency boundary",
+          "concept_id": "build-cache-dependency-boundary",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "This explains why a file change affects some cached work and not other work.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "docker-cache-dependency-invalidation",
+            "target": null
+          }
+        },
+        {
+          "id": "docker-prereq-invalidation",
+          "label": "Cache invalidation cascade",
+          "concept_id": "cache-invalidation-cascade",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "The cascade explains why an upstream volatile dependency multiplies downstream build cost.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "docker-cache-dependency-invalidation",
+            "target": null
+          }
+        },
+        {
+          "id": "docker-prereq-persistent-cache",
+          "label": "Persistent build cache",
+          "concept_id": "persistent-build-cache",
+          "priority": "learn_next",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "Cache mounts and external caches solve reuse beyond exact layer hits and clarify the difference between cache and durable application state.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "docker-cache-dependency-invalidation",
+            "target": null
+          }
+        }
+      ]
     }
   ]
 }

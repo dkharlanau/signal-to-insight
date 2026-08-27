@@ -241,6 +241,28 @@
           "controlled-execution"
         ]
       }
+    },
+    {
+      "insight_id": "docker-cache-dependency-invalidation",
+      "retention_prompt": "Without looking back, explain Docker build caching as a dependency problem: what makes a layer reusable, why can one early change cascade into expensive downstream work, and how do context, mounts and external caches change the dependency/reuse boundary?",
+      "answer_key": {
+        "problem_from": "whole_source_map.problem",
+        "mechanism_from": "whole_source_map.thesis",
+        "anchor_concept_ids": [
+          "build-cache-dependency-boundary",
+          "cache-invalidation-cascade",
+          "persistent-build-cache"
+        ],
+        "boundary_limitation_index": 0
+      },
+      "transfer_prompt": {
+        "prompt": "A Dockerfile copies an entire repository before installing dependencies, and a one-line source change triggers a ten-minute dependency install. Redesign the dependency boundary and explain when a cache mount or external cache would solve a different part of the problem.",
+        "expected_concept_ids": [
+          "build-cache-dependency-boundary",
+          "cache-invalidation-cascade",
+          "persistent-build-cache"
+        ]
+      }
     }
   ]
 }
