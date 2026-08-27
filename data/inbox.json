@@ -132,6 +132,17 @@
       "source_id": null,
       "insight_id": null,
       "notes": "GitHub source intake issue #59. Dogfood cohort: standard/framework / AI governance."
+    },
+    {
+      "id": "intake-2026-08-27-arxiv-1706-03762",
+      "source_url": "https://arxiv.org/abs/1706.03762",
+      "source_type": "paper",
+      "submitted_at": "2026-08-27",
+      "requested_focus": "Understand why self-attention replaced recurrence for the Transformer architecture, what parallelism and dependency modeling changed, and which claims belong to the original machine-translation context rather than later LLM folklore.",
+      "status": "queued",
+      "source_id": null,
+      "insight_id": null,
+      "notes": "GitHub source intake issue #60. Dogfood cohort: foundational ML paper."
     }
   ]
 }
