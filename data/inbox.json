@@ -66,6 +66,17 @@
       "source_id": null,
       "insight_id": null,
       "notes": "GitHub source intake issue #53. Dogfood cohort: distributed systems / orchestration documentation."
+    },
+    {
+      "id": "intake-2026-08-27-sqlite-wal-html",
+      "source_url": "https://www.sqlite.org/wal.html",
+      "source_type": "documentation",
+      "submitted_at": "2026-08-27",
+      "requested_focus": "Understand the WAL mental model, read/write concurrency, checkpointing, failure boundaries, and when append-first persistence changes system behavior.",
+      "status": "queued",
+      "source_id": null,
+      "insight_id": null,
+      "notes": "GitHub source intake issue #54. Dogfood cohort: database/storage documentation."
     }
   ]
 }
