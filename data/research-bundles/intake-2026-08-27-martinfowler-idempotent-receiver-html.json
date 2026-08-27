@@ -5,23 +5,23 @@
   "source": {
     "type": "article",
     "canonical_url": "https://martinfowler.com/articles/patterns-of-distributed-systems/idempotent-receiver.html",
-    "title": null,
-    "creators": [],
-    "publisher": null,
-    "published_at": null,
+    "title": "Idempotent Receiver",
+    "creators": ["Unmesh Joshi"],
+    "publisher": "martinfowler.com / Patterns of Distributed Systems",
+    "published_at": "2023-11-23",
     "event_date": null,
     "version": null,
-    "language": null,
+    "language": "en",
     "duration": null,
-    "date_note": null
+    "date_note": "The pattern page identifies Unmesh Joshi and is dated 23 November 2023. AWS Builders' Library was used separately to verify practical idempotency boundaries, not as source-authored content."
   },
   "inspection": {
-    "method": "not inspected",
-    "full_content_used_ephemerally": false,
+    "method": "Direct inspection of the Idempotent Receiver pattern page plus separate verification against AWS Builders' Library guidance on idempotent APIs.",
+    "full_content_used_ephemerally": true,
     "full_content_committed": false,
-    "confidence": "metadata_only",
+    "confidence": "direct",
     "gaps": [
-      "Source content has not been mapped yet."
+      "The source page is deliberately compact and does not specify retention windows, atomic storage implementation, concurrency races or late-arriving-request policy."
     ]
   },
   "prior_knowledge": {
@@ -33,52 +33,51 @@
         "label": "Idempotency under retry",
         "coverage": "explained",
         "evidence_insights": [
-          {
-            "id": "temporal-durable-execution-mental-model",
-            "status": "review",
-            "title": "Temporal: the mental model behind durable execution"
-          }
+          {"id": "temporal-durable-execution-mental-model", "status": "review", "title": "Temporal: the mental model behind durable execution"}
         ],
-        "relationship_to_source": "unclassified"
+        "relationship_to_source": "refinement"
       },
       {
         "concept_id": "activity-execution",
         "label": "Activity Execution",
         "coverage": "explained",
         "evidence_insights": [
-          {
-            "id": "temporal-durable-execution-mental-model",
-            "status": "review",
-            "title": "Temporal: the mental model behind durable execution"
-          }
+          {"id": "temporal-durable-execution-mental-model", "status": "review", "title": "Temporal: the mental model behind durable execution"}
         ],
-        "relationship_to_source": "unclassified"
+        "relationship_to_source": "not_relevant"
       }
     ],
     "classification_required": true
   },
   "content_map": {
-    "problem": null,
-    "thesis": null,
-    "sections": [],
-    "concepts": [],
-    "mechanisms": [],
+    "problem": "After a timeout or lost response, a client cannot know whether the server never processed the request or processed it and only the response was lost; retrying can therefore deliver the same logical request more than once.",
+    "thesis": "Give the client and each logical request stable identity, let the receiver detect whether that request was already processed, and return the saved response instead of executing the operation again.",
+    "sections": ["Problem", "Solution", "Patterns of Distributed Systems context"],
+    "concepts": ["idempotent receiver", "client identity", "request identity", "duplicate request detection", "saved response replay"],
+    "mechanisms": ["assign a stable client identifier", "assign a request number/identifier to the logical request", "look up whether the same client/request pair was already processed", "reuse the saved response for duplicates", "skip repeated mutation when the logical request is already complete"],
     "tools": [],
-    "examples": [],
-    "claims": [],
-    "evidence": [],
-    "assumptions": [],
-    "limitations": [],
-    "open_questions": []
+    "examples": ["a client retries after receiving no response even though the first server attempt may already have completed"],
+    "claims": ["Ambiguous failures force clients to retry because a missing response does not reveal whether server-side processing happened.", "A retry can become a duplicate request when the first request was processed before the response was lost.", "The receiver can recognize duplicates using client plus request identity and return the earlier saved response without reprocessing the operation."],
+    "evidence": ["The source's Problem section distinguishes response loss from server failure before processing.", "The Solution section specifies client identity, request numbers, processed-request lookup and saved-response reuse."],
+    "assumptions": ["The same logical operation reuses the same request identity across retries.", "The receiver retains enough durable information to decide whether that identity was already processed.", "The saved result can be returned with semantics useful to the retrying client."],
+    "limitations": ["The source does not define how long request identities and saved results must be retained.", "A request identifier alone does not explain how deduplication state and the business mutation are made atomic under crashes or concurrency.", "Treating identical parameters as identical intent can be wrong; the caller may legitimately want two equivalent-looking operations."],
+    "open_questions": ["What is the correct deduplication retention window for the operation?", "How should the service atomically persist request identity and business outcome?", "What should happen when the same request identity arrives with different parameters or intent?"]
   },
   "selection": {
     "requested_focus": "Understand duplicate delivery under retries and the idempotent receiver pattern; connect it carefully to the existing idempotency-under-retry concept and identify where deduplication IDs are insufficient.",
-    "coherent_core": [],
-    "prerequisites": [],
-    "drop_notes": [],
-    "connections": []
+    "coherent_core": ["ambiguous failure makes retry necessary", "retry can duplicate an already-completed mutation", "stable logical request identity lets the receiver recognize a duplicate", "a duplicate should reuse prior outcome/response rather than repeat the mutation", "the deduplication record must be trustworthy enough to survive the same failures the retry mechanism is addressing"],
+    "prerequisites": ["idempotency under retry", "logical request identity"],
+    "drop_notes": ["Do not turn this into a Temporal Activity tutorial; Activity Execution was a retrieval match caused by the earlier idempotency case, not part of this source.", "Keep AWS atomicity and client-intent guidance visibly labeled as verification/enrichment rather than source content."],
+    "connections": ["refines idempotency-under-retry with a concrete receiver-side mechanism", "connects retries to stable request identity and durable duplicate detection"]
   },
-  "verification_candidates": [],
-  "source_locators": [],
+  "verification_candidates": [
+    {"question": "Must request-token storage and the business mutation be atomic?", "reason": "A token-only design can still fail if the token and mutation are persisted inconsistently; AWS Builders' Library provides concrete production guidance.", "priority": "high"},
+    {"question": "Should request identity be inferred from request parameters?", "reason": "Identical parameters can represent distinct caller intent, so inferred hashes can incorrectly suppress valid operations.", "priority": "medium"}
+  ],
+  "source_locators": [
+    {"label": "Ambiguous retry problem", "locator": "Idempotent Receiver → Problem"},
+    {"label": "Client and request identity", "locator": "Idempotent Receiver → Solution"},
+    {"label": "Saved response reuse", "locator": "Idempotent Receiver → Solution"}
+  ],
   "created_at": "2026-08-27"
 }
