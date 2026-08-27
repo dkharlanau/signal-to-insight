@@ -1,4 +1,4 @@
-name: Validate and wire source decisions
+name: Validate source decisions
 
 on:
   push:
@@ -12,7 +12,7 @@ on:
       - "scripts/validate_source_decisions.py"
       - "decision.js"
       - "decision.css"
-      - "evidence.js"
+      - "app.js"
       - ".github/workflows/source-decisions.yml"
   pull_request:
     branches: [main]
@@ -25,21 +25,18 @@ on:
       - "scripts/validate_source_decisions.py"
       - "decision.js"
       - "decision.css"
-      - "evidence.js"
+      - "app.js"
       - ".github/workflows/source-decisions.yml"
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   source-decisions:
-    if: github.actor != 'github-actions[bot]' || github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || 'main' }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -50,57 +47,18 @@ jobs:
         run: python scripts/validate_source_decisions.py
 
       - name: Validate decision UI JavaScript
-        run: node --check decision.js
+        run: |
+          node --check decision.js
+          node --check app.js
 
-      - name: Ensure generated explainers load the decision module
+      - name: Verify the app shell loads the decision UI
         run: |
           python - <<'PY'
           from pathlib import Path
-          path = Path('evidence.js')
-          text = path.read_text(encoding='utf-8')
-          marker = 'signal-to-insight:source-decision-loader'
-          if marker not in text:
-              text += r'''
-
-// signal-to-insight:source-decision-loader
-(() => {
-  if (!document.querySelector('link[data-source-decision-ui]')) {
-    const style = document.createElement('link');
-    style.rel = 'stylesheet';
-    style.href = '../../decision.css';
-    style.dataset.sourceDecisionUi = 'true';
-    document.head.appendChild(style);
-  }
-  if (!document.querySelector('script[data-source-decision-ui]')) {
-    const script = document.createElement('script');
-    script.src = '../../decision.js';
-    script.dataset.sourceDecisionUi = 'true';
-    script.defer = true;
-    document.head.appendChild(script);
-  }
-})();
-'''
-              path.write_text(text, encoding='utf-8')
+          text = Path('app.js').read_text(encoding='utf-8')
+          required = ['../../decision.css', '../../decision.js', 'data-source-decision-ui']
+          missing = [marker for marker in required if marker not in text]
+          if missing:
+              raise SystemExit('source-decision loader missing from app.js: ' + ', '.join(missing))
+          print('Source-decision UI is wired directly by app.js.')
           PY
-
-      - name: Verify loader on pull requests
-        if: github.event_name == 'pull_request'
-        run: |
-          if [ -n "$(git status --porcelain -- evidence.js)" ]; then
-            echo "evidence.js is missing the source-decision loader."
-            git diff -- evidence.js
-            exit 1
-          fi
-
-      - name: Commit loader on main when needed
-        if: github.event_name == 'push'
-        run: |
-          if [ -z "$(git status --porcelain -- evidence.js)" ]; then
-            echo "Source-decision UI loader already installed."
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add evidence.js
-          git commit -m "ui: wire source decision module"
-          git push origin HEAD:main
