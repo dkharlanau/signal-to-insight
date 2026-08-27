@@ -83,11 +83,23 @@ def is_strong_seed(features: dict) -> bool:
     return False
 
 
-def rank(query: str, limit: int = 5) -> dict:
+def rank(
+    query: str,
+    limit: int = 5,
+    suppressed_concepts: set[str] | None = None,
+) -> dict:
+    """Rank graph concepts, optionally excluding an experiment-provided concept set.
+
+    `suppressed_concepts` is deliberately opt-in. Production retrieval does not learn from
+    rejected cohort matches unless a caller explicitly supplies evidence-backed feedback.
+    This makes baseline-versus-candidate experiments possible without silently changing the
+    live ranking contract.
+    """
     graph = json.loads(GRAPH.read_text(encoding="utf-8"))
     insight_data = json.loads(INSIGHTS.read_text(encoding="utf-8"))
     insights = {item["id"]: item for item in insight_data.get("insights", [])}
     concepts = {item["id"]: item for item in graph.get("concepts", [])}
+    suppressed = set(suppressed_concepts or ())
     query_words = words(query)
     if not query_words:
         return {"query": query, "matches": [], "message": "No searchable terms."}
@@ -97,6 +109,8 @@ def rank(query: str, limit: int = 5) -> dict:
     for concept in concepts.values():
         features = lexical_features(query, query_words, concept)
         feature_map[concept["id"]] = features
+        if concept["id"] in suppressed:
+            continue
         if is_strong_seed(features):
             scored.append((features["score"], concept["id"]))
     scored.sort(key=lambda item: (-item[0], concepts[item[1]]["label"].lower()))
@@ -119,7 +133,7 @@ def rank(query: str, limit: int = 5) -> dict:
                 "rationale": relation["rationale"],
             }
             neighbors[left].append(entry)
-            if right not in seeds:
+            if right not in seeds and right not in suppressed:
                 neighbor_candidates.setdefault(right, {"via": [], "strength": 0})
                 neighbor_candidates[right]["via"].append({"seed": left, "type": relation["type"], "direction": "out"})
                 neighbor_candidates[right]["strength"] += score_map.get(left, 0)
@@ -132,7 +146,7 @@ def rank(query: str, limit: int = 5) -> dict:
                 "rationale": relation["rationale"],
             }
             neighbors[right].append(entry)
-            if left not in seeds:
+            if left not in seeds and left not in suppressed:
                 neighbor_candidates.setdefault(left, {"via": [], "strength": 0})
                 neighbor_candidates[left]["via"].append({"seed": right, "type": relation["type"], "direction": "in"})
                 neighbor_candidates[left]["strength"] += score_map.get(right, 0)
@@ -160,7 +174,12 @@ def rank(query: str, limit: int = 5) -> dict:
             bridge_id, target_id, direction = right, left, "in"
         if bridge_id is None or target_id is None or direction is None:
             continue
-        if target_id in seeds or target_id in direct_candidates or target_id == bridge_id:
+        if (
+            target_id in seeds
+            or target_id in direct_candidates
+            or target_id == bridge_id
+            or target_id in suppressed
+        ):
             continue
         bridge_strength = neighbor_candidates[bridge_id]["strength"]
         neighbor_candidates[target_id] = {
@@ -235,6 +254,7 @@ def rank(query: str, limit: int = 5) -> dict:
         "query": query,
         "query_terms": sorted(query_words),
         "matches": matches,
+        "suppressed_concepts": sorted(suppressed),
         "instruction": "Use lexical matches as likely prior concepts and graph-neighbor matches as context. Distinguish reinforcement, refinement, contradiction and genuinely new concepts before drafting a new insight."
     }
 
@@ -249,6 +269,15 @@ def self_test() -> int:
         return 1
     if not any(item.get("neighbors") for item in durable["matches"]):
         print("graph context self-test failed; expected expanded neighbors")
+        return 1
+
+    suppressed = rank(
+        "durable workflow retry",
+        limit=5,
+        suppressed_concepts={"durable-execution"},
+    )
+    if "durable-execution" in {item["concept_id"] for item in suppressed.get("matches", [])}:
+        print("graph context self-test failed; opt-in suppression did not exclude durable-execution")
         return 1
 
     opa = rank(

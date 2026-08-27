@@ -1,0 +1,59 @@
+{
+  "version": "1.0.0",
+  "records": [
+    {
+      "id": "kubernetes-controller-rejections",
+      "intake_id": "intake-2026-08-27-kubernetes-controller",
+      "query": "Understand reconciliation/control loops: desired state vs current state, why many small controllers are preferable to one monolith, and what this teaches about resilient automation.",
+      "rejected_concepts": [
+        "durable-execution",
+        "workflow-execution",
+        "controlled-execution",
+        "event-history",
+        "worker-process"
+      ]
+    },
+    {
+      "id": "sqlite-wal-rejections",
+      "intake_id": "intake-2026-08-27-sqlite-wal-html",
+      "query": "Understand the WAL mental model, read/write concurrency, checkpointing, failure boundaries, and when append-first persistence changes system behavior.",
+      "rejected_concepts": [
+        "execution-history",
+        "event-history",
+        "controlled-execution",
+        "replayable-evaluation"
+      ]
+    },
+    {
+      "id": "postgresql-mvcc-rejections",
+      "intake_id": "intake-2026-08-27-postgresql-mvcc-intro-html",
+      "query": "Understand MVCC as a concurrency model: snapshots, read/write non-blocking behavior, isolation boundaries, and what the model does not eliminate.",
+      "rejected_concepts": [
+        "wal-reader-snapshot"
+      ]
+    },
+    {
+      "id": "transformer-rejections",
+      "intake_id": "intake-2026-08-27-arxiv-1706-03762",
+      "query": "Understand why self-attention replaced recurrence for the Transformer architecture, what parallelism and dependency modeling changed, and which claims belong to the original machine-translation context rather than later LLM folklore.",
+      "rejected_concepts": [
+        "retrieval-practice",
+        "observation-grounding",
+        "policy-as-code",
+        "performance-retention-gap",
+        "controlled-execution"
+      ]
+    },
+    {
+      "id": "opentelemetry-trace-rejections",
+      "intake_id": "intake-2026-08-27-opentelemetry-traces",
+      "query": "Understand traces as a causal model of distributed work: spans, parent/child relationships, context propagation, links and what observability can reconstruct versus what business execution evidence must record separately.",
+      "rejected_concepts": [
+        "controlled-execution",
+        "execution-history",
+        "open-policy-agent",
+        "durable-execution"
+      ]
+    }
+  ]
+}
