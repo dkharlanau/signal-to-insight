@@ -93,6 +93,9 @@ jobs:
       - name: Test portable private state
         run: python scripts/local_state.py self-test
 
+      - name: Test private overlay isolation
+        run: python scripts/private_overlay.py self-test
+
       - name: Test explicit publication lifecycle boundaries
         run: |
           python scripts/publish_reviewed.py --self-test
