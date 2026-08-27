@@ -1,138 +1,19 @@
 {
-  "bundle_version": "1.1.0",
-  "intake_id": "intake-2026-08-27-github-pydantic-ai",
-  "source_id": null,
-  "source": {
-    "type": "repository",
-    "canonical_url": "https://github.com/pydantic/pydantic-ai",
-    "title": null,
-    "creators": [],
-    "publisher": null,
-    "published_at": null,
-    "event_date": null,
-    "version": null,
-    "language": null,
-    "duration": null,
-    "date_note": null
-  },
-  "inspection": {
-    "method": "not inspected",
-    "full_content_used_ephemerally": false,
-    "full_content_committed": false,
-    "confidence": "metadata_only",
-    "gaps": [
-      "Source content has not been mapped yet."
-    ]
-  },
-  "prior_knowledge": {
-    "captured_at": "2026-08-27",
-    "query": "Understand Pydantic AI's typed agent-loop model, dependency/context handling, tool execution and evaluation surface; compare responsibilities with existing agent-loop and production-control concepts without treating framework features as universal architecture.",
-    "matches": [
-      {
-        "concept_id": "controlled-execution",
-        "label": "Controlled execution",
-        "coverage": "explained",
-        "evidence_insights": [
-          {
-            "id": "enterprise-agents-production-substrate",
-            "status": "published",
-            "title": "Why enterprise AI agents fail after the POC"
-          },
-          {
-            "id": "open-policy-agent-decision-enforcement-model",
-            "status": "review",
-            "title": "Open Policy Agent: separate policy decisions from enforcement"
-          },
-          {
-            "id": "react-reason-act-observe-loop",
-            "status": "review",
-            "title": "ReAct: reason, act, observe — then update the plan"
-          }
-        ],
-        "relationship_to_source": "unclassified"
-      },
-      {
-        "concept_id": "react-loop",
-        "label": "ReAct loop",
-        "coverage": "explained",
-        "evidence_insights": [
-          {
-            "id": "react-reason-act-observe-loop",
-            "status": "review",
-            "title": "ReAct: reason, act, observe — then update the plan"
-          }
-        ],
-        "relationship_to_source": "unclassified"
-      },
-      {
-        "concept_id": "replayable-evaluation",
-        "label": "Replayable evaluation",
-        "coverage": "explained",
-        "evidence_insights": [
-          {
-            "id": "enterprise-agents-production-substrate",
-            "status": "published",
-            "title": "Why enterprise AI agents fail after the POC"
-          }
-        ],
-        "relationship_to_source": "unclassified"
-      },
-      {
-        "concept_id": "execution-history",
-        "label": "Execution history",
-        "coverage": "explained",
-        "evidence_insights": [
-          {
-            "id": "enterprise-agents-production-substrate",
-            "status": "published",
-            "title": "Why enterprise AI agents fail after the POC"
-          },
-          {
-            "id": "temporal-durable-execution-mental-model",
-            "status": "review",
-            "title": "Temporal: the mental model behind durable execution"
-          }
-        ],
-        "relationship_to_source": "unclassified"
-      },
-      {
-        "concept_id": "human-agent-task-equivalence",
-        "label": "Human-agent task equivalence",
-        "coverage": "explained",
-        "evidence_insights": [
-          {
-            "id": "enterprise-agents-production-substrate",
-            "status": "published",
-            "title": "Why enterprise AI agents fail after the POC"
-          }
-        ],
-        "relationship_to_source": "unclassified"
-      }
-    ],
-    "classification_required": true
-  },
-  "content_map": {
-    "problem": null,
-    "thesis": null,
-    "sections": [],
-    "concepts": [],
-    "mechanisms": [],
-    "tools": [],
-    "examples": [],
-    "claims": [],
-    "evidence": [],
-    "assumptions": [],
-    "limitations": [],
-    "open_questions": []
-  },
-  "selection": {
-    "requested_focus": "Understand Pydantic AI's typed agent-loop model, dependency/context handling, tool execution and evaluation surface; compare responsibilities with existing agent-loop and production-control concepts without treating framework features as universal architecture.",
-    "coherent_core": [],
-    "prerequisites": [],
-    "drop_notes": [],
-    "connections": []
-  },
-  "verification_candidates": [],
-  "source_locators": [],
-  "created_at": "2026-08-27"
+  "bundle_version":"1.1.0",
+  "intake_id":"intake-2026-08-27-github-pydantic-ai",
+  "source_id":"src-pydantic-ai-repository-2026",
+  "source":{"type":"repository","canonical_url":"https://github.com/pydantic/pydantic-ai","title":"Pydantic AI","creators":["Pydantic project contributors"],"publisher":"Pydantic","published_at":null,"event_date":null,"version":"v2.35.1","language":"en","duration":null,"date_note":"Living repository inspected on 2026-08-27; latest release v2.35.1 was published on 2026-08-27."},
+  "inspection":{"method":"Direct inspection of the official Pydantic AI repository README and latest release metadata, focusing on typed agent loop, RunContext dependencies, validated tools/outputs, capabilities and evaluation surface.","full_content_used_ephemerally":true,"full_content_committed":false,"confidence":"direct","gaps":["This case does not catalog every model/provider/capability.","Framework features are not treated as universal agent-architecture requirements or as a complete production-governance layer."]},
+  "prior_knowledge":{"captured_at":"2026-08-27","query":"Understand Pydantic AI's typed agent-loop model, dependency/context handling, tool execution and evaluation surface; compare responsibilities with existing agent-loop and production-control concepts without treating framework features as universal architecture.","matches":[
+    {"concept_id":"controlled-execution","label":"Controlled execution","coverage":"explained","evidence_insights":[{"id":"enterprise-agents-production-substrate","status":"published","title":"Why enterprise AI agents fail after the POC"},{"id":"open-policy-agent-decision-enforcement-model","status":"review","title":"Open Policy Agent: separate policy decisions from enforcement"},{"id":"react-reason-act-observe-loop","status":"review","title":"ReAct: reason, act, observe — then update the plan"},{"id":"langgraph-stateful-agent-orchestration","status":"review","title":"LangGraph: stateful orchestration is not the same as the agent loop"}],"relationship_to_source":"not_relevant"},
+    {"concept_id":"react-loop","label":"ReAct loop","coverage":"explained","evidence_insights":[{"id":"react-reason-act-observe-loop","status":"review","title":"ReAct: reason, act, observe — then update the plan"}],"relationship_to_source":"not_relevant"},
+    {"concept_id":"replayable-evaluation","label":"Replayable evaluation","coverage":"explained","evidence_insights":[{"id":"enterprise-agents-production-substrate","status":"published","title":"Why enterprise AI agents fail after the POC"}],"relationship_to_source":"not_relevant"},
+    {"concept_id":"execution-history","label":"Execution history","coverage":"explained","evidence_insights":[{"id":"enterprise-agents-production-substrate","status":"published","title":"Why enterprise AI agents fail after the POC"},{"id":"temporal-durable-execution-mental-model","status":"review","title":"Temporal: the mental model behind durable execution"}],"relationship_to_source":"not_relevant"},
+    {"concept_id":"human-agent-task-equivalence","label":"Human-agent task equivalence","coverage":"explained","evidence_insights":[{"id":"enterprise-agents-production-substrate","status":"published","title":"Why enterprise AI agents fail after the POC"}],"relationship_to_source":"not_relevant"}
+  ],"classification_required":true},
+  "content_map":{"problem":"Python agent code often leaves model I/O, tool arguments, runtime dependencies and behavioral testing as loosely connected conventions, making failures surface late and interfaces harder to reason about.","thesis":"Treat the agent as a typed application object: validate structured outputs and tool arguments, carry explicit dependencies through RunContext, compose capabilities around the core loop, and test behavior with a dedicated evaluation surface.","sections":["Repository positioning: typed extensible agent loop","Data extraction example","RunContext and dependencies","Typed tools and structured output","Capabilities and durable execution","Instrumentation and Pydantic Evals"],"concepts":["typed agent contract","RunContext dependency injection","validated tool boundary","agent behavior evaluation surface"],"mechanisms":["output_type validates the run result against a declared Python/Pydantic type","tool signatures/docstrings become tool schemas and arguments are validated before execution","RunContext carries typed dependencies into tools and instructions","capabilities compose tools/instructions/hooks/settings around the same agent","Pydantic Evals and OTel instrumentation make behavior observable/testable without redefining the agent loop"],"tools":["Agent","RunContext","function tools","structured outputs","capabilities","Pydantic Evals"],"examples":["typed sentiment extraction with a tool","durable background agent through a Temporal capability"],"claims":["Pydantic AI positions its core as a typed extensible agent loop.","Tool arguments and structured outputs are validated against Python/Pydantic types.","RunContext carries dependencies into agent/tool execution.","Evaluation and durable execution are adjacent integrations/capabilities rather than proof that the core loop alone supplies production governance."],"evidence":["Official README: product positioning and Why Pydantic AI.","Official README data-extraction example shows output_type, RunContext and validated tools.","Official README durable background agent section shows TemporalDurability as an attachable capability.","Official README describes Pydantic Evals and OpenTelemetry-native instrumentation."],"assumptions":["Python typing/Pydantic schemas are useful boundary contracts for the target application.","Tools can expose meaningful schemas and validate arguments before side effects.","Behavioral quality still needs examples/evals beyond static typing."],"limitations":["Typing validates structure, not semantic correctness or authorization.","A typed tool call can still execute the wrong business action if policy and runtime controls are missing.","Framework-specific capabilities should not be mistaken for universal architecture primitives."],"open_questions":["Which production defects are actually prevented by stronger typed boundaries versus merely made easier to debug?","How much of the capability surface remains stable across rapid framework releases?"]},
+  "selection":{"requested_focus":"Understand Pydantic AI's typed agent-loop model, dependency/context handling, tool execution and evaluation surface; compare responsibilities with existing agent-loop and production-control concepts without treating framework features as universal architecture.","coherent_core":["The portable value is explicit runtime contracts, not the provider list.","Typed output and tool schemas move interface failures toward the boundary where they occur.","RunContext makes runtime dependencies explicit rather than hidden global state.","Evaluation/instrumentation are separate quality surfaces; durable execution is an attachable runtime capability."],"prerequisites":["structured output schema","dependency injection/context","tool schema validation"],"drop_notes":["Do not equate generic Pydantic agent execution with the ReAct method.","Do not claim typed tools provide authorization, durable history or full controlled execution.","Do not turn the explainer into a catalog of providers and UI integrations."],"connections":["controlled execution remains a broader production concern around the typed application boundary","LangGraph and Temporal solve different state/durability responsibilities; Pydantic AI can integrate with such runtimes rather than replacing their mental models"]},
+  "verification_candidates":[{"question":"Which typed boundary failures show up most often in real agent projects?","reason":"Useful dogfood follow-up; not required to establish the framework model.","priority":"low"}],
+  "source_locators":[{"label":"Typed agent loop","locator":"README → opening product definition / Why Pydantic AI"},{"label":"Typed output and tools","locator":"README → Data extraction"},{"label":"RunContext dependencies","locator":"README → Data extraction / RunContext"},{"label":"Durable execution boundary","locator":"README → Durable background agent"},{"label":"Evaluation surface","locator":"README → Why Pydantic AI → Measured, not vibes"}],
+  "created_at":"2026-08-27"
 }
