@@ -9,6 +9,7 @@ on:
       - "data/sources.json"
       - "data/insights.json"
       - "scripts/build_reanalysis.py"
+      - ".github/workflows/reanalysis-previews.yml"
   pull_request:
     branches: [main]
     paths:
@@ -17,6 +18,7 @@ on:
       - "data/sources.json"
       - "data/insights.json"
       - "scripts/build_reanalysis.py"
+      - ".github/workflows/reanalysis-previews.yml"
 
 permissions:
   contents: write
