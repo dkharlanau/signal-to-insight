@@ -1,0 +1,120 @@
+{
+  "patch_version": "1.0.0",
+  "intake_id": "intake-2026-08-27-sre-monitoring-distributed-systems",
+  "intake_status": "review",
+  "updated_at": "2026-08-27",
+  "graph_version": "0.4.0",
+  "source": {
+    "id": "src-google-sre-monitoring-2016",
+    "type": "article",
+    "title": "Monitoring Distributed Systems",
+    "canonical_url": "https://sre.google/sre-book/monitoring-distributed-systems",
+    "creators": ["Rob Ewaschuk"],
+    "publisher": "Google SRE Book",
+    "event": null,
+    "published_at": null,
+    "event_date": null,
+    "captured_at": "2026-08-27",
+    "analyzed_at": "2026-08-27",
+    "date_note": "Google SRE Book Chapter 6, inspected on 2026-08-27; no standalone online-page publication date is asserted.",
+    "verification": [{"title": "Google SRE Book — Monitoring Distributed Systems", "url": "https://sre.google/sre-book/monitoring-distributed-systems/", "accessed_at": "2026-08-27"}],
+    "derived_records": ["google-sre-monitoring-signal-model"]
+  },
+  "insight": {
+    "id": "google-sre-monitoring-signal-model",
+    "source_id": "src-google-sre-monitoring-2016",
+    "slug": "google-sre-monitoring-signal-model",
+    "status": "review",
+    "title": "Google SRE monitoring: page symptoms, diagnose causes",
+    "one_liner": "Reliable monitoring separates user-visible symptoms from internal causes, uses black-box and white-box signals for different jobs, and protects human attention with simple low-noise paging rules.",
+    "why_this_matters": "More telemetry does not automatically create better operations. The SRE model is a decision system: detect meaningful service impact, keep paging simple and scarce, use internal signals for diagnosis, and start service coverage with latency, traffic, errors and saturation rather than indiscriminate metric volume.",
+    "whole_source_map": {
+      "problem": "Monitoring systems can collect vast internal data yet still fail operators by paging on noise, hiding user-visible impact, or mixing detection of what is broken with diagnosis of why it is broken.",
+      "thesis": "Use black-box monitoring for externally visible symptoms, white-box monitoring for internal diagnosis/imminent failures, four golden signals as a compact baseline, and simple high-signal pager rules because human interruption is expensive.",
+      "core_topics": ["monitoring purposes", "symptom versus cause", "black-box monitoring", "white-box monitoring", "latency traffic errors saturation", "paging cost", "signal-to-noise discipline", "simple alerting path"]
+    },
+    "derived_model": {
+      "problem": "Telemetry volume and alert sophistication can increase while operator awareness gets worse because low-value alerts compete with real failures for attention.",
+      "mechanism": "Anchor detection in service symptoms, retain white-box internal visibility for diagnosis and imminent/masked issues, watch the four golden signals, and route only simple actionable conditions to a pager.",
+      "result": "Operators receive fewer higher-value interruptions while still retaining enough internal telemetry to explain causes and perform retrospective debugging."
+    },
+    "coherence_review": {
+      "central_chain": [
+        "Monitoring serves several purposes, but paging has the strictest requirement because it interrupts a human.",
+        "A symptom answers what users experience; a cause explains why the symptom exists and should not be confused with the paging condition itself.",
+        "Black-box monitoring observes externally visible behavior and is strong for ongoing user-impact symptoms.",
+        "White-box monitoring exposes internal system behavior and is essential for diagnosis plus masked or imminent failures.",
+        "Latency, traffic, errors and saturation provide a compact baseline, while pager rules stay simple, robust and low-noise."
+      ],
+      "prerequisites_complete": true,
+      "source_vs_enrichment_clear": true,
+      "open_gaps": [
+        "The chapter's paging model predates later burn-rate/SLO alerting practices that should be sourced separately.",
+        "The four golden signals are a service-health baseline, not a complete integrity/security/business-correctness model."
+      ],
+      "scores": {"coherence": 5, "prerequisite_completeness": 5, "evidence_confidence": 5, "practical_leverage": 5}
+    },
+    "visual_plan": {
+      "dominant": {
+        "type": "sequence",
+        "title": "Detect impact first, diagnose cause second",
+        "nodes": [
+          {"label": "01 · Observe", "title": "Black-box symptom", "text": "Measure what users can actually experience: availability, latency, errors or lost capacity."},
+          {"label": "02 · Decide", "title": "Is a human needed?", "text": "Page only when the condition is real, important and actionable enough to justify interruption."},
+          {"label": "03 · Diagnose", "title": "White-box cause", "text": "Use internal metrics, logs and traces to explain the symptom or expose masked failures."},
+          {"label": "04 · Improve", "title": "Reduce future noise", "text": "Fix root causes and simplify monitoring so pages remain scarce and trustworthy."}
+        ]
+      },
+      "supporting": ["comparison", "concept_grid", "examples", "limitations", "action_map", "source_map"],
+      "image": {"needed": false, "reason": "The distinction between symptom-driven paging and internal diagnosis is an operational sequence, not an illustration problem."}
+    },
+    "concepts": [
+      {"name": "Black-box monitoring", "depth": "learn", "why_needed": "Externally visible behavior gives the strongest evidence that a user-impacting problem is actually happening."},
+      {"name": "White-box monitoring", "depth": "learn", "why_needed": "Internal instrumentation is required to diagnose causes and detect masked or imminent failures."},
+      {"name": "Four golden signals", "depth": "learn", "why_needed": "Latency, traffic, errors and saturation form a compact default vocabulary for service health."},
+      {"name": "Actionable paging", "depth": "learn", "why_needed": "Human interruption is expensive, so pager rules must optimize for signal and actionability rather than telemetry coverage."
+      }
+    ],
+    "tool_map": [],
+    "examples": [
+      {"domain": "web service", "scenario": "Database retries hide intermittent backend errors and users still receive successful responses.", "question": "Should this page the frontend team now, or remain a white-box diagnostic/imminent-risk signal until a real service symptom appears?"},
+      {"domain": "incident triage", "scenario": "Users see high latency while database read time also rises.", "question": "Which measurement establishes the service symptom and which helps diagnose the cause without confusing the two?"},
+      {"domain": "monitoring design", "scenario": "A team has hundreds of metrics but responders ignore frequent alerts.", "question": "Which latency/traffic/error/saturation signals correspond to real impact, and which rules should become dashboards or tickets rather than pages?"}
+    ],
+    "limitations": [
+      "The four golden signals do not replace domain-specific correctness, security, data-integrity or business-process monitoring.",
+      "Black-box monitoring is weak for not-yet-visible failures; internal white-box signals remain necessary for prediction and diagnosis.",
+      "White-box monitoring can create alert noise when internal anomalies page humans without demonstrated service impact.",
+      "Complex dependency-aware alerting can be fragile as systems change; the chapter explicitly favors a simple and comprehensible critical pager path."
+    ],
+    "action_map": {
+      "use_now": ["For every page, write the user/service symptom it represents and the action expected from the responder; demote rules that cannot answer both.", "Separate detection dashboards from diagnostic telemetry instead of requiring every collected signal to generate an alert."],
+      "try": ["Map one service to latency, traffic, errors and saturation, then label each existing alert as black-box symptom, white-box cause, ticket or page."],
+      "learn": ["SLO burn-rate alerting", "tail latency", "alert fatigue", "black-box probes", "service saturation"],
+      "build": ["A small monitoring review worksheet that classifies each alert by symptom/cause, black/white box, actionability and human-interruption cost."],
+      "watch": ["Whether low-severity internal signals are silently drifting back into pager paths and reducing trust in alerts."],
+      "ignore_for_now": ["Complex causal/dependency alert hierarchies that are harder to understand than the service failure they are meant to detect."]
+    },
+    "connections": [
+      "observability: this source refines generic telemetry into an operator decision model with different roles for detection, diagnosis and paging",
+      "distributed-trace: tracing is one white-box mechanism that helps explain a distributed cause but does not define whether a human should be paged"
+    ],
+    "supporting_sources": [{"title": "Monitoring Distributed Systems", "url": "https://sre.google/sre-book/monitoring-distributed-systems/", "publisher": "Google SRE Book", "purpose": "primary source for monitoring definitions, symptom/cause boundary, black/white box, golden signals and paging signal/noise guidance", "accessed_at": "2026-08-27"}],
+    "tags": ["sre", "monitoring", "observability", "alerting", "reliability", "operations"],
+    "provenance": {"source_linked": true, "source_dates_recorded": true, "full_transcript_stored": false, "analysis_type": "direct official Google SRE chapter analysis focused on operator signal and paging decisions", "reviewed_at": "2026-08-27"}
+  },
+  "graph": {
+    "concepts": [
+      {"id": "observability", "insight_ids": ["google-sre-monitoring-signal-model"]},
+      {"id": "black-box-monitoring", "label": "Black-box monitoring", "summary": "Monitoring externally visible service behavior as a user would experience it, emphasizing active symptoms and impact rather than internal implementation state.", "domain": "site reliability engineering", "coverage": "explained", "insight_ids": ["google-sre-monitoring-signal-model"], "aliases": ["external symptom monitoring"], "tags": ["monitoring", "symptoms", "sre"]},
+      {"id": "white-box-monitoring", "label": "White-box monitoring", "summary": "Monitoring internal system metrics, logs or interfaces to diagnose causes and expose masked or imminent failures not visible from the outside.", "domain": "site reliability engineering", "coverage": "explained", "insight_ids": ["google-sre-monitoring-signal-model"], "aliases": ["internal monitoring"], "tags": ["monitoring", "diagnosis", "sre"]},
+      {"id": "golden-signals", "label": "Four golden signals", "summary": "Latency, traffic, errors and saturation used as a compact baseline set of service-health signals for user-facing systems.", "domain": "site reliability engineering", "coverage": "explained", "insight_ids": ["google-sre-monitoring-signal-model"], "aliases": ["latency traffic errors saturation"], "tags": ["monitoring", "metrics", "service-health"]},
+      {"id": "actionable-paging", "label": "Actionable paging", "summary": "Restricting human-interrupting alerts to simple, high-signal conditions representing real or imminent problems that warrant direct operator action.", "domain": "site reliability engineering", "coverage": "explained", "insight_ids": ["google-sre-monitoring-signal-model"], "aliases": ["low-noise paging"], "tags": ["alerting", "paging", "signal-noise", "operations"]}
+    ],
+    "relations": [
+      {"id": "rel-black-box-monitoring-related-to-white-box-monitoring", "from": "black-box-monitoring", "to": "white-box-monitoring", "type": "related_to", "rationale": "Black-box symptoms and white-box internal signals answer complementary questions about service impact and diagnosis rather than replacing one another.", "evidence_insights": ["google-sre-monitoring-signal-model"]},
+      {"id": "rel-actionable-paging-depends-on-black-box-monitoring", "from": "actionable-paging", "to": "black-box-monitoring", "type": "depends_on", "rationale": "The chapter gives black-box symptom monitoring a key role in paging because it forces attention toward problems that are already affecting externally visible behavior.", "evidence_insights": ["google-sre-monitoring-signal-model"]},
+      {"id": "rel-golden-signals-related-to-black-box-monitoring", "from": "golden-signals", "to": "black-box-monitoring", "type": "related_to", "rationale": "Latency, traffic, errors and saturation provide a compact service-health baseline that can anchor symptom-oriented monitoring and dashboards.", "evidence_insights": ["google-sre-monitoring-signal-model"]}
+    ]
+  }
+}
