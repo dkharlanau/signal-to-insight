@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
-"""Fail if private personal context can leak into versioned/public projection paths."""
+"""Fail if private personal/source context can leak into versioned/public projection paths."""
 
 from __future__ import annotations
 
 import argparse
 import json
-import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -13,12 +12,23 @@ MANIFESTS = ROOT / "data" / "run-manifests"
 GITIGNORE = ROOT / ".gitignore"
 PUBLIC_BUILDERS = [
     ROOT / "scripts" / "build.py",
+    ROOT / "scripts" / "build_previews.py",
     ROOT / "scripts" / "build_graph.py",
+    ROOT / "scripts" / "build_public_graph.py",
     ROOT / "scripts" / "build_library.py",
     ROOT / "scripts" / "build_syntheses.py",
     ROOT / "scripts" / "build_sitemap.py",
+    ROOT / "scripts" / "build_history.py",
+    ROOT / "scripts" / "build_reanalysis.py",
 ]
-FORBIDDEN_BUILDER_MARKERS = [".local/", "personal-baseline.json", "action-outcomes.json", "run-context/"]
+FORBIDDEN_BUILDER_MARKERS = [
+    ".local/",
+    "personal-baseline.json",
+    "action-outcomes.json",
+    "run-context/",
+    "private_overlay",
+    ".local/private",
+]
 ALLOWED_MANIFEST_KEYS = {
     "available",
     "baseline_version",
@@ -61,7 +71,7 @@ def validate_manifest_personal(manifest: dict, where: str) -> None:
 
 def validate_repo() -> None:
     ignore = GITIGNORE.read_text(encoding="utf-8") if GITIGNORE.exists() else ""
-    if ".local/" not in ignore.splitlines():
+    if ".local/" not in {line.strip() for line in ignore.splitlines()}:
         raise PrivateBoundaryError(".gitignore must exclude .local/")
 
     for path in PUBLIC_BUILDERS:
@@ -118,7 +128,7 @@ def main() -> int:
     except (PrivateBoundaryError, json.JSONDecodeError) as exc:
         print(f"private boundary validation failed: {exc}")
         return 1
-    print("Private boundary validation passed; public builders are independent of .local personal context.")
+    print("Private boundary validation passed; public builders are independent of .local personal/source context.")
     return 0
 
 
