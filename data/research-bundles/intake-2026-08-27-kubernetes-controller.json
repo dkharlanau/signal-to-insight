@@ -5,134 +5,63 @@
   "source": {
     "type": "documentation",
     "canonical_url": "https://kubernetes.io/docs/concepts/architecture/controller",
-    "title": null,
-    "creators": [],
-    "publisher": null,
+    "title": "Controllers",
+    "creators": ["Kubernetes documentation contributors"],
+    "publisher": "Kubernetes",
     "published_at": null,
     "event_date": null,
     "version": null,
-    "language": null,
+    "language": "en",
     "duration": null,
-    "date_note": null
+    "date_note": "Living documentation. Page metadata reports last modification on 2024-09-01; analyzed as accessed on 2026-08-27."
   },
   "inspection": {
-    "method": "not inspected",
-    "full_content_used_ephemerally": false,
+    "method": "Direct inspection of the official Kubernetes Controllers documentation page, including Controller pattern, API/direct control, desired/current state and design sections.",
+    "full_content_used_ephemerally": true,
     "full_content_committed": false,
-    "confidence": "metadata_only",
-    "gaps": [
-      "Source content has not been mapped yet."
-    ]
+    "confidence": "direct",
+    "gaps": ["Implementation-level controller-runtime mechanics such as work queues, rate limiting and generation handling are outside this conceptual page."]
   },
   "prior_knowledge": {
     "captured_at": "2026-08-27",
     "query": "Understand reconciliation/control loops: desired state vs current state, why many small controllers are preferable to one monolith, and what this teaches about resilient automation.",
     "matches": [
-      {
-        "concept_id": "durable-execution",
-        "label": "Durable execution",
-        "coverage": "explained",
-        "evidence_insights": [
-          {
-            "id": "enterprise-agents-production-substrate",
-            "status": "published",
-            "title": "Why enterprise AI agents fail after the POC"
-          },
-          {
-            "id": "temporal-durable-execution-mental-model",
-            "status": "review",
-            "title": "Temporal: the mental model behind durable execution"
-          }
-        ],
-        "relationship_to_source": "unclassified"
-      },
-      {
-        "concept_id": "workflow-execution",
-        "label": "Workflow Execution",
-        "coverage": "explained",
-        "evidence_insights": [
-          {
-            "id": "temporal-durable-execution-mental-model",
-            "status": "review",
-            "title": "Temporal: the mental model behind durable execution"
-          }
-        ],
-        "relationship_to_source": "unclassified"
-      },
-      {
-        "concept_id": "controlled-execution",
-        "label": "Controlled execution",
-        "coverage": "explained",
-        "evidence_insights": [
-          {
-            "id": "enterprise-agents-production-substrate",
-            "status": "published",
-            "title": "Why enterprise AI agents fail after the POC"
-          },
-          {
-            "id": "open-policy-agent-decision-enforcement-model",
-            "status": "review",
-            "title": "Open Policy Agent: separate policy decisions from enforcement"
-          },
-          {
-            "id": "react-reason-act-observe-loop",
-            "status": "review",
-            "title": "ReAct: reason, act, observe — then update the plan"
-          }
-        ],
-        "relationship_to_source": "unclassified"
-      },
-      {
-        "concept_id": "event-history",
-        "label": "Event History",
-        "coverage": "explained",
-        "evidence_insights": [
-          {
-            "id": "temporal-durable-execution-mental-model",
-            "status": "review",
-            "title": "Temporal: the mental model behind durable execution"
-          }
-        ],
-        "relationship_to_source": "unclassified"
-      },
-      {
-        "concept_id": "worker-process",
-        "label": "Worker Process",
-        "coverage": "explained",
-        "evidence_insights": [
-          {
-            "id": "temporal-durable-execution-mental-model",
-            "status": "review",
-            "title": "Temporal: the mental model behind durable execution"
-          }
-        ],
-        "relationship_to_source": "unclassified"
-      }
+      {"concept_id": "durable-execution", "label": "Durable execution", "coverage": "explained", "evidence_insights": [{"id": "enterprise-agents-production-substrate", "status": "published", "title": "Why enterprise AI agents fail after the POC"}, {"id": "temporal-durable-execution-mental-model", "status": "review", "title": "Temporal: the mental model behind durable execution"}], "relationship_to_source": "not_relevant"},
+      {"concept_id": "workflow-execution", "label": "Workflow Execution", "coverage": "explained", "evidence_insights": [{"id": "temporal-durable-execution-mental-model", "status": "review", "title": "Temporal: the mental model behind durable execution"}], "relationship_to_source": "not_relevant"},
+      {"concept_id": "controlled-execution", "label": "Controlled execution", "coverage": "explained", "evidence_insights": [{"id": "enterprise-agents-production-substrate", "status": "published", "title": "Why enterprise AI agents fail after the POC"}, {"id": "open-policy-agent-decision-enforcement-model", "status": "review", "title": "Open Policy Agent: separate policy decisions from enforcement"}, {"id": "react-reason-act-observe-loop", "status": "review", "title": "ReAct: reason, act, observe — then update the plan"}], "relationship_to_source": "not_relevant"},
+      {"concept_id": "event-history", "label": "Event History", "coverage": "explained", "evidence_insights": [{"id": "temporal-durable-execution-mental-model", "status": "review", "title": "Temporal: the mental model behind durable execution"}], "relationship_to_source": "not_relevant"},
+      {"concept_id": "worker-process", "label": "Worker Process", "coverage": "explained", "evidence_insights": [{"id": "temporal-durable-execution-mental-model", "status": "review", "title": "Temporal: the mental model behind durable execution"}], "relationship_to_source": "not_relevant"}
     ],
     "classification_required": true
   },
   "content_map": {
-    "problem": null,
-    "thesis": null,
-    "sections": [],
-    "concepts": [],
-    "mechanisms": [],
-    "tools": [],
-    "examples": [],
-    "claims": [],
-    "evidence": [],
-    "assumptions": [],
-    "limitations": [],
-    "open_questions": []
+    "problem": "The actual state of a distributed system can continuously diverge from what operators declared, so one successful command does not prove that the intended condition remains true.",
+    "thesis": "Controllers are non-terminating control loops that observe current state and make or request changes so the system moves toward desired state.",
+    "sections": ["Controller pattern", "Control via API server", "Direct control", "Desired versus current state", "Design", "Ways of running controllers"],
+    "concepts": ["reconciliation/control loop", "desired state", "current/observed state", "focused controller responsibility", "API-mediated versus direct external control"],
+    "mechanisms": ["watch a resource specification expressing desired state", "observe relevant current state", "compare current and desired state", "make or request a bounded corrective change", "report/observe resulting state and repeat"],
+    "tools": ["Kubernetes API server", "kube-controller-manager"],
+    "examples": ["Job controller creates/manages Pods to move a Job toward completion", "controllers may manage external systems such as node capacity directly"],
+    "claims": ["Kubernetes controllers are control loops that watch cluster state and make/request changes where needed.", "A resource spec represents desired state and controllers work to bring current state closer to it.", "Kubernetes uses many controllers managing particular aspects of state rather than one monolithic control loop.", "The overall cluster does not need to become permanently stable for controllers to remain useful."],
+    "evidence": ["Official Controllers documentation defines the thermostat-style control-loop analogy and desired/current-state comparison.", "The Job controller example shows API-mediated creation/removal of Pods rather than the controller running containers itself.", "The design section explicitly favors simple controllers managing particular aspects of cluster state."],
+    "assumptions": ["Desired state is meaningful and sufficiently specified.", "Controllers can observe enough current state to decide whether action is required.", "Corrective actions are designed so repeated reconciliation does not create uncontrolled duplicate side effects."],
+    "limitations": ["The page is conceptual documentation rather than a controller implementation guide.", "Reconciliation does not automatically make external side effects idempotent or correct.", "Multiple focused controllers can still interact through shared resources and require careful ownership semantics."],
+    "open_questions": ["Which controller-runtime queue/backoff patterns best prevent hot loops and duplicate work?", "When should a business process be modeled as reconciliation versus a durable workflow execution?"]
   },
   "selection": {
     "requested_focus": "Understand reconciliation/control loops: desired state vs current state, why many small controllers are preferable to one monolith, and what this teaches about resilient automation.",
-    "coherent_core": [],
-    "prerequisites": [],
-    "drop_notes": [],
-    "connections": []
+    "coherent_core": ["desired state is distinct from observed reality", "the controller repeatedly compares the two", "actions reduce the delta rather than permanently complete the system", "focused controllers compose around bounded responsibilities"],
+    "prerequisites": ["declarative desired state", "feedback/control loop"],
+    "drop_notes": ["Do not expand into general Kubernetes scheduling/networking concepts not required for the controller mental model.", "Do not reinterpret preliminary Temporal/controlled-execution retrieval matches as the same concept; they describe different responsibilities."],
+    "connections": ["reconciliation is complementary to durable workflow execution but not equivalent", "repeated corrective actions make safe duplicate handling an implementation concern"]
   },
-  "verification_candidates": [],
-  "source_locators": [],
+  "verification_candidates": [{"question": "What controller-runtime mechanisms handle repeated events, backoff and stale generations?", "reason": "Useful implementation depth, but not required to establish the conceptual reconciliation model.", "priority": "low"}],
+  "source_locators": [
+    {"label": "Controller pattern", "locator": "Controllers → Controller pattern"},
+    {"label": "Job controller example", "locator": "Controllers → Control via API server"},
+    {"label": "External control", "locator": "Controllers → Direct control"},
+    {"label": "Desired/current state", "locator": "Controllers → Desired versus current state"},
+    {"label": "Focused controllers", "locator": "Controllers → Design"}
+  ],
   "created_at": "2026-08-27"
 }
