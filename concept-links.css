@@ -1,0 +1,49 @@
+/* Public concept-page and graph-related explainer navigation. */
+
+.concept-page-link {
+  display: inline-block;
+  margin-top: 18px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  color: var(--ink);
+  font: 700 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  text-underline-offset: 3px;
+}
+
+.related-explainer-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.related-explainer-card {
+  min-height: 180px;
+  padding: 22px;
+  border: 1px solid var(--ink);
+  display: flex;
+  flex-direction: column;
+}
+
+.related-explainer-card h3 {
+  margin: 0 0 18px;
+  font-size: 22px;
+  line-height: 1.05;
+}
+
+.related-explainer-card a {
+  color: inherit;
+  text-underline-offset: 3px;
+}
+
+.related-explainer-card p {
+  margin-top: auto;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+@media (max-width: 720px) {
+  .related-explainer-grid { grid-template-columns: 1fr; }
+}
