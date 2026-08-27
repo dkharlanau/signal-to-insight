@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dkharlanau.github.io/signal-to-insight/schemas/reanalysis-events.schema.json",
+  "title": "Signal to Insight living-source reanalysis events",
+  "type": "object",
+  "required": ["event_version", "events"],
+  "properties": {
+    "event_version": {"type": "string"},
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "source_id", "insight_id", "status", "checked_at", "from_revision", "to_revision", "source_change", "mental_model", "review"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^reanalysis-[a-z0-9-]+$"},
+          "source_id": {"type": "string", "pattern": "^src-[a-z0-9-]+$"},
+          "insight_id": {"type": "string", "minLength": 1},
+          "status": {"enum": ["detected", "review", "accepted", "dismissed"]},
+          "checked_at": {"type": "string", "format": "date"},
+          "from_revision": {
+            "type": "object",
+            "required": ["kind", "id"],
+            "properties": {
+              "kind": {"enum": ["commit", "release"]},
+              "id": {"type": "string", "minLength": 1}
+            },
+            "additionalProperties": false
+          },
+          "to_revision": {
+            "type": "object",
+            "required": ["kind", "id", "occurred_at"],
+            "properties": {
+              "kind": {"enum": ["commit", "release"]},
+              "id": {"type": "string", "minLength": 1},
+              "occurred_at": {"type": ["string", "null"]}
+            },
+            "additionalProperties": false
+          },
+          "source_change": {
+            "type": "object",
+            "required": ["changed", "commit_count", "changed_files", "summary", "evidence_urls"],
+            "properties": {
+              "changed": {"type": "boolean"},
+              "commit_count": {"type": "integer", "minimum": 0},
+              "changed_files": {"type": "array", "items": {"type": "string"}},
+              "summary": {"type": "string"},
+              "evidence_urls": {"type": "array", "items": {"type": "string", "format": "uri"}}
+            },
+            "additionalProperties": false
+          },
+          "mental_model": {
+            "type": "object",
+            "required": ["impact", "changed", "still_valid", "unresolved"],
+            "properties": {
+              "impact": {"enum": ["unknown", "stable", "refine", "contradict", "supersede"]},
+              "changed": {"type": "array", "items": {"type": "string"}},
+              "still_valid": {"type": "array", "items": {"type": "string"}},
+              "unresolved": {"type": "array", "items": {"type": "string"}}
+            },
+            "additionalProperties": false
+          },
+          "review": {
+            "type": "object",
+            "required": ["required", "reviewed_by", "reviewed_at", "decision", "note"],
+            "properties": {
+              "required": {"const": true},
+              "reviewed_by": {"type": ["string", "null"]},
+              "reviewed_at": {"type": ["string", "null"]},
+              "decision": {"enum": ["pending", "keep_current_model", "update_model", "archive_model"]},
+              "note": {"type": ["string", "null"]}
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
