@@ -5,19 +5,27 @@ on:
     branches: [main]
     paths:
       - "data/case-patches/**.json"
+      - "data/case-contracts/**.json"
       - "schemas/case-patch.schema.json"
+      - "schemas/case-contract.schema.json"
       - "scripts/apply_case_patch.py"
+      - "scripts/apply_case_contract.py"
       - "scripts/pending_case_patches.py"
       - "scripts/validate_case_patches.py"
+      - "scripts/validate_case_contracts.py"
       - ".github/workflows/case-patches.yml"
   pull_request:
     branches: [main]
     paths:
       - "data/case-patches/**.json"
+      - "data/case-contracts/**.json"
       - "schemas/case-patch.schema.json"
+      - "schemas/case-contract.schema.json"
       - "scripts/apply_case_patch.py"
+      - "scripts/apply_case_contract.py"
       - "scripts/pending_case_patches.py"
       - "scripts/validate_case_patches.py"
+      - "scripts/validate_case_contracts.py"
       - ".github/workflows/case-patches.yml"
 
 permissions:
@@ -39,8 +47,10 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Preflight researched case patches
-        run: python scripts/validate_case_patches.py
+      - name: Preflight researched case patches and companion contracts
+        run: |
+          python scripts/validate_case_patches.py
+          python scripts/validate_case_contracts.py
 
       - name: Resolve case patches to materialize
         id: patches
@@ -59,7 +69,7 @@ jobs:
           echo "files=$FILES" >> "$GITHUB_OUTPUT"
           echo "Changed patches: ${CHANGED:-none}"
           echo "Pending patches: ${PENDING:-none}"
-          echo "Materializing: ${FILES:-none}"
+          echo "Materializing patches: ${FILES:-none}"
 
       - name: Apply researched case patches
         if: steps.patches.outputs.files != ''
@@ -69,12 +79,38 @@ jobs:
             python scripts/apply_case_patch.py "$patch"
           done
 
+      - name: Resolve companion contracts to materialize
+        id: contracts
+        shell: bash
+        run: |
+          if [ -d data/case-contracts ]; then
+            FILES=$(find data/case-contracts -maxdepth 1 -type f -name '*.json' -print | sort | tr '\n' ' ')
+          else
+            FILES=""
+          fi
+          echo "files=$FILES" >> "$GITHUB_OUTPUT"
+          echo "Materializing contracts: ${FILES:-none}"
+
+      - name: Apply companion review contracts
+        if: steps.contracts.outputs.files != ''
+        shell: bash
+        run: |
+          for contract in ${{ steps.contracts.outputs.files }}; do
+            python scripts/apply_case_contract.py "$contract"
+          done
+
       - name: Validate materialized knowledge
         run: |
           python scripts/validate.py
           python scripts/validate_bundles.py
           python scripts/validate_case_patches.py
+          python scripts/validate_case_contracts.py
           python scripts/validate_graph.py
+          python scripts/validate_knowledge_deltas.py
+          python scripts/validate_claim_evidence.py
+          python scripts/validate_prerequisites.py
+          python scripts/validate_learning_prompts.py
+          python scripts/validate_source_decisions.py
           python scripts/public_projection.py
 
       - name: Build review and public surfaces
@@ -84,17 +120,19 @@ jobs:
           python scripts/build.py
           python scripts/build_library.py
           python scripts/build_public_graph.py
+          python scripts/build_sitemap.py
 
       - name: Commit materialized case on main
-        if: github.event_name == 'push' && steps.patches.outputs.files != ''
+        if: github.event_name == 'push' && (steps.patches.outputs.files != '' || steps.contracts.outputs.files != '')
         shell: bash
         run: |
-          if [ -z "$(git status --porcelain -- data/inbox.json data/sources.json data/insights.json data/knowledge-graph.json previews explainers library knowledge)" ]; then
-            echo "Case patches are already materialized."
+          TRACKED="data/inbox.json data/sources.json data/insights.json data/knowledge-graph.json data/knowledge-deltas.json data/claim-evidence.json data/prerequisite-maps.json data/learning-prompts.json data/source-decisions.json previews explainers library knowledge sitemap.xml"
+          if [ -z "$(git status --porcelain -- $TRACKED)" ]; then
+            echo "Case patches and companion contracts are already materialized."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/inbox.json data/sources.json data/insights.json data/knowledge-graph.json previews explainers library knowledge
-          git commit -m "build: materialize researched case patches"
+          git add $TRACKED
+          git commit -m "build: materialize researched review case"
           git push origin HEAD:main
