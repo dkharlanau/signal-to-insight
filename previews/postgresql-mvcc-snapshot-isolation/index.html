@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>[PREVIEW] PostgreSQL MVCC: snapshots reduce blocking, isolation defines the boundary — Signal to Insight</title>
+  <meta name="description" content="PostgreSQL MVCC lets readers work from versioned snapshots while writes continue; Read Committed refreshes the snapshot per statement, Repeatable Read holds it for the transaction, and Serializable may reject work that cannot fit a serial order.">
+  <meta property="og:title" content="PostgreSQL MVCC: snapshots reduce blocking, isolation defines the boundary">
+  <meta property="og:description" content="PostgreSQL MVCC lets readers work from versioned snapshots while writes continue; Read Committed refreshes the snapshot per statement, Repeatable Read holds it for the transaction, and Serializable may reject work that cannot fit a serial order.">
+  <meta property="og:type" content="article">
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="generated-page preview-page">
+  <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+  <header class="site-header wrap">
+    <a class="brand" href="../../"><span class="brand-mark">S→I</span><span>Signal to Insight</span></a>
+    <nav aria-label="Explainer navigation">
+      <a href="#delta">Delta</a><a href="#model">Model</a><a href="#concepts">Concepts</a><a href="#tools">Tools</a><a href="#actions">Actions</a><a href="#sources">Sources</a>
+    </nav>
+  </header>
+
+  <div class="preview-banner">REVIEW PREVIEW · NOT INDEXED · NOT PUBLISHED</div>
+  <main>
+    <section class="detail-hero wrap">
+      <a class="back-link" href="../../">← Research engine</a>
+      <p class="eyebrow">EXPLAINER · review</p>
+      <h1>PostgreSQL MVCC: snapshots reduce blocking, isolation defines the boundary</h1>
+      <div class="detail-lede">
+        <p>PostgreSQL MVCC lets readers work from versioned snapshots while writes continue; Read Committed refreshes the snapshot per statement, Repeatable Read holds it for the transaction, and Serializable may reject work that cannot fit a serial order.</p>
+        <dl class="detail-meta">
+          <div><dt>Original source</dt><dd><a href="https://www.postgresql.org/docs/current/mvcc-intro.html" target="_blank" rel="noreferrer">PostgreSQL 18: Multiversion Concurrency Control ↗</a></dd></div>
+          <div><dt>Creator</dt><dd>PostgreSQL Global Development Group</dd></div>
+          <div><dt>Source status</dt><dd>living source · accessed 2026-08-27</dd></div>
+          <div><dt>Captured</dt><dd>2026-08-27</dd></div>
+          <div><dt>Analyzed</dt><dd>2026-08-27</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="detail-section wrap">
+      <p class="kicker">WHY THIS MATTERS</p>
+      <p class="big-statement">MVCC is often compressed into &#x27;reads do not block writes,&#x27; which hides the part that matters for application correctness: every query sees a visibility boundary, that boundary changes with isolation level, concurrent writers can still wait or fail, and stronger consistency deliberately turns some conflicts into transaction retries.</p>
+    </section>
+
+    <section id="delta" class="detail-section wrap knowledge-delta-section">
+      <p class="kicker">KNOWLEDGE DELTA</p>
+      <h2>What this source changes in the existing model.</h2>
+      <p class="big-statement">PostgreSQL opens a new database-concurrency branch: multiversion visibility snapshots, isolation-dependent snapshot scope and serialization retry. The existing SQLite WAL reader snapshot is explicitly rejected as the same concept because it is a WAL end-mark mechanism rather than PostgreSQL row-version visibility.</p>
+      <div class="concept-grid"><article class="concept-card delta-card">
+          <span>New</span>
+          <h3>Multiversion Concurrency Control (MVCC)</h3>
+          <p><strong>Source says:</strong> PostgreSQL maintains multiple data versions so statements can read a coherent snapshot while concurrent transactions continue to update data.</p>
+          <p><strong>Previously:</strong> The graph had database storage and WAL concepts but no general multiversion concurrency model.</p>
+          <p><strong>Project interpretation:</strong> MVCC becomes the reusable model for separating read visibility from concurrent physical updates without equating concurrency with absence of conflicts.</p>
+          <small>Prior evidence: <span class="delta-baseline">No prior project evidence — baseline/new knowledge.</span></small>
+        </article><article class="concept-card delta-card">
+          <span>New</span>
+          <h3>MVCC snapshot</h3>
+          <p><strong>Source says:</strong> Each PostgreSQL statement sees a snapshot of data, and stronger isolation levels extend the stability of that view across the transaction.</p>
+          <p><strong>Previously:</strong> SQLite WAL already had a reader end-mark concept, but it is specific to WAL visibility and is not a PostgreSQL MVCC row-version snapshot.</p>
+          <p><strong>Project interpretation:</strong> The new snapshot concept is kept separate so similar user-visible stability does not erase the different storage and visibility mechanisms.</p>
+          <small>Prior evidence: <span class="delta-baseline">No prior project evidence — baseline/new knowledge.</span></small>
+        </article><article class="concept-card delta-card">
+          <span>New</span>
+          <h3>Transaction isolation scope</h3>
+          <p><strong>Source says:</strong> Read Committed takes a snapshot at each statement, while Repeatable Read keeps a transaction snapshot and Serializable adds stronger anomaly protection.</p>
+          <p><strong>Previously:</strong> No prior concept modeled snapshot lifetime and anomaly guarantees as an explicit isolation-level contract.</p>
+          <p><strong>Project interpretation:</strong> Isolation scope becomes the bridge between the abstract snapshot model and application-visible consistency behavior.</p>
+          <small>Prior evidence: <span class="delta-baseline">No prior project evidence — baseline/new knowledge.</span></small>
+        </article><article class="concept-card delta-card">
+          <span>New</span>
+          <h3>Serialization failure and retry</h3>
+          <p><strong>Source says:</strong> Repeatable Read and Serializable can abort transactions under concurrent conflicts, and Serializable applications must be prepared to retry transactions after serialization failure.</p>
+          <p><strong>Previously:</strong> The graph has retry/idempotency concepts for external side effects but no database concurrency concept where abort-and-retry is itself part of the isolation contract.</p>
+          <p><strong>Project interpretation:</strong> Database transaction retry is modeled separately from idempotent receiver or workflow retry so external side-effect safety is not inferred from database retry semantics.</p>
+          <small>Prior evidence: <span class="delta-baseline">No prior project evidence — baseline/new knowledge.</span></small>
+        </article></div>
+      <p class="section-note"><strong>Noise rejected:</strong> prior concepts retrieved but deliberately classified as not relevant: wal-reader-snapshot.</p>
+    </section>
+
+    <section id="model" class="detail-section wrap">
+      <p class="kicker">MENTAL MODEL</p>
+      <div class="visual-compare" aria-label="One MVCC model, two snapshot scopes"><article>
+          <span>READ COMMITTED</span>
+          <h3>Fresh snapshot per statement</h3>
+          <p>Each statement sees commits visible when that statement begins, so later statements in the same transaction can observe newer committed data.</p>
+        </article><article>
+          <span>REPEATABLE READ / SERIALIZABLE</span>
+          <h3>Stable transaction snapshot</h3>
+          <p>Both keep a transaction-wide view. Serializable additionally tracks dangerous read/write dependencies and can reject a transaction when the outcome cannot match a serial order.</p>
+        </article></div>
+      <div class="core-map">
+        <div><span>Source problem</span><p>Concurrent sessions need consistent views of changing data without serializing every reader and writer behind the same locking path.</p></div>
+        <div><span>Source thesis</span><p>PostgreSQL uses multiple row versions and visibility snapshots to reduce read/write lock contention; transaction isolation determines snapshot lifetime and anomaly protection, while Serializable adds dependency detection that can abort transactions to preserve a serializable outcome.</p></div>
+        <div><span>Core topics</span><ul><li>MVCC snapshots</li><li>read/write nonblocking versus write/write conflicts</li><li>Read Committed statement snapshots</li><li>Repeatable Read transaction snapshots</li><li>Serializable Snapshot Isolation and retry</li><li>explicit-lock and transaction-visibility boundaries</li></ul></div>
+      </div>
+    </section>
+
+    <section id="concepts" class="detail-section wrap">
+      <p class="kicker">CONCEPTS TO KNOW</p>
+      <h2>Learn only the prerequisites that preserve the model.</h2>
+      <div class="concept-grid"><article class="concept-card">
+          <span>learn</span>
+          <h3>Multiversion Concurrency Control (MVCC)</h3>
+          <p>The concurrency model works by letting readers choose visible row versions from a snapshot rather than treating one physical row value as universally current.</p>
+        </article><article class="concept-card">
+          <span>learn</span>
+          <h3>MVCC snapshot</h3>
+          <p>A snapshot is the visibility boundary that makes a statement or transaction see a coherent database version while concurrent commits continue.</p>
+        </article><article class="concept-card">
+          <span>learn</span>
+          <h3>Transaction isolation scope</h3>
+          <p>Read Committed, Repeatable Read and Serializable differ in when snapshots refresh and which anomalies or failures applications must handle.</p>
+        </article><article class="concept-card">
+          <span>learn</span>
+          <h3>Serialization failure and retry</h3>
+          <p>Stronger consistency can deliberately reject a transaction, so correctness depends on retrying the complete transaction rather than assuming every concurrent commit must succeed.</p>
+        </article></div>
+    </section>
+
+    <section id="tools" class="detail-section wrap">
+      <p class="kicker">TOOLS / SYSTEMS</p>
+      <h2>Concrete systems worth knowing.</h2>
+      <p class="section-note">Tool connections may be project enrichment rather than recommendations from the original source. Each card states the relationship.</p>
+      <div class="tool-grid"><a class="tool-card" href="https://www.postgresql.org/docs/18/sql-set-transaction.html" target="_blank" rel="noreferrer">
+          <span>try</span>
+          <strong>SET TRANSACTION</strong>
+          <p>Makes the snapshot contract explicit in a small experiment by switching between Read Committed, Repeatable Read and Serializable.</p>
+          <small>transaction isolation control · Source-native PostgreSQL command referenced by the transaction-isolation documentation.</small>
+        </a><a class="tool-card" href="https://www.postgresql.org/docs/18/view-pg-locks.html" target="_blank" rel="noreferrer">
+          <span>learn</span>
+          <strong>pg_locks</strong>
+          <p>Useful after the mental model to inspect where PostgreSQL still uses locks instead of concluding that MVCC means &#x27;no locking&#x27;.</p>
+          <small>concurrency inspection · Source-native PostgreSQL system view for lock inspection; supporting implementation detail beyond the core MVCC introduction.</small>
+        </a></div>
+    </section>
+
+    <section class="detail-section wrap">
+      <p class="kicker">EXAMPLES</p>
+      <div class="example-grid"><article class="example-card">
+          <span>dashboard/reporting</span>
+          <h3>A transaction runs two SELECT statements while another session commits between them.</h3>
+          <p>Under Read Committed, should the second statement see the newer commit; under Repeatable Read, should it stay on the earlier transaction snapshot?</p>
+        </article><article class="example-card">
+          <span>concurrent account update</span>
+          <h3>Two transactions try to update the same row after one has already changed it.</h3>
+          <p>Where does MVCC stop being &#x27;nonblocking&#x27; and require a wait, re-evaluation or serialization failure?</p>
+        </article><article class="example-card">
+          <span>business invariant</span>
+          <h3>Two transactions each read a different aggregate and write a result that is individually valid but jointly impossible in any serial order.</h3>
+          <p>Would Repeatable Read allow the anomaly, and should Serializable detect the dependency cycle and abort one transaction?</p>
+        </article></div>
+    </section>
+
+    <section class="detail-section wrap limitation-section">
+      <p class="kicker">WHERE THE MODEL BREAKS</p>
+      <h2>Useful does not mean sufficient.</h2>
+      <ol class="limitation-list"><li>MVCC reduces ordinary read/write lock contention but does not eliminate write/write waits, explicit locks or deadlocks.</li><li>Read Committed provides a statement snapshot, not a stable transaction-wide view; successive queries can legitimately see different committed data.</li><li>Repeatable Read gives a stable view but can still allow serialization anomalies and can fail on concurrent updates.</li><li>Serializable improves anomaly protection by aborting transactions; applications must handle SQLSTATE 40001 and retry the whole transaction.</li><li>Some DDL and sequence behavior has visibility rules outside the simplified MVCC snapshot model.</li></ol>
+    </section>
+
+    <section id="actions" class="detail-section wrap">
+      <p class="kicker">PERSONAL ACTION MAP</p>
+      <h2>Convert understanding into a decision.</h2>
+      <div class="action-grid"><article class="action-card action-use_now">
+          <span>Use now</span>
+          <ul><li>When reviewing concurrent database logic, state the required visibility scope explicitly instead of saying only &#x27;use a transaction&#x27;.</li><li>Treat serialization failure as part of the API contract when choosing Repeatable Read or Serializable, not as an unexpected infrastructure error.</li></ul>
+        </article><article class="action-card action-try">
+          <span>Try</span>
+          <ul><li>Run two psql sessions and repeat the same pair of SELECTs under Read Committed and Repeatable Read to observe statement-versus-transaction snapshot scope.</li><li>Create a simple Serializable conflict and verify that one transaction returns SQLSTATE 40001 and must be retried.</li></ul>
+        </article><article class="action-card action-learn">
+          <span>Learn</span>
+          <ul><li>MVCC visibility snapshots</li><li>PostgreSQL transaction isolation levels</li><li>serialization anomalies</li><li>serialization failure handling</li></ul>
+        </article><article class="action-card action-build">
+          <span>Build</span>
+          <ul><li>A small concurrency test harness that runs the same business invariant under Read Committed, Repeatable Read and Serializable and records observed values, waits and retries.</li></ul>
+        </article><article class="action-card action-watch">
+          <span>Watch</span>
+          <ul><li>How long-running snapshots and retry rates interact with workload design before moving into VACUUM and storage internals.</li></ul>
+        </article><article class="action-card action-ignore_for_now">
+          <span>Ignore for now</span>
+          <ul><li>Treating SQLite WAL reader end marks as the same mechanism as PostgreSQL MVCC simply because both expose a stable reader view.</li></ul>
+        </article></div>
+    </section>
+
+    <section id="sources" class="detail-section wrap source-section">
+      <p class="kicker">SOURCES + DATES</p>
+      <div class="source-grid">
+        <div>
+          <h3>Primary source</h3>
+          <a href="https://www.postgresql.org/docs/current/mvcc-intro.html" target="_blank" rel="noreferrer">PostgreSQL 18: Multiversion Concurrency Control ↗</a>
+          <p>PostgreSQL Global Development Group · Source status: living source · accessed 2026-08-27</p>
+          <p>Living documentation. The current manual resolves to PostgreSQL 18; PostgreSQL 18.6 was released on 2026-08-13. Stable PostgreSQL 18 documentation URLs were recorded as verification sources.</p>
+        </div>
+        <div>
+          <h3>Verification / enrichment</h3>
+          <ul class="supporting-sources"><li>
+          <a href="https://www.postgresql.org/docs/18/mvcc-intro.html" target="_blank" rel="noreferrer">PostgreSQL 18 — 13.1 Introduction</a>
+          <span>primary source for MVCC snapshot and read/write lock-contention model · accessed 2026-08-27</span>
+        </li><li>
+          <a href="https://www.postgresql.org/docs/18/transaction-iso.html" target="_blank" rel="noreferrer">PostgreSQL 18 — 13.2 Transaction Isolation</a>
+          <span>primary source for Read Committed, Repeatable Read, Serializable behavior and retry boundaries · accessed 2026-08-27</span>
+        </li><li>
+          <a href="https://www.postgresql.org/docs/18/mvcc-caveats.html" target="_blank" rel="noreferrer">PostgreSQL 18 — 13.6 Caveats</a>
+          <span>official caveats for operations that fall outside the simplified MVCC visibility model · accessed 2026-08-27</span>
+        </li></ul>
+        </div>
+      </div>
+      <p class="provenance-note">Analyzed 2026-08-27. Full third-party transcript is not stored. Source claims and project enrichment are kept distinguishable.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer wrap">
+    <span>Signal to Insight</span><span>Explainer: postgresql-mvcc-snapshot-isolation</span><span>Reviewed 2026-08-27</span>
+  </footer>
+  <script src="../../app.js"></script>
+</body>
+</html>

@@ -606,6 +606,85 @@
         "reader",
         "concurrency"
       ]
+    },
+    {
+      "id": "multiversion-concurrency-control",
+      "label": "Multiversion Concurrency Control (MVCC)",
+      "summary": "A database concurrency model that maintains multiple row versions so transactions can read a coherent visibility snapshot while concurrent writes continue.",
+      "domain": "database concurrency",
+      "coverage": "explained",
+      "insight_ids": [
+        "postgresql-mvcc-snapshot-isolation"
+      ],
+      "aliases": [
+        "MVCC",
+        "multiversion concurrency"
+      ],
+      "tags": [
+        "database",
+        "concurrency",
+        "versions",
+        "transactions"
+      ]
+    },
+    {
+      "id": "mvcc-snapshot",
+      "label": "MVCC snapshot",
+      "summary": "A visibility boundary that determines which committed row versions a PostgreSQL statement or transaction can see while other transactions continue to commit.",
+      "domain": "database concurrency",
+      "coverage": "explained",
+      "insight_ids": [
+        "postgresql-mvcc-snapshot-isolation"
+      ],
+      "aliases": [
+        "database snapshot",
+        "visibility snapshot"
+      ],
+      "tags": [
+        "database",
+        "snapshot",
+        "visibility",
+        "transactions"
+      ]
+    },
+    {
+      "id": "transaction-isolation-scope",
+      "label": "Transaction isolation scope",
+      "summary": "The rules that determine snapshot lifetime and allowed concurrency phenomena, such as statement-level Read Committed versus transaction-level Repeatable Read or Serializable behavior.",
+      "domain": "database concurrency",
+      "coverage": "explained",
+      "insight_ids": [
+        "postgresql-mvcc-snapshot-isolation"
+      ],
+      "aliases": [
+        "isolation snapshot scope"
+      ],
+      "tags": [
+        "database",
+        "isolation",
+        "snapshot",
+        "transactions"
+      ]
+    },
+    {
+      "id": "serialization-failure-retry",
+      "label": "Serialization failure and retry",
+      "summary": "A concurrency-control outcome where PostgreSQL aborts a transaction that cannot safely commit under the requested isolation guarantee and the application retries the whole transaction.",
+      "domain": "database concurrency",
+      "coverage": "explained",
+      "insight_ids": [
+        "postgresql-mvcc-snapshot-isolation"
+      ],
+      "aliases": [
+        "serialization retry",
+        "SQLSTATE 40001 retry"
+      ],
+      "tags": [
+        "database",
+        "serializable",
+        "retry",
+        "transactions"
+      ]
     }
   ],
   "relations": [
@@ -915,6 +994,36 @@
       "rationale": "Appending newer commits to WAL lets an existing reader keep its own end mark and stable snapshot without blocking the writer.",
       "evidence_insights": [
         "sqlite-write-ahead-log-checkpointing"
+      ]
+    },
+    {
+      "id": "rel-multiversion-concurrency-control-depends-on-mvcc-snapshot",
+      "from": "multiversion-concurrency-control",
+      "to": "mvcc-snapshot",
+      "type": "depends_on",
+      "rationale": "The multiversion model becomes useful to readers only through visibility rules that select a coherent set of row versions for the current statement or transaction.",
+      "evidence_insights": [
+        "postgresql-mvcc-snapshot-isolation"
+      ]
+    },
+    {
+      "id": "rel-mvcc-snapshot-depends-on-transaction-isolation-scope",
+      "from": "mvcc-snapshot",
+      "to": "transaction-isolation-scope",
+      "type": "depends_on",
+      "rationale": "The effective snapshot boundary depends on the requested isolation level: Read Committed refreshes per statement while stronger levels keep a transaction-wide view.",
+      "evidence_insights": [
+        "postgresql-mvcc-snapshot-isolation"
+      ]
+    },
+    {
+      "id": "rel-transaction-isolation-scope-related-to-serialization-failure-retry",
+      "from": "transaction-isolation-scope",
+      "to": "serialization-failure-retry",
+      "type": "related_to",
+      "rationale": "Stronger PostgreSQL isolation guarantees can convert dangerous concurrent interactions into transaction aborts that the application must retry.",
+      "evidence_insights": [
+        "postgresql-mvcc-snapshot-isolation"
       ]
     }
   ]

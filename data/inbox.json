@@ -84,9 +84,9 @@
       "source_type": "documentation",
       "submitted_at": "2026-08-27",
       "requested_focus": "Understand MVCC as a concurrency model: snapshots, read/write non-blocking behavior, isolation boundaries, and what the model does not eliminate.",
-      "status": "queued",
-      "source_id": null,
-      "insight_id": null,
+      "status": "review",
+      "source_id": "src-postgresql-mvcc-docs-2026",
+      "insight_id": "postgresql-mvcc-snapshot-isolation",
       "notes": "GitHub source intake issue #55. Dogfood cohort: database/concurrency documentation."
     },
     {

@@ -299,6 +299,51 @@
         "controlled-execution",
         "replayable-evaluation"
       ]
+    },
+    {
+      "insight_id": "postgresql-mvcc-snapshot-isolation",
+      "summary": "PostgreSQL opens a new database-concurrency branch: multiversion visibility snapshots, isolation-dependent snapshot scope and serialization retry. The existing SQLite WAL reader snapshot is explicitly rejected as the same concept because it is a WAL end-mark mechanism rather than PostgreSQL row-version visibility.",
+      "items": [
+        {
+          "relationship": "new",
+          "concept_id": "multiversion-concurrency-control",
+          "label": "Multiversion Concurrency Control (MVCC)",
+          "source_basis": "PostgreSQL maintains multiple data versions so statements can read a coherent snapshot while concurrent transactions continue to update data.",
+          "prior_basis": "The graph had database storage and WAL concepts but no general multiversion concurrency model.",
+          "interpretation": "MVCC becomes the reusable model for separating read visibility from concurrent physical updates without equating concurrency with absence of conflicts.",
+          "evidence_insights": []
+        },
+        {
+          "relationship": "new",
+          "concept_id": "mvcc-snapshot",
+          "label": "MVCC snapshot",
+          "source_basis": "Each PostgreSQL statement sees a snapshot of data, and stronger isolation levels extend the stability of that view across the transaction.",
+          "prior_basis": "SQLite WAL already had a reader end-mark concept, but it is specific to WAL visibility and is not a PostgreSQL MVCC row-version snapshot.",
+          "interpretation": "The new snapshot concept is kept separate so similar user-visible stability does not erase the different storage and visibility mechanisms.",
+          "evidence_insights": []
+        },
+        {
+          "relationship": "new",
+          "concept_id": "transaction-isolation-scope",
+          "label": "Transaction isolation scope",
+          "source_basis": "Read Committed takes a snapshot at each statement, while Repeatable Read keeps a transaction snapshot and Serializable adds stronger anomaly protection.",
+          "prior_basis": "No prior concept modeled snapshot lifetime and anomaly guarantees as an explicit isolation-level contract.",
+          "interpretation": "Isolation scope becomes the bridge between the abstract snapshot model and application-visible consistency behavior.",
+          "evidence_insights": []
+        },
+        {
+          "relationship": "new",
+          "concept_id": "serialization-failure-retry",
+          "label": "Serialization failure and retry",
+          "source_basis": "Repeatable Read and Serializable can abort transactions under concurrent conflicts, and Serializable applications must be prepared to retry transactions after serialization failure.",
+          "prior_basis": "The graph has retry/idempotency concepts for external side effects but no database concurrency concept where abort-and-retry is itself part of the isolation contract.",
+          "interpretation": "Database transaction retry is modeled separately from idempotent receiver or workflow retry so external side-effect safety is not inferred from database retry semantics.",
+          "evidence_insights": []
+        }
+      ],
+      "suppressed_prior_matches": [
+        "wal-reader-snapshot"
+      ]
     }
   ]
 }

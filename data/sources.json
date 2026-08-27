@@ -273,6 +273,42 @@
       "derived_records": [
         "sqlite-write-ahead-log-checkpointing"
       ]
+    },
+    {
+      "id": "src-postgresql-mvcc-docs-2026",
+      "type": "documentation",
+      "title": "PostgreSQL 18: Multiversion Concurrency Control",
+      "canonical_url": "https://www.postgresql.org/docs/current/mvcc-intro.html",
+      "creators": [
+        "PostgreSQL Global Development Group"
+      ],
+      "publisher": "PostgreSQL Global Development Group",
+      "event": null,
+      "published_at": null,
+      "event_date": null,
+      "captured_at": "2026-08-27",
+      "analyzed_at": "2026-08-27",
+      "date_note": "Living documentation. The current manual resolves to PostgreSQL 18; PostgreSQL 18.6 was released on 2026-08-13. Stable PostgreSQL 18 documentation URLs were recorded as verification sources.",
+      "verification": [
+        {
+          "title": "PostgreSQL 18 — 13.1 Introduction",
+          "url": "https://www.postgresql.org/docs/18/mvcc-intro.html",
+          "accessed_at": "2026-08-27"
+        },
+        {
+          "title": "PostgreSQL 18 — 13.2 Transaction Isolation",
+          "url": "https://www.postgresql.org/docs/18/transaction-iso.html",
+          "accessed_at": "2026-08-27"
+        },
+        {
+          "title": "PostgreSQL 18 — 13.6 Caveats",
+          "url": "https://www.postgresql.org/docs/18/mvcc-caveats.html",
+          "accessed_at": "2026-08-27"
+        }
+      ],
+      "derived_records": [
+        "postgresql-mvcc-snapshot-isolation"
+      ]
     }
   ]
 }

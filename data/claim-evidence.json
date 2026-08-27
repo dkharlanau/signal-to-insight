@@ -498,6 +498,118 @@
           "note": "This is a project-level scope comparison used to reject lexical retrieval noise; the SQLite source itself does not discuss the project's execution-history concepts."
         }
       ]
+    },
+    {
+      "insight_id": "postgresql-mvcc-snapshot-isolation",
+      "claims": [
+        {
+          "id": "postgresql-mvcc-snapshot-visibility",
+          "text": "PostgreSQL MVCC gives each SQL statement a snapshot of data so it can see a coherent database version despite concurrent transactions changing underlying rows.",
+          "impact": "high",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-postgresql-mvcc-docs-2026",
+              "url": "https://www.postgresql.org/docs/18/mvcc-intro.html",
+              "locator": "PostgreSQL 18 §13.1 Introduction"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "postgresql-read-write-nonblocking-boundary",
+          "text": "Ordinary MVCC reads do not conflict with write locks, but this does not eliminate write-write waiting, explicit locks, or concurrency failures when transactions target the same data.",
+          "impact": "high",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-postgresql-mvcc-docs-2026",
+              "url": "https://www.postgresql.org/docs/18/mvcc-intro.html",
+              "locator": "PostgreSQL 18 §13.1 Introduction"
+            },
+            {
+              "kind": "primary_source",
+              "source_id": "src-postgresql-mvcc-docs-2026",
+              "url": "https://www.postgresql.org/docs/18/transaction-iso.html",
+              "locator": "PostgreSQL 18 §13.2.1 Read Committed"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "postgresql-read-committed-statement-snapshot",
+          "text": "Under Read Committed, each SELECT sees the committed database state as of that query's start, so successive statements inside one transaction can see different committed data.",
+          "impact": "high",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-postgresql-mvcc-docs-2026",
+              "url": "https://www.postgresql.org/docs/18/transaction-iso.html",
+              "locator": "PostgreSQL 18 §13.2.1 Read Committed"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "postgresql-repeatable-read-transaction-snapshot",
+          "text": "Under Repeatable Read, a transaction keeps a stable snapshot from its first non-control statement, while conflicting later updates can cause the transaction to abort with a serialization failure.",
+          "impact": "high",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-postgresql-mvcc-docs-2026",
+              "url": "https://www.postgresql.org/docs/18/transaction-iso.html",
+              "locator": "PostgreSQL 18 §13.2.2 Repeatable Read"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "postgresql-serializable-dependency-retry",
+          "text": "Serializable adds monitoring for dangerous read-write dependencies and can reject a transaction when the concurrent result cannot match any serial execution, requiring application-level transaction retry.",
+          "impact": "high",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-postgresql-mvcc-docs-2026",
+              "url": "https://www.postgresql.org/docs/18/transaction-iso.html",
+              "locator": "PostgreSQL 18 §13.2.3 Serializable"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "postgresql-mvcc-not-sqlite-wal-snapshot",
+          "text": "PostgreSQL MVCC snapshots and SQLite WAL reader snapshots should remain separate concepts: both stabilize what a reader sees, but one is multiversion row visibility and the other is a WAL end-mark mechanism.",
+          "impact": "high",
+          "origin": "project_interpretation",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-postgresql-mvcc-docs-2026",
+              "url": "https://www.postgresql.org/docs/18/mvcc-intro.html",
+              "locator": "PostgreSQL 18 §13.1 Introduction"
+            },
+            {
+              "kind": "prior_insight",
+              "insight_id": "sqlite-write-ahead-log-checkpointing",
+              "locator": "SQLite WAL reader end mark and checkpoint model"
+            }
+          ],
+          "note": "This scope boundary is project synthesis comparing two database concurrency mechanisms; PostgreSQL documentation does not discuss SQLite WAL."
+        }
+      ]
     }
   ]
 }

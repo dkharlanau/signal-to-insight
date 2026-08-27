@@ -333,6 +333,67 @@
           ]
         }
       ]
+    },
+    {
+      "insight_id": "postgresql-mvcc-snapshot-isolation",
+      "decision": "skim_selected_parts",
+      "rationale": "The explainer is enough for the MVCC mental model, but the official isolation sections are worth opening when database correctness matters because PostgreSQL's exact snapshot timing, conflicting-update behavior and Serializable retry semantics are the details most likely to be misremembered.",
+      "novelty": {
+        "level": "high",
+        "reason": "This source adds a new database-concurrency branch and introduces isolation-dependent snapshot scope rather than repeating the existing SQLite WAL storage model."
+      },
+      "source_quality": {
+        "level": "high",
+        "reason": "The source is the current official PostgreSQL 18 manual and is authoritative for transaction isolation behavior."
+      },
+      "relevance": {
+        "level": "high",
+        "reason": "Snapshot visibility and retry semantics directly affect correctness of concurrent application logic and data migrations, not just database internals."
+      },
+      "practical_leverage": {
+        "level": "high",
+        "reason": "The model provides a concrete checklist for choosing isolation levels, diagnosing concurrency assumptions and designing retry behavior."
+      },
+      "compression_loss": {
+        "level": "medium",
+        "reason": "A compact explainer preserves the model but cannot safely replace PostgreSQL's exact command-specific rules and edge cases when implementing complex concurrent updates."
+      },
+      "selected_parts": [
+        {
+          "label": "MVCC snapshot and nonblocking model",
+          "locator": "PostgreSQL 18 §13.1 Introduction",
+          "why": "Establishes what a snapshot is and the precise read-versus-write contention claim.",
+          "claim_refs": [
+            "postgresql-mvcc-snapshot-visibility",
+            "postgresql-read-write-nonblocking-boundary"
+          ]
+        },
+        {
+          "label": "Read Committed snapshot timing",
+          "locator": "PostgreSQL 18 §13.2.1 Read Committed",
+          "why": "Shows why two statements in one transaction can legitimately see different committed states and where same-row writers may wait.",
+          "claim_refs": [
+            "postgresql-read-committed-statement-snapshot",
+            "postgresql-read-write-nonblocking-boundary"
+          ]
+        },
+        {
+          "label": "Repeatable Read transaction view",
+          "locator": "PostgreSQL 18 §13.2.2 Repeatable Read",
+          "why": "Makes the transaction-wide snapshot and concurrent-update failure behavior explicit.",
+          "claim_refs": [
+            "postgresql-repeatable-read-transaction-snapshot"
+          ]
+        },
+        {
+          "label": "Serializable dependency detection",
+          "locator": "PostgreSQL 18 §13.2.3 Serializable",
+          "why": "Explains why stronger consistency can reject a transaction and why retry is part of the application contract.",
+          "claim_refs": [
+            "postgresql-serializable-dependency-retry"
+          ]
+        }
+      ]
     }
   ]
 }

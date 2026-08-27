@@ -175,6 +175,28 @@
           "wal-reader-snapshot"
         ]
       }
+    },
+    {
+      "insight_id": "postgresql-mvcc-snapshot-isolation",
+      "retention_prompt": "Without looking back, reconstruct PostgreSQL MVCC: explain what a snapshot controls, why ordinary reads can overlap writes, how Read Committed and Repeatable Read differ in snapshot lifetime, and why Serializable or conflicting updates can require a full transaction retry.",
+      "answer_key": {
+        "problem_from": "whole_source_map.problem",
+        "mechanism_from": "whole_source_map.thesis",
+        "anchor_concept_ids": [
+          "multiversion-concurrency-control",
+          "mvcc-snapshot",
+          "transaction-isolation-scope"
+        ],
+        "boundary_limitation_index": 0
+      },
+      "transfer_prompt": {
+        "prompt": "Two services read and update the same business data concurrently. One requires each statement to see the newest committed state; another must keep one stable transaction view and reject unsafe concurrent outcomes. Which PostgreSQL isolation behavior fits each requirement, and where must retry handling become part of the design?",
+        "expected_concept_ids": [
+          "mvcc-snapshot",
+          "transaction-isolation-scope",
+          "serialization-failure-retry"
+        ]
+      }
     }
   ]
 }

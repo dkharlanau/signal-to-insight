@@ -412,6 +412,68 @@
           }
         }
       ]
+    },
+    {
+      "insight_id": "postgresql-mvcc-snapshot-isolation",
+      "summary": "The MVCC model is coherent once the reader understands the multiversion model, the snapshot that controls visibility, the isolation rule that scopes that snapshot, and why stronger guarantees can intentionally fail a transaction.",
+      "items": [
+        {
+          "id": "postgresql-prereq-mvcc",
+          "label": "Multiversion Concurrency Control (MVCC)",
+          "concept_id": "multiversion-concurrency-control",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "The core concurrency benefit depends on separating visible row versions from one universally current physical value.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "postgresql-mvcc-snapshot-isolation",
+            "target": null
+          }
+        },
+        {
+          "id": "postgresql-prereq-snapshot",
+          "label": "MVCC snapshot",
+          "concept_id": "mvcc-snapshot",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "Snapshot visibility is the concrete mechanism that lets a statement or transaction read a coherent database version while commits continue.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "postgresql-mvcc-snapshot-isolation",
+            "target": null
+          }
+        },
+        {
+          "id": "postgresql-prereq-isolation-scope",
+          "label": "Transaction isolation scope",
+          "concept_id": "transaction-isolation-scope",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "Read Committed and Repeatable Read are easy to confuse unless snapshot lifetime is treated as an explicit part of the isolation contract.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "postgresql-mvcc-snapshot-isolation",
+            "target": null
+          }
+        },
+        {
+          "id": "postgresql-prereq-serialization-retry",
+          "label": "Serialization failure and retry",
+          "concept_id": "serialization-failure-retry",
+          "priority": "learn_next",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "The strongest consistency story is incomplete unless transaction abort and whole-transaction retry are understood as expected concurrency behavior.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "postgresql-mvcc-snapshot-isolation",
+            "target": null
+          }
+        }
+      ]
     }
   ]
 }
