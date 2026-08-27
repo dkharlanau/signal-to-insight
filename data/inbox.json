@@ -176,6 +176,17 @@
       "source_id": null,
       "insight_id": null,
       "notes": "GitHub source intake issue #63. Dogfood cohort: AI framework repository."
+    },
+    {
+      "id": "intake-2026-08-27-developer-purpose",
+      "source_url": "https://developer.hashicorp.com/terraform/language/state/purpose",
+      "source_type": "documentation",
+      "submitted_at": "2026-08-27",
+      "requested_focus": "Understand why declarative infrastructure still needs state: mapping configuration to remote objects, metadata, synchronization and the operational risks of shared state.",
+      "status": "queued",
+      "source_id": null,
+      "insight_id": null,
+      "notes": "GitHub source intake issue #64. Dogfood cohort: infrastructure-as-code documentation."
     }
   ]
 }
