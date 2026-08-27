@@ -5,23 +5,24 @@
   "source": {
     "type": "article",
     "canonical_url": "https://sre.google/sre-book/monitoring-distributed-systems",
-    "title": null,
-    "creators": [],
-    "publisher": null,
+    "title": "Monitoring Distributed Systems",
+    "creators": ["Rob Ewaschuk"],
+    "publisher": "Google SRE Book",
     "published_at": null,
     "event_date": null,
     "version": null,
-    "language": null,
+    "language": "en",
     "duration": null,
-    "date_note": null
+    "date_note": "Chapter 6 of the Google SRE Book, inspected on 2026-08-27. The online chapter identifies Rob Ewaschuk as author; no standalone page publication date is asserted."
   },
   "inspection": {
-    "method": "not inspected",
-    "full_content_used_ephemerally": false,
+    "method": "Direct inspection of the official Google SRE chapter, focusing on why monitoring exists, symptom/cause separation, black-box versus white-box monitoring, four golden signals and paging simplicity/noise boundaries.",
+    "full_content_used_ephemerally": true,
     "full_content_committed": false,
-    "confidence": "metadata_only",
+    "confidence": "direct",
     "gaps": [
-      "Source content has not been mapped yet."
+      "Later sections on tail latency, resolution and long-term monitoring implementation are compressed because the requested focus is operator signal and alerting design.",
+      "Modern SLO/error-budget alerting refinements are covered elsewhere in SRE literature and are not silently backported into this chapter."
     ]
   },
   "prior_knowledge": {
@@ -31,27 +32,79 @@
     "classification_required": true
   },
   "content_map": {
-    "problem": null,
-    "thesis": null,
-    "sections": [],
-    "concepts": [],
-    "mechanisms": [],
-    "tools": [],
-    "examples": [],
-    "claims": [],
-    "evidence": [],
-    "assumptions": [],
-    "limitations": [],
-    "open_questions": []
+    "problem": "Monitoring can collect enormous telemetry while still failing operators if it pages on internal weirdness, hides user-visible symptoms in noise, or provides no path from what is broken to why it is broken.",
+    "thesis": "Use monitoring for distinct purposes, page humans only on simple high-signal evidence of real or imminent impact, combine black-box symptom monitoring with white-box diagnostic visibility, and cover user-facing services with the four golden signals: latency, traffic, errors and saturation.",
+    "sections": ["Why Monitor?", "Setting Reasonable Expectations for Monitoring", "Symptoms Versus Causes", "Black-Box Versus White-Box", "The Four Golden Signals", "As Simple as Possible, No Simpler"],
+    "concepts": ["black-box monitoring", "white-box monitoring", "symptom versus cause", "four golden signals", "actionable paging", "signal-to-noise discipline"],
+    "mechanisms": [
+      "Use black-box checks to observe externally visible service symptoms as users experience them.",
+      "Use white-box instrumentation to inspect internal causes, masked failures and imminent problems.",
+      "Separate the question 'what is broken?' from 'why is it broken?' so alerting and diagnosis do not collapse into one noisy rule system.",
+      "Use latency, traffic, errors and saturation as a compact baseline for user-facing service health.",
+      "Keep pager rules simple, comprehensible and tied to clear failure because human interruption is expensive and alert noise erodes response quality."
+    ],
+    "tools": ["black-box probe", "white-box metrics/logs", "dashboard", "pager/alert system"],
+    "examples": [
+      "A frontend is slow because the database is slow: the frontend's black-box symptom and the database's white-box cause are different operational questions.",
+      "A retry hides an internal backend failure from users: white-box monitoring can expose the masked failure while black-box monitoring remains healthy.",
+      "A service with acceptable averages still has a damaging latency tail; golden-signal monitoring should preserve distribution rather than only mean values."
+    ],
+    "claims": [
+      "Black-box monitoring observes externally visible behavior and is symptom-oriented, while white-box monitoring uses internal instrumentation and is essential for diagnosis and imminent/masked failure visibility.",
+      "Human paging should be reserved for simple high-signal conditions representing real or near-term actionable problems because frequent noisy pages train responders to ignore alerts.",
+      "Latency, traffic, errors and saturation form the four golden signals recommended as a minimal monitoring baseline for user-facing systems.",
+      "Monitoring should distinguish symptoms from causes: what is broken determines impact, while why it is broken guides diagnosis."
+    ],
+    "evidence": [
+      "The official chapter defines black-box monitoring as externally visible behavior and white-box monitoring as internal-system instrumentation.",
+      "The chapter explicitly describes paging as expensive, warns that frequent pages are ignored, and calls for good signal with very low noise.",
+      "The Four Golden Signals section names latency, traffic, errors and saturation and recommends them when only four metrics can be measured.",
+      "The Symptoms Versus Causes section calls the what-versus-why distinction one of the most important for maximum signal and minimum noise."
+    ],
+    "assumptions": [
+      "Operators have a clear enough service/user boundary to define externally meaningful symptoms.",
+      "White-box instrumentation exposes internal signals useful for diagnosis without overwhelming responders.",
+      "Pager ownership and response procedures exist so a page corresponds to an action a human can take."
+    ],
+    "limitations": [
+      "The four golden signals are a baseline, not a complete domain-specific monitoring model; data integrity, security and business correctness may need additional signals.",
+      "Black-box monitoring detects user-visible symptoms but is weak at predicting not-yet-visible failures; white-box signals are needed for imminent or masked problems.",
+      "White-box telemetry can create noise if internal anomalies page humans without demonstrated service impact.",
+      "The chapter favors simple, robust pager paths and post-hoc diagnostic depth; it does not justify increasingly complex alert dependency graphs by default."
+    ],
+    "open_questions": [
+      "Which signals should page versus create a ticket for this specific service/SLO?",
+      "Which black-box probe most closely matches a real user-critical path?",
+      "What internal telemetry is necessary for diagnosis but should never independently wake a human?"
+    ]
   },
   "selection": {
     "requested_focus": "Understand what monitoring should tell operators, the difference between black-box and white-box signals, alerting boundaries and how to avoid turning telemetry volume into operational noise.",
-    "coherent_core": [],
-    "prerequisites": [],
-    "drop_notes": [],
-    "connections": []
+    "coherent_core": [
+      "Monitoring serves different purposes; paging is only one and has the strictest signal/noise requirement.",
+      "Black-box answers whether users are experiencing a problem; white-box helps explain internal causes and detect masked/imminent failures.",
+      "Golden signals provide a compact default service-health vocabulary.",
+      "Pager rules should stay simple and tied to actionable symptoms rather than arbitrary telemetry anomalies."
+    ],
+    "prerequisites": ["service symptom", "internal telemetry", "human paging/alerting"],
+    "drop_notes": [
+      "Prior-knowledge retrieval returned no matches even though the cumulative graph already contains a broad `observability` concept; treat this as a retrieval-recall miss and curate the refinement explicitly rather than pretending no prior knowledge exists.",
+      "Do not turn every white-box signal into a page; the source repeatedly separates diagnostic richness from paging discipline."
+    ],
+    "connections": [
+      "observability is refined from generic telemetry into an operator decision model: symptoms for impact, internal signals for diagnosis, and strict pager signal/noise boundaries",
+      "distributed tracing is one white-box diagnostic mechanism, not the whole monitoring strategy"
+    ]
   },
-  "verification_candidates": [],
-  "source_locators": [],
+  "verification_candidates": [
+    {"question": "How should current SLO/error-budget burn-rate alerting refine the chapter's paging guidance?", "reason": "Useful modern follow-up, but outside the chapter's direct scope and should be sourced separately.", "priority": "medium"}
+  ],
+  "source_locators": [
+    {"label": "Pager signal/noise", "locator": "Monitoring Distributed Systems → Why Monitor?"},
+    {"label": "Symptoms versus causes", "locator": "Monitoring Distributed Systems → Symptoms Versus Causes"},
+    {"label": "Black-box versus white-box", "locator": "Monitoring Distributed Systems → Black-Box Versus White-Box"},
+    {"label": "Four golden signals", "locator": "Monitoring Distributed Systems → The Four Golden Signals"},
+    {"label": "Simple pager path", "locator": "Monitoring Distributed Systems → Setting Reasonable Expectations for Monitoring"}
+  ],
   "created_at": "2026-08-27"
 }
