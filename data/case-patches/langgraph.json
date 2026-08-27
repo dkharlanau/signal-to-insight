@@ -1,0 +1,130 @@
+{
+  "patch_version": "1.0.0",
+  "intake_id": "intake-2026-08-27-github-langgraph",
+  "intake_status": "review",
+  "updated_at": "2026-08-27",
+  "graph_version": "0.4.0",
+  "source": {
+    "id": "src-langgraph-repository-2026",
+    "type": "repository",
+    "title": "LangGraph",
+    "canonical_url": "https://github.com/langchain-ai/langgraph",
+    "creators": ["LangChain Inc. / LangGraph contributors"],
+    "publisher": "LangChain Inc.",
+    "event": null,
+    "published_at": null,
+    "event_date": null,
+    "captured_at": "2026-08-27",
+    "analyzed_at": "2026-08-27",
+    "date_note": "Living repository and official documentation inspected on 2026-08-27; no single publication date is asserted.",
+    "verification": [
+      {"title": "LangGraph overview", "url": "https://docs.langchain.com/oss/python/langgraph/overview", "accessed_at": "2026-08-27"},
+      {"title": "LangGraph persistence", "url": "https://docs.langchain.com/oss/python/langgraph/persistence", "accessed_at": "2026-08-27"}
+    ],
+    "derived_records": ["langgraph-stateful-agent-orchestration"]
+  },
+  "insight": {
+    "id": "langgraph-stateful-agent-orchestration",
+    "source_id": "src-langgraph-repository-2026",
+    "slug": "langgraph-stateful-agent-orchestration",
+    "status": "review",
+    "title": "LangGraph: separate agent reasoning from orchestration state and control flow",
+    "one_liner": "LangGraph treats agent execution as an explicit stateful graph where deterministic and model-driven steps can coexist, while checkpoints let a thread pause, recover and continue.",
+    "why_this_matters": "Agent capability and agent orchestration are different problems. A model can decide what to do next, but a production application still needs explicit state, branching, persistence and intervention points around those decisions. LangGraph makes that outer control structure a first-class programming model.",
+    "whole_source_map": {
+      "problem": "Long-running agent applications need explicit state, control flow, persistence and interruption behavior beyond a model/tool-calling loop.",
+      "thesis": "Model the application as a state graph whose nodes can be deterministic or agentic, then persist thread state with checkpoints so orchestration can survive interruptions and support human intervention.",
+      "core_topics": ["stateful agent orchestration", "StateGraph nodes and edges", "deterministic plus agentic steps", "thread checkpoints", "cross-thread stores", "human-in-the-loop"]
+    },
+    "derived_model": {
+      "problem": "A reasoning loop can choose actions without giving the application a durable, inspectable model of execution state and control transitions.",
+      "mechanism": "LangGraph makes state and graph transitions explicit, mixes deterministic and LLM-driven nodes, and persists thread state through checkpointers while Stores handle longer-lived cross-thread data.",
+      "result": "Agent applications gain a programmable orchestration layer that can pause, resume, branch and expose intervention points without pretending the orchestration graph itself is the model's reasoning strategy."
+    },
+    "coherence_review": {
+      "central_chain": [
+        "A model/tool loop decides actions but does not by itself define the application's durable control structure.",
+        "LangGraph represents that outer structure as explicit graph state, nodes and edges.",
+        "Nodes can combine deterministic application logic with LLM-driven decisions in one workflow.",
+        "Checkpointers persist thread-scoped graph state so interrupted or failed work can resume, while Stores persist data across threads.",
+        "This creates a stateful agent-orchestration runtime whose responsibilities overlap with but do not equal ReAct, Temporal or broader execution governance."
+      ],
+      "prerequisites_complete": true,
+      "source_vs_enrichment_clear": true,
+      "open_gaps": [
+        "The explainer does not compare production checkpointer implementations or LangSmith deployment architecture.",
+        "LangGraph evolves quickly; version-specific persistence and deployment guidance should be re-verified before production implementation."
+      ],
+      "scores": {"coherence": 5, "prerequisite_completeness": 5, "evidence_confidence": 5, "practical_leverage": 5}
+    },
+    "visual_plan": {
+      "dominant": {
+        "type": "layers",
+        "title": "Reasoning lives inside an orchestration layer",
+        "nodes": [
+          {"label": "01 · Decisions", "title": "Agentic / deterministic nodes", "text": "Individual steps may use LLM reasoning or ordinary application code."},
+          {"label": "02 · Orchestration", "title": "StateGraph + transitions", "text": "Explicit state and edges determine how work moves, branches and reaches intervention points."},
+          {"label": "03 · Persistence", "title": "Checkpoints + stores", "text": "Thread checkpoints preserve execution state; stores preserve application data across threads."}
+        ]
+      },
+      "supporting": ["comparison", "sequence", "concept_grid", "tool_map", "examples", "limitations", "action_map", "source_map"],
+      "image": {"needed": false, "reason": "The conceptual boundary is best taught as nested responsibility layers rather than a decorative agent illustration."}
+    },
+    "concepts": [
+      {"name": "Stateful agent orchestration", "depth": "learn", "why_needed": "Separates the application's execution structure from whatever reasoning strategy is used inside a node."},
+      {"name": "Graph state and control flow", "depth": "learn", "why_needed": "Nodes and edges make transitions explicit enough to mix deterministic and agentic steps deliberately."},
+      {"name": "Thread checkpoint", "depth": "learn", "why_needed": "Persisted graph-state snapshots support continuation, interruption, time travel and fault recovery for one thread."},
+      {"name": "Cross-thread store", "depth": "know", "why_needed": "Long-term application data has a different scope from the execution checkpoint of one thread."}
+    ],
+    "tool_map": [
+      {"name": "LangGraph", "category": "agent orchestration runtime", "why_explore": "Useful when an agent application needs explicit control flow, durable state or human interruption rather than only a prebuilt model/tool loop.", "url": "https://docs.langchain.com/oss/python/langgraph/overview", "relationship": "Primary source-native framework.", "status": "try"},
+      {"name": "LangSmith", "category": "tracing/evaluation/deployment platform", "why_explore": "Adjacent ecosystem for tracing and evaluating LangGraph runs; not required to understand the open-source orchestration mental model.", "url": "https://docs.langchain.com/langsmith/home", "relationship": "Adjacent LangChain product named by official LangGraph documentation.", "status": "watch"}
+    ],
+    "examples": [
+      {"domain": "agent workflow", "scenario": "A validation step is deterministic, a planning step uses an LLM, and a tool step executes an external action.", "question": "Can the application express those responsibilities as explicit nodes and transitions instead of hiding everything in one agent loop?"},
+      {"domain": "human approval", "scenario": "An agent reaches a consequential action and must pause until a person reviews or modifies current state.", "question": "Can the thread state be checkpointed, inspected and later resumed from the same orchestration point?"},
+      {"domain": "memory", "scenario": "A user preference should survive across conversations while the current graph run has its own transient execution state.", "question": "Which information belongs in a cross-thread Store versus a thread checkpoint?"}
+    ],
+    "limitations": [
+      "LangGraph orchestration does not by itself provide authorization policy, protected-data separation or the broader governance semantics required for consequential controlled execution.",
+      "LangGraph is not the ReAct method: a ReAct-style reason/action/observation loop can be implemented inside graph nodes/edges, but the two abstractions answer different questions.",
+      "LangGraph persistence and Temporal durable execution overlap in recovery goals but expose different runtime/state models and should not be treated as interchangeable implementations.",
+      "An in-memory checkpointer does not persist across process restarts; production durability depends on the selected persistence implementation."
+    ],
+    "action_map": {
+      "use_now": ["When reviewing an agent design, separate three questions: reasoning strategy, orchestration state/control flow, and execution governance."],
+      "try": ["Implement one small graph with a deterministic validation node, one LLM node and an interrupt/resume point using a persistent checkpointer."],
+      "learn": ["StateGraph", "checkpointers", "thread state", "Stores", "interrupts and human-in-the-loop"],
+      "build": ["A minimal agent workflow that can persist a thread, stop before a consequential action and resume after explicit approval."],
+      "watch": ["How LangGraph persistence and deployment abstractions evolve relative to general-purpose durable workflow engines."],
+      "ignore_for_now": ["Treating every simple model/tool workflow as a reason to adopt a low-level orchestration graph."]
+    },
+    "connections": [
+      "ReAct: reasoning/action strategy, not orchestration equivalence.",
+      "Temporal: related durable-execution goal, different workflow/state runtime abstraction.",
+      "Controlled execution: LangGraph refines orchestration/persistence, but policy, authority and protected-data controls remain outside this source's core model."
+    ],
+    "supporting_sources": [
+      {"title": "LangGraph GitHub repository", "url": "https://github.com/langchain-ai/langgraph", "publisher": "LangChain Inc.", "purpose": "primary source for low-level stateful orchestration positioning and named capabilities", "accessed_at": "2026-08-27"},
+      {"title": "LangGraph overview", "url": "https://docs.langchain.com/oss/python/langgraph/overview", "publisher": "LangChain", "purpose": "verification of orchestration runtime, deterministic/agentic graph and capability boundaries", "accessed_at": "2026-08-27"},
+      {"title": "LangGraph persistence", "url": "https://docs.langchain.com/oss/python/langgraph/persistence", "publisher": "LangChain", "purpose": "verification of checkpointer versus Store scopes and persistence behavior", "accessed_at": "2026-08-27"}
+    ],
+    "tags": ["langgraph", "agents", "orchestration", "state", "persistence", "human-in-the-loop"],
+    "provenance": {"source_linked": true, "source_dates_recorded": true, "full_transcript_stored": false, "analysis_type": "direct repository and official-documentation analysis with explicit responsibility-boundary comparison", "reviewed_at": "2026-08-27"}
+  },
+  "graph": {
+    "concepts": [
+      {"id": "stateful-agent-orchestration", "label": "Stateful agent orchestration", "summary": "An application-level execution model that makes agent state and control transitions explicit around deterministic and model-driven steps.", "domain": "agent orchestration", "coverage": "explained", "insight_ids": ["langgraph-stateful-agent-orchestration"], "aliases": ["agent graph orchestration"], "tags": ["agents", "orchestration", "state", "control-flow"]},
+      {"id": "graph-state-checkpoint", "label": "Graph state checkpoint", "summary": "A persisted snapshot of one graph thread's execution state used for continuity, interruption, recovery and inspection.", "domain": "agent persistence", "coverage": "explained", "insight_ids": ["langgraph-stateful-agent-orchestration"], "aliases": ["thread checkpoint"], "tags": ["state", "checkpoint", "persistence", "agents"]},
+      {"id": "cross-thread-store", "label": "Cross-thread store", "summary": "Application-defined persistent data whose scope spans graph threads rather than representing the execution state of one thread.", "domain": "agent memory", "coverage": "explained", "insight_ids": ["langgraph-stateful-agent-orchestration"], "aliases": ["LangGraph Store"], "tags": ["memory", "store", "persistence", "agents"]},
+      {"id": "controlled-execution", "insight_ids": ["langgraph-stateful-agent-orchestration"]},
+      {"id": "durable-execution", "insight_ids": ["langgraph-stateful-agent-orchestration"]}
+    ],
+    "relations": [
+      {"id": "rel-stateful-agent-orchestration-depends-on-checkpoint", "from": "stateful-agent-orchestration", "to": "graph-state-checkpoint", "type": "depends_on", "rationale": "Long-running graph orchestration can survive interruptions and resume only when thread execution state is persisted outside the transient call stack.", "evidence_insights": ["langgraph-stateful-agent-orchestration"]},
+      {"id": "rel-stateful-agent-orchestration-related-to-store", "from": "stateful-agent-orchestration", "to": "cross-thread-store", "type": "related_to", "rationale": "Stores are an optional persistence scope for application-defined information shared across graph threads; they complement but are not required for one thread's checkpointed orchestration state.", "evidence_insights": ["langgraph-stateful-agent-orchestration"]},
+      {"id": "rel-stateful-agent-orchestration-related-to-controlled-execution", "from": "stateful-agent-orchestration", "to": "controlled-execution", "type": "related_to", "rationale": "LangGraph provides explicit orchestration, persistence and intervention points that implement part of a controlled-execution substrate, while authorization and data-governance concerns remain separate.", "evidence_insights": ["langgraph-stateful-agent-orchestration"]},
+      {"id": "rel-graph-state-checkpoint-related-to-durable-execution", "from": "graph-state-checkpoint", "to": "durable-execution", "type": "related_to", "rationale": "Persisting thread graph state supports continuation after interruption or failure and therefore realizes a LangGraph-specific durability mechanism without collapsing it into another runtime's state model.", "evidence_insights": ["langgraph-stateful-agent-orchestration"]}
+    ]
+  }
+}
