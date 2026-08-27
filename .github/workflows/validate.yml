@@ -89,6 +89,9 @@ jobs:
       - name: Test one-command source orchestration
         run: python scripts/run_source.py --self-test
 
+      - name: Test reusable starter bootstrap
+        run: python scripts/bootstrap_starter.py --self-test
+
       - name: Test private personal knowledge baseline
         run: python scripts/personal_baseline.py self-test
 
@@ -144,4 +147,4 @@ jobs:
         run: python -m unittest discover -s tests -p "test_*.py" -v
 
       - name: Compile Python utilities
-        run: python -m compileall -q scripts tests
+        run: python -m compileall -q sti.py scripts tests
