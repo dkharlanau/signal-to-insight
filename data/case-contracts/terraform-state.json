@@ -1,0 +1,49 @@
+{
+  "contract_version": "1.0.0",
+  "intake_id": "intake-2026-08-27-developer-purpose",
+  "insight_id": "terraform-state-identity-binding",
+  "knowledge_delta": {
+    "insight_id": "terraform-state-identity-binding",
+    "summary": "Terraform adds a distinct persistent-state model to the graph: declarative intent still requires durable managed-object identity, lifecycle metadata and shared coordination across runs rather than reconstructing infrastructure ownership from scratch.",
+    "items": [
+      {"relationship": "new", "concept_id": "terraform-state", "label": "Terraform state", "source_basis": "Terraform requires persistent state to map configuration to real resources, retain metadata and support future planning/synchronization.", "prior_basis": "The cumulative graph had desired-state, workflow and database-state concepts but no infrastructure-as-code state record with Terraform's ownership semantics.", "interpretation": "State becomes a separate reusable concept: declarative code is not sufficient operational memory when a tool must manage the same remote objects across runs.", "evidence_insights": []},
+      {"relationship": "new", "concept_id": "resource-identity-binding", "label": "Resource identity binding", "source_basis": "The primary purpose of Terraform state is binding a resource instance in configuration to the identity of a concrete remote object.", "prior_basis": "No prior concept represented a persistent address-to-remote-object ownership mapping for infrastructure lifecycle management.", "interpretation": "Identity binding explains why state is required even when desired configuration is complete and version-controlled.", "evidence_insights": []},
+      {"relationship": "new", "concept_id": "shared-state-coordination", "label": "Shared state coordination", "source_basis": "Terraform recommends a shared remote state so collaborators operate on the same mapping, with locking used to reduce simultaneous state mutation.", "prior_basis": "The graph did not yet model collaboration around one mutable infrastructure ownership record.", "interpretation": "State is not just local execution memory; in team use it becomes shared operational data requiring synchronization and access discipline.", "evidence_insights": []}
+    ],
+    "suppressed_prior_matches": []
+  },
+  "claim_evidence": {
+    "insight_id": "terraform-state-identity-binding",
+    "claims": [
+      {"id": "terraform-state-maps-real-objects", "text": "Terraform state is required to persist the mapping between resource instances declared in configuration and the concrete remote objects Terraform manages across runs.", "impact": "high", "origin": "source", "status": "supported", "evidence": [{"kind": "primary_source", "source_id": "src-terraform-state-purpose-2026", "url": "https://developer.hashicorp.com/terraform/language/state/purpose", "locator": "Purpose of Terraform State → Mapping to the Real World"}], "note": null},
+      {"id": "terraform-state-keeps-metadata", "text": "Terraform state retains lifecycle metadata such as resource dependencies and provider configuration information in addition to remote object identities and cached attributes.", "impact": "medium", "origin": "source", "status": "supported", "evidence": [{"kind": "primary_source", "source_id": "src-terraform-state-purpose-2026", "url": "https://developer.hashicorp.com/terraform/language/state/purpose", "locator": "Purpose of Terraform State → Metadata"}], "note": null},
+      {"id": "terraform-state-syncs-collaboration", "text": "For collaborative infrastructure management, Terraform needs participants to operate from the same state, and remote state with locking is used to coordinate access and reduce concurrent updates.", "impact": "high", "origin": "source", "status": "supported", "evidence": [{"kind": "primary_source", "source_id": "src-terraform-state-purpose-2026", "url": "https://developer.hashicorp.com/terraform/language/state/purpose", "locator": "Purpose of Terraform State → Syncing"}], "note": null}
+    ]
+  },
+  "prerequisite_map": {
+    "insight_id": "terraform-state-identity-binding",
+    "summary": "The minimum Terraform state model needs three pieces: the state record itself, the resource identity binding that gives it purpose, and shared coordination that becomes necessary when multiple actors mutate the same managed infrastructure.",
+    "items": [
+      {"id": "terraform-state-prereq-state", "label": "Terraform state", "concept_id": "terraform-state", "priority": "must_know_now", "prior_coverage": "absent", "state": "explained_here", "reason": "The source is specifically explaining why Terraform needs a persistent state layer alongside declarative configuration.", "resolution": {"kind": "explained_here", "insight_id": "terraform-state-identity-binding", "target": null}},
+      {"id": "terraform-state-prereq-binding", "label": "Resource identity binding", "concept_id": "resource-identity-binding", "priority": "must_know_now", "prior_coverage": "absent", "state": "explained_here", "reason": "Without the configuration-to-remote-object mapping, state is easily misread as only a cache of current values.", "resolution": {"kind": "explained_here", "insight_id": "terraform-state-identity-binding", "target": null}},
+      {"id": "terraform-state-prereq-coordination", "label": "Shared state coordination", "concept_id": "shared-state-coordination", "priority": "learn_next", "prior_coverage": "absent", "state": "explained_here", "reason": "Team use changes state from local operational memory into a synchronized shared asset whose mutation must be coordinated.", "resolution": {"kind": "explained_here", "insight_id": "terraform-state-identity-binding", "target": null}}
+    ]
+  },
+  "learning_prompt": {
+    "insight_id": "terraform-state-identity-binding",
+    "retention_prompt": "Without looking back, explain why declarative Terraform configuration is not enough by itself: identify what state remembers about remote objects, what additional metadata it keeps, how refresh changes current attributes without replacing identity, and why team use requires shared-state coordination.",
+    "answer_key": {"problem_from": "whole_source_map.problem", "mechanism_from": "whole_source_map.thesis", "anchor_concept_ids": ["terraform-state", "resource-identity-binding", "shared-state-coordination"], "boundary_limitation_index": 0},
+    "transfer_prompt": {"prompt": "A team keeps perfect Terraform code in Git but deletes the shared state and asks Terraform to infer ownership from the cloud APIs on every run. What information has been lost, why is rediscovery not equivalent to the old state, and what team coordination problem still remains?", "expected_concept_ids": ["terraform-state", "resource-identity-binding", "shared-state-coordination"]}
+  },
+  "source_decision": {
+    "insight_id": "terraform-state-identity-binding",
+    "decision": "explainer_is_enough",
+    "rationale": "For the conceptual question of why declarative infrastructure still needs state, the explainer preserves the complete identity-mapping, metadata, performance and synchronization model. Open the original mainly when backend-specific implementation details are the next task.",
+    "novelty": {"level": "high", "reason": "The source introduces a new persistent infrastructure-ownership model rather than repeating an existing workflow or database state concept."},
+    "source_quality": {"level": "high", "reason": "The primary source is current official Terraform documentation describing the state model the Terraform CLI itself relies on."},
+    "relevance": {"level": "high", "reason": "The distinction between declarative intent and durable managed identity is central to infrastructure-as-code design and operational safety."},
+    "practical_leverage": {"level": "high", "reason": "The model directly improves decisions about remote state, locking, state ownership, drift handling and the risks of treating state as disposable."},
+    "compression_loss": {"level": "low", "reason": "The official purpose page is compact and conceptual; its important mapping, metadata, performance and synchronization arguments can be retained without reproducing backend-specific details."},
+    "selected_parts": []
+  }
+}

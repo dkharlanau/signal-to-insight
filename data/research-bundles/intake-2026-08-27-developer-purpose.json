@@ -5,23 +5,24 @@
   "source": {
     "type": "documentation",
     "canonical_url": "https://developer.hashicorp.com/terraform/language/state/purpose",
-    "title": null,
-    "creators": [],
-    "publisher": null,
+    "title": "Purpose of Terraform State",
+    "creators": ["HashiCorp Terraform documentation contributors"],
+    "publisher": "HashiCorp",
     "published_at": null,
     "event_date": null,
     "version": null,
-    "language": null,
+    "language": "en",
     "duration": null,
-    "date_note": null
+    "date_note": "Living Terraform documentation inspected on 2026-08-27; no standalone publication date is asserted."
   },
   "inspection": {
-    "method": "not inspected",
-    "full_content_used_ephemerally": false,
+    "method": "Direct inspection of the official HashiCorp Purpose of Terraform State page, with the parent State documentation used only to verify storage/locking/security boundaries.",
+    "full_content_used_ephemerally": true,
     "full_content_committed": false,
-    "confidence": "metadata_only",
+    "confidence": "direct",
     "gaps": [
-      "Source content has not been mapped yet."
+      "Backend-specific locking, encryption and HCP Terraform behavior are outside this source-focused mental model.",
+      "State file internals and state surgery commands are intentionally excluded."
     ]
   },
   "prior_knowledge": {
@@ -31,27 +32,80 @@
     "classification_required": true
   },
   "content_map": {
-    "problem": null,
-    "thesis": null,
-    "sections": [],
-    "concepts": [],
-    "mechanisms": [],
-    "tools": [],
-    "examples": [],
-    "claims": [],
-    "evidence": [],
-    "assumptions": [],
-    "limitations": [],
-    "open_questions": []
+    "problem": "A declarative configuration names resource instances, but remote systems expose concrete object identities that Terraform must remember across runs; rediscovering every relationship from provider APIs is incomplete, ambiguous or expensive.",
+    "thesis": "Terraform state is the persistent identity and metadata layer between configuration and real infrastructure: it binds resource instances to remote objects, keeps provider/dependency metadata, caches attributes for planning performance, and gives collaborators one synchronized operational view.",
+    "sections": ["Mapping to the Real World", "Metadata", "Performance", "Syncing"],
+    "concepts": ["Terraform state", "resource identity binding", "state metadata", "state synchronization", "remote state locking"],
+    "mechanisms": [
+      "Record a one-to-one binding between a configured resource instance and the identity of the corresponding remote object.",
+      "Retain metadata such as dependency and provider information that cannot always be reconstructed from the remote API alone.",
+      "Refresh remote attributes before planning by default while retaining cached state to avoid treating every run as full discovery from zero.",
+      "Use shared remote state and locking so collaborators operate against the same mapping and avoid concurrent state mutation."
+    ],
+    "tools": ["terraform plan", "terraform apply", "remote state backend", "state locking"],
+    "examples": [
+      "A configuration address such as aws_instance.foo must continue referring to the same remote instance ID on later runs.",
+      "Two operators changing the same workspace need one synchronized state rather than independent local mappings.",
+      "Large infrastructures benefit from cached attributes because querying every remote object on every run can be slow and rate-limited."
+    ],
+    "claims": [
+      "Terraform requires persistent state because declarative resource addresses alone do not identify the concrete remote objects created in previous runs.",
+      "State stores more than current values: it also keeps metadata needed to manage resources and their provider/dependency relationships.",
+      "State participates in synchronization and planning performance, so team use introduces coordination, locking and secure-storage concerns.",
+      "Declarative configuration and persistent state are complementary responsibilities rather than competing alternatives."
+    ],
+    "evidence": [
+      "Official Purpose page states that the primary purpose of state is mapping resource instances in configuration to remote objects.",
+      "The Metadata section explains that Terraform retains resource dependencies and provider configuration information.",
+      "The Performance and Syncing sections explain cached attributes, refresh behavior, shared remote state and locking."
+    ],
+    "assumptions": [
+      "Terraform remains the authority managing the resource binding recorded in its state.",
+      "A remote object should be bound to only one resource instance within the managed configuration unless an explicit migration/import changes that relationship.",
+      "Collaborating operators can access a shared state backend with appropriate coordination and access controls."
+    ],
+    "limitations": [
+      "State can be stale relative to real infrastructure until refresh/reconciliation occurs.",
+      "Shared state is operationally sensitive because it can contain resource attributes and must be protected and coordinated.",
+      "State does not remove provider/API limits or external changes; it gives Terraform a durable mapping from which to detect and plan around them.",
+      "Caching attributes improves performance but should not be confused with the primary identity-binding purpose of state."
+    ],
+    "open_questions": [
+      "Which backend and locking model is appropriate for a particular team and trust boundary?",
+      "Which state contents are sensitive for a given provider and therefore need stricter access controls?",
+      "How should state ownership be partitioned when one large workspace creates excessive coordination or blast radius?"
+    ]
   },
   "selection": {
     "requested_focus": "Understand why declarative infrastructure still needs state: mapping configuration to remote objects, metadata, synchronization and the operational risks of shared state.",
-    "coherent_core": [],
-    "prerequisites": [],
-    "drop_notes": [],
-    "connections": []
+    "coherent_core": [
+      "Configuration says what resource instance should exist; state remembers which concrete remote object that instance means.",
+      "The mapping is the primary purpose; metadata and cached attributes support future planning and lifecycle operations.",
+      "Because state is persistent shared operational knowledge, collaboration needs one synchronized copy and locking.",
+      "State can become stale or sensitive, so it is not the same thing as ground-truth reality even though Terraform depends on it."
+    ],
+    "prerequisites": ["declarative resource configuration", "remote object identity", "planning versus applying changes"],
+    "drop_notes": [
+      "Do not reduce state to a cache; identity binding is the central responsibility.",
+      "Do not expand into backend/vendor comparison until a concrete collaboration or security requirement exists."
+    ],
+    "connections": [
+      "The model is conceptually adjacent to reconciliation: declared configuration is compared with observed infrastructure, but Terraform state adds persistent identity/metadata required to know which remote objects are under management.",
+      "State locking is coordination around shared mutable operational knowledge, not a general distributed-consensus guarantee."
+    ]
   },
-  "verification_candidates": [],
-  "source_locators": [],
+  "verification_candidates": [
+    {
+      "question": "Which current Terraform backends provide locking and what are their failure semantics?",
+      "reason": "The source establishes why coordination matters but backend-specific implementation changes over time.",
+      "priority": "medium"
+    }
+  ],
+  "source_locators": [
+    {"label": "Identity binding", "locator": "Purpose of Terraform State → Mapping to the Real World"},
+    {"label": "Metadata", "locator": "Purpose of Terraform State → Metadata"},
+    {"label": "Planning performance", "locator": "Purpose of Terraform State → Performance"},
+    {"label": "Shared state and locking", "locator": "Purpose of Terraform State → Syncing"}
+  ],
   "created_at": "2026-08-27"
 }
