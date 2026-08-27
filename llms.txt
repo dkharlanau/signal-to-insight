@@ -1,64 +1,27 @@
 # Signal to Insight
 
-> A personalized source-to-understanding engine that turns videos, papers, articles, repositories, tools, documentation and other useful sources into coherent visual explanations, concept/tool maps and practical learning decisions.
+> A source-to-understanding engine that maps the whole source, shows what changed relative to prior knowledge, preserves evidence boundaries and turns reviewed understanding into visual explainers.
 
-Canonical project: https://github.com/dkharlanau/signal-to-insight
-Site: https://dkharlanau.github.io/signal-to-insight/
-Research profile: https://dkharlanau.github.io/signal-to-insight/config/research-profile.json
-Machine-readable insights: https://dkharlanau.github.io/signal-to-insight/data/insights.json
-Source registry: https://dkharlanau.github.io/signal-to-insight/data/sources.json
-Schema: https://dkharlanau.github.io/signal-to-insight/data/insight.schema.json
+Canonical site: https://dkharlanau.github.io/signal-to-insight/
+Repository: https://github.com/dkharlanau/signal-to-insight
+Published-only discovery JSON: https://dkharlanau.github.io/signal-to-insight/discovery.json
+Atom feed: https://dkharlanau.github.io/signal-to-insight/atom.xml
+Explainer library: https://dkharlanau.github.io/signal-to-insight/library/
+Public knowledge graph: https://dkharlanau.github.io/signal-to-insight/knowledge/
+Published concept index: https://dkharlanau.github.io/signal-to-insight/knowledge/concepts/index.json
+Published knowledge history: https://dkharlanau.github.io/signal-to-insight/knowledge/history.json
 
-## Core behavior
+## Product contract
 
-The project does not optimize for generic summarization. The intended transformation is:
+Signal to Insight is not a generic summarizer. Public material is intentionally human-reviewed. Review previews, private/local context and unpublished insight records are excluded from this discovery bundle.
 
-source → whole-source map → personalized selection → verification/enrichment → coherent mental model → tools/concepts → action map → visual explainer
+Core loop: source → whole-source map → prior-knowledge comparison → verification → mental model → Knowledge Delta → source decision → review → published explainer.
 
-Selection should retain all prerequisites and relationships required for coherent understanding, even when some parts are not individually exciting.
+## Published explainers
 
-The project is not domain-locked. SAP/enterprise can be an application when appropriate, but AI tools, developer systems, custom architectures, research and other high-leverage topics are equally valid.
+- [Why enterprise AI agents fail after the POC](https://dkharlanau.github.io/signal-to-insight/explainers/why-enterprise-ai-agents-fail-after-the-poc/) — A production agent needs a controlled execution environment around the model, not just a model connected to tools.
+  Source: Why Your Enterprise Tech Stack Isn't Ready for AI Agents - And What to Build Instead — https://www.youtube.com/watch?v=mav15aW9lLM
 
-## Required provenance
+## Discovery boundary
 
-Every published record should include:
-
-- canonical source;
-- creator/publisher when known;
-- publication date when verifiable;
-- event date when relevant;
-- capture/access date;
-- analysis/review date;
-- supporting sources used for verification or enrichment.
-
-Unknown dates must not be guessed.
-
-## Content principles
-
-- Prefer coherent mental models over disconnected takeaways.
-- Explain prerequisites that the source assumes but the reader needs.
-- Distinguish source claims from project-added research and interpretation.
-- Prefer official/primary sources for tool and technical verification.
-- Include limitations and counterpoints.
-- End in explicit learning/action decisions: use, try, learn, build, watch or ignore for now.
-- Use visuals to explain mechanisms, relationships, comparisons or sequences; decorative visuals are secondary.
-- Link to original sources rather than reproducing them.
-- Do not store full third-party transcripts in the public repository.
-
-## Published case 001
-
-### Why enterprise AI agents fail after the POC
-
-Primary source: https://www.youtube.com/watch?v=mav15aW9lLM
-Event: AI Engineer World's Fair 2026
-Event date: 2026-07-02
-Captured/analyzed: 2026-08-26
-YouTube publication date: not independently verified
-
-Core model: production readiness depends on the controlled execution environment around an AI agent — including authority, durable/reconstructable history, protected data access, human intervention and replay — rather than model capability alone.
-
-Adjacent learning tools added by this project: Temporal, OpenTelemetry and Open Policy Agent.
-
-Structured record: /data/insights.json
-Source record: /data/sources.json
-Human-readable explainer: /content/explainers/001-enterprise-agent-production-substrate.md
+Only `status=published` insights are enumerated here. Do not treat repository review previews, local/private overlays or working knowledge as published claims.

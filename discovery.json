@@ -1,0 +1,32 @@
+{
+  "version": "1.0.0",
+  "projection": "published-evidence-only",
+  "site": "https://dkharlanau.github.io/signal-to-insight/",
+  "repository": "https://github.com/dkharlanau/signal-to-insight",
+  "atom": "https://dkharlanau.github.io/signal-to-insight/atom.xml",
+  "concept_index": "https://dkharlanau.github.io/signal-to-insight/knowledge/concepts/index.json",
+  "knowledge_history": "https://dkharlanau.github.io/signal-to-insight/knowledge/history.json",
+  "records": [
+    {
+      "id": "enterprise-agents-production-substrate",
+      "title": "Why enterprise AI agents fail after the POC",
+      "summary": "A production agent needs a controlled execution environment around the model, not just a model connected to tools.",
+      "url": "https://dkharlanau.github.io/signal-to-insight/explainers/why-enterprise-ai-agents-fail-after-the-poc/",
+      "reviewed_at": "2026-08-26",
+      "tags": [
+        "ai-agents",
+        "architecture",
+        "durable-execution",
+        "evals",
+        "governance",
+        "tools"
+      ],
+      "source": {
+        "id": "src-ai-engineer-enterprise-stack-agents-2026",
+        "title": "Why Your Enterprise Tech Stack Isn't Ready for AI Agents - And What to Build Instead",
+        "url": "https://www.youtube.com/watch?v=mav15aW9lLM",
+        "type": "video"
+      }
+    }
+  ]
+}
