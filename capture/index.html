@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Capture a source · Signal to Insight</title>
+  <link rel="stylesheet" href="../capture.css">
+</head>
+<body>
+  <main class="shell">
+    <a class="back" href="../">Signal to Insight</a>
+    <header>
+      <p class="eyebrow">Quick capture</p>
+      <h1>Queue a source without a backend.</h1>
+      <p class="lede">Paste or share a URL. This page only prepares the existing owner GitHub intake; it holds no credentials and publishes nothing.</p>
+    </header>
+
+    <form data-capture-form class="card">
+      <label>Source URL
+        <input name="url" type="url" inputmode="url" placeholder="https://…" required autofocus>
+      </label>
+      <label>Source type
+        <select name="type">
+          <option>article</option>
+          <option>video</option>
+          <option>paper</option>
+          <option>podcast</option>
+          <option>documentation</option>
+          <option>repository</option>
+          <option>tool</option>
+          <option>product</option>
+          <option>course</option>
+          <option>presentation</option>
+          <option>system</option>
+          <option>notes</option>
+        </select>
+      </label>
+      <label>Focus <span>optional</span>
+        <textarea name="focus" rows="3" placeholder="What should I understand, learn, try or build from this?"></textarea>
+      </label>
+      <label>Note <span>optional</span>
+        <textarea name="note" rows="2" placeholder="Why this looked useful"></textarea>
+      </label>
+      <p data-error class="error" aria-live="polite"></p>
+      <button type="submit">Open source intake</button>
+    </form>
+
+    <section class="secondary">
+      <h2>One-click desktop capture</h2>
+      <p>Drag this link to the bookmarks bar. On any page, click it to open this form with the current URL prefilled.</p>
+      <a data-bookmarklet class="bookmarklet" href="#">Capture to Signal to Insight</a>
+      <p class="small">On mobile, copy/share the source URL and paste it here. No GitHub token is exposed in this page.</p>
+    </section>
+  </main>
+  <script src="../capture.js"></script>
+</body>
+</html>
