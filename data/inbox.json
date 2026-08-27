@@ -77,6 +77,17 @@
       "source_id": null,
       "insight_id": null,
       "notes": "GitHub source intake issue #54. Dogfood cohort: database/storage documentation."
+    },
+    {
+      "id": "intake-2026-08-27-postgresql-mvcc-intro-html",
+      "source_url": "https://www.postgresql.org/docs/current/mvcc-intro.html",
+      "source_type": "documentation",
+      "submitted_at": "2026-08-27",
+      "requested_focus": "Understand MVCC as a concurrency model: snapshots, read/write non-blocking behavior, isolation boundaries, and what the model does not eliminate.",
+      "status": "queued",
+      "source_id": null,
+      "insight_id": null,
+      "notes": "GitHub source intake issue #55. Dogfood cohort: database/concurrency documentation."
     }
   ]
 }
