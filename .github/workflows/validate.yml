@@ -23,87 +23,64 @@ jobs:
 
       - name: Validate structured knowledge
         run: python scripts/validate.py
-
       - name: Validate cumulative knowledge graph
         run: python scripts/validate_graph.py
-
       - name: Validate curated Knowledge Delta
         run: python scripts/validate_knowledge_deltas.py
-
       - name: Validate claim-level evidence trace
         run: python scripts/validate_claim_evidence.py
-
       - name: Validate contradiction and refinement reviews
         run: |
           python scripts/validate_knowledge_reviews.py
           python scripts/validate_knowledge_reviews.py --self-test
-
       - name: Validate prerequisite maps
         run: python scripts/validate_prerequisites.py
-
       - name: Validate multi-source syntheses
         run: python scripts/validate_syntheses.py
-
       - name: Validate authored learning prompts
         run: python scripts/validate_learning_prompts.py
-
       - name: Validate research bundles
         run: python scripts/validate_bundles.py
-
       - name: Validate researched case patches
         run: python scripts/validate_case_patches.py
-
       - name: Test prior-knowledge retrieval
         run: |
           python scripts/graph_context.py --self-test
           python scripts/scaffold_bundle.py --self-test
-
       - name: Benchmark prior-knowledge retrieval quality
         run: python scripts/benchmark_retrieval.py
-
       - name: Test one-command source orchestration
         run: python scripts/run_source.py --self-test
-
       - name: Test private personal knowledge baseline
         run: |
           python scripts/personal_baseline.py self-test
           python scripts/run_personalized.py --self-test
-
       - name: Test learning utility local loop
         run: python scripts/learning_utility.py self-test
-
       - name: Test dogfood cohort evidence store
         run: python scripts/dogfood.py self-test
-
       - name: Test Source Decision calibration store
         run: python scripts/source_decision_benchmark.py self-test
-
       - name: Test action-to-outcome evidence loop
         run: python scripts/action_outcomes.py self-test
-
       - name: Test knowledge evolution timeline
         run: python scripts/knowledge_history.py --self-test
-
       - name: Test next-research target derivation
         run: python scripts/next_research.py --self-test
-
       - name: Test living-source revision workflow
         run: python scripts/source_freshness.py self-test
-
       - name: Test portable private state
         run: python scripts/local_state.py self-test
-
       - name: Test private overlay isolation
         run: python scripts/private_overlay.py self-test
-
+      - name: Test public concept-page threshold
+        run: python scripts/build_concepts.py --self-test
       - name: Test explicit publication lifecycle boundaries
         run: |
           python scripts/publish_reviewed.py --self-test
           python scripts/retract_published.py --self-test
-
       - name: Verify sitemap matches published records
         run: python scripts/build_sitemap.py --check
-
       - name: Validate browser JavaScript
         run: |
           node --check app.js
@@ -111,9 +88,7 @@ jobs:
           node --check library.js
           node --check capture.js
           node capture.js --self-test
-
       - name: Run pipeline acceptance tests
         run: python -m unittest discover -s tests -p "test_*.py" -v
-
       - name: Compile Python utilities
         run: python -m compileall -q scripts tests
