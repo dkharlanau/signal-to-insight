@@ -5,23 +5,33 @@
   "source": {
     "type": "paper",
     "canonical_url": "https://arxiv.org/abs/1706.03762",
-    "title": null,
-    "creators": [],
-    "publisher": null,
-    "published_at": null,
+    "title": "Attention Is All You Need",
+    "creators": [
+      "Ashish Vaswani",
+      "Noam Shazeer",
+      "Niki Parmar",
+      "Jakob Uszkoreit",
+      "Llion Jones",
+      "Aidan N. Gomez",
+      "Lukasz Kaiser",
+      "Illia Polosukhin"
+    ],
+    "publisher": "arXiv / NeurIPS 2017",
+    "published_at": "2017-06-12",
     "event_date": null,
-    "version": null,
-    "language": null,
+    "version": "arXiv:1706.03762 v7; original v1 submitted 2017-06-12",
+    "language": "en",
     "duration": null,
-    "date_note": null
+    "date_note": "The original arXiv submission was 2017-06-12; the current arXiv record is v7 revised 2023-08-02. This case preserves the paper's original sequence-transduction/machine-translation context rather than projecting later decoder-only LLM developments back into the 2017 claims."
   },
   "inspection": {
-    "method": "not inspected",
-    "full_content_used_ephemerally": false,
+    "method": "Direct inspection of the arXiv abstract and paper PDF, especially the architecture/attention sections, positional encoding, Table 1 / Why Self-Attention, and machine-translation results.",
+    "full_content_used_ephemerally": true,
     "full_content_committed": false,
-    "confidence": "metadata_only",
+    "confidence": "direct",
     "gaps": [
-      "Source content has not been mapped yet."
+      "This case does not reconstruct every attention equation, optimization setting or later Transformer variant.",
+      "The paper's 2017 WMT BLEU/training results are historical evidence for the proposed architecture, not a ranking of current language models."
     ]
   },
   "prior_knowledge": {
@@ -32,107 +42,154 @@
         "concept_id": "retrieval-practice",
         "label": "Retrieval practice",
         "coverage": "explained",
-        "evidence_insights": [
-          {
-            "id": "retrieval-practice-delayed-retention",
-            "status": "review",
-            "title": "Retrieval practice: optimize for what remains, not what feels easy now"
-          }
-        ],
-        "relationship_to_source": "unclassified"
+        "evidence_insights": [{"id": "retrieval-practice-delayed-retention", "status": "review", "title": "Retrieval practice: optimize for what remains, not what feels easy now"}],
+        "relationship_to_source": "not_relevant"
       },
       {
         "concept_id": "observation-grounding",
         "label": "Observation grounding",
         "coverage": "explained",
-        "evidence_insights": [
-          {
-            "id": "react-reason-act-observe-loop",
-            "status": "review",
-            "title": "ReAct: reason, act, observe — then update the plan"
-          }
-        ],
-        "relationship_to_source": "unclassified"
+        "evidence_insights": [{"id": "react-reason-act-observe-loop", "status": "review", "title": "ReAct: reason, act, observe — then update the plan"}],
+        "relationship_to_source": "not_relevant"
       },
       {
         "concept_id": "policy-as-code",
         "label": "Policy as code",
         "coverage": "introduced",
         "evidence_insights": [
-          {
-            "id": "enterprise-agents-production-substrate",
-            "status": "published",
-            "title": "Why enterprise AI agents fail after the POC"
-          },
-          {
-            "id": "open-policy-agent-decision-enforcement-model",
-            "status": "review",
-            "title": "Open Policy Agent: separate policy decisions from enforcement"
-          }
+          {"id": "enterprise-agents-production-substrate", "status": "published", "title": "Why enterprise AI agents fail after the POC"},
+          {"id": "open-policy-agent-decision-enforcement-model", "status": "review", "title": "Open Policy Agent: separate policy decisions from enforcement"}
         ],
-        "relationship_to_source": "unclassified"
+        "relationship_to_source": "not_relevant"
       },
       {
         "concept_id": "performance-retention-gap",
         "label": "Immediate performance / delayed retention gap",
         "coverage": "explained",
-        "evidence_insights": [
-          {
-            "id": "retrieval-practice-delayed-retention",
-            "status": "review",
-            "title": "Retrieval practice: optimize for what remains, not what feels easy now"
-          }
-        ],
-        "relationship_to_source": "unclassified"
+        "evidence_insights": [{"id": "retrieval-practice-delayed-retention", "status": "review", "title": "Retrieval practice: optimize for what remains, not what feels easy now"}],
+        "relationship_to_source": "not_relevant"
       },
       {
         "concept_id": "controlled-execution",
         "label": "Controlled execution",
         "coverage": "explained",
         "evidence_insights": [
-          {
-            "id": "enterprise-agents-production-substrate",
-            "status": "published",
-            "title": "Why enterprise AI agents fail after the POC"
-          },
-          {
-            "id": "open-policy-agent-decision-enforcement-model",
-            "status": "review",
-            "title": "Open Policy Agent: separate policy decisions from enforcement"
-          },
-          {
-            "id": "react-reason-act-observe-loop",
-            "status": "review",
-            "title": "ReAct: reason, act, observe — then update the plan"
-          }
+          {"id": "enterprise-agents-production-substrate", "status": "published", "title": "Why enterprise AI agents fail after the POC"},
+          {"id": "open-policy-agent-decision-enforcement-model", "status": "review", "title": "Open Policy Agent: separate policy decisions from enforcement"},
+          {"id": "react-reason-act-observe-loop", "status": "review", "title": "ReAct: reason, act, observe — then update the plan"}
         ],
-        "relationship_to_source": "unclassified"
+        "relationship_to_source": "not_relevant"
       }
     ],
     "classification_required": true
   },
   "content_map": {
-    "problem": null,
-    "thesis": null,
-    "sections": [],
-    "concepts": [],
-    "mechanisms": [],
+    "problem": "Dominant sequence-transduction models used recurrent or convolutional encoder-decoder networks, which introduced sequential computation and longer paths between distant sequence positions.",
+    "thesis": "The Transformer removes recurrence and convolution and uses attention-based encoder-decoder layers so all positions can interact through self-attention, reducing sequential operations and dependency path length while making sequence order an explicit positional-encoding input.",
+    "sections": [
+      "Abstract and original machine-translation scope",
+      "§2 Background",
+      "§3 Model Architecture",
+      "§3.2 Attention and applications in encoder/decoder",
+      "§3.5 Positional Encoding",
+      "Table 1 / §4 Why Self-Attention",
+      "§6.1 Machine Translation"
+    ],
+    "concepts": [
+      "Transformer sequence-transduction architecture",
+      "self-attention",
+      "sequence-computation parallelism",
+      "constant attention dependency path",
+      "positional encoding",
+      "masked autoregressive decoder attention"
+    ],
+    "mechanisms": [
+      "Each encoder position can attend to all positions in the previous encoder layer through self-attention.",
+      "The decoder uses masked self-attention so a position cannot attend to later output positions, preserving autoregressive generation.",
+      "Encoder-decoder attention lets decoder queries attend to encoder representations.",
+      "Removing recurrence means layer computation across known sequence positions no longer requires O(n) recurrent sequential steps.",
+      "All-to-all self-attention gives constant maximum path length between positions but has O(n²·d) per-layer complexity in the paper's comparison.",
+      "Positional encodings inject token order because the model contains neither recurrence nor convolution."
+    ],
     "tools": [],
-    "examples": [],
-    "claims": [],
-    "evidence": [],
-    "assumptions": [],
-    "limitations": [],
-    "open_questions": []
+    "examples": [
+      "WMT 2014 English-to-German translation",
+      "WMT 2014 English-to-French translation",
+      "English constituency parsing as a second task family"
+    ],
+    "claims": [
+      "The 2017 Transformer is an encoder-decoder sequence-transduction model based solely on attention rather than recurrence or convolution.",
+      "Self-attention reduces the minimum sequential operations per layer from O(n) for recurrence to O(1) and the maximum dependency path from O(n) to O(1), according to the paper's Table 1.",
+      "That path/parallelism advantage comes with O(n²·d) self-attention complexity, so the paper itself treats sequence length as a trade-off and discusses restricted attention for very long sequences.",
+      "Positional encodings are required to inject order because the architecture removes recurrence and convolution.",
+      "The decoder remains autoregressive by masking future positions; attention-only layers do not make output generation fully parallel.",
+      "The paper's reported quality and training-time evidence comes primarily from WMT 2014 machine translation and should not be generalized into a current claim about every later Transformer/LLM architecture."
+    ],
+    "evidence": [
+      "arXiv abstract identifies the architecture and WMT translation results.",
+      "PDF §3 describes encoder self-attention, masked decoder self-attention and encoder-decoder attention.",
+      "PDF §3.5 states positional information is added because the model has no recurrence or convolution.",
+      "PDF Table 1 / §4 compares complexity, sequential operations and maximum path length for self-attention, recurrent and convolutional layers."
+    ],
+    "assumptions": [
+      "The task is sequence transduction with sequence representations available for parallel layer computation during training/encoding.",
+      "Token order must be represented explicitly once recurrence/convolution no longer supplies an ordering bias.",
+      "The paper's computational comparison uses sequence length n and representation dimension d and does not imply self-attention is cheapest at every sequence length."
+    ],
+    "limitations": [
+      "Self-attention's all-pairs interaction has O(n²·d) per-layer complexity in sequence length, so constant path length is not free for long contexts.",
+      "The original Transformer is an encoder-decoder sequence-transduction architecture, not the later decoder-only LLM template that dominates many current language models.",
+      "Masked decoder self-attention preserves autoregressive output dependence, so the paper's O(1) sequential-operations layer comparison should not be read as fully parallel autoregressive generation.",
+      "The WMT 2014 BLEU and training-time results are historical evidence from the paper's tasks/hardware rather than universal evidence that attention-only models outperform every recurrent or convolutional architecture today."
+    ],
+    "open_questions": [
+      "How later long-context architectures changed the quadratic self-attention cost while preserving useful dependency paths.",
+      "Which later developments made decoder-only Transformers the dominant LLM architecture rather than the original encoder-decoder design."
+    ]
   },
   "selection": {
     "requested_focus": "Understand why self-attention replaced recurrence for the Transformer architecture, what parallelism and dependency modeling changed, and which claims belong to the original machine-translation context rather than later LLM folklore.",
-    "coherent_core": [],
-    "prerequisites": [],
-    "drop_notes": [],
-    "connections": []
+    "coherent_core": [
+      "Replace recurrent/convolutional sequence layers with attention-based encoder-decoder layers.",
+      "Self-attention removes the O(n) recurrent layer dependency chain and gives a constant maximum path between sequence positions.",
+      "The parallelism/path advantage trades against quadratic all-pairs attention cost as sequence length grows.",
+      "Removing recurrence/convolution makes positional information an explicit input rather than an implicit architectural ordering mechanism.",
+      "The original evidence is sequence transduction—especially WMT 2014 translation—not a retrospective claim about all later LLMs."
+    ],
+    "prerequisites": [
+      "encoder-decoder sequence transduction",
+      "self-attention",
+      "sequence-level parallelism",
+      "positional encoding"
+    ],
+    "drop_notes": [
+      "Do not teach modern decoder-only LLM architecture as though it were the exact 2017 model.",
+      "Do not interpret Table 1's O(1) sequential operations as fully parallel autoregressive generation.",
+      "All automatically retrieved prior concepts are cross-domain noise and remain suppressed."
+    ],
+    "connections": [
+      "ReAct and controlled execution are later agent/runtime layers and should not be graph-linked to the 2017 model architecture merely because both involve attention or sequence decisions.",
+      "Modern LLM architecture is a future follow-up source, not evidence retroactively attributed to this paper."
+    ]
   },
-  "verification_candidates": [],
-  "source_locators": [],
+  "verification_candidates": [
+    {
+      "question": "Which later paper should define the transition from the original encoder-decoder Transformer to decoder-only language modeling?",
+      "reason": "That evolution is central to modern LLM understanding but is outside the 2017 paper's source claims.",
+      "priority": "high"
+    },
+    {
+      "question": "Which long-context attention variants materially alter the O(n²) sequence-length cost while preserving useful global dependencies?",
+      "reason": "This is the main technical boundary exposed by the original Table 1 model.",
+      "priority": "medium"
+    }
+  ],
+  "source_locators": [
+    {"label": "Original proposal and WMT scope", "locator": "arXiv abstract / paper Abstract"},
+    {"label": "Encoder, decoder and attention roles", "locator": "PDF §3.1–§3.2.3 pp.3–5"},
+    {"label": "Positional encoding requirement", "locator": "PDF §3.5 p.6"},
+    {"label": "Parallelism/path/complexity trade-off", "locator": "PDF Table 1 and §4 Why Self-Attention p.6"},
+    {"label": "Original machine-translation evidence", "locator": "PDF §6.1 Machine Translation pp.8–9"}
+  ],
   "created_at": "2026-08-27"
 }
