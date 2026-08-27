@@ -1,5 +1,5 @@
 {
-  "version": "1.1.0",
+  "version": "1.2.0",
   "cases": [
     {
       "id": "durable-workflow-retry",
@@ -80,6 +80,46 @@
       "forbidden": ["execution-history", "event-history", "replayable-evaluation", "controlled-execution"],
       "min_precision": 0.6,
       "classification_probe": "cohort-precision-regression"
+    },
+    {
+      "id": "kubernetes-reconciliation-not-temporal",
+      "query": "Understand reconciliation control loops desired state current state small controllers resilient automation",
+      "limit": 5,
+      "required": ["reconciliation-loop", "desired-state", "observed-state"],
+      "acceptable": [],
+      "forbidden": ["durable-execution", "workflow-execution", "controlled-execution", "event-history", "worker-process"],
+      "min_precision": 0.6,
+      "classification_probe": "cohort-negative-kubernetes-temporal"
+    },
+    {
+      "id": "postgresql-mvcc-not-sqlite-wal-snapshot",
+      "query": "Understand MVCC concurrency snapshots read write non blocking isolation boundaries transactions",
+      "limit": 5,
+      "required": ["multiversion-concurrency-control", "mvcc-snapshot", "transaction-isolation"],
+      "acceptable": [],
+      "forbidden": ["wal-reader-snapshot", "write-ahead-log", "checkpointing", "execution-history"],
+      "min_precision": 0.6,
+      "classification_probe": "cohort-negative-postgres-sqlite"
+    },
+    {
+      "id": "transformer-attention-not-cross-domain",
+      "query": "Understand why self attention replaced recurrence Transformer architecture parallelism dependency modeling machine translation",
+      "limit": 5,
+      "required": ["transformer-sequence-transduction", "self-attention", "sequence-computation-parallelism"],
+      "acceptable": ["attention-dependency-path", "positional-encoding"],
+      "forbidden": ["retrieval-practice", "policy-as-code", "controlled-execution", "observation-grounding"],
+      "min_precision": 0.8,
+      "classification_probe": "cohort-negative-transformer-cross-domain"
+    },
+    {
+      "id": "opentelemetry-trace-not-execution-ledger",
+      "query": "Understand traces causal distributed work spans parent child context propagation links observability",
+      "limit": 5,
+      "required": ["distributed-trace", "trace-context-propagation", "span-link"],
+      "acceptable": ["telemetry-span", "observability"],
+      "forbidden": ["execution-history", "controlled-execution", "durable-execution", "open-policy-agent"],
+      "min_precision": 0.8,
+      "classification_probe": "cohort-negative-trace-execution"
     }
   ]
 }
