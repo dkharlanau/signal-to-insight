@@ -1,0 +1,105 @@
+{
+  "patch_version": "1.0.0",
+  "intake_id": "intake-2026-08-27-martinfowler-idempotent-receiver-html",
+  "intake_status": "review",
+  "updated_at": "2026-08-27",
+  "graph_version": "0.4.0",
+  "source": {
+    "id": "src-idempotent-receiver-2023",
+    "type": "article",
+    "title": "Idempotent Receiver",
+    "canonical_url": "https://martinfowler.com/articles/patterns-of-distributed-systems/idempotent-receiver.html",
+    "creators": ["Unmesh Joshi"],
+    "publisher": "martinfowler.com / Patterns of Distributed Systems",
+    "event": null,
+    "published_at": "2023-11-23",
+    "event_date": null,
+    "captured_at": "2026-08-27",
+    "analyzed_at": "2026-08-27",
+    "date_note": "Primary pattern page dated 23 November 2023. AWS Builders' Library guidance was inspected separately as verification for production idempotency boundaries.",
+    "verification": [
+      {"title": "Idempotent Receiver", "url": "https://martinfowler.com/articles/patterns-of-distributed-systems/idempotent-receiver.html", "accessed_at": "2026-08-27"},
+      {"title": "Making retries safe with idempotent APIs", "url": "https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/", "accessed_at": "2026-08-27"}
+    ],
+    "derived_records": ["idempotent-receiver-retry-deduplication"]
+  },
+  "insight": {
+    "id": "idempotent-receiver-retry-deduplication",
+    "source_id": "src-idempotent-receiver-2023",
+    "slug": "idempotent-receiver-retry-deduplication",
+    "status": "review",
+    "title": "Idempotent Receiver: retries need logical request identity",
+    "one_liner": "When a timeout leaves execution ambiguous, reuse the same logical request identity on retry so the receiver can return the earlier outcome instead of repeating the side effect.",
+    "why_this_matters": "Retries are one of the simplest reliability tools and one of the easiest ways to duplicate side effects. Idempotent Receiver turns the existing abstract rule 'make retries safe' into a concrete protocol between caller and receiver: stable request identity, durable duplicate detection and response reuse.",
+    "whole_source_map": {
+      "problem": "A client that receives no response cannot tell whether the server failed before processing or completed the operation and only lost the response; retrying can therefore repeat an already-completed mutation.",
+      "thesis": "Identify the client and logical request uniquely, detect previously processed requests at the receiver, and return the saved prior response without processing the same logical operation again.",
+      "core_topics": ["ambiguous failure after missing response", "duplicate delivery under retry", "client plus request identity", "receiver-side processed-request lookup", "saved response reuse", "atomicity and intent boundaries from verification"]
+    },
+    "derived_model": {
+      "problem": "A transport failure creates uncertainty about outcome, not proof of failure; blindly retrying converts that uncertainty into duplicate-side-effect risk.",
+      "mechanism": "Carry a stable identifier for the logical request across retries. The receiver records the processed request and outcome, recognizes the same identity later, and reuses the prior result instead of mutating again.",
+      "result": "Clients can retry ambiguous failures with an at-most-once-style business effect, provided the receiver's deduplication state is durable and consistent with the mutation it protects."
+    },
+    "coherence_review": {
+      "central_chain": ["A missing response leaves the caller uncertain whether the operation happened.", "Retrying the same logical operation can therefore create a duplicate side effect.", "Stable caller/request identity lets the receiver distinguish a retry from a new operation.", "The receiver can return the saved prior outcome rather than execute the mutation again.", "Production correctness still depends on durable/atomic deduplication state and on request identity representing caller intent rather than just matching parameters."],
+      "prerequisites_complete": true,
+      "source_vs_enrichment_clear": true,
+      "open_gaps": ["The primary pattern page does not specify retention windows for request identities or saved responses.", "Atomic token+mutation persistence and same-token/different-intent handling are verification-layer production concerns from AWS guidance, not claims made by the primary pattern page."],
+      "scores": {"coherence": 5, "prerequisite_completeness": 5, "evidence_confidence": 5, "practical_leverage": 5}
+    },
+    "visual_plan": {
+      "dominant": {
+        "type": "sequence",
+        "title": "Retry the request, not the side effect",
+        "nodes": [
+          {"label": "01 · Call", "title": "Logical request R1", "text": "The caller sends a mutation with a stable request identity."},
+          {"label": "02 · Ambiguity", "title": "Response is lost", "text": "The caller cannot know whether the mutation completed or the server failed before processing."},
+          {"label": "03 · Retry", "title": "Send R1 again", "text": "The retry keeps the same logical request identity rather than creating a new one."},
+          {"label": "04 · Detect", "title": "Receiver finds R1", "text": "The receiver sees that this logical request was already processed."},
+          {"label": "05 · Reuse", "title": "Return prior outcome", "text": "The saved response or semantically equivalent result is returned without repeating the mutation."}
+        ]
+      },
+      "supporting": ["comparison", "concept_grid", "examples", "limitations", "action_map", "source_map"],
+      "image": {"needed": false, "reason": "The useful information is the retry/duplicate-detection sequence and the identity boundary; a compact sequence explains it more precisely than an illustration."}
+    },
+    "concepts": [
+      {"name": "Idempotency under retry", "depth": "learn", "why_needed": "The reliability goal is that repeating an ambiguous request does not create an unintended second business effect."},
+      {"name": "Idempotent Receiver", "depth": "learn", "why_needed": "This is the concrete receiver-side mechanism that recognizes a repeated logical request and reuses its prior outcome."},
+      {"name": "Logical request identity", "depth": "learn", "why_needed": "The receiver needs a stable key that means 'this is the same intended operation', not merely a request that happens to have similar parameters."}
+    ],
+    "tool_map": [],
+    "examples": [
+      {"domain": "payments", "scenario": "A client times out while creating a payment and cannot tell whether the debit occurred.", "question": "Will retrying with the same logical request identity return the first payment outcome instead of creating another debit?"},
+      {"domain": "resource creation", "scenario": "A create request succeeds on the server but the network drops before the caller sees the response.", "question": "Can the caller repeat the same request identity and recover the original resource/result rather than creating a duplicate?"},
+      {"domain": "integration", "scenario": "An outbound interface retries a master-data write after a transport timeout.", "question": "What request identity survives the retry, and is the receiver's deduplication record committed consistently with the business update?"}
+    ],
+    "limitations": ["A deduplication key is not enough if recording the key and committing the protected mutation can diverge during a crash; AWS verification guidance calls for an atomic/ACID boundary around those changes.", "Inferring identity from request parameters can suppress legitimate repeated intent; caller-provided logical request IDs make intent more explicit.", "Idempotency does not make an operation globally exactly-once across every downstream dependency; each consequential boundary needs compatible semantics.", "Retention and late-arriving-request policy determine how long a retry remains recognizable as the same logical request."],
+    "action_map": {
+      "use_now": ["For every retryable mutation, define the logical request identity before defining retry count/backoff.", "Treat a timeout as an unknown outcome, not as proof that the remote mutation failed."],
+      "try": ["Add an idempotency key to one create/update API and test lost-response retry, concurrent duplicate delivery and replay of the saved result."],
+      "learn": ["idempotent API contracts", "request identity", "atomic deduplication state", "late-arriving retries"],
+      "build": ["A tiny receiver that stores request ID + outcome transactionally and returns the stored outcome for repeated IDs."],
+      "watch": ["How downstream APIs expose caller-provided idempotency tokens and how long they retain them."],
+      "ignore_for_now": ["Assuming identical request parameters are always sufficient proof of duplicate caller intent."]
+    },
+    "connections": ["idempotency-under-retry: this source concretizes the earlier Temporal boundary with a receiver-side protocol", "reconciliation-loop: retries and reconciliation both handle uncertainty, but deduplicating one logical mutation is not the same as continuously converging desired state"],
+    "supporting_sources": [
+      {"title": "Idempotent Receiver", "url": "https://martinfowler.com/articles/patterns-of-distributed-systems/idempotent-receiver.html", "publisher": "martinfowler.com", "purpose": "primary source for ambiguous failure, client/request identity and saved-response reuse", "accessed_at": "2026-08-27"},
+      {"title": "Making retries safe with idempotent APIs", "url": "https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/", "publisher": "Amazon Builders' Library", "purpose": "verification/enrichment for caller-provided intent identifiers, atomic token+mutation persistence and semantically equivalent retry responses", "accessed_at": "2026-08-27"}
+    ],
+    "tags": ["idempotency", "retries", "distributed-systems", "apis", "deduplication", "reliability"],
+    "provenance": {"source_linked": true, "source_dates_recorded": true, "full_transcript_stored": false, "analysis_type": "direct primary-pattern analysis with separately labeled AWS verification of production boundaries", "reviewed_at": "2026-08-27"}
+  },
+  "graph": {
+    "concepts": [
+      {"id": "idempotency-under-retry", "insight_ids": ["idempotent-receiver-retry-deduplication"]},
+      {"id": "idempotent-receiver", "label": "Idempotent Receiver", "summary": "A receiver-side pattern that recognizes a repeated logical request and reuses its prior outcome instead of repeating the protected side effect.", "domain": "distributed systems", "coverage": "explained", "insight_ids": ["idempotent-receiver-retry-deduplication"], "aliases": ["idempotent request receiver", "duplicate-safe receiver"], "tags": ["idempotency", "retry", "deduplication", "api"]},
+      {"id": "request-identity", "label": "Logical request identity", "summary": "A stable identifier reused across retries to express that several deliveries represent the same intended logical operation.", "domain": "distributed systems", "coverage": "explained", "insight_ids": ["idempotent-receiver-retry-deduplication"], "aliases": ["idempotency key", "client request identifier"], "tags": ["idempotency", "identity", "retry", "api"]}
+    ],
+    "relations": [
+      {"id": "rel-idempotent-receiver-refines-idempotency-under-retry", "from": "idempotent-receiver", "to": "idempotency-under-retry", "type": "refines", "rationale": "The receiver pattern turns the broad requirement for duplicate-safe retries into a concrete request-identity and prior-outcome reuse mechanism.", "evidence_insights": ["idempotent-receiver-retry-deduplication"]},
+      {"id": "rel-idempotent-receiver-depends-on-request-identity", "from": "idempotent-receiver", "to": "request-identity", "type": "depends_on", "rationale": "The receiver must distinguish a retry of the same intended operation from a genuinely new operation before it can suppress duplicate execution.", "evidence_insights": ["idempotent-receiver-retry-deduplication"]}
+    ]
+  }
+}
