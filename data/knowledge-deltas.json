@@ -600,6 +600,55 @@
         "performance-retention-gap",
         "controlled-execution"
       ]
+    },
+    {
+      "insight_id": "mapreduce-runtime-abstraction-boundary",
+      "summary": "MapReduce adds a new abstraction-ownership model: a restricted user computation interface enables the runtime to own distribution, locality and task recovery. Existing workflow/durable-execution matches are suppressed because their persisted unit and semantics differ.",
+      "items": [
+        {
+          "relationship": "new",
+          "concept_id": "restricted-programming-model",
+          "label": "Restricted programming model",
+          "source_basis": "The paper restricts user computation to Map and Reduce functions over key/value data.",
+          "prior_basis": "The graph contains domain-specific workflow and agent abstractions but no general concept for deliberately restricting a programming interface so the runtime can infer distributed execution.",
+          "interpretation": "The restriction is not merely API simplicity; it is what creates room for automatic parallelization and fault tolerance.",
+          "evidence_insights": []
+        },
+        {
+          "relationship": "new",
+          "concept_id": "runtime-managed-distribution",
+          "label": "Runtime-managed distribution",
+          "source_basis": "The runtime handles input partitioning, scheduling, communication and intermediate-data movement.",
+          "prior_basis": "Existing orchestration concepts model other execution systems, not the MapReduce boundary that removes cluster mechanics from batch transformation code.",
+          "interpretation": "Distribution becomes a framework responsibility rather than application boilerplate.",
+          "evidence_insights": []
+        },
+        {
+          "relationship": "new",
+          "concept_id": "task-reexecution-fault-recovery",
+          "label": "Task re-execution fault recovery",
+          "source_basis": "Failed worker tasks are reset/rescheduled, and map work may be re-executed as the primary recovery mechanism.",
+          "prior_basis": "Durable workflow progress and external-side-effect idempotency exist in the graph, but neither is the same as re-running deterministic batch tasks.",
+          "interpretation": "The source adds a distinct recovery model enabled by the restricted computation semantics.",
+          "evidence_insights": []
+        },
+        {
+          "relationship": "new",
+          "concept_id": "data-locality-scheduling",
+          "label": "Data-locality scheduling",
+          "source_basis": "The master preferentially schedules map tasks on or near machines that hold input replicas.",
+          "prior_basis": "No existing graph concept represents scheduler-owned compute placement driven by data location.",
+          "interpretation": "The runtime can optimize physical placement while preserving the logical user program.",
+          "evidence_insights": []
+        }
+      ],
+      "suppressed_prior_matches": [
+        "durable-execution",
+        "activity-execution",
+        "workflow-execution",
+        "controlled-execution",
+        "idempotency-under-retry"
+      ]
     }
   ]
 }

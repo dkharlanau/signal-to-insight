@@ -1138,6 +1138,81 @@
           "note": "This is the project's scope boundary: it compares what the 2017 source actually specifies and evaluates with later terminology, without attributing later LLM developments to the paper."
         }
       ]
+    },
+    {
+      "insight_id": "mapreduce-runtime-abstraction-boundary",
+      "claims": [
+        {
+          "id": "mapreduce-user-runtime-boundary",
+          "text": "MapReduce asks users to provide Map and Reduce functions while the runtime owns partitioning, scheduling, machine-failure handling and inter-machine communication.",
+          "impact": "high",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-google-mapreduce-osdi-2004",
+              "url": "https://research.google/pubs/mapreduce-simplified-data-processing-on-large-clusters",
+              "locator": "Publication page → Abstract"
+            },
+            {
+              "kind": "primary_source",
+              "source_id": "src-google-mapreduce-osdi-2004",
+              "url": "https://storage.googleapis.com/gweb-research2023-media/pubtools/4449.pdf",
+              "locator": "PDF §2 Programming Model and Figure 1 / §3.1 Execution Overview"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "mapreduce-reexecution-fault-tolerance",
+          "text": "The Google implementation uses task rescheduling and re-execution as a primary mechanism for tolerating worker failures in large batch computations.",
+          "impact": "high",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-google-mapreduce-osdi-2004",
+              "url": "https://storage.googleapis.com/gweb-research2023-media/pubtools/4449.pdf",
+              "locator": "PDF §3.3 Fault Tolerance → Worker Failure"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "mapreduce-locality-scheduling",
+          "text": "The master uses input-location information to schedule map tasks on or near machines holding the required data, reducing network traffic.",
+          "impact": "medium",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-google-mapreduce-osdi-2004",
+              "url": "https://storage.googleapis.com/gweb-research2023-media/pubtools/4449.pdf",
+              "locator": "PDF §3.4 Locality"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "mapreduce-restriction-enables-runtime",
+          "text": "The transferable architectural lesson is that restricting the programming model gives the runtime enough structure to automate parallelization, distribution and fault recovery.",
+          "impact": "high",
+          "origin": "project_interpretation",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-google-mapreduce-osdi-2004",
+              "url": "https://storage.googleapis.com/gweb-research2023-media/pubtools/4449.pdf",
+              "locator": "PDF Introduction and §8 Conclusions"
+            }
+          ],
+          "note": "This wording is the project's architecture synthesis of the authors' stated rationale, not a source-authored general framework law."
+        }
+      ]
     }
   ]
 }

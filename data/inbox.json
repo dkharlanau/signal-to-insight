@@ -150,9 +150,9 @@
       "source_type": "paper",
       "submitted_at": "2026-08-27",
       "requested_focus": "Understand the MapReduce abstraction boundary: what map/reduce lets the programmer specify, what the runtime takes over, and why hiding partitioning, scheduling and failure recovery created leverage.",
-      "status": "queued",
-      "source_id": null,
-      "insight_id": null,
+      "status": "review",
+      "source_id": "src-google-mapreduce-osdi-2004",
+      "insight_id": "mapreduce-runtime-abstraction-boundary",
       "notes": "GitHub source intake issue #61. Dogfood cohort: distributed data processing paper."
     },
     {

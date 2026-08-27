@@ -488,6 +488,33 @@
       "derived_records": [
         "transformer-self-attention-sequence-model"
       ]
+    },
+    {
+      "id": "src-google-mapreduce-osdi-2004",
+      "type": "paper",
+      "title": "MapReduce: Simplified Data Processing on Large Clusters",
+      "canonical_url": "https://research.google/pubs/mapreduce-simplified-data-processing-on-large-clusters",
+      "creators": [
+        "Jeffrey Dean",
+        "Sanjay Ghemawat"
+      ],
+      "publisher": "Google / OSDI'04",
+      "event": "OSDI'04",
+      "published_at": null,
+      "event_date": null,
+      "captured_at": "2026-08-27",
+      "analyzed_at": "2026-08-27",
+      "date_note": "Published in OSDI'04 (2004), pp. 137–150; exact publication day is not asserted.",
+      "verification": [
+        {
+          "title": "Official Google-hosted OSDI paper PDF",
+          "url": "https://storage.googleapis.com/gweb-research2023-media/pubtools/4449.pdf",
+          "accessed_at": "2026-08-27"
+        }
+      ],
+      "derived_records": [
+        "mapreduce-runtime-abstraction-boundary"
+      ]
     }
   ]
 }

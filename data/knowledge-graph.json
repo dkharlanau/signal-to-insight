@@ -1045,6 +1045,78 @@
         "sequence",
         "transformer"
       ]
+    },
+    {
+      "id": "restricted-programming-model",
+      "label": "Restricted programming model",
+      "summary": "A deliberately constrained user-facing computation model that gives a runtime enough structure to automate execution responsibilities.",
+      "domain": "software architecture",
+      "coverage": "explained",
+      "insight_ids": [
+        "mapreduce-runtime-abstraction-boundary"
+      ],
+      "aliases": [
+        "constrained programming interface"
+      ],
+      "tags": [
+        "abstraction",
+        "runtime",
+        "framework"
+      ]
+    },
+    {
+      "id": "runtime-managed-distribution",
+      "label": "Runtime-managed distribution",
+      "summary": "Moving partitioning, scheduling and inter-machine data movement from application code into a framework runtime.",
+      "domain": "distributed systems",
+      "coverage": "explained",
+      "insight_ids": [
+        "mapreduce-runtime-abstraction-boundary"
+      ],
+      "aliases": [
+        "automatic distributed execution"
+      ],
+      "tags": [
+        "scheduling",
+        "partitioning",
+        "runtime"
+      ]
+    },
+    {
+      "id": "task-reexecution-fault-recovery",
+      "label": "Task re-execution fault recovery",
+      "summary": "Recovering worker failure by rescheduling or re-running deterministic batch tasks instead of requiring application code to repair individual machines.",
+      "domain": "distributed systems",
+      "coverage": "explained",
+      "insight_ids": [
+        "mapreduce-runtime-abstraction-boundary"
+      ],
+      "aliases": [
+        "task replay recovery"
+      ],
+      "tags": [
+        "fault-tolerance",
+        "retry",
+        "workers"
+      ]
+    },
+    {
+      "id": "data-locality-scheduling",
+      "label": "Data-locality scheduling",
+      "summary": "Placing computation on or near machines that already hold its input data to reduce network transfer.",
+      "domain": "distributed systems",
+      "coverage": "explained",
+      "insight_ids": [
+        "mapreduce-runtime-abstraction-boundary"
+      ],
+      "aliases": [
+        "compute-near-data scheduling"
+      ],
+      "tags": [
+        "locality",
+        "scheduling",
+        "network"
+      ]
     }
   ],
   "relations": [
@@ -1564,6 +1636,36 @@
       "rationale": "Because the architecture removes recurrence and convolution, the paper injects positional encodings so the model can use token order.",
       "evidence_insights": [
         "transformer-self-attention-sequence-model"
+      ]
+    },
+    {
+      "id": "rel-restricted-programming-model-enables-runtime-managed-distribution",
+      "from": "restricted-programming-model",
+      "to": "runtime-managed-distribution",
+      "type": "enables",
+      "rationale": "A predictable Map/Reduce structure gives the runtime enough information to partition and schedule work automatically.",
+      "evidence_insights": [
+        "mapreduce-runtime-abstraction-boundary"
+      ]
+    },
+    {
+      "id": "rel-runtime-managed-distribution-enables-task-reexecution-fault-recovery",
+      "from": "runtime-managed-distribution",
+      "to": "task-reexecution-fault-recovery",
+      "type": "enables",
+      "rationale": "Runtime ownership of task scheduling lets failed work be reset, reassigned and executed again without rewriting the user computation.",
+      "evidence_insights": [
+        "mapreduce-runtime-abstraction-boundary"
+      ]
+    },
+    {
+      "id": "rel-runtime-managed-distribution-enables-data-locality-scheduling",
+      "from": "runtime-managed-distribution",
+      "to": "data-locality-scheduling",
+      "type": "enables",
+      "rationale": "The scheduler can use input-location metadata to place map tasks near their data while preserving the same user-facing program.",
+      "evidence_insights": [
+        "mapreduce-runtime-abstraction-boundary"
       ]
     }
   ]

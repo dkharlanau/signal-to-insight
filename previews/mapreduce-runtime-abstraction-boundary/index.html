@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>[PREVIEW] MapReduce: let the program define the transformation and the runtime own distribution — Signal to Insight</title>
+  <meta name="description" content="MapReduce gains leverage by restricting user code to Map and Reduce while the runtime owns partitioning, scheduling, communication, locality and task recovery.">
+  <meta property="og:title" content="MapReduce: let the program define the transformation and the runtime own distribution">
+  <meta property="og:description" content="MapReduce gains leverage by restricting user code to Map and Reduce while the runtime owns partitioning, scheduling, communication, locality and task recovery.">
+  <meta property="og:type" content="article">
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="generated-page preview-page">
+  <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+  <header class="site-header wrap">
+    <a class="brand" href="../../"><span class="brand-mark">S→I</span><span>Signal to Insight</span></a>
+    <nav aria-label="Explainer navigation">
+      <a href="#delta">Delta</a><a href="#model">Model</a><a href="#concepts">Concepts</a><a href="#tools">Tools</a><a href="#actions">Actions</a><a href="#sources">Sources</a>
+    </nav>
+  </header>
+
+  <div class="preview-banner">REVIEW PREVIEW · NOT INDEXED · NOT PUBLISHED</div>
+  <main>
+    <section class="detail-hero wrap">
+      <a class="back-link" href="../../">← Research engine</a>
+      <p class="eyebrow">EXPLAINER · review</p>
+      <h1>MapReduce: let the program define the transformation and the runtime own distribution</h1>
+      <div class="detail-lede">
+        <p>MapReduce gains leverage by restricting user code to Map and Reduce while the runtime owns partitioning, scheduling, communication, locality and task recovery.</p>
+        <dl class="detail-meta">
+          <div><dt>Original source</dt><dd><a href="https://research.google/pubs/mapreduce-simplified-data-processing-on-large-clusters" target="_blank" rel="noreferrer">MapReduce: Simplified Data Processing on Large Clusters ↗</a></dd></div>
+          <div><dt>Creator</dt><dd>Jeffrey Dean, Sanjay Ghemawat</dd></div>
+          <div><dt>Source date</dt><dd>not independently verified</dd></div>
+          <div><dt>Captured</dt><dd>2026-08-27</dd></div>
+          <div><dt>Analyzed</dt><dd>2026-08-27</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="detail-section wrap">
+      <p class="kicker">WHY THIS MATTERS</p>
+      <p class="big-statement">The transferable idea is an architecture boundary: a framework becomes powerful when the user declares only the domain computation and the runtime has enough structure to automate distributed execution reliably.</p>
+    </section>
+
+    <section id="delta" class="detail-section wrap knowledge-delta-section">
+      <p class="kicker">KNOWLEDGE DELTA</p>
+      <h2>What this source changes in the existing model.</h2>
+      <p class="big-statement">MapReduce adds a new abstraction-ownership model: a restricted user computation interface enables the runtime to own distribution, locality and task recovery. Existing workflow/durable-execution matches are suppressed because their persisted unit and semantics differ.</p>
+      <div class="concept-grid"><article class="concept-card delta-card">
+          <span>New</span>
+          <h3>Restricted programming model</h3>
+          <p><strong>Source says:</strong> The paper restricts user computation to Map and Reduce functions over key/value data.</p>
+          <p><strong>Previously:</strong> The graph contains domain-specific workflow and agent abstractions but no general concept for deliberately restricting a programming interface so the runtime can infer distributed execution.</p>
+          <p><strong>Project interpretation:</strong> The restriction is not merely API simplicity; it is what creates room for automatic parallelization and fault tolerance.</p>
+          <small>Prior evidence: <span class="delta-baseline">No prior project evidence — baseline/new knowledge.</span></small>
+        </article><article class="concept-card delta-card">
+          <span>New</span>
+          <h3>Runtime-managed distribution</h3>
+          <p><strong>Source says:</strong> The runtime handles input partitioning, scheduling, communication and intermediate-data movement.</p>
+          <p><strong>Previously:</strong> Existing orchestration concepts model other execution systems, not the MapReduce boundary that removes cluster mechanics from batch transformation code.</p>
+          <p><strong>Project interpretation:</strong> Distribution becomes a framework responsibility rather than application boilerplate.</p>
+          <small>Prior evidence: <span class="delta-baseline">No prior project evidence — baseline/new knowledge.</span></small>
+        </article><article class="concept-card delta-card">
+          <span>New</span>
+          <h3>Task re-execution fault recovery</h3>
+          <p><strong>Source says:</strong> Failed worker tasks are reset/rescheduled, and map work may be re-executed as the primary recovery mechanism.</p>
+          <p><strong>Previously:</strong> Durable workflow progress and external-side-effect idempotency exist in the graph, but neither is the same as re-running deterministic batch tasks.</p>
+          <p><strong>Project interpretation:</strong> The source adds a distinct recovery model enabled by the restricted computation semantics.</p>
+          <small>Prior evidence: <span class="delta-baseline">No prior project evidence — baseline/new knowledge.</span></small>
+        </article><article class="concept-card delta-card">
+          <span>New</span>
+          <h3>Data-locality scheduling</h3>
+          <p><strong>Source says:</strong> The master preferentially schedules map tasks on or near machines that hold input replicas.</p>
+          <p><strong>Previously:</strong> No existing graph concept represents scheduler-owned compute placement driven by data location.</p>
+          <p><strong>Project interpretation:</strong> The runtime can optimize physical placement while preserving the logical user program.</p>
+          <small>Prior evidence: <span class="delta-baseline">No prior project evidence — baseline/new knowledge.</span></small>
+        </article></div>
+      <p class="section-note"><strong>Noise rejected:</strong> prior concepts retrieved but deliberately classified as not relevant: durable-execution, activity-execution, workflow-execution, controlled-execution, idempotency-under-retry.</p>
+    </section>
+
+    <section id="model" class="detail-section wrap">
+      <p class="kicker">MENTAL MODEL</p>
+      <div class="visual-layers" aria-label="The abstraction boundary"><article>
+          <span>USER</span>
+          <h3>Map + Reduce</h3>
+          <p>Define the domain transformation over key/value records.</p>
+        </article><article>
+          <span>RUNTIME</span>
+          <h3>Partition + schedule + shuffle</h3>
+          <p>Derive distributed tasks, assign workers and move intermediate data.</p>
+        </article><article>
+          <span>RELIABILITY</span>
+          <h3>Re-execute + place near data</h3>
+          <p>Recover failed tasks and reduce network cost without changing the user program.</p>
+        </article></div>
+      <div class="core-map">
+        <div><span>Source problem</span><p>Straightforward large-data computations become dominated by distribution code when programmers must explicitly parallelize work, partition data, schedule machines, move intermediate data and recover from failures.</p></div>
+        <div><span>Source thesis</span><p>Restrict the user program to Map and Reduce functions over key/value data so a runtime can automatically partition, schedule, move data and re-execute tasks across a cluster.</p></div>
+        <div><span>Core topics</span><ul><li>Map/Reduce user interface</li><li>automatic partitioning and scheduling</li><li>master/worker execution</li><li>task re-execution after failure</li><li>data locality</li><li>restricted-model trade-off</li></ul></div>
+      </div>
+    </section>
+
+    <section id="concepts" class="detail-section wrap">
+      <p class="kicker">CONCEPTS TO KNOW</p>
+      <h2>Learn only the prerequisites that preserve the model.</h2>
+      <div class="concept-grid"><article class="concept-card">
+          <span>learn</span>
+          <h3>Restricted programming model</h3>
+          <p>The runtime can automate distribution precisely because user programs fit a constrained Map/Reduce structure.</p>
+        </article><article class="concept-card">
+          <span>learn</span>
+          <h3>Runtime-managed distribution</h3>
+          <p>Partitioning, scheduling and communication are deliberately moved out of application code.</p>
+        </article><article class="concept-card">
+          <span>learn</span>
+          <h3>Task re-execution fault recovery</h3>
+          <p>Worker failures are handled by rescheduling/re-executing tasks rather than forcing user code to coordinate machine recovery.</p>
+        </article><article class="concept-card">
+          <span>know</span>
+          <h3>Data-locality scheduling</h3>
+          <p>The runtime can place map work near input replicas to reduce network traffic.</p>
+        </article></div>
+    </section>
+
+    <section id="tools" class="detail-section wrap">
+      <p class="kicker">TOOLS / SYSTEMS</p>
+      <h2>Concrete systems worth knowing.</h2>
+      <p class="section-note">Tool connections may be project enrichment rather than recommendations from the original source. Each card states the relationship.</p>
+      <div class="tool-grid"><p class="empty-note">No tool is required to understand this source.</p></div>
+    </section>
+
+    <section class="detail-section wrap">
+      <p class="kicker">EXAMPLES</p>
+      <div class="example-grid"><article class="example-card">
+          <span>log aggregation</span>
+          <h3>Terabytes of records must be grouped and aggregated by key.</h3>
+          <p>Can the business transformation be expressed as Map/Reduce while the runtime owns partitioning and recovery?</p>
+        </article><article class="example-card">
+          <span>framework design</span>
+          <h3>A team is building a distributed transformation engine.</h3>
+          <p>Which responsibilities can be removed from user code if the framework intentionally restricts the computation model?</p>
+        </article></div>
+    </section>
+
+    <section class="detail-section wrap limitation-section">
+      <p class="kicker">WHERE THE MODEL BREAKS</p>
+      <h2>Useful does not mean sufficient.</h2>
+      <ol class="limitation-list"><li>A restricted Map/Reduce interface cannot express every distributed algorithm naturally.</li><li>Task re-execution is safe only when the computation semantics tolerate replay; it is not a blanket guarantee for arbitrary external side effects.</li><li>The paper describes batch processing on a 2004 Google cluster and should not be read as a current systems benchmark.</li><li>Automatic runtime ownership reduces control as well as complexity.</li></ol>
+    </section>
+
+    <section id="actions" class="detail-section wrap">
+      <p class="kicker">PERSONAL ACTION MAP</p>
+      <h2>Convert understanding into a decision.</h2>
+      <div class="action-grid"><article class="action-card action-use_now">
+          <span>Use now</span>
+          <ul><li>When designing a framework, separate domain transformation from distribution mechanics and ask which runtime responsibilities become automatable if the user interface is deliberately constrained.</li></ul>
+        </article><article class="action-card action-try">
+          <span>Try</span>
+          <ul><li>Take one batch transformation and specify only its logical partition/aggregation functions, then list every execution concern a runtime could own.</li></ul>
+        </article><article class="action-card action-learn">
+          <span>Learn</span>
+          <ul><li>restricted programming models</li><li>runtime scheduling</li><li>task re-execution</li><li>data locality</li></ul>
+        </article><article class="action-card action-build">
+          <span>Build</span>
+          <ul><li>A small local Map/Reduce-style executor that partitions records, runs map tasks, groups intermediate keys and retries failed tasks.</li></ul>
+        </article><article class="action-card action-watch">
+          <span>Watch</span>
+          <ul><li>Where modern agent/data frameworks gain reliability by narrowing user-defined execution semantics.</li></ul>
+        </article><article class="action-card action-ignore_for_now">
+          <span>Ignore for now</span>
+          <ul><li>Treating the 2004 master/worker implementation or hardware details as the essence of the MapReduce abstraction.</li></ul>
+        </article></div>
+    </section>
+
+    <section id="sources" class="detail-section wrap source-section">
+      <p class="kicker">SOURCES + DATES</p>
+      <div class="source-grid">
+        <div>
+          <h3>Primary source</h3>
+          <a href="https://research.google/pubs/mapreduce-simplified-data-processing-on-large-clusters" target="_blank" rel="noreferrer">MapReduce: Simplified Data Processing on Large Clusters ↗</a>
+          <p>Jeffrey Dean, Sanjay Ghemawat · Source date: not independently verified</p>
+          <p>Published in OSDI&#x27;04 (2004), pp. 137–150; exact publication day is not asserted.</p>
+        </div>
+        <div>
+          <h3>Verification / enrichment</h3>
+          <ul class="supporting-sources"><li>
+          <a href="https://research.google/pubs/mapreduce-simplified-data-processing-on-large-clusters" target="_blank" rel="noreferrer">Google Research publication page</a>
+          <span>official metadata and abstract describing the user/runtime responsibility split · accessed 2026-08-27</span>
+        </li><li>
+          <a href="https://storage.googleapis.com/gweb-research2023-media/pubtools/4449.pdf" target="_blank" rel="noreferrer">Official OSDI paper PDF</a>
+          <span>primary evidence for execution overview, fault tolerance, locality and conclusions · accessed 2026-08-27</span>
+        </li></ul>
+        </div>
+      </div>
+      <p class="provenance-note">Analyzed 2026-08-27. Full third-party transcript is not stored. Source claims and project enrichment are kept distinguishable.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer wrap">
+    <span>Signal to Insight</span><span>Explainer: mapreduce-runtime-abstraction-boundary</span><span>Reviewed 2026-08-27</span>
+  </footer>
+  <script src="../../app.js"></script>
+</body>
+</html>

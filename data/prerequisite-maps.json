@@ -784,6 +784,68 @@
           }
         }
       ]
+    },
+    {
+      "insight_id": "mapreduce-runtime-abstraction-boundary",
+      "summary": "The mental model needs the constrained user interface, runtime-owned distribution and re-execution recovery; locality is useful depth after those responsibilities are clear.",
+      "items": [
+        {
+          "id": "mapreduce-prereq-restricted-model",
+          "label": "Restricted programming model",
+          "concept_id": "restricted-programming-model",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "The source's leverage is impossible to understand if Map and Reduce are treated as mere convenience functions rather than a deliberate constraint.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "mapreduce-runtime-abstraction-boundary",
+            "target": null
+          }
+        },
+        {
+          "id": "mapreduce-prereq-runtime-distribution",
+          "label": "Runtime-managed distribution",
+          "concept_id": "runtime-managed-distribution",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "The user/runtime responsibility split is the central reason simple transformations can run across many machines without custom cluster code.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "mapreduce-runtime-abstraction-boundary",
+            "target": null
+          }
+        },
+        {
+          "id": "mapreduce-prereq-reexecution",
+          "label": "Task re-execution fault recovery",
+          "concept_id": "task-reexecution-fault-recovery",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "Failure handling demonstrates what the runtime can safely automate once tasks fit the constrained computation model.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "mapreduce-runtime-abstraction-boundary",
+            "target": null
+          }
+        },
+        {
+          "id": "mapreduce-prereq-locality",
+          "label": "Data-locality scheduling",
+          "concept_id": "data-locality-scheduling",
+          "priority": "learn_next",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "Locality shows how runtime ownership can optimize physical placement without expanding the user-facing abstraction.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "mapreduce-runtime-abstraction-boundary",
+            "target": null
+          }
+        }
+      ]
     }
   ]
 }

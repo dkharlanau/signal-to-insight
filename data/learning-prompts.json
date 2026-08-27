@@ -312,6 +312,28 @@
           "positional-encoding"
         ]
       }
+    },
+    {
+      "insight_id": "mapreduce-runtime-abstraction-boundary",
+      "retention_prompt": "Without looking back, reconstruct the MapReduce responsibility boundary: what does the programmer specify, which distributed-execution responsibilities does the runtime take over, why does the restricted model make task re-execution practical, and what important workload boundary remains?",
+      "answer_key": {
+        "problem_from": "whole_source_map.problem",
+        "mechanism_from": "whole_source_map.thesis",
+        "anchor_concept_ids": [
+          "restricted-programming-model",
+          "runtime-managed-distribution",
+          "task-reexecution-fault-recovery"
+        ],
+        "boundary_limitation_index": 0
+      },
+      "transfer_prompt": {
+        "prompt": "You are designing a framework for large repeatable file transformations. Which parts of the user API would you deliberately restrict so the runtime can own partitioning, scheduling and failure recovery, and where would that restriction become too limiting?",
+        "expected_concept_ids": [
+          "restricted-programming-model",
+          "runtime-managed-distribution",
+          "task-reexecution-fault-recovery"
+        ]
+      }
     }
   ]
 }
