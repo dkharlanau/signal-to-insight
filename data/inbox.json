@@ -106,9 +106,9 @@
       "source_type": "repository",
       "submitted_at": "2026-08-27",
       "requested_focus": "Understand LangGraph's model for resilient agent orchestration, state, control flow and durable execution; compare the responsibilities with the existing ReAct/Temporal/controlled-execution model without forcing equivalence.",
-      "status": "queued",
-      "source_id": null,
-      "insight_id": null,
+      "status": "review",
+      "source_id": "src-langgraph-repository-2026",
+      "insight_id": "langgraph-stateful-agent-orchestration",
       "notes": "GitHub source intake issue #57. Dogfood cohort: AI agent framework repository."
     },
     {

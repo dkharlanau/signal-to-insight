@@ -437,6 +437,49 @@
           ]
         }
       ]
+    },
+    {
+      "insight_id": "langgraph-stateful-agent-orchestration",
+      "decision": "skim_selected_parts",
+      "rationale": "The explainer preserves the responsibility model and cross-source boundaries, but the official overview and persistence table are worth a targeted skim because the product vocabulary changes quickly and the checkpointer-versus-Store distinction is implementation-relevant. Broad repository reading is unnecessary for the mental model.",
+      "novelty": {
+        "level": "high",
+        "reason": "The source adds an explicit agent-orchestration runtime layer and state-scope distinctions not previously modeled as first-class concepts."
+      },
+      "source_quality": {
+        "level": "high",
+        "reason": "The repository and the verification material are official LangGraph/LangChain sources that directly define the runtime and persistence model."
+      },
+      "relevance": {
+        "level": "high",
+        "reason": "The orchestration boundary is directly useful when designing long-running agent workflows with deterministic controls, state and human intervention."
+      },
+      "practical_leverage": {
+        "level": "high",
+        "reason": "The model can immediately change how an agent system separates model reasoning, application control flow, persistence and governance responsibilities."
+      },
+      "compression_loss": {
+        "level": "medium",
+        "reason": "The explainer deliberately omits API details, checkpointer choices and deployment specifics that matter when moving from architecture to implementation."
+      },
+      "selected_parts": [
+        {
+          "label": "LangGraph overview",
+          "locator": "LangGraph overview → low-level orchestration and core benefits",
+          "why": "Confirm the runtime's intended responsibility and deterministic/agentic composition model.",
+          "claim_refs": [
+            "langgraph-deterministic-agentic-graph"
+          ]
+        },
+        {
+          "label": "Persistence scopes",
+          "locator": "Persistence → Checkpointer vs. store",
+          "why": "See the authoritative distinction between thread checkpoints and cross-thread Stores before designing state boundaries.",
+          "claim_refs": [
+            "langgraph-checkpointer-store-scope"
+          ]
+        }
+      ]
     }
   ]
 }

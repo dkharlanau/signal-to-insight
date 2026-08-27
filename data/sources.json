@@ -340,6 +340,37 @@
       "derived_records": [
         "duckdb-in-process-analytics"
       ]
+    },
+    {
+      "id": "src-langgraph-repository-2026",
+      "type": "repository",
+      "title": "LangGraph",
+      "canonical_url": "https://github.com/langchain-ai/langgraph",
+      "creators": [
+        "LangChain Inc. / LangGraph contributors"
+      ],
+      "publisher": "LangChain Inc.",
+      "event": null,
+      "published_at": null,
+      "event_date": null,
+      "captured_at": "2026-08-27",
+      "analyzed_at": "2026-08-27",
+      "date_note": "Living repository and official documentation inspected on 2026-08-27; no single publication date is asserted.",
+      "verification": [
+        {
+          "title": "LangGraph overview",
+          "url": "https://docs.langchain.com/oss/python/langgraph/overview",
+          "accessed_at": "2026-08-27"
+        },
+        {
+          "title": "LangGraph persistence",
+          "url": "https://docs.langchain.com/oss/python/langgraph/persistence",
+          "accessed_at": "2026-08-27"
+        }
+      ],
+      "derived_records": [
+        "langgraph-stateful-agent-orchestration"
+      ]
     }
   ]
 }

@@ -684,6 +684,101 @@
           "note": "This comparison is project synthesis and is not claimed by DuckDB or PostgreSQL documentation."
         }
       ]
+    },
+    {
+      "insight_id": "langgraph-stateful-agent-orchestration",
+      "claims": [
+        {
+          "id": "langgraph-low-level-orchestration",
+          "text": "LangGraph is a low-level orchestration framework and runtime for long-running, stateful agents rather than a high-level prebuilt agent abstraction.",
+          "impact": "high",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-langgraph-repository-2026",
+              "url": "https://github.com/langchain-ai/langgraph",
+              "locator": "README → Low-level orchestration framework / Why use LangGraph?"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "langgraph-deterministic-agentic-graph",
+          "text": "LangGraph can mix deterministic application steps with LLM-driven agentic steps in one explicit graph.",
+          "impact": "high",
+          "origin": "verification",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "verification",
+              "source_id": "src-langgraph-repository-2026",
+              "url": "https://docs.langchain.com/oss/python/langgraph/overview",
+              "locator": "LangGraph overview → low-level orchestration and core benefits"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "langgraph-checkpointer-store-scope",
+          "text": "LangGraph checkpointers persist thread-scoped graph-state snapshots, while Stores persist application-defined data across threads.",
+          "impact": "high",
+          "origin": "verification",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "verification",
+              "source_id": "src-langgraph-repository-2026",
+              "url": "https://docs.langchain.com/oss/python/langgraph/persistence",
+              "locator": "Persistence → Checkpointer vs. store"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "langgraph-not-react-equivalence",
+          "text": "LangGraph orchestration and the ReAct reasoning/action/observation method are different abstraction layers even though a ReAct-style loop can be implemented inside an orchestration graph.",
+          "impact": "high",
+          "origin": "project_interpretation",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-langgraph-repository-2026",
+              "url": "https://github.com/langchain-ai/langgraph",
+              "locator": "README → stateful orchestration positioning"
+            },
+            {
+              "kind": "prior_insight",
+              "insight_id": "react-reason-act-observe-loop",
+              "locator": "Reason / Action / Observation model"
+            }
+          ],
+          "note": "This is project synthesis separating framework orchestration from a reasoning/action method; the LangGraph source does not claim this comparison directly."
+        },
+        {
+          "id": "langgraph-not-temporal-equivalence",
+          "text": "LangGraph checkpoint persistence and Temporal durable workflow execution share recovery goals but expose different runtime and state abstractions and should not be treated as interchangeable implementations.",
+          "impact": "high",
+          "origin": "project_interpretation",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "verification",
+              "source_id": "src-langgraph-repository-2026",
+              "url": "https://docs.langchain.com/oss/python/langgraph/persistence",
+              "locator": "Persistence → checkpoints and thread state"
+            },
+            {
+              "kind": "prior_insight",
+              "insight_id": "temporal-durable-execution-mental-model",
+              "locator": "Workflow Execution / Event History model"
+            }
+          ],
+          "note": "This is project synthesis comparing two durability models rather than a claim made by either vendor."
+        }
+      ]
     }
   ]
 }

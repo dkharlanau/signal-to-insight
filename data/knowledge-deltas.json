@@ -384,6 +384,67 @@
         "activity-execution",
         "task-queue"
       ]
+    },
+    {
+      "insight_id": "langgraph-stateful-agent-orchestration",
+      "summary": "LangGraph adds an explicit stateful-agent-orchestration layer and refines existing controlled/durable-execution knowledge without collapsing into ReAct or Temporal. The useful change is responsibility separation: reasoning strategy, graph orchestration state and broader execution governance are different layers.",
+      "items": [
+        {
+          "relationship": "new",
+          "concept_id": "stateful-agent-orchestration",
+          "label": "Stateful agent orchestration",
+          "source_basis": "LangGraph is positioned as a low-level orchestration framework/runtime for long-running stateful agents, with explicit graph state and control flow.",
+          "prior_basis": "The graph already contains agent reasoning, durable workflow execution and controlled execution, but not a dedicated application-level graph orchestration concept that mixes deterministic and LLM-driven steps.",
+          "interpretation": "Agent reasoning can now be placed inside an explicit orchestration layer rather than conflated with the whole application runtime.",
+          "evidence_insights": []
+        },
+        {
+          "relationship": "new",
+          "concept_id": "graph-state-checkpoint",
+          "label": "Graph state checkpoint",
+          "source_basis": "LangGraph checkpointers persist thread-scoped graph state for continuity, interruption, time travel and fault recovery.",
+          "prior_basis": "Existing execution-history and Temporal concepts represent other durability models, but not LangGraph's thread-scoped graph-state checkpoint abstraction.",
+          "interpretation": "This creates a concrete persistence boundary for agent orchestration while preserving the distinction from general workflow event histories.",
+          "evidence_insights": []
+        },
+        {
+          "relationship": "new",
+          "concept_id": "cross-thread-store",
+          "label": "Cross-thread store",
+          "source_basis": "LangGraph Stores hold application-defined data across graph threads, separate from one thread's checkpointed execution state.",
+          "prior_basis": "The current graph does not explicitly distinguish execution-state persistence from cross-thread agent/application memory.",
+          "interpretation": "Persistence should be split by scope: thread execution continuity versus durable information reused across threads.",
+          "evidence_insights": []
+        },
+        {
+          "relationship": "refines",
+          "concept_id": "controlled-execution",
+          "label": "Controlled execution",
+          "source_basis": "LangGraph provides explicit state, deterministic/agentic control flow, persistence and human-intervention points.",
+          "prior_basis": "Controlled execution already includes a broader requirement for consequential work to be governable, reconstructable and testable.",
+          "interpretation": "LangGraph refines the orchestration/persistence slice of controlled execution but does not supply authorization policy or protected-data governance by itself.",
+          "evidence_insights": [
+            "enterprise-agents-production-substrate"
+          ]
+        },
+        {
+          "relationship": "refines",
+          "concept_id": "durable-execution",
+          "label": "Durable execution",
+          "source_basis": "Checkpointers let LangGraph threads preserve state through interruptions/failures and resume later.",
+          "prior_basis": "Durable execution is already represented through the broader architecture case and the Temporal workflow model.",
+          "interpretation": "LangGraph adds a domain-specific agent-graph durability mechanism; it reinforces the goal while refining how state is represented in this runtime.",
+          "evidence_insights": [
+            "enterprise-agents-production-substrate",
+            "temporal-durable-execution-mental-model"
+          ]
+        }
+      ],
+      "suppressed_prior_matches": [
+        "activity-execution",
+        "human-agent-task-equivalence",
+        "react-loop"
+      ]
     }
   ]
 }

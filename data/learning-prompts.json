@@ -219,6 +219,28 @@
           "direct-file-querying"
         ]
       }
+    },
+    {
+      "insight_id": "langgraph-stateful-agent-orchestration",
+      "retention_prompt": "Without looking back, reconstruct the LangGraph mental model: what does the graph orchestrate, how can deterministic and agentic steps coexist, what is persisted by a checkpointer versus a Store, and why is this not the same abstraction as ReAct or Temporal?",
+      "answer_key": {
+        "problem_from": "whole_source_map.problem",
+        "mechanism_from": "whole_source_map.thesis",
+        "anchor_concept_ids": [
+          "stateful-agent-orchestration",
+          "graph-state-checkpoint",
+          "cross-thread-store"
+        ],
+        "boundary_limitation_index": 1
+      },
+      "transfer_prompt": {
+        "prompt": "An AI workflow validates input deterministically, asks an LLM to plan, calls an external tool, pauses for human approval and must resume tomorrow with the same execution state. Which responsibilities belong in graph orchestration, which state belongs in checkpoints, and which concerns still require a separate governance layer?",
+        "expected_concept_ids": [
+          "stateful-agent-orchestration",
+          "graph-state-checkpoint",
+          "controlled-execution"
+        ]
+      }
     }
   ]
 }

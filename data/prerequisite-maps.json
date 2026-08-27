@@ -522,6 +522,54 @@
           }
         }
       ]
+    },
+    {
+      "insight_id": "langgraph-stateful-agent-orchestration",
+      "summary": "The source becomes clear once three responsibility boundaries are explicit: the graph orchestrates state/control flow, checkpoints persist one thread's execution state, and Stores keep data whose scope spans threads.",
+      "items": [
+        {
+          "id": "langgraph-prereq-orchestration",
+          "label": "Stateful agent orchestration",
+          "concept_id": "stateful-agent-orchestration",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "Without the orchestration layer, LangGraph can be mistaken for a reasoning algorithm or just another model wrapper.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "langgraph-stateful-agent-orchestration",
+            "target": null
+          }
+        },
+        {
+          "id": "langgraph-prereq-checkpoint",
+          "label": "Graph state checkpoint",
+          "concept_id": "graph-state-checkpoint",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "Thread checkpoint persistence is the mechanism that makes interruption, continuation and fault recovery concrete in the LangGraph runtime.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "langgraph-stateful-agent-orchestration",
+            "target": null
+          }
+        },
+        {
+          "id": "langgraph-prereq-store",
+          "label": "Cross-thread store",
+          "concept_id": "cross-thread-store",
+          "priority": "learn_next",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "A Store clarifies that execution-state persistence and durable application memory are different scopes.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "langgraph-stateful-agent-orchestration",
+            "target": null
+          }
+        }
+      ]
     }
   ]
 }

@@ -11,7 +11,8 @@
       "insight_ids": [
         "enterprise-agents-production-substrate",
         "open-policy-agent-decision-enforcement-model",
-        "react-reason-act-observe-loop"
+        "react-reason-act-observe-loop",
+        "langgraph-stateful-agent-orchestration"
       ],
       "aliases": [
         "production execution substrate"
@@ -158,7 +159,8 @@
       "coverage": "explained",
       "insight_ids": [
         "enterprise-agents-production-substrate",
-        "temporal-durable-execution-mental-model"
+        "temporal-durable-execution-mental-model",
+        "langgraph-stateful-agent-orchestration"
       ],
       "aliases": [
         "durable workflow execution"
@@ -742,6 +744,63 @@
         "sql",
         "data"
       ]
+    },
+    {
+      "id": "stateful-agent-orchestration",
+      "label": "Stateful agent orchestration",
+      "summary": "An application-level execution model that makes agent state and control transitions explicit around deterministic and model-driven steps.",
+      "domain": "agent orchestration",
+      "coverage": "explained",
+      "insight_ids": [
+        "langgraph-stateful-agent-orchestration"
+      ],
+      "aliases": [
+        "agent graph orchestration"
+      ],
+      "tags": [
+        "agents",
+        "orchestration",
+        "state",
+        "control-flow"
+      ]
+    },
+    {
+      "id": "graph-state-checkpoint",
+      "label": "Graph state checkpoint",
+      "summary": "A persisted snapshot of one graph thread's execution state used for continuity, interruption, recovery and inspection.",
+      "domain": "agent persistence",
+      "coverage": "explained",
+      "insight_ids": [
+        "langgraph-stateful-agent-orchestration"
+      ],
+      "aliases": [
+        "thread checkpoint"
+      ],
+      "tags": [
+        "state",
+        "checkpoint",
+        "persistence",
+        "agents"
+      ]
+    },
+    {
+      "id": "cross-thread-store",
+      "label": "Cross-thread store",
+      "summary": "Application-defined persistent data whose scope spans graph threads rather than representing the execution state of one thread.",
+      "domain": "agent memory",
+      "coverage": "explained",
+      "insight_ids": [
+        "langgraph-stateful-agent-orchestration"
+      ],
+      "aliases": [
+        "LangGraph Store"
+      ],
+      "tags": [
+        "memory",
+        "store",
+        "persistence",
+        "agents"
+      ]
     }
   ],
   "relations": [
@@ -1101,6 +1160,46 @@
       "rationale": "DuckDB's embedded SQL engine can query supported files directly, reducing the need for an explicit service-side ingestion step in many local analytical workflows.",
       "evidence_insights": [
         "duckdb-in-process-analytics"
+      ]
+    },
+    {
+      "id": "rel-stateful-agent-orchestration-depends-on-checkpoint",
+      "from": "stateful-agent-orchestration",
+      "to": "graph-state-checkpoint",
+      "type": "depends_on",
+      "rationale": "Long-running graph orchestration can survive interruptions and resume only when thread execution state is persisted outside the transient call stack.",
+      "evidence_insights": [
+        "langgraph-stateful-agent-orchestration"
+      ]
+    },
+    {
+      "id": "rel-stateful-agent-orchestration-related-to-store",
+      "from": "stateful-agent-orchestration",
+      "to": "cross-thread-store",
+      "type": "related_to",
+      "rationale": "Stores are an optional persistence scope for application-defined information shared across graph threads; they complement but are not required for one thread's checkpointed orchestration state.",
+      "evidence_insights": [
+        "langgraph-stateful-agent-orchestration"
+      ]
+    },
+    {
+      "id": "rel-stateful-agent-orchestration-related-to-controlled-execution",
+      "from": "stateful-agent-orchestration",
+      "to": "controlled-execution",
+      "type": "related_to",
+      "rationale": "LangGraph provides explicit orchestration, persistence and intervention points that implement part of a controlled-execution substrate, while authorization and data-governance concerns remain separate.",
+      "evidence_insights": [
+        "langgraph-stateful-agent-orchestration"
+      ]
+    },
+    {
+      "id": "rel-graph-state-checkpoint-related-to-durable-execution",
+      "from": "graph-state-checkpoint",
+      "to": "durable-execution",
+      "type": "related_to",
+      "rationale": "Persisting thread graph state supports continuation after interruption or failure and therefore realizes a LangGraph-specific durability mechanism without collapsing it into another runtime's state model.",
+      "evidence_insights": [
+        "langgraph-stateful-agent-orchestration"
       ]
     }
   ]
