@@ -698,6 +698,40 @@
         "execution-history",
         "human-agent-task-equivalence"
       ]
+    },
+    {
+      "insight_id": "terraform-state-identity-binding",
+      "summary": "Terraform adds a distinct persistent-state model to the graph: declarative intent still requires durable managed-object identity, lifecycle metadata and shared coordination across runs rather than reconstructing infrastructure ownership from scratch.",
+      "items": [
+        {
+          "relationship": "new",
+          "concept_id": "terraform-state",
+          "label": "Terraform state",
+          "source_basis": "Terraform requires persistent state to map configuration to real resources, retain metadata and support future planning/synchronization.",
+          "prior_basis": "The cumulative graph had desired-state, workflow and database-state concepts but no infrastructure-as-code state record with Terraform's ownership semantics.",
+          "interpretation": "State becomes a separate reusable concept: declarative code is not sufficient operational memory when a tool must manage the same remote objects across runs.",
+          "evidence_insights": []
+        },
+        {
+          "relationship": "new",
+          "concept_id": "resource-identity-binding",
+          "label": "Resource identity binding",
+          "source_basis": "The primary purpose of Terraform state is binding a resource instance in configuration to the identity of a concrete remote object.",
+          "prior_basis": "No prior concept represented a persistent address-to-remote-object ownership mapping for infrastructure lifecycle management.",
+          "interpretation": "Identity binding explains why state is required even when desired configuration is complete and version-controlled.",
+          "evidence_insights": []
+        },
+        {
+          "relationship": "new",
+          "concept_id": "shared-state-coordination",
+          "label": "Shared state coordination",
+          "source_basis": "Terraform recommends a shared remote state so collaborators operate on the same mapping, with locking used to reduce simultaneous state mutation.",
+          "prior_basis": "The graph did not yet model collaboration around one mutable infrastructure ownership record.",
+          "interpretation": "State is not just local execution memory; in team use it becomes shared operational data requiring synchronization and access discipline.",
+          "evidence_insights": []
+        }
+      ],
+      "suppressed_prior_matches": []
     }
   ]
 }

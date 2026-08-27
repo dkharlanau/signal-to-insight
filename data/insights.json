@@ -3442,6 +3442,210 @@
         "analysis_type": "direct official repository analysis focused on typed application boundaries",
         "reviewed_at": "2026-08-27"
       }
+    },
+    {
+      "id": "terraform-state-identity-binding",
+      "source_id": "src-terraform-state-purpose-2026",
+      "slug": "terraform-state-identity-binding",
+      "status": "review",
+      "title": "Terraform state: declarative intent still needs durable identity",
+      "one_liner": "Terraform state is the durable mapping and metadata layer that tells declarative configuration which real remote objects it already manages across runs.",
+      "why_this_matters": "A common mental shortcut is that declarative systems should be stateless because the desired configuration already exists in code. Terraform shows why that is incomplete: configuration describes desired resources, while persistent state preserves identity, metadata and shared operational coordination needed to manage the same remote objects over time.",
+      "whole_source_map": {
+        "problem": "Configuration resource addresses do not by themselves identify the concrete remote objects created in earlier runs, and reconstructing every mapping from provider APIs is incomplete, ambiguous or expensive.",
+        "thesis": "Persist the configuration-to-remote-object binding plus lifecycle metadata and cached attributes in state, refresh that state against reality during planning, and coordinate team operations around one shared state.",
+        "core_topics": [
+          "configuration-to-object identity binding",
+          "state metadata",
+          "cached attributes and refresh",
+          "shared remote state",
+          "state locking",
+          "staleness and sensitive state boundaries"
+        ]
+      },
+      "derived_model": {
+        "problem": "Declarative intent says what should exist but cannot reliably answer which existing remote object a resource address means on the next run.",
+        "mechanism": "Terraform records a durable one-to-one resource binding, retains provider/dependency metadata and refreshed/cached attributes, and shares that state between collaborators with coordination around mutation.",
+        "result": "Plans can reason about changing managed objects rather than rediscovering infrastructure from scratch, but the state itself becomes a sensitive synchronized operational asset."
+      },
+      "coherence_review": {
+        "central_chain": [
+          "A configuration address names a desired resource instance but does not contain the remote object's provider-side identity.",
+          "When Terraform creates or imports an object, state binds that resource instance to the concrete remote object.",
+          "Later plans use the binding plus metadata and refreshed attributes to decide which object should be changed, replaced or removed.",
+          "For teams, everyone must operate against the same state mapping; remote state and locking reduce concurrent mutation risk.",
+          "Therefore declarative configuration and persistent state are complementary: code carries intent, state carries managed identity and operational continuity."
+        ],
+        "prerequisites_complete": true,
+        "source_vs_enrichment_clear": true,
+        "open_gaps": [
+          "Backend-specific locking, encryption and availability semantics require separate current documentation.",
+          "The source explains why state exists, not how to partition large Terraform estates into optimal state/workspace boundaries."
+        ],
+        "scores": {
+          "coherence": 5,
+          "prerequisite_completeness": 5,
+          "evidence_confidence": 5,
+          "practical_leverage": 5
+        }
+      },
+      "visual_plan": {
+        "dominant": {
+          "type": "sequence",
+          "title": "Intent becomes manageable through persistent identity",
+          "nodes": [
+            {
+              "label": "01 · Declare",
+              "title": "Configuration address",
+              "text": "Code says which resource instance should exist and how it should be configured."
+            },
+            {
+              "label": "02 · Bind",
+              "title": "Remote object identity",
+              "text": "State records which concrete provider-side object corresponds to that resource instance."
+            },
+            {
+              "label": "03 · Refresh",
+              "title": "Observe current attributes",
+              "text": "Terraform synchronizes managed-object data so planning starts from an updated view of reality."
+            },
+            {
+              "label": "04 · Plan",
+              "title": "Compute the change",
+              "text": "Desired configuration and managed state are compared to decide the lifecycle action for the same object."
+            }
+          ]
+        },
+        "supporting": [
+          "comparison",
+          "concept_grid",
+          "examples",
+          "limitations",
+          "action_map",
+          "source_map"
+        ],
+        "image": {
+          "needed": false,
+          "reason": "The key distinction is the flow from declarative address to persistent remote identity and refreshed planning state; a sequence is clearer than decorative imagery."
+        }
+      },
+      "concepts": [
+        {
+          "name": "Terraform state",
+          "depth": "learn",
+          "why_needed": "State is the persistent knowledge layer Terraform requires between configuration and managed infrastructure."
+        },
+        {
+          "name": "Resource identity binding",
+          "depth": "learn",
+          "why_needed": "The primary purpose of state is preserving which remote object a configured resource instance means across runs."
+        },
+        {
+          "name": "Shared state coordination",
+          "depth": "learn",
+          "why_needed": "Team operations need one synchronized state and protection against concurrent state mutation."
+        }
+      ],
+      "tool_map": [
+        {
+          "name": "terraform plan",
+          "category": "change planning",
+          "why_explore": "Makes the relationship between desired configuration, refreshed state and proposed remote changes visible.",
+          "url": "https://developer.hashicorp.com/terraform/cli/commands/plan",
+          "relationship": "Source-native Terraform operation that consumes state to determine planned changes.",
+          "status": "try"
+        },
+        {
+          "name": "remote state backend",
+          "category": "state storage and coordination",
+          "why_explore": "Needed when multiple operators or automation runs must share the same managed-object mapping safely.",
+          "url": "https://developer.hashicorp.com/terraform/language/state/remote",
+          "relationship": "Source-native Terraform mechanism for shared state.",
+          "status": "learn"
+        }
+      ],
+      "examples": [
+        {
+          "domain": "cloud infrastructure",
+          "scenario": "Configuration still contains aws_instance.foo one week after the original apply.",
+          "question": "How does Terraform know which concrete provider instance ID that address should update rather than creating or touching a different object?"
+        },
+        {
+          "domain": "team operations",
+          "scenario": "Two engineers run changes against the same infrastructure at nearly the same time.",
+          "question": "Are both runs using one synchronized state mapping, and what prevents concurrent mutation of that shared operational record?"
+        },
+        {
+          "domain": "drift",
+          "scenario": "A managed object's attributes are changed outside Terraform.",
+          "question": "Which part comes from durable identity in state and which part must be refreshed from the real provider before the next plan is trustworthy?"
+        }
+      ],
+      "limitations": [
+        "State can become stale relative to external reality until Terraform refreshes managed objects.",
+        "State may contain sensitive resource attributes and therefore requires stronger storage/access discipline than ordinary source code.",
+        "Shared state coordination reduces concurrent update risk but does not make every backend or external provider operation transactional.",
+        "Cached attributes improve performance, but treating state mainly as a cache misses its primary role as the identity binding between configuration and real objects."
+      ],
+      "action_map": {
+        "use_now": [
+          "When reviewing infrastructure-as-code architecture, ask separately where desired intent lives and where durable managed-object identity lives.",
+          "Treat Terraform state as operational data with explicit ownership, access and concurrency rules rather than as a disposable build artifact."
+        ],
+        "try": [
+          "Create one disposable resource, inspect its state binding, change one remote attribute out of band and observe how refresh plus plan separate identity from current attributes."
+        ],
+        "learn": [
+          "state backends",
+          "state locking",
+          "resource import/move",
+          "state sensitivity and access control"
+        ],
+        "build": [
+          "A small demo showing the same configuration address across create, external drift, refresh and planned repair while the remote object identity remains stable."
+        ],
+        "watch": [
+          "Backend-specific locking changes and state security guidance as Terraform evolves."
+        ],
+        "ignore_for_now": [
+          "Direct manual editing of terraform.tfstate as a normal operating model."
+        ]
+      },
+      "connections": [
+        "reconciliation-loop: both compare declared intent with observed reality, but Terraform state adds durable identity/metadata needed to know which real objects are being reconciled",
+        "desired-state: Terraform configuration expresses desired infrastructure while state preserves the managed binding to remote objects"
+      ],
+      "supporting_sources": [
+        {
+          "title": "Purpose of Terraform State",
+          "url": "https://developer.hashicorp.com/terraform/language/state/purpose",
+          "publisher": "HashiCorp",
+          "purpose": "primary source for mapping, metadata, performance and syncing",
+          "accessed_at": "2026-08-27"
+        },
+        {
+          "title": "Terraform State",
+          "url": "https://developer.hashicorp.com/terraform/language/state",
+          "publisher": "HashiCorp",
+          "purpose": "verification for current storage, remote-state and locking/security guidance",
+          "accessed_at": "2026-08-27"
+        }
+      ],
+      "tags": [
+        "terraform",
+        "infrastructure-as-code",
+        "state",
+        "identity",
+        "declarative",
+        "coordination"
+      ],
+      "provenance": {
+        "source_linked": true,
+        "source_dates_recorded": true,
+        "full_transcript_stored": false,
+        "analysis_type": "direct official Terraform documentation analysis",
+        "reviewed_at": "2026-08-27"
+      }
     }
   ]
 }

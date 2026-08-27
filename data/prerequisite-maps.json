@@ -908,6 +908,54 @@
           }
         }
       ]
+    },
+    {
+      "insight_id": "terraform-state-identity-binding",
+      "summary": "The minimum Terraform state model needs three pieces: the state record itself, the resource identity binding that gives it purpose, and shared coordination that becomes necessary when multiple actors mutate the same managed infrastructure.",
+      "items": [
+        {
+          "id": "terraform-state-prereq-state",
+          "label": "Terraform state",
+          "concept_id": "terraform-state",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "The source is specifically explaining why Terraform needs a persistent state layer alongside declarative configuration.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "terraform-state-identity-binding",
+            "target": null
+          }
+        },
+        {
+          "id": "terraform-state-prereq-binding",
+          "label": "Resource identity binding",
+          "concept_id": "resource-identity-binding",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "Without the configuration-to-remote-object mapping, state is easily misread as only a cache of current values.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "terraform-state-identity-binding",
+            "target": null
+          }
+        },
+        {
+          "id": "terraform-state-prereq-coordination",
+          "label": "Shared state coordination",
+          "concept_id": "shared-state-coordination",
+          "priority": "learn_next",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "Team use changes state from local operational memory into a synchronized shared asset whose mutation must be coordinated.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "terraform-state-identity-binding",
+            "target": null
+          }
+        }
+      ]
     }
   ]
 }

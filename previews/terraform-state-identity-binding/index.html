@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>[PREVIEW] Terraform state: declarative intent still needs durable identity — Signal to Insight</title>
+  <meta name="description" content="Terraform state is the durable mapping and metadata layer that tells declarative configuration which real remote objects it already manages across runs.">
+  <meta property="og:title" content="Terraform state: declarative intent still needs durable identity">
+  <meta property="og:description" content="Terraform state is the durable mapping and metadata layer that tells declarative configuration which real remote objects it already manages across runs.">
+  <meta property="og:type" content="article">
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="generated-page preview-page">
+  <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+  <header class="site-header wrap">
+    <a class="brand" href="../../"><span class="brand-mark">S→I</span><span>Signal to Insight</span></a>
+    <nav aria-label="Explainer navigation">
+      <a href="#delta">Delta</a><a href="#model">Model</a><a href="#concepts">Concepts</a><a href="#tools">Tools</a><a href="#actions">Actions</a><a href="#sources">Sources</a>
+    </nav>
+  </header>
+
+  <div class="preview-banner">REVIEW PREVIEW · NOT INDEXED · NOT PUBLISHED</div>
+  <main>
+    <section class="detail-hero wrap">
+      <a class="back-link" href="../../">← Research engine</a>
+      <p class="eyebrow">EXPLAINER · review</p>
+      <h1>Terraform state: declarative intent still needs durable identity</h1>
+      <div class="detail-lede">
+        <p>Terraform state is the durable mapping and metadata layer that tells declarative configuration which real remote objects it already manages across runs.</p>
+        <dl class="detail-meta">
+          <div><dt>Original source</dt><dd><a href="https://developer.hashicorp.com/terraform/language/state/purpose" target="_blank" rel="noreferrer">Purpose of Terraform State ↗</a></dd></div>
+          <div><dt>Creator</dt><dd>HashiCorp Terraform documentation contributors</dd></div>
+          <div><dt>Source status</dt><dd>living source · accessed 2026-08-27</dd></div>
+          <div><dt>Captured</dt><dd>2026-08-27</dd></div>
+          <div><dt>Analyzed</dt><dd>2026-08-27</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="detail-section wrap">
+      <p class="kicker">WHY THIS MATTERS</p>
+      <p class="big-statement">A common mental shortcut is that declarative systems should be stateless because the desired configuration already exists in code. Terraform shows why that is incomplete: configuration describes desired resources, while persistent state preserves identity, metadata and shared operational coordination needed to manage the same remote objects over time.</p>
+    </section>
+
+    <section id="delta" class="detail-section wrap knowledge-delta-section">
+      <p class="kicker">KNOWLEDGE DELTA</p>
+      <h2>What this source changes in the existing model.</h2>
+      <p class="big-statement">Terraform adds a distinct persistent-state model to the graph: declarative intent still requires durable managed-object identity, lifecycle metadata and shared coordination across runs rather than reconstructing infrastructure ownership from scratch.</p>
+      <div class="concept-grid"><article class="concept-card delta-card">
+          <span>New</span>
+          <h3>Terraform state</h3>
+          <p><strong>Source says:</strong> Terraform requires persistent state to map configuration to real resources, retain metadata and support future planning/synchronization.</p>
+          <p><strong>Previously:</strong> The cumulative graph had desired-state, workflow and database-state concepts but no infrastructure-as-code state record with Terraform&#x27;s ownership semantics.</p>
+          <p><strong>Project interpretation:</strong> State becomes a separate reusable concept: declarative code is not sufficient operational memory when a tool must manage the same remote objects across runs.</p>
+          <small>Prior evidence: <span class="delta-baseline">No prior project evidence — baseline/new knowledge.</span></small>
+        </article><article class="concept-card delta-card">
+          <span>New</span>
+          <h3>Resource identity binding</h3>
+          <p><strong>Source says:</strong> The primary purpose of Terraform state is binding a resource instance in configuration to the identity of a concrete remote object.</p>
+          <p><strong>Previously:</strong> No prior concept represented a persistent address-to-remote-object ownership mapping for infrastructure lifecycle management.</p>
+          <p><strong>Project interpretation:</strong> Identity binding explains why state is required even when desired configuration is complete and version-controlled.</p>
+          <small>Prior evidence: <span class="delta-baseline">No prior project evidence — baseline/new knowledge.</span></small>
+        </article><article class="concept-card delta-card">
+          <span>New</span>
+          <h3>Shared state coordination</h3>
+          <p><strong>Source says:</strong> Terraform recommends a shared remote state so collaborators operate on the same mapping, with locking used to reduce simultaneous state mutation.</p>
+          <p><strong>Previously:</strong> The graph did not yet model collaboration around one mutable infrastructure ownership record.</p>
+          <p><strong>Project interpretation:</strong> State is not just local execution memory; in team use it becomes shared operational data requiring synchronization and access discipline.</p>
+          <small>Prior evidence: <span class="delta-baseline">No prior project evidence — baseline/new knowledge.</span></small>
+        </article></div>
+      
+    </section>
+
+    <section id="model" class="detail-section wrap">
+      <p class="kicker">MENTAL MODEL</p>
+      <div class="visual-sequence" aria-label="Intent becomes manageable through persistent identity"><article>
+          <span>01 · Declare</span>
+          <h3>Configuration address</h3>
+          <p>Code says which resource instance should exist and how it should be configured.</p>
+        </article><article>
+          <span>02 · Bind</span>
+          <h3>Remote object identity</h3>
+          <p>State records which concrete provider-side object corresponds to that resource instance.</p>
+        </article><article>
+          <span>03 · Refresh</span>
+          <h3>Observe current attributes</h3>
+          <p>Terraform synchronizes managed-object data so planning starts from an updated view of reality.</p>
+        </article><article>
+          <span>04 · Plan</span>
+          <h3>Compute the change</h3>
+          <p>Desired configuration and managed state are compared to decide the lifecycle action for the same object.</p>
+        </article></div>
+      <div class="core-map">
+        <div><span>Source problem</span><p>Configuration resource addresses do not by themselves identify the concrete remote objects created in earlier runs, and reconstructing every mapping from provider APIs is incomplete, ambiguous or expensive.</p></div>
+        <div><span>Source thesis</span><p>Persist the configuration-to-remote-object binding plus lifecycle metadata and cached attributes in state, refresh that state against reality during planning, and coordinate team operations around one shared state.</p></div>
+        <div><span>Core topics</span><ul><li>configuration-to-object identity binding</li><li>state metadata</li><li>cached attributes and refresh</li><li>shared remote state</li><li>state locking</li><li>staleness and sensitive state boundaries</li></ul></div>
+      </div>
+    </section>
+
+    <section id="concepts" class="detail-section wrap">
+      <p class="kicker">CONCEPTS TO KNOW</p>
+      <h2>Learn only the prerequisites that preserve the model.</h2>
+      <div class="concept-grid"><article class="concept-card">
+          <span>learn</span>
+          <h3>Terraform state</h3>
+          <p>State is the persistent knowledge layer Terraform requires between configuration and managed infrastructure.</p>
+        </article><article class="concept-card">
+          <span>learn</span>
+          <h3>Resource identity binding</h3>
+          <p>The primary purpose of state is preserving which remote object a configured resource instance means across runs.</p>
+        </article><article class="concept-card">
+          <span>learn</span>
+          <h3>Shared state coordination</h3>
+          <p>Team operations need one synchronized state and protection against concurrent state mutation.</p>
+        </article></div>
+    </section>
+
+    <section id="tools" class="detail-section wrap">
+      <p class="kicker">TOOLS / SYSTEMS</p>
+      <h2>Concrete systems worth knowing.</h2>
+      <p class="section-note">Tool connections may be project enrichment rather than recommendations from the original source. Each card states the relationship.</p>
+      <div class="tool-grid"><a class="tool-card" href="https://developer.hashicorp.com/terraform/cli/commands/plan" target="_blank" rel="noreferrer">
+          <span>try</span>
+          <strong>terraform plan</strong>
+          <p>Makes the relationship between desired configuration, refreshed state and proposed remote changes visible.</p>
+          <small>change planning · Source-native Terraform operation that consumes state to determine planned changes.</small>
+        </a><a class="tool-card" href="https://developer.hashicorp.com/terraform/language/state/remote" target="_blank" rel="noreferrer">
+          <span>learn</span>
+          <strong>remote state backend</strong>
+          <p>Needed when multiple operators or automation runs must share the same managed-object mapping safely.</p>
+          <small>state storage and coordination · Source-native Terraform mechanism for shared state.</small>
+        </a></div>
+    </section>
+
+    <section class="detail-section wrap">
+      <p class="kicker">EXAMPLES</p>
+      <div class="example-grid"><article class="example-card">
+          <span>cloud infrastructure</span>
+          <h3>Configuration still contains aws_instance.foo one week after the original apply.</h3>
+          <p>How does Terraform know which concrete provider instance ID that address should update rather than creating or touching a different object?</p>
+        </article><article class="example-card">
+          <span>team operations</span>
+          <h3>Two engineers run changes against the same infrastructure at nearly the same time.</h3>
+          <p>Are both runs using one synchronized state mapping, and what prevents concurrent mutation of that shared operational record?</p>
+        </article><article class="example-card">
+          <span>drift</span>
+          <h3>A managed object&#x27;s attributes are changed outside Terraform.</h3>
+          <p>Which part comes from durable identity in state and which part must be refreshed from the real provider before the next plan is trustworthy?</p>
+        </article></div>
+    </section>
+
+    <section class="detail-section wrap limitation-section">
+      <p class="kicker">WHERE THE MODEL BREAKS</p>
+      <h2>Useful does not mean sufficient.</h2>
+      <ol class="limitation-list"><li>State can become stale relative to external reality until Terraform refreshes managed objects.</li><li>State may contain sensitive resource attributes and therefore requires stronger storage/access discipline than ordinary source code.</li><li>Shared state coordination reduces concurrent update risk but does not make every backend or external provider operation transactional.</li><li>Cached attributes improve performance, but treating state mainly as a cache misses its primary role as the identity binding between configuration and real objects.</li></ol>
+    </section>
+
+    <section id="actions" class="detail-section wrap">
+      <p class="kicker">PERSONAL ACTION MAP</p>
+      <h2>Convert understanding into a decision.</h2>
+      <div class="action-grid"><article class="action-card action-use_now">
+          <span>Use now</span>
+          <ul><li>When reviewing infrastructure-as-code architecture, ask separately where desired intent lives and where durable managed-object identity lives.</li><li>Treat Terraform state as operational data with explicit ownership, access and concurrency rules rather than as a disposable build artifact.</li></ul>
+        </article><article class="action-card action-try">
+          <span>Try</span>
+          <ul><li>Create one disposable resource, inspect its state binding, change one remote attribute out of band and observe how refresh plus plan separate identity from current attributes.</li></ul>
+        </article><article class="action-card action-learn">
+          <span>Learn</span>
+          <ul><li>state backends</li><li>state locking</li><li>resource import/move</li><li>state sensitivity and access control</li></ul>
+        </article><article class="action-card action-build">
+          <span>Build</span>
+          <ul><li>A small demo showing the same configuration address across create, external drift, refresh and planned repair while the remote object identity remains stable.</li></ul>
+        </article><article class="action-card action-watch">
+          <span>Watch</span>
+          <ul><li>Backend-specific locking changes and state security guidance as Terraform evolves.</li></ul>
+        </article><article class="action-card action-ignore_for_now">
+          <span>Ignore for now</span>
+          <ul><li>Direct manual editing of terraform.tfstate as a normal operating model.</li></ul>
+        </article></div>
+    </section>
+
+    <section id="sources" class="detail-section wrap source-section">
+      <p class="kicker">SOURCES + DATES</p>
+      <div class="source-grid">
+        <div>
+          <h3>Primary source</h3>
+          <a href="https://developer.hashicorp.com/terraform/language/state/purpose" target="_blank" rel="noreferrer">Purpose of Terraform State ↗</a>
+          <p>HashiCorp Terraform documentation contributors · Source status: living source · accessed 2026-08-27</p>
+          <p>Living Terraform documentation inspected on 2026-08-27; no standalone publication date is asserted.</p>
+        </div>
+        <div>
+          <h3>Verification / enrichment</h3>
+          <ul class="supporting-sources"><li>
+          <a href="https://developer.hashicorp.com/terraform/language/state/purpose" target="_blank" rel="noreferrer">Purpose of Terraform State</a>
+          <span>primary source for mapping, metadata, performance and syncing · accessed 2026-08-27</span>
+        </li><li>
+          <a href="https://developer.hashicorp.com/terraform/language/state" target="_blank" rel="noreferrer">Terraform State</a>
+          <span>verification for current storage, remote-state and locking/security guidance · accessed 2026-08-27</span>
+        </li></ul>
+        </div>
+      </div>
+      <p class="provenance-note">Analyzed 2026-08-27. Full third-party transcript is not stored. Source claims and project enrichment are kept distinguishable.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer wrap">
+    <span>Signal to Insight</span><span>Explainer: terraform-state-identity-binding</span><span>Reviewed 2026-08-27</span>
+  </footer>
+  <script src="../../app.js"></script>
+</body>
+</html>

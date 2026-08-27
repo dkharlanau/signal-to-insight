@@ -1282,6 +1282,59 @@
           "note": "This is the project's architecture interpretation of the repository's separate typing, instrumentation and eval surfaces."
         }
       ]
+    },
+    {
+      "insight_id": "terraform-state-identity-binding",
+      "claims": [
+        {
+          "id": "terraform-state-maps-real-objects",
+          "text": "Terraform state is required to persist the mapping between resource instances declared in configuration and the concrete remote objects Terraform manages across runs.",
+          "impact": "high",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-terraform-state-purpose-2026",
+              "url": "https://developer.hashicorp.com/terraform/language/state/purpose",
+              "locator": "Purpose of Terraform State → Mapping to the Real World"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "terraform-state-keeps-metadata",
+          "text": "Terraform state retains lifecycle metadata such as resource dependencies and provider configuration information in addition to remote object identities and cached attributes.",
+          "impact": "medium",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-terraform-state-purpose-2026",
+              "url": "https://developer.hashicorp.com/terraform/language/state/purpose",
+              "locator": "Purpose of Terraform State → Metadata"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "terraform-state-syncs-collaboration",
+          "text": "For collaborative infrastructure management, Terraform needs participants to operate from the same state, and remote state with locking is used to coordinate access and reduce concurrent updates.",
+          "impact": "high",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-terraform-state-purpose-2026",
+              "url": "https://developer.hashicorp.com/terraform/language/state/purpose",
+              "locator": "Purpose of Terraform State → Syncing"
+            }
+          ],
+          "note": null
+        }
+      ]
     }
   ]
 }

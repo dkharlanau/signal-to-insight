@@ -541,6 +541,37 @@
       "derived_records": [
         "pydantic-ai-typed-agent-contracts"
       ]
+    },
+    {
+      "id": "src-terraform-state-purpose-2026",
+      "type": "documentation",
+      "title": "Purpose of Terraform State",
+      "canonical_url": "https://developer.hashicorp.com/terraform/language/state/purpose",
+      "creators": [
+        "HashiCorp Terraform documentation contributors"
+      ],
+      "publisher": "HashiCorp",
+      "event": null,
+      "published_at": null,
+      "event_date": null,
+      "captured_at": "2026-08-27",
+      "analyzed_at": "2026-08-27",
+      "date_note": "Living Terraform documentation inspected on 2026-08-27; no standalone publication date is asserted.",
+      "verification": [
+        {
+          "title": "Purpose of Terraform State",
+          "url": "https://developer.hashicorp.com/terraform/language/state/purpose",
+          "accessed_at": "2026-08-27"
+        },
+        {
+          "title": "Terraform State",
+          "url": "https://developer.hashicorp.com/terraform/language/state",
+          "accessed_at": "2026-08-27"
+        }
+      ],
+      "derived_records": [
+        "terraform-state-identity-binding"
+      ]
     }
   ]
 }

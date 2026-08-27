@@ -1189,6 +1189,62 @@
         "testing",
         "agents"
       ]
+    },
+    {
+      "id": "terraform-state",
+      "label": "Terraform state",
+      "summary": "Terraform's persistent managed-infrastructure record containing resource bindings, metadata and refreshed/cached attributes used across runs.",
+      "domain": "infrastructure as code",
+      "coverage": "explained",
+      "insight_ids": [
+        "terraform-state-identity-binding"
+      ],
+      "aliases": [
+        "Terraform state file"
+      ],
+      "tags": [
+        "terraform",
+        "state",
+        "infrastructure-as-code"
+      ]
+    },
+    {
+      "id": "resource-identity-binding",
+      "label": "Resource identity binding",
+      "summary": "A durable mapping from a declarative resource instance address to the concrete remote object Terraform manages for that address.",
+      "domain": "infrastructure as code",
+      "coverage": "explained",
+      "insight_ids": [
+        "terraform-state-identity-binding"
+      ],
+      "aliases": [
+        "configuration-to-remote-object binding"
+      ],
+      "tags": [
+        "identity",
+        "mapping",
+        "terraform",
+        "lifecycle"
+      ]
+    },
+    {
+      "id": "shared-state-coordination",
+      "label": "Shared state coordination",
+      "summary": "Keeping collaborators and automation on one synchronized infrastructure state while controlling concurrent mutation of that shared record.",
+      "domain": "infrastructure operations",
+      "coverage": "explained",
+      "insight_ids": [
+        "terraform-state-identity-binding"
+      ],
+      "aliases": [
+        "remote state coordination"
+      ],
+      "tags": [
+        "state",
+        "locking",
+        "collaboration",
+        "operations"
+      ]
     }
   ],
   "relations": [
@@ -1768,6 +1824,26 @@
       "rationale": "Structural correctness is necessary but behavioral quality requires a separate evaluation/test surface.",
       "evidence_insights": [
         "pydantic-ai-typed-agent-contracts"
+      ]
+    },
+    {
+      "id": "rel-resource-identity-binding-realized-by-terraform-state",
+      "from": "resource-identity-binding",
+      "to": "terraform-state",
+      "type": "realized_by",
+      "rationale": "Terraform persists the resource-instance to remote-object identity mapping in its state structure so the same managed object can be addressed on future runs.",
+      "evidence_insights": [
+        "terraform-state-identity-binding"
+      ]
+    },
+    {
+      "id": "rel-terraform-state-enables-shared-state-coordination",
+      "from": "terraform-state",
+      "to": "shared-state-coordination",
+      "type": "enables",
+      "rationale": "A shared state backend gives collaborators a common mapping, while locking/coordination protects that mapping from overlapping mutation.",
+      "evidence_insights": [
+        "terraform-state-identity-binding"
       ]
     }
   ]

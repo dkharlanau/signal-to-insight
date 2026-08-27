@@ -720,6 +720,32 @@
           ]
         }
       ]
+    },
+    {
+      "insight_id": "terraform-state-identity-binding",
+      "decision": "explainer_is_enough",
+      "rationale": "For the conceptual question of why declarative infrastructure still needs state, the explainer preserves the complete identity-mapping, metadata, performance and synchronization model. Open the original mainly when backend-specific implementation details are the next task.",
+      "novelty": {
+        "level": "high",
+        "reason": "The source introduces a new persistent infrastructure-ownership model rather than repeating an existing workflow or database state concept."
+      },
+      "source_quality": {
+        "level": "high",
+        "reason": "The primary source is current official Terraform documentation describing the state model the Terraform CLI itself relies on."
+      },
+      "relevance": {
+        "level": "high",
+        "reason": "The distinction between declarative intent and durable managed identity is central to infrastructure-as-code design and operational safety."
+      },
+      "practical_leverage": {
+        "level": "high",
+        "reason": "The model directly improves decisions about remote state, locking, state ownership, drift handling and the risks of treating state as disposable."
+      },
+      "compression_loss": {
+        "level": "low",
+        "reason": "The official purpose page is compact and conceptual; its important mapping, metadata, performance and synchronization arguments can be retained without reproducing backend-specific details."
+      },
+      "selected_parts": []
     }
   ]
 }

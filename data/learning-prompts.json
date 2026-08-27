@@ -356,6 +356,28 @@
           "validated-tool-boundary"
         ]
       }
+    },
+    {
+      "insight_id": "terraform-state-identity-binding",
+      "retention_prompt": "Without looking back, explain why declarative Terraform configuration is not enough by itself: identify what state remembers about remote objects, what additional metadata it keeps, how refresh changes current attributes without replacing identity, and why team use requires shared-state coordination.",
+      "answer_key": {
+        "problem_from": "whole_source_map.problem",
+        "mechanism_from": "whole_source_map.thesis",
+        "anchor_concept_ids": [
+          "terraform-state",
+          "resource-identity-binding",
+          "shared-state-coordination"
+        ],
+        "boundary_limitation_index": 0
+      },
+      "transfer_prompt": {
+        "prompt": "A team keeps perfect Terraform code in Git but deletes the shared state and asks Terraform to infer ownership from the cloud APIs on every run. What information has been lost, why is rediscovery not equivalent to the old state, and what team coordination problem still remains?",
+        "expected_concept_ids": [
+          "terraform-state",
+          "resource-identity-binding",
+          "shared-state-coordination"
+        ]
+      }
     }
   ]
 }
