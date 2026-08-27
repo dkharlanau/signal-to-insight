@@ -198,6 +198,17 @@
       "source_id": null,
       "insight_id": null,
       "notes": "GitHub source intake issue #65. Dogfood cohort: observability documentation."
+    },
+    {
+      "id": "intake-2026-08-27-sre-monitoring-distributed-systems",
+      "source_url": "https://sre.google/sre-book/monitoring-distributed-systems",
+      "source_type": "article",
+      "submitted_at": "2026-08-27",
+      "requested_focus": "Understand what monitoring should tell operators, the difference between black-box and white-box signals, alerting boundaries and how to avoid turning telemetry volume into operational noise.",
+      "status": "queued",
+      "source_id": null,
+      "insight_id": null,
+      "notes": "GitHub source intake issue #66. Dogfood cohort: reliability/operations book chapter."
     }
   ]
 }
