@@ -91,6 +91,9 @@ jobs:
       - name: Test one-command source orchestration
         run: python scripts/run_source.py --self-test
 
+      - name: Test isolated researched case preflight
+        run: python scripts/preflight_case.py --self-test
+
       - name: Test reusable starter bootstrap
         run: python scripts/bootstrap_starter.py --self-test
 
