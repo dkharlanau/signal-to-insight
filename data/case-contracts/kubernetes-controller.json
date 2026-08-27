@@ -33,7 +33,7 @@
     "insight_id": "kubernetes-reconciliation-controller-loop",
     "retention_prompt": "Without looking back, reconstruct the Kubernetes controller model: distinguish desired state from observed state, explain the compare-and-correct loop, state why the loop does not terminate after one successful action, and name one failure mode that reconciliation does not solve automatically.",
     "answer_key": {"problem_from": "whole_source_map.problem", "mechanism_from": "whole_source_map.thesis", "anchor_concept_ids": ["reconciliation-loop", "desired-state", "observed-state"], "boundary_limitation_index": 0},
-    "transfer_prompt": {"prompt": "A customer record is expected to exist consistently in three systems. An overnight workflow created all three copies successfully, but one downstream copy can later disappear or drift. Which part of the problem is better modeled as a reconciliation loop, what becomes desired versus observed state, and what side-effect safety is still required?", "expected_concept_ids": ["reconciliation-loop", "desired-state", "observed-state", "idempotency-under-retry"]}
+    "transfer_prompt": {"prompt": "A customer record is expected to exist consistently in three systems. An overnight workflow created all three copies successfully, but one downstream copy can later disappear or drift. Which part of the problem is better modeled as a reconciliation loop, what becomes desired versus observed state, and what side-effect safety question must still be answered separately?", "expected_concept_ids": ["reconciliation-loop", "desired-state", "observed-state"]}
   },
   "source_decision": {
     "insight_id": "kubernetes-reconciliation-controller-loop",
