@@ -1,0 +1,13 @@
+{
+  "version": "1.0.0",
+  "records": [
+    {
+      "source_id": "src-open-policy-agent-opa-2026",
+      "revision_kind": "release",
+      "analyzed_revision": "v1.19.1",
+      "analyzed_at": "2026-08-26",
+      "revision_url": "https://github.com/open-policy-agent/opa/releases/tag/v1.19.1",
+      "reanalysis_events": []
+    }
+  ]
+}
