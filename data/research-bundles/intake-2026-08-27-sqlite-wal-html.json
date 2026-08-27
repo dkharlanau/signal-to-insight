@@ -5,121 +5,62 @@
   "source": {
     "type": "documentation",
     "canonical_url": "https://www.sqlite.org/wal.html",
-    "title": null,
-    "creators": [],
-    "publisher": null,
+    "title": "Write-Ahead Logging",
+    "creators": ["SQLite project"],
+    "publisher": "SQLite",
     "published_at": null,
     "event_date": null,
     "version": null,
-    "language": null,
+    "language": "en",
     "duration": null,
-    "date_note": null
+    "date_note": "Living SQLite documentation. WAL mode was introduced in SQLite 3.7.0 on 2010-07-21; this analysis uses documentation accessed on 2026-08-27 rather than inventing a page publication date."
   },
   "inspection": {
-    "method": "not inspected",
-    "full_content_used_ephemerally": false,
+    "method": "Direct inspection of official SQLite WAL documentation: Overview, How WAL Works, Checkpointing, Concurrency, Performance Considerations and WAL-file lifecycle.",
+    "full_content_used_ephemerally": true,
     "full_content_committed": false,
-    "confidence": "metadata_only",
-    "gaps": [
-      "Source content has not been mapped yet."
-    ]
+    "confidence": "direct",
+    "gaps": ["Low-level WAL file format, locking protocol and VFS implementation details are outside the mental model retained here."]
   },
   "prior_knowledge": {
     "captured_at": "2026-08-27",
     "query": "Understand the WAL mental model, read/write concurrency, checkpointing, failure boundaries, and when append-first persistence changes system behavior.",
     "matches": [
-      {
-        "concept_id": "execution-history",
-        "label": "Execution history",
-        "coverage": "explained",
-        "evidence_insights": [
-          {
-            "id": "enterprise-agents-production-substrate",
-            "status": "published",
-            "title": "Why enterprise AI agents fail after the POC"
-          },
-          {
-            "id": "temporal-durable-execution-mental-model",
-            "status": "review",
-            "title": "Temporal: the mental model behind durable execution"
-          }
-        ],
-        "relationship_to_source": "unclassified"
-      },
-      {
-        "concept_id": "event-history",
-        "label": "Event History",
-        "coverage": "explained",
-        "evidence_insights": [
-          {
-            "id": "temporal-durable-execution-mental-model",
-            "status": "review",
-            "title": "Temporal: the mental model behind durable execution"
-          }
-        ],
-        "relationship_to_source": "unclassified"
-      },
-      {
-        "concept_id": "controlled-execution",
-        "label": "Controlled execution",
-        "coverage": "explained",
-        "evidence_insights": [
-          {
-            "id": "enterprise-agents-production-substrate",
-            "status": "published",
-            "title": "Why enterprise AI agents fail after the POC"
-          },
-          {
-            "id": "open-policy-agent-decision-enforcement-model",
-            "status": "review",
-            "title": "Open Policy Agent: separate policy decisions from enforcement"
-          },
-          {
-            "id": "react-reason-act-observe-loop",
-            "status": "review",
-            "title": "ReAct: reason, act, observe — then update the plan"
-          }
-        ],
-        "relationship_to_source": "unclassified"
-      },
-      {
-        "concept_id": "replayable-evaluation",
-        "label": "Replayable evaluation",
-        "coverage": "explained",
-        "evidence_insights": [
-          {
-            "id": "enterprise-agents-production-substrate",
-            "status": "published",
-            "title": "Why enterprise AI agents fail after the POC"
-          }
-        ],
-        "relationship_to_source": "unclassified"
-      }
+      {"concept_id": "execution-history", "label": "Execution history", "coverage": "explained", "evidence_insights": [{"id": "enterprise-agents-production-substrate", "status": "published", "title": "Why enterprise AI agents fail after the POC"}, {"id": "temporal-durable-execution-mental-model", "status": "review", "title": "Temporal: the mental model behind durable execution"}], "relationship_to_source": "not_relevant"},
+      {"concept_id": "event-history", "label": "Event History", "coverage": "explained", "evidence_insights": [{"id": "temporal-durable-execution-mental-model", "status": "review", "title": "Temporal: the mental model behind durable execution"}], "relationship_to_source": "not_relevant"},
+      {"concept_id": "controlled-execution", "label": "Controlled execution", "coverage": "explained", "evidence_insights": [{"id": "enterprise-agents-production-substrate", "status": "published", "title": "Why enterprise AI agents fail after the POC"}, {"id": "open-policy-agent-decision-enforcement-model", "status": "review", "title": "Open Policy Agent: separate policy decisions from enforcement"}, {"id": "react-reason-act-observe-loop", "status": "review", "title": "ReAct: reason, act, observe — then update the plan"}], "relationship_to_source": "not_relevant"},
+      {"concept_id": "replayable-evaluation", "label": "Replayable evaluation", "coverage": "explained", "evidence_insights": [{"id": "enterprise-agents-production-substrate", "status": "published", "title": "Why enterprise AI agents fail after the POC"}], "relationship_to_source": "not_relevant"}
     ],
     "classification_required": true
   },
   "content_map": {
-    "problem": null,
-    "thesis": null,
-    "sections": [],
-    "concepts": [],
-    "mechanisms": [],
-    "tools": [],
-    "examples": [],
-    "claims": [],
-    "evidence": [],
-    "assumptions": [],
-    "limitations": [],
-    "open_questions": []
+    "problem": "Traditional rollback journaling writes original pages aside before changing the database file, which limits read/write concurrency and makes commit behavior different from an append-first design.",
+    "thesis": "WAL inverts the write path: keep the database file unchanged during commit, append changed pages and a commit record to a WAL, let readers use a stable end mark, and later checkpoint committed WAL content back into the database.",
+    "sections": ["Overview", "How WAL Works", "Checkpointing", "Concurrency", "Performance Considerations", "WAL File lifecycle"],
+    "concepts": ["write-ahead log", "append-first commit", "checkpointing", "reader end mark/snapshot", "single writer", "checkpoint starvation"],
+    "mechanisms": ["append changed pages to WAL instead of overwriting the database during commit", "append a commit marker to make the transaction committed", "assign each reader a fixed end mark for its read transaction", "read newest page version before that end mark from WAL or fall back to database", "checkpoint WAL pages back into the database", "pause checkpoint when active readers still depend on later WAL pages"],
+    "tools": ["PRAGMA journal_mode=WAL", "wal-index", "sqlite3_wal_checkpoint interfaces"],
+    "examples": ["readers continue from their snapshot while a writer appends new commits", "a long-lived read can prevent checkpoint completion and allow WAL growth"],
+    "claims": ["WAL commits by appending changes and a commit record without first writing the original database file.", "Readers and a writer can proceed concurrently because readers use stable end marks while the writer appends to WAL, but SQLite still permits only one writer at a time.", "Checkpointing transfers WAL content back into the database and can be blocked from completing by active readers.", "WAL trades commit latency, checkpoint cost, read performance and durability settings rather than being universally faster in every workload."],
+    "evidence": ["Official How WAL Works section describes append-first changes and commit record.", "Concurrency section defines reader end marks, WAL lookup and one-writer constraint.", "Checkpointing and performance sections describe checkpoint progress, reader blocking and performance trade-offs."],
+    "assumptions": ["All processes sharing WAL mode use compatible shared-memory mechanisms on the same host unless exclusive locking removes that need.", "Applications accept WAL-specific checkpoint and durability semantics.", "One-writer-at-a-time fits the workload even though readers can coexist with that writer."],
+    "limitations": ["WAL does not work over a normal network filesystem because SQLite's wal-index requires shared memory between processes.", "Only one writer can append at a time.", "Long-running readers can delay checkpoint completion and allow WAL growth.", "Durability and latency depend on synchronous/checkpoint configuration; NORMAL mode can trade power-loss durability for lower foreground sync cost."],
+    "open_questions": ["Which checkpoint policy matches a specific read/write workload?", "When is rollback journal preferable despite WAL's concurrency benefits?", "How should long-lived readers be detected before checkpoint starvation becomes operationally significant?"]
   },
   "selection": {
     "requested_focus": "Understand the WAL mental model, read/write concurrency, checkpointing, failure boundaries, and when append-first persistence changes system behavior.",
-    "coherent_core": [],
-    "prerequisites": [],
-    "drop_notes": [],
-    "connections": []
+    "coherent_core": ["commit appends changed pages rather than overwriting the database", "a reader keeps a fixed WAL end mark and therefore sees a stable snapshot", "checkpointing is a separate third operation that moves committed pages back", "readers can coexist with a writer but only one writer exists", "checkpoint frequency creates explicit read/write latency and file-growth trade-offs"],
+    "prerequisites": ["transaction commit", "write-ahead log", "checkpoint", "snapshot boundary"],
+    "drop_notes": ["Do not connect WAL to execution-history or audit evidence simply because both use log/history vocabulary; the source is about transactional storage state.", "Do not expand into WAL binary format or VFS internals unless implementation work requires them."],
+    "connections": ["append-first persistence can separate foreground commit from later consolidation work", "checkpoint starvation is an example of a background maintenance task constrained by active readers"]
   },
   "verification_candidates": [],
-  "source_locators": [],
+  "source_locators": [
+    {"label": "WAL versus rollback journal", "locator": "Write-Ahead Logging → How WAL Works"},
+    {"label": "Checkpoint model", "locator": "Write-Ahead Logging → Checkpointing"},
+    {"label": "Reader end mark and writer concurrency", "locator": "Write-Ahead Logging → Concurrency"},
+    {"label": "Performance/durability trade-offs", "locator": "Write-Ahead Logging → Performance Considerations"},
+    {"label": "Checkpoint starvation", "locator": "Write-Ahead Logging → Avoiding Excessively Large WAL Files"}
+  ],
   "created_at": "2026-08-27"
 }
