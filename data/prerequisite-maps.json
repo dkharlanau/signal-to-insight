@@ -632,6 +632,82 @@
           }
         }
       ]
+    },
+    {
+      "insight_id": "nist-ai-rmf-operating-model",
+      "summary": "The framework is coherent once the reader understands the Core as an operating layer, GOVERN as cross-cutting capability, MAP as context, MEASURE as evidence and MANAGE as the decision/response function.",
+      "items": [
+        {
+          "id": "nist-prereq-core",
+          "label": "AI RMF Core",
+          "concept_id": "ai-rmf-core",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "The reader needs the Core as a single operating model before categories and Playbook suggestions can be interpreted without turning them into checklist fragments.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "nist-ai-rmf-operating-model",
+            "target": null
+          }
+        },
+        {
+          "id": "nist-prereq-govern",
+          "label": "Cross-cutting AI governance",
+          "concept_id": "cross-cutting-ai-governance",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "The model is misread if governance is treated as a first phase that ends rather than an organizational capability active throughout risk work.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "nist-ai-rmf-operating-model",
+            "target": null
+          }
+        },
+        {
+          "id": "nist-prereq-map",
+          "label": "AI risk context mapping",
+          "concept_id": "ai-risk-context-mapping",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "Measurements and controls cannot be selected intelligently until the system purpose, actors, impacts and context-specific risks are explicit.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "nist-ai-rmf-operating-model",
+            "target": null
+          }
+        },
+        {
+          "id": "nist-prereq-measure",
+          "label": "AI risk measurement and monitoring",
+          "concept_id": "ai-risk-measurement",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "AI risk management needs evidence about mapped risks rather than only principles, policies or generic model metrics.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "nist-ai-rmf-operating-model",
+            "target": null
+          }
+        },
+        {
+          "id": "nist-prereq-manage",
+          "label": "AI risk prioritization and response",
+          "concept_id": "ai-risk-prioritization-response",
+          "priority": "learn_next",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "Evidence only becomes risk management when it is prioritized and converted into treatment, resource and lifecycle decisions.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "nist-ai-rmf-operating-model",
+            "target": null
+          }
+        }
+      ]
     }
   ]
 }

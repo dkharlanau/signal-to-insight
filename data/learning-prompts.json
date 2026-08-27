@@ -263,6 +263,31 @@
           "persistent-build-cache"
         ]
       }
+    },
+    {
+      "insight_id": "nist-ai-rmf-operating-model",
+      "retention_prompt": "Without looking back, reconstruct NIST AI RMF 1.0 as an operating model rather than a checklist: explain what GOVERN contributes continuously, what MAP must establish before testing, what MEASURE adds, what MANAGE decides, and why the framework still needs context-specific controls and evidence.",
+      "answer_key": {
+        "problem_from": "whole_source_map.problem",
+        "mechanism_from": "whole_source_map.thesis",
+        "anchor_concept_ids": [
+          "ai-rmf-core",
+          "cross-cutting-ai-governance",
+          "ai-risk-context-mapping",
+          "ai-risk-measurement",
+          "ai-risk-prioritization-response"
+        ],
+        "boundary_limitation_index": 1
+      },
+      "transfer_prompt": {
+        "prompt": "A team wants to deploy an AI agent that can approve refunds. Before choosing a specific policy engine or evaluation metric, use the AI RMF operating model to state what must be governed, what deployment context and affected actors must be mapped, what evidence should be measured, and which risk decision the organization must explicitly make.",
+        "expected_concept_ids": [
+          "cross-cutting-ai-governance",
+          "ai-risk-context-mapping",
+          "ai-risk-measurement",
+          "ai-risk-prioritization-response"
+        ]
+      }
     }
   ]
 }

@@ -880,6 +880,135 @@
           "note": null
         }
       ]
+    },
+    {
+      "insight_id": "nist-ai-rmf-operating-model",
+      "claims": [
+        {
+          "id": "nist-ai-rmf-voluntary-scope",
+          "text": "AI RMF 1.0 is intended as a voluntary, rights-preserving, non-sector-specific and use-case-agnostic resource for organizations managing AI risks.",
+          "impact": "high",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-nist-ai-rmf-1-0-2023",
+              "url": "https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-ai-rmf-10",
+              "locator": "NIST publication page → Abstract / Published 2023-01-26"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "nist-ai-rmf-four-functions-not-checklist",
+          "text": "The AI RMF Core is organized around GOVERN, MAP, MEASURE and MANAGE, with GOVERN cross-cutting; the functions and actions are not a mandatory checklist or rigid ordered workflow.",
+          "impact": "high",
+          "origin": "verification",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "verification",
+              "source_id": "src-nist-ai-rmf-1-0-2023",
+              "url": "https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.100-1.pdf",
+              "locator": "AI RMF 1.0 §5 Core / Figure 5 (PDF p.20)"
+            },
+            {
+              "kind": "verification",
+              "source_id": "src-nist-ai-rmf-1-0-2023",
+              "url": "https://airc.nist.gov/airmf-resources/airmf/5-sec-core/",
+              "locator": "AIRC AI RMF Core → functions are not checklist/ordered steps"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "nist-govern-cross-cutting",
+          "text": "GOVERN establishes organizational structures, policies, roles, culture and accountability and remains a continual cross-cutting requirement throughout AI risk management.",
+          "impact": "high",
+          "origin": "verification",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "verification",
+              "source_id": "src-nist-ai-rmf-1-0-2023",
+              "url": "https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.100-1.pdf",
+              "locator": "AI RMF 1.0 §5.1 GOVERN (PDF pp.21–24)"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "nist-map-context-risks",
+          "text": "The MAP function builds contextual knowledge about the AI system and identifies risks related to its purpose, setting, affected actors and potential impacts.",
+          "impact": "high",
+          "origin": "verification",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "verification",
+              "source_id": "src-nist-ai-rmf-1-0-2023",
+              "url": "https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.100-1.pdf",
+              "locator": "AI RMF 1.0 §5.2 MAP"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "nist-measure-risk-evidence",
+          "text": "The MEASURE function uses qualitative, quantitative or mixed methods to assess, benchmark and monitor mapped AI risks and trustworthiness-related impacts.",
+          "impact": "high",
+          "origin": "verification",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "verification",
+              "source_id": "src-nist-ai-rmf-1-0-2023",
+              "url": "https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.100-1.pdf",
+              "locator": "AI RMF 1.0 §5.3 MEASURE"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "nist-manage-risk-decisions",
+          "text": "The MANAGE function prioritizes assessed AI risks, develops responses and includes explicit determinations about whether a system's development or deployment should proceed.",
+          "impact": "high",
+          "origin": "verification",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "verification",
+              "source_id": "src-nist-ai-rmf-1-0-2023",
+              "url": "https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.100-1.pdf",
+              "locator": "AI RMF 1.0 §5.4 MANAGE / MANAGE 1.1"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "nist-framework-not-controls-catalog",
+          "text": "AI RMF outcomes should not be mistaken for a universal technical-controls checklist; the Playbook provides optional suggested actions that organizations tailor to context and are not expected to implement in full.",
+          "impact": "high",
+          "origin": "project_interpretation",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "verification",
+              "source_id": "src-nist-ai-rmf-1-0-2023",
+              "url": "https://airc.nist.gov/airmf-resources/airmf/5-sec-core/",
+              "locator": "AIRC AI RMF Core → categories/subcategories are outcomes/actions, not checklist"
+            },
+            {
+              "kind": "verification",
+              "source_id": "src-nist-ai-rmf-1-0-2023",
+              "url": "https://www.nist.gov/itl/ai-risk-management-framework/nist-ai-rmf-playbook-faqs",
+              "locator": "NIST AI RMF Playbook FAQs → not expected to implement all suggestions / not ordered steps"
+            }
+          ],
+          "note": "The distinction between framework outcomes and implementation controls is the project's synthesis of NIST's explicit non-checklist and tailoring guidance."
+        }
+      ]
     }
   ]
 }

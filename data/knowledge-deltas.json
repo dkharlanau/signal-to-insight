@@ -490,6 +490,58 @@
         }
       ],
       "suppressed_prior_matches": []
+    },
+    {
+      "insight_id": "nist-ai-rmf-operating-model",
+      "summary": "NIST AI RMF opens a new AI-governance branch: a cross-cutting governance function plus context mapping, risk measurement and explicit risk response. No prior graph concept is close enough to reuse without collapsing implementation controls into the framework itself.",
+      "items": [
+        {
+          "relationship": "new",
+          "concept_id": "ai-rmf-core",
+          "label": "AI RMF Core",
+          "source_basis": "AI RMF 1.0 organizes practical AI risk management around GOVERN, MAP, MEASURE and MANAGE outcomes and explicitly says the actions are not a checklist or mandatory ordered steps.",
+          "prior_basis": "The project has architecture, policy, observability and decision concepts but no use-case-agnostic AI risk-management operating framework.",
+          "interpretation": "The Core becomes a reusable layer for structuring AI risk decisions without pretending that one control implementation equals the framework.",
+          "evidence_insights": []
+        },
+        {
+          "relationship": "new",
+          "concept_id": "cross-cutting-ai-governance",
+          "label": "Cross-cutting AI governance",
+          "source_basis": "GOVERN is designed to inform and be infused throughout MAP, MEASURE and MANAGE rather than ending after an initial setup phase.",
+          "prior_basis": "Existing governance-related concepts describe specific execution or policy mechanisms, not organizational accountability and risk culture across an AI lifecycle.",
+          "interpretation": "Governance is modeled as persistent organizational capability and decision ownership rather than a one-time compliance gate.",
+          "evidence_insights": []
+        },
+        {
+          "relationship": "new",
+          "concept_id": "ai-risk-context-mapping",
+          "label": "AI risk context mapping",
+          "source_basis": "MAP recognizes context, purpose, affected actors and context-related risks before those risks are measured or managed.",
+          "prior_basis": "No prior concept explicitly models AI risk as dependent on deployment context and affected actors.",
+          "interpretation": "Context becomes a prerequisite for selecting evidence and controls instead of treating generic model metrics as universally meaningful.",
+          "evidence_insights": []
+        },
+        {
+          "relationship": "new",
+          "concept_id": "ai-risk-measurement",
+          "label": "AI risk measurement and monitoring",
+          "source_basis": "MEASURE applies quantitative, qualitative or mixed methods to assess, benchmark and monitor mapped AI risks and trustworthiness-related impacts.",
+          "prior_basis": "Existing project evaluation/observability concepts do not provide a general AI risk-assessment function tied to context and risk-management decisions.",
+          "interpretation": "Measurement is treated as evidence for risk decisions, not as telemetry volume or model benchmarking for its own sake.",
+          "evidence_insights": []
+        },
+        {
+          "relationship": "new",
+          "concept_id": "ai-risk-prioritization-response",
+          "label": "AI risk prioritization and response",
+          "source_basis": "MANAGE prioritizes assessed risks, develops responses and includes explicit determinations about whether development or deployment should proceed.",
+          "prior_basis": "No prior concept provides a general lifecycle risk-response function that converts assessment results into proceed/mitigate/monitor/stop decisions.",
+          "interpretation": "The framework's value culminates in visible risk decisions and treatment, not merely in documenting risks or measurements.",
+          "evidence_insights": []
+        }
+      ],
+      "suppressed_prior_matches": []
     }
   ]
 }

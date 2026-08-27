@@ -515,6 +515,57 @@
         "reason": "The omitted material is mainly command/package-manager detail; the source's central causal model and important boundaries are retained."
       },
       "selected_parts": []
+    },
+    {
+      "insight_id": "nist-ai-rmf-operating-model",
+      "decision": "skim_selected_parts",
+      "rationale": "The explainer preserves the four-function operating model and its non-checklist boundary, but the original framework is still worth skimming where exact categories, governance responsibilities and MANAGE decisions matter because those details determine how a real organization tailors the framework without inventing its own meaning.",
+      "novelty": {
+        "level": "high",
+        "reason": "This source opens a new AI risk-management and governance branch rather than repeating existing agent, policy or observability architecture concepts."
+      },
+      "source_quality": {
+        "level": "high",
+        "reason": "The primary source is the official NIST AI RMF 1.0 publication, with official AIRC and Playbook material used to verify the operating boundaries."
+      },
+      "relevance": {
+        "level": "high",
+        "reason": "The framework provides a practical structure for enterprise AI decisions, especially when teams need to connect governance, context, testing evidence and deployment choices."
+      },
+      "practical_leverage": {
+        "level": "high",
+        "reason": "The model can immediately structure AI risk workshops, evidence plans, ownership and proceed/stop decisions without requiring a new technical platform."
+      },
+      "compression_loss": {
+        "level": "medium",
+        "reason": "The central model compresses well, but exact categories/subcategories and trustworthiness guidance are intentionally omitted and matter when operationalizing the framework in a real program."
+      },
+      "selected_parts": [
+        {
+          "label": "AI RMF Core and Figure 5",
+          "locator": "AI RMF 1.0 §5 Core / Figure 5 (PDF p.20)",
+          "why": "Shows the four functions, GOVERN's cross-cutting role and the explicit statement that actions are not a checklist or mandatory ordered steps.",
+          "claim_refs": [
+            "nist-ai-rmf-four-functions-not-checklist"
+          ]
+        },
+        {
+          "label": "GOVERN cross-cutting role",
+          "locator": "AI RMF 1.0 §5.1 GOVERN (PDF pp.21–24)",
+          "why": "Makes accountability, policy, culture, lifecycle ownership and continuous governance concrete beyond the four-word function label.",
+          "claim_refs": [
+            "nist-govern-cross-cutting"
+          ]
+        },
+        {
+          "label": "MANAGE decision boundary",
+          "locator": "AI RMF 1.0 §5.4 MANAGE / MANAGE 1.1",
+          "why": "Shows that risk work should culminate in prioritization and explicit lifecycle decisions rather than measurement-only governance.",
+          "claim_refs": [
+            "nist-manage-risk-decisions"
+          ]
+        }
+      ]
     }
   ]
 }

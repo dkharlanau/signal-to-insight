@@ -859,6 +859,101 @@
         "ci",
         "dependencies"
       ]
+    },
+    {
+      "id": "ai-rmf-core",
+      "label": "AI RMF Core",
+      "summary": "A context-sensitive AI risk-management operating framework organized around GOVERN, MAP, MEASURE and MANAGE outcomes rather than a fixed controls checklist.",
+      "domain": "AI governance",
+      "coverage": "explained",
+      "insight_ids": [
+        "nist-ai-rmf-operating-model"
+      ],
+      "aliases": [
+        "NIST AI RMF Core"
+      ],
+      "tags": [
+        "ai",
+        "risk",
+        "governance",
+        "framework"
+      ]
+    },
+    {
+      "id": "cross-cutting-ai-governance",
+      "label": "Cross-cutting AI governance",
+      "summary": "Policies, accountability, roles, culture and risk-tolerance structures that remain active across AI risk mapping, measurement and management throughout the lifecycle.",
+      "domain": "AI governance",
+      "coverage": "explained",
+      "insight_ids": [
+        "nist-ai-rmf-operating-model"
+      ],
+      "aliases": [
+        "GOVERN function"
+      ],
+      "tags": [
+        "governance",
+        "accountability",
+        "risk",
+        "lifecycle"
+      ]
+    },
+    {
+      "id": "ai-risk-context-mapping",
+      "label": "AI risk context mapping",
+      "summary": "Making system purpose, context, affected actors, impacts and contextual risks explicit before selecting how they should be evaluated or treated.",
+      "domain": "AI risk management",
+      "coverage": "explained",
+      "insight_ids": [
+        "nist-ai-rmf-operating-model"
+      ],
+      "aliases": [
+        "MAP function"
+      ],
+      "tags": [
+        "risk",
+        "context",
+        "stakeholders",
+        "ai"
+      ]
+    },
+    {
+      "id": "ai-risk-measurement",
+      "label": "AI risk measurement and monitoring",
+      "summary": "Using appropriate qualitative, quantitative or mixed methods to assess, benchmark and monitor mapped AI risks and trustworthiness characteristics.",
+      "domain": "AI risk management",
+      "coverage": "explained",
+      "insight_ids": [
+        "nist-ai-rmf-operating-model"
+      ],
+      "aliases": [
+        "MEASURE function"
+      ],
+      "tags": [
+        "risk",
+        "measurement",
+        "monitoring",
+        "evaluation"
+      ]
+    },
+    {
+      "id": "ai-risk-prioritization-response",
+      "label": "AI risk prioritization and response",
+      "summary": "Prioritizing assessed AI risks and choosing treatments, resources and lifecycle decisions such as proceed, mitigate, monitor or stop.",
+      "domain": "AI risk management",
+      "coverage": "explained",
+      "insight_ids": [
+        "nist-ai-rmf-operating-model"
+      ],
+      "aliases": [
+        "MANAGE function"
+      ],
+      "tags": [
+        "risk",
+        "decision",
+        "response",
+        "prioritization"
+      ]
     }
   ],
   "relations": [
@@ -1278,6 +1373,66 @@
       "rationale": "Persistent cache mounts or external caches reduce the cost of required rebuilds even when an exact layer cache hit is lost.",
       "evidence_insights": [
         "docker-cache-dependency-invalidation"
+      ]
+    },
+    {
+      "id": "rel-ai-rmf-core-depends-on-cross-cutting-ai-governance",
+      "from": "ai-rmf-core",
+      "to": "cross-cutting-ai-governance",
+      "type": "depends_on",
+      "rationale": "The Core treats GOVERN as a cross-cutting function that establishes the organizational structures enabling effective mapping, measurement and management of AI risks.",
+      "evidence_insights": [
+        "nist-ai-rmf-operating-model"
+      ]
+    },
+    {
+      "id": "rel-ai-rmf-core-depends-on-ai-risk-context-mapping",
+      "from": "ai-rmf-core",
+      "to": "ai-risk-context-mapping",
+      "type": "depends_on",
+      "rationale": "AI risks and trustworthiness concerns must be understood in the system's actual context before evidence and responses can be selected meaningfully.",
+      "evidence_insights": [
+        "nist-ai-rmf-operating-model"
+      ]
+    },
+    {
+      "id": "rel-ai-rmf-core-depends-on-ai-risk-measurement",
+      "from": "ai-rmf-core",
+      "to": "ai-risk-measurement",
+      "type": "depends_on",
+      "rationale": "The framework requires evidence about mapped risks and impacts rather than managing risk only through assumptions or policy statements.",
+      "evidence_insights": [
+        "nist-ai-rmf-operating-model"
+      ]
+    },
+    {
+      "id": "rel-ai-rmf-core-depends-on-ai-risk-prioritization-response",
+      "from": "ai-rmf-core",
+      "to": "ai-risk-prioritization-response",
+      "type": "depends_on",
+      "rationale": "Risk management is incomplete unless assessment results are prioritized and converted into documented treatment and lifecycle decisions.",
+      "evidence_insights": [
+        "nist-ai-rmf-operating-model"
+      ]
+    },
+    {
+      "id": "rel-ai-risk-context-mapping-enables-ai-risk-measurement",
+      "from": "ai-risk-context-mapping",
+      "to": "ai-risk-measurement",
+      "type": "enables",
+      "rationale": "The MEASURE function uses knowledge about AI risks identified through MAP to select appropriate measurement, assessment and monitoring approaches.",
+      "evidence_insights": [
+        "nist-ai-rmf-operating-model"
+      ]
+    },
+    {
+      "id": "rel-ai-risk-measurement-enables-ai-risk-prioritization-response",
+      "from": "ai-risk-measurement",
+      "to": "ai-risk-prioritization-response",
+      "type": "enables",
+      "rationale": "Measurement and assessment results provide the evidence used by MANAGE to prioritize risks and select responses.",
+      "evidence_insights": [
+        "nist-ai-rmf-operating-model"
       ]
     }
   ]

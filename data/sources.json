@@ -409,6 +409,52 @@
       "derived_records": [
         "docker-cache-dependency-invalidation"
       ]
+    },
+    {
+      "id": "src-nist-ai-rmf-1-0-2023",
+      "type": "paper",
+      "title": "Artificial Intelligence Risk Management Framework (AI RMF 1.0)",
+      "canonical_url": "https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-ai-rmf-10",
+      "creators": [
+        "Elham Tabassi"
+      ],
+      "publisher": "National Institute of Standards and Technology (NIST)",
+      "event": null,
+      "published_at": "2023-01-26",
+      "event_date": null,
+      "captured_at": "2026-08-27",
+      "analyzed_at": "2026-08-27",
+      "date_note": "NIST AI 100-1 / AI RMF 1.0 was published 2023-01-26. NIST states in 2026 that AI RMF 1.0 is being revised; this review preserves 1.0 as the analyzed source and treats future changes as a separate re-analysis event.",
+      "verification": [
+        {
+          "title": "NIST AI RMF 1.0 PDF",
+          "url": "https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.100-1.pdf",
+          "accessed_at": "2026-08-27"
+        },
+        {
+          "title": "AI RMF Core — AIRC",
+          "url": "https://airc.nist.gov/airmf-resources/airmf/5-sec-core/",
+          "accessed_at": "2026-08-27"
+        },
+        {
+          "title": "NIST AI RMF Playbook",
+          "url": "https://www.nist.gov/itl/ai-risk-management-framework/nist-ai-rmf-playbook",
+          "accessed_at": "2026-08-27"
+        },
+        {
+          "title": "NIST AI RMF Playbook FAQs",
+          "url": "https://www.nist.gov/itl/ai-risk-management-framework/nist-ai-rmf-playbook-faqs",
+          "accessed_at": "2026-08-27"
+        },
+        {
+          "title": "NIST AI RMF current overview",
+          "url": "https://www.nist.gov/itl/ai-risk-management-framework",
+          "accessed_at": "2026-08-27"
+        }
+      ],
+      "derived_records": [
+        "nist-ai-rmf-operating-model"
+      ]
     }
   ]
 }

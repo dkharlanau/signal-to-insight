@@ -128,9 +128,9 @@
       "source_type": "paper",
       "submitted_at": "2026-08-27",
       "requested_focus": "Understand the AI RMF operating model, its core functions and how risk management should shape practical AI system decisions; distinguish framework guidance from specific technical controls.",
-      "status": "queued",
-      "source_id": null,
-      "insight_id": null,
+      "status": "review",
+      "source_id": "src-nist-ai-rmf-1-0-2023",
+      "insight_id": "nist-ai-rmf-operating-model",
       "notes": "GitHub source intake issue #59. Dogfood cohort: standard/framework / AI governance."
     },
     {
