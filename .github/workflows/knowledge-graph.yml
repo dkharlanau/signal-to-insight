@@ -1,4 +1,4 @@
-name: Validate knowledge graph and history
+name: Validate knowledge graph, history and concepts
 
 on:
   push:
@@ -9,12 +9,14 @@ on:
       - "data/knowledge-reviews.json"
       - "data/reanalysis-events.json"
       - "data/insights.json"
+      - "data/sources.json"
       - "schemas/knowledge-graph.schema.json"
       - "schemas/knowledge-history.schema.json"
       - "scripts/validate_graph.py"
       - "scripts/validate_knowledge_history.py"
       - "scripts/knowledge_history.py"
       - "scripts/build_history.py"
+      - "scripts/build_concepts.py"
       - "scripts/build_graph.py"
       - "scripts/build_public_graph.py"
       - "scripts/public_projection.py"
@@ -29,12 +31,14 @@ on:
       - "data/knowledge-reviews.json"
       - "data/reanalysis-events.json"
       - "data/insights.json"
+      - "data/sources.json"
       - "schemas/knowledge-graph.schema.json"
       - "schemas/knowledge-history.schema.json"
       - "scripts/validate_graph.py"
       - "scripts/validate_knowledge_history.py"
       - "scripts/knowledge_history.py"
       - "scripts/build_history.py"
+      - "scripts/build_concepts.py"
       - "scripts/build_graph.py"
       - "scripts/build_public_graph.py"
       - "scripts/public_projection.py"
@@ -71,23 +75,25 @@ jobs:
           python scripts/validate_knowledge_history.py
           python scripts/public_projection.py
 
-      - name: Test prior-knowledge and history queries
+      - name: Test public navigation models
         run: |
           python scripts/graph_context.py --self-test
           python scripts/knowledge_history.py --self-test
           python scripts/build_history.py --self-test
+          python scripts/build_concepts.py --self-test
 
       - name: Rebuild public knowledge surfaces
         run: |
           python scripts/build_public_graph.py
           python scripts/build_history.py
+          python scripts/build_concepts.py
 
-      - name: Verify graph and history on pull requests
+      - name: Verify knowledge surfaces on pull requests
         if: github.event_name == 'pull_request'
         run: |
           if [ -n "$(git status --porcelain -- knowledge data/knowledge-graph.json)" ]; then
             git status --short -- knowledge data/knowledge-graph.json
-            echo "Public graph or temporal-history projection is missing or stale."
+            echo "Public graph, temporal history or concept navigation is missing or stale."
             exit 1
           fi
 
@@ -95,7 +101,7 @@ jobs:
         if: github.event_name == 'push'
         run: |
           if [ -z "$(git status --porcelain -- knowledge data/knowledge-graph.json)" ]; then
-            echo "Knowledge graph and history already current."
+            echo "Knowledge surfaces already current."
             exit 0
           fi
           git config user.name "github-actions[bot]"
