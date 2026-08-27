@@ -1,0 +1,21 @@
+{
+  "version": "1.0.0",
+  "revision": 2,
+  "updated_at": "2026-08-27T00:00:00Z",
+  "entries": [
+    {
+      "id": "personal-durable-execution",
+      "concept": "Durable execution",
+      "state": "known",
+      "origin": "experience",
+      "note": "Example only. Real personal baseline data belongs in .local/.",
+      "tags": ["reliability", "workflow"],
+      "updated_at": "2026-08-27T00:00:00Z"
+    }
+  ],
+  "active_context": {
+    "goals": ["Example goal: understand production agent control"],
+    "projects": [],
+    "questions": []
+  }
+}
