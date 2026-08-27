@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Golden walkthrough — Signal to Insight</title>
+  <meta name="description" content="One complete Signal to Insight proof path: source, whole-source model, Knowledge Delta, Source Decision, published explainer and delayed reconstruction checkpoint.">
+  <meta name="theme-color" content="#f3f1e9">
+  <meta property="og:title" content="Signal to Insight — Golden walkthrough">
+  <meta property="og:description" content="See one source move through the complete evidence-backed understanding loop.">
+  <meta property="og:type" content="article">
+  <style>
+    :root{--paper:#f3f1e9;--ink:#171717;--muted:#66645e;--line:#c9c5ba;--panel:#e9e5da;--dark:#1f2326;--max:1120px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    a{color:inherit} .wrap{width:min(var(--max),calc(100% - 36px));margin:auto}
+    header{display:flex;justify-content:space-between;gap:24px;align-items:center;padding:26px 0;border-bottom:1px solid var(--line)}
+    .brand{font-weight:800;text-decoration:none;letter-spacing:-.02em}.brand span{display:inline-grid;place-items:center;width:34px;height:34px;border:1px solid var(--ink);margin-right:10px;font-size:12px}
+    nav{display:flex;gap:18px;flex-wrap:wrap}nav a{font-size:13px;text-transform:uppercase;letter-spacing:.08em;text-decoration:none}
+    .hero{padding:72px 0 54px}.eyebrow,.step-no,.status{font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:800}.eyebrow{color:var(--muted)}
+    h1{font-size:clamp(46px,8vw,94px);line-height:.95;letter-spacing:-.065em;margin:16px 0 24px;max-width:950px}h1 em,h2 em{font-family:Georgia,serif;font-weight:400}
+    .lede{font-size:clamp(20px,3vw,30px);line-height:1.25;max-width:820px;margin:0;color:#343330}
+    .proof-strip{display:grid;grid-template-columns:repeat(6,1fr);border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);margin-top:48px}.proof-strip span{padding:15px 10px;font-size:12px;text-transform:uppercase;letter-spacing:.07em;text-align:center;border-right:1px solid var(--line)}.proof-strip span:last-child{border-right:0}
+    main{padding-bottom:90px}.step{display:grid;grid-template-columns:90px 1fr;gap:34px;padding:58px 0;border-bottom:1px solid var(--line)}.step-no{padding-top:8px;color:var(--muted)}
+    h2{font-size:clamp(34px,5vw,62px);line-height:1;letter-spacing:-.045em;margin:0 0 20px;max-width:880px}.intro{font-size:20px;max-width:780px;color:#383733}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:28px}.card{border:1px solid var(--line);padding:24px;min-height:150px;background:rgba(255,255,255,.18)}.card strong{display:block;font-size:20px;margin:6px 0}.card small{color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+    .model{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:12px;align-items:stretch;margin-top:30px}.model div{border:1px solid var(--ink);padding:22px}.model b{display:grid;place-items:center;font-size:26px}.model small{display:block;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:7px}
+    .delta{background:var(--dark);color:#f5f3ed;padding:30px;margin-top:28px}.delta-row{display:grid;grid-template-columns:110px 1fr;gap:20px;padding:18px 0;border-top:1px solid #51565a}.delta-row:first-of-type{margin-top:18px}.delta-row span{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#bfc4c7}.delta-row strong{font-size:21px;display:block;margin-bottom:5px}
+    .decision{display:grid;grid-template-columns:220px 1fr;gap:28px;border:2px solid var(--ink);padding:30px;margin-top:28px}.decision .badge{display:grid;place-items:center;text-align:center;background:var(--ink);color:var(--paper);font-weight:850;text-transform:uppercase;letter-spacing:.08em;padding:22px}.selected{margin:16px 0 0;padding-left:20px}.selected li{margin:8px 0}
+    .cta{display:inline-block;margin-top:18px;border:1px solid var(--ink);padding:12px 16px;text-decoration:none;font-weight:750}.cta:hover{background:var(--ink);color:var(--paper)}
+    blockquote{font:28px/1.35 Georgia,serif;margin:28px 0;padding:28px;border-left:5px solid var(--ink);background:var(--panel)}
+    .pending{border:1px dashed var(--ink);padding:24px;margin-top:22px}.pending .status{display:inline-block;background:#e1d9c6;padding:5px 8px;margin-bottom:12px}.pending p{margin:7px 0}
+    .truth{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:28px}.truth>div{padding:28px;border:1px solid var(--line)}.truth .no{background:#e5e0d5}.truth ul{padding-left:20px;margin-bottom:0}
+    footer{padding:30px 0 50px;color:var(--muted);font-size:13px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+    @media(max-width:760px){header{align-items:flex-start;flex-direction:column}.proof-strip{grid-template-columns:repeat(2,1fr)}.step{grid-template-columns:1fr;gap:10px}.model{grid-template-columns:1fr}.model b{transform:rotate(90deg);height:28px}.grid,.truth,.decision{grid-template-columns:1fr}.decision .badge{min-height:110px}}
+  </style>
+</head>
+<body>
+  <header class="wrap">
+    <a class="brand" href="../"><span>S→I</span>Signal to Insight</a>
+    <nav aria-label="Walkthrough navigation">
+      <a href="#delta">Delta</a><a href="#decision">Decision</a><a href="#reconstruct">Reconstruct</a><a href="../library/">Library</a><a href="../knowledge/">Knowledge</a>
+    </nav>
+  </header>
+
+  <section class="hero wrap">
+    <p class="eyebrow">Golden walkthrough · one complete proof path</p>
+    <h1>Not a summary.<br><em>A change in understanding.</em></h1>
+    <p class="lede">This page follows one already-published source through the complete Signal to Insight contract: source provenance → whole-source model → Knowledge Delta → Source Decision → published explainer → delayed reconstruction checkpoint.</p>
+    <div class="proof-strip" aria-label="Product proof path">
+      <span>01 Source</span><span>02 Model</span><span>03 Delta</span><span>04 Decision</span><span>05 Explainer</span><span>06 Reconstruct</span>
+    </div>
+  </section>
+
+  <main class="wrap">
+    <section class="step" id="source">
+      <div class="step-no">01 / SOURCE</div>
+      <div>
+        <p class="eyebrow">Start with evidence, not generated prose</p>
+        <h2>One source, <em>with provenance.</em></h2>
+        <p class="intro">The reference case is the 2026 AI Engineer World's Fair talk “Why Your Enterprise Tech Stack Isn't Ready for AI Agents — And What to Build Instead.” The system records the canonical source, speakers, event date, capture/analysis date and verification sources before deriving an insight.</p>
+        <div class="grid">
+          <div class="card"><small>Primary source</small><strong>Conference talk</strong><p>Christopher Lovejoy & Saul Howard · AI Engineer World's Fair 2026.</p></div>
+          <div class="card"><small>Product question</small><strong>What survives compression?</strong><p>Keep the production architecture model, not a sequence of memorable quotes.</p></div>
+        </div>
+        <a class="cta" href="https://www.youtube.com/watch?v=mav15aW9lLM" target="_blank" rel="noreferrer">Open original source ↗</a>
+      </div>
+    </section>
+
+    <section class="step" id="model">
+      <div class="step-no">02 / MODEL</div>
+      <div>
+        <p class="eyebrow">Map the whole source before selecting highlights</p>
+        <h2>Compress without <em>breaking the causal chain.</em></h2>
+        <p class="intro">The whole-source model separates the problem, mechanism and result before the page is written. For this case, the key distinction is capability versus controlled production execution.</p>
+        <div class="model" aria-label="Mental model">
+          <div><small>Problem</small><strong>A capable model is not a production system</strong><p>Tool success does not prove authority, recoverability, auditability or safe intervention.</p></div><b>→</b>
+          <div><small>Mechanism</small><strong>Controlled execution substrate</strong><p>Identity + policy + protected data boundaries + executor-independent tasks + durable history.</p></div><b>→</b>
+          <div><small>Result</small><strong>Work can be reconstructed and evaluated</strong><p>Consequential actions become governable, transferable and replayable rather than opaque tool calls.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="step" id="delta">
+      <div class="step-no">03 / DELTA</div>
+      <div>
+        <p class="eyebrow">Compare with accumulated knowledge</p>
+        <h2>Show what the source <em>actually changes.</em></h2>
+        <p class="intro">Because this was the first reference case, its Knowledge Delta establishes the baseline rather than pretending there was earlier evidence to refine.</p>
+        <div class="delta">
+          <p class="eyebrow" style="color:#bfc4c7">Knowledge Delta · curated, evidence-aware</p>
+          <div class="delta-row"><span>NEW</span><div><strong>Controlled execution</strong><p>The source establishes that production agent work needs authority, durable history, protected-data boundaries, intervention and replay around model execution.</p></div></div>
+          <div class="delta-row"><span>NEW</span><div><strong>Execution history</strong><p>Reconstructable work evidence becomes a reusable concept for governance and later evaluation.</p></div></div>
+        </div>
+        <p><small>Later sources can reinforce or refine these stable concepts instead of creating disconnected pages. False retrieval matches remain suppressed rather than becoming decorative graph edges.</small></p>
+      </div>
+    </section>
+
+    <section class="step" id="decision">
+      <div class="step-no">04 / DECISION</div>
+      <div>
+        <p class="eyebrow">Do I still need the original?</p>
+        <h2>Turn understanding into a <em>time decision.</em></h2>
+        <div class="decision">
+          <div class="badge">Skim selected parts</div>
+          <div>
+            <p>The explainer preserves the production mental model, but the original talk still adds value in three evidence-dense areas:</p>
+            <ol class="selected">
+              <li>POC success versus production readiness.</li>
+              <li>Execution history and replay.</li>
+              <li>The controlled-substrate framing across protected data and human handoff.</li>
+            </ol>
+            <p><small>This recommendation is generated only after whole-source mapping and claim evidence exist. Issue #39 separately tests whether these recommendations are actually calibrated against full-source consumption.</small></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="step" id="explainer">
+      <div class="step-no">05 / EXPLAINER</div>
+      <div>
+        <p class="eyebrow">Published only after review</p>
+        <h2>A visual explainer backed by <em>structured knowledge.</em></h2>
+        <p class="intro">The public page is generated from the reviewed insight, claim evidence, prerequisites, Knowledge Delta and source metadata — not directly from a raw transcript.</p>
+        <div class="grid">
+          <div class="card"><small>Public state</small><strong>Published</strong><p>One intentionally public reference case. The rest of the 20-source cohort remains review-only until explicit human publication review.</p></div>
+          <div class="card"><small>Cumulative memory</small><strong>Stable concepts</strong><p>Later research can use review knowledge internally while public concept projections remain limited to published evidence.</p></div>
+        </div>
+        <a class="cta" href="../explainers/why-enterprise-ai-agents-fail-after-the-poc/">Open the published explainer →</a>
+      </div>
+    </section>
+
+    <section class="step" id="reconstruct">
+      <div class="step-no">06 / RECONSTRUCT</div>
+      <div>
+        <p class="eyebrow">Immediate clarity is not enough</p>
+        <h2>Can the model be <em>reconstructed later?</em></h2>
+        <p class="intro">Every review-ready insight has an authored reconstruction prompt. This is where the product moves from “I understood the page” to a falsifiable learning check.</p>
+        <blockquote>Without looking back, reconstruct why a capable AI agent still needs a controlled execution substrate: state the production failure mode, the surrounding mechanism, the operational result, and one boundary where that model is still insufficient.</blockquote>
+        <div class="pending">
+          <span class="status">Outcome pending human benchmark</span>
+          <p><strong>What exists now:</strong> the prompt, answer-key anchors and transfer question are implemented and validated.</p>
+          <p><strong>What is not claimed:</strong> no delayed-recall score is invented here. Issue #19 requires a real human delay, reconstruction attempt and missed-model analysis.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="step" id="truth">
+      <div class="step-no">PROOF / BOUNDARY</div>
+      <div>
+        <p class="eyebrow">What is already proven versus still experimental</p>
+        <h2>Keep the evidence boundary <em>visible.</em></h2>
+        <div class="truth">
+          <div><h3>Usable today</h3><ul><li>URL intake and provenance contracts.</li><li>Whole-source research bundles.</li><li>Cumulative concept graph and prior retrieval.</li><li>Knowledge Delta, claim evidence and prerequisites.</li><li>Source Decision and visual explainers.</li><li>Review/publish isolation and private/local context.</li><li>20-source structural dogfood cohort with regression fixes.</li></ul></div>
+          <div class="no"><h3>Still requires external or human evidence</h3><ul><li>A capable research agent/provider to inspect arbitrary external sources.</li><li>Human approval before review content becomes public.</li><li>Delayed reconstruction/transfer benchmark (#19).</li><li>Source Decision calibration against full-source consumption (#39).</li><li>GitHub Pages repository setting before this static surface is live.</li></ul></div>
+        </div>
+        <a class="cta" href="../docs/COHORT_20_REPORT.md">Read the 20-source cohort report →</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap"><span>Signal to Insight · evidence-backed source-to-understanding</span><span><a href="../">Home</a> · <a href="../library/">Library</a> · <a href="../knowledge/">Knowledge</a> · <a href="https://github.com/dkharlanau/signal-to-insight">GitHub</a></span></footer>
+</body>
+</html>

@@ -1,107 +1,146 @@
 # Signal to Insight
 
-A personalized source-to-understanding engine with cumulative concept memory.
+**An evidence-backed source-to-understanding engine with cumulative concept memory.**
 
-Give the agent a useful source — video, article, paper, podcast, documentation, repository, tool or system — and turn it into a coherent, visual, actionable explanation of what is worth understanding, learning, trying, using, building or simply tracking.
+Give it a useful source — video, article, paper, documentation, repository, tool or system — and turn it into a coherent mental model of what is worth understanding, what changed relative to prior knowledge, whether the original is still worth your time, and what to learn or try next.
 
-This is **not a summarizer** and it is **not domain-locked**. The system preserves the minimum complete mental model behind a source rather than extracting disconnected highlights. New sources are also compared with prior knowledge so repeated ideas reinforce or refine the existing model instead of becoming isolated pages.
+Signal to Insight is **not a generic summarizer**. The durable output is a versioned knowledge model with provenance, evidence boundaries and review state — not a pile of disconnected summaries.
 
-The product now treats that comparison as a first-class artifact: every review-ready insight has a curated **Knowledge Delta** explaining what is genuinely new, what reinforces or refines earlier knowledge, and which retrieved connections were rejected as noise.
+**Start here:** [Golden walkthrough](walkthrough/index.html) — one complete published proof path from source → whole-source model → Knowledge Delta → Source Decision → explainer → delayed-reconstruction checkpoint.
 
-## Product loop
+**Validation evidence:** [20-source cohort report](docs/COHORT_20_REPORT.md) — 20 real sources across five source types, with structural coverage and dogfood failures recorded rather than hidden.
+
+> Map the whole source first. Then compress it without breaking the model.
+>
+> Check what is already known before creating something new.
+>
+> Show what the source actually changes — and reject attractive false connections.
+
+## The product loop
 
 ```text
-source
-  ↓
-intake + provenance
-  ↓
-prior-knowledge lookup
-  ↓
+source + provenance
+        ↓
+prior-knowledge retrieval
+        ↓
 whole-source map
-  ↓
-normalized research bundle
-  ↓
-personal research profile
-  ↓
-coherent-core selection
-  ↓
-verification + enrichment
-  ↓
-mental model
-  ↓
-curated Knowledge Delta
-  ↓
-merge concepts + relations into knowledge graph
-  ↓
-structured insight
-  ↓
+        ↓
+verification / enrichment
+        ↓
+coherent mental model
+        ↓
+Knowledge Delta
+        ↓
+claim evidence + prerequisites
+        ↓
+Source Decision
+        ↓
 review preview
-  ↓
-review
-  ↓
-published visual explainer + library + public knowledge graph
+        ↓
+explicit human publication
+        ↓
+published explainer + library + concept graph
+        ↓
+delayed reconstruction / transfer check
 ```
 
-The strongest rules in the project are:
+The five product questions are:
 
-> **Map the whole source first. Then compress it without breaking the model.**
->
-> **Check what is already known before creating something new.**
->
-> **Show what the new source actually changes — and reject attractive false connections.**
+1. **What did this source actually change in the existing model?**
+2. **Why should that change be trusted?**
+3. **Do I still need the original source?**
+4. **Can I reconstruct and apply the model later?**
+5. **What should I learn, test or investigate next?**
 
-## What is implemented
+## What works today
 
-The repository now has a working deterministic foundation for the complete source-to-page lifecycle:
+The repository has a deterministic, validated foundation for the full source-to-review lifecycle:
 
-- source intake queue and URL normalization;
-- owner-only GitHub Issue intake that can queue a source and scaffold its research bundle in one workflow;
-- stable intake/source/insight identifiers;
-- provenance and source-date rules;
-- personalized research profile;
-- source adapter contracts for video, article/docs, paper/PDF, GitHub repository and tools/systems;
-- normalized research bundles that never commit full third-party source text;
-- automatic prior-knowledge snapshot in newly scaffolded bundles;
-- cumulative concept graph with stable concept IDs and typed evidence-backed relations;
-- prior-knowledge retrieval with neighboring concepts and supporting insights;
-- curated Knowledge Delta records with source/prior/interpretation separation and explicit noise suppression;
-- machine-readable insight records;
-- schema/semantic validation and cross-reference checks;
-- generated visual explainer pages with Knowledge Delta sections;
-- `review` previews with `noindex,nofollow` and no public canonical/JSON-LD;
-- reusable explainer visual grammar;
-- generated searchable library with tag filters;
-- generated public knowledge graph and relation-derived learning path;
-- explicit owner-confirmed `review → published` transition;
-- explicit owner-confirmed `published → review/archived` retraction with provenance history;
-- stale public explainer removal when publication is retracted;
-- end-to-end fixture-driven acceptance tests;
-- GitHub Actions checks for structured data and generated-output drift;
-- auto-sync workflows for review previews, published explainers, the public knowledge graph and the generated library.
+- URL/source intake with stable IDs and provenance;
+- normalized research bundles without committed third-party full text;
+- whole-source mapping before selection/compression;
+- cumulative concept graph with typed evidence-backed relations;
+- prior-knowledge retrieval with cohort-derived regression tests;
+- curated **Knowledge Delta** records separating source evidence, prior evidence and project interpretation;
+- claim-level evidence traces;
+- prerequisite maps;
+- evidence-backed **Source Decision**: `consume / skim selected parts / explainer is enough / skip for now`;
+- authored delayed-reconstruction and transfer prompts;
+- visual explainer generation from structured knowledge;
+- review previews with `noindex,nofollow`;
+- explicit owner-confirmed `review → published` lifecycle;
+- public concept projections that cannot leak review-only evidence;
+- private/local personal baseline and sensitive-source overlay;
+- living-source freshness and knowledge-evolution support;
+- local action/outcome and learning-utility stores;
+- generated library, knowledge graph, concept pages, sitemap and discovery bundle;
+- reusable local-first starter and repo-local CLI;
+- CI contracts for source, evidence, knowledge, publication, privacy and generated-output drift.
 
-## Cumulative knowledge model
+## What still requires an external research agent
 
-`data/knowledge-graph.json` is the durable memory layer between source-specific research runs.
+The repository is the stable knowledge and product layer. It does **not** embed a universal browser, YouTube transcription service, PDF extractor or LLM runtime.
 
-A concept has a stable ID, short definition, domain, aliases, tags, coverage and supporting insight IDs. Relations are explicit and typed:
+A capable research agent currently performs source inspection and additional verification, then writes the normalized repository contracts. This is intentional: source-specific extraction is kept behind stable inputs so the core model does not depend on one provider.
+
+Provider adapters are a later expansion only when repeated dogfood proves they remove meaningful friction.
+
+## What is still experimental or human-gated
+
+These are deliberately not represented as solved:
+
+- **Delayed reconstruction + transfer benchmark (#19):** prompts and local measurement format exist; real delayed human results are still required.
+- **Curated public proof corpus (#38):** review cases stay private-to-review until a person explicitly approves publication.
+- **Source Decision calibration (#39):** deterministic decision contracts exist; trustworthiness must still be tested against real full-source consumption.
+- **Dogfood utility metrics (#40):** structural 20-source cohort is complete; subjective utility, elapsed work and human learning measurements remain private/human evidence.
+- **GitHub Pages (#45):** the static site and deployment workflow are ready, but the repository-level Pages setting is not currently enabled.
+
+## 20-source validation cohort
+
+The frozen validation cohort is now **20/20 processed**:
+
+| Source type | Count |
+| --- | ---: |
+| Documentation | 7 |
+| Repository | 4 |
+| Paper | 4 |
+| Article | 4 |
+| Video | 1 |
+
+Current publication state: **1 published + 19 review**. This is intentional; output volume is not treated as publication quality.
+
+The cohort exposed real product failures, including:
+
+- semantic retrieval precision/recall errors;
+- evidence-boundary mismatches in transfer prompts, prerequisites and skim locators;
+- mixed published/review concept projection risk;
+- stale-branch materialization races under parallel agent loops;
+- visual-primitive overreach;
+- publication self-test assumptions that broke as the cumulative graph grew.
+
+Those failures produced concrete validators, CI fixes and retrieval regressions. See [`docs/COHORT_20_REPORT.md`](docs/COHORT_20_REPORT.md).
+
+## Knowledge model
+
+`data/knowledge-graph.json` is the cumulative memory between source runs.
+
+A concept has a stable ID, definition, domain, aliases, tags, coverage and supporting insight IDs. Relations are explicit and typed:
 
 ```text
 depends_on
- enables
- realized_by
- refines
- related_to
+enables
+realized_by
+refines
+related_to
 ```
 
-Every relation needs a rationale and shared evidence. The graph validator rejects dangling concepts, dangling insights, duplicate semantic edges, self-relations, unsupported relations and isolated nodes.
-
-Before researching a new source, query prior knowledge:
+Before research, prior concepts are retrieved:
 
 ```bash
 python scripts/graph_context.py "durable workflow retry"
 ```
 
-The agent then classifies overlap as:
+The new source is then classified against prior knowledge as:
 
 ```text
 reinforcement
@@ -111,100 +150,62 @@ new knowledge
 not relevant
 ```
 
-The research-bundle classification is only the input to the public-facing comparison. `data/knowledge-deltas.json` is the curated layer that explains meaningful changes using three separate statements: what the current source establishes, what prior project evidence said, and how the project interprets the difference. `not_relevant` matches remain suppressed rather than becoming decorative graph edges.
+`not relevant` matches are kept out of the graph. Review-only knowledge can help future research internally, while public concept pages remain backed only by published evidence.
 
-Review-only concepts may exist in machine-readable memory so later research can use them. The public `/knowledge/` page exposes only concepts backed by at least one published insight, so cumulative memory cannot bypass human publication review.
+## Knowledge Delta
 
-## Current operating model
+`data/knowledge-deltas.json` is the curated comparison layer.
 
-A capable research agent is currently the intelligence/extraction layer. It reads [`AGENTS.md`](AGENTS.md), the research profile, prior concept graph and pipeline, inspects the supplied source using the tools available to it, performs additional research when needed, and writes the normalized repository artifacts.
+Each meaningful delta separates:
 
-The repository itself does **not** yet contain a universal YouTube/web/PDF transcription service or an embedded LLM runtime. That is intentional: source-specific extraction is separated from the stable research/output contracts so different agents/providers can be used without changing the knowledge model.
+- what the current source establishes;
+- what prior project evidence established;
+- how the project interprets the change.
+
+The first published reference case establishes `controlled-execution` and `execution-history`. Later sources can refine those stable concepts instead of creating new pages just because terminology differs.
+
+## Source Decision
+
+Every review-ready insight gets a decision only after whole-source mapping and evidence exist:
+
+```text
+consume
+skim_selected_parts
+explainer_is_enough
+skip_for_now
+```
+
+For `skim_selected_parts`, every recommended locator is tied back to claim evidence. The decision is a product hypothesis until the human calibration loop in #39 confirms that it reliably saves time.
+
+## Delayed reconstruction
+
+Every review/published insight has an authored prompt designed to test whether the mental model survives after reading.
+
+Example from the published reference case:
+
+> Without looking back, reconstruct why a capable AI agent still needs a controlled execution substrate: state the production failure mode, the surrounding mechanism, the operational result, and one boundary where that model is still insufficient.
+
+The prompt is implemented. A real delayed score is **not** claimed until the human benchmark in #19 is performed.
 
 ## Start a source
 
-A URL can be queued locally with:
+Using the repo-local CLI:
 
 ```bash
-python scripts/new_source.py "https://example.com/source" --type article --focus "What should I learn or try from this?"
+python sti.py intake "https://example.com/source" --type article --focus "What should I learn or try?"
+python sti.py scaffold <intake-id>
+python sti.py validate
 ```
 
-Then create the normalized working artifact:
+Or use the owner-only GitHub source Issue Form. New source issues are normalized, deduplicated and scaffolded with a snapshot of relevant prior knowledge.
 
-```bash
-python scripts/scaffold_bundle.py <intake-id>
-```
-
-New bundles include a snapshot of relevant graph concepts. Those matches begin as `unclassified`; the research step must decide whether the new source reinforces, refines, contradicts or adds knowledge.
-
-The owner-only GitHub Issue Form removes the second manual command: a new `[source]` issue is normalized, deduplicated and, when newly queued, committed together with its graph-aware research bundle.
-
-For agent-driven work, simply provide the source to an agent that can edit this repository and tell it to follow `AGENTS.md`.
-
-## Required processing behavior
-
-Before selecting insights, the agent maps:
-
-- prior concepts and neighboring relations;
-- problem and thesis;
-- source structure;
-- concepts and prerequisites;
-- mechanisms and relationships;
-- named tools/systems;
-- examples;
-- claims/evidence;
-- assumptions;
-- limitations;
-- unresolved questions.
-
-Then `config/research-profile.json` determines what deserves attention. Topic match alone is not enough: an unfamiliar tool or concept stays when it has high learning or practical leverage.
-
-After the coherent model exists, reusable concepts and relations are merged into `data/knowledge-graph.json`. Different wording is not enough to create a new concept; prefer a stable concept ID plus aliases when the meaning is already represented.
-
-Before the insight reaches review, curate its Knowledge Delta. Only meaningful `new / reinforces / refines / contradicts` changes should appear. Keep source evidence, prior evidence and project interpretation visibly separate.
-
-The final action vocabulary is deliberately small:
-
-`use now / try / learn / build / watch / ignore for now`
-
-## Source and date policy
-
-Every published item must preserve:
-
-- canonical source URL or stable identifier;
-- creator/publisher when known;
-- publication date when verifiable;
-- event date separately when relevant;
-- capture and analysis dates;
-- supporting/verification sources and access dates.
-
-A missing source date remains `null` with a note. It is never guessed.
-
-Full third-party transcripts, copied articles, PDF text dumps or mirrored repository contents are not committed. They may be transient research input; public data stores derived maps, paraphrased analysis, safe locators and provenance.
-
-## Visual output
-
-The explainer is generated from structured knowledge, not directly from raw source text.
-
-The visual grammar supports different idea structures:
-
-```text
-causal chain     problem → mechanism → result
-sequence         A → B → C → D
-layered system   experience / orchestration / data
-comparison       A | B
-decision         condition → choices
-```
-
-See [`docs/VISUAL_GRAMMAR.md`](docs/VISUAL_GRAMMAR.md). Images are optional and should be used only when they explain more than a diagram can.
-
-The knowledge graph is a different visualization: its layout is generated from reusable concepts and typed relations, while its learning path is derived from relation semantics rather than manually curated ordering.
+For agent-driven work, give the agent access to this repository and tell it to follow [`AGENTS.md`](AGENTS.md).
 
 ## Publication lifecycle
 
-Publication remains deliberately human-controlled.
+Research output stops at `review` by default.
 
-To publish an existing review insight, use the owner workflow or:
+Publishing requires an explicit confirmation and review note:
 
 ```bash
 python scripts/publish_reviewed.py \
@@ -214,96 +215,91 @@ python scripts/publish_reviewed.py \
   --review-note "What was checked"
 ```
 
-A published insight can be returned to review or archived without losing provenance:
+Published content can be returned to review or archived without losing provenance. Review patches cannot silently downgrade or overwrite a published insight.
 
-```bash
-python scripts/retract_published.py \
-  --insight <insight-id> \
-  --target review \
-  --confirm REVIEW:<insight-id> \
-  --changed-by <reviewer> \
-  --note "Why public state changed"
-```
+## Privacy boundary
 
-The equivalent archive confirmation is `ARCHIVE:<insight-id>`. Public surfaces are regenerated in the same workflow so a retracted item cannot remain discoverable merely because an old generated file survived.
+Private personalization and sensitive-source context live under `.local/` and are excluded from public builders.
 
-## Repository structure
-
-```text
-AGENTS.md                         agent operating contract
-config/research-profile.json      personalization rules
-content/                          human-readable source/explainer notes
-data/
-  inbox.json                      source queue
-  sources.json                    canonical source registry
-  research-bundles/               normalized source maps + prior-knowledge snapshots
-  insights.json                   publishable knowledge model
-  knowledge-deltas.json           curated source-vs-prior changes
-  knowledge-graph.json            cumulative concepts + typed relations
-schemas/                          machine-readable contracts
-scripts/
-  new_source.py                   queue a URL
-  scaffold_bundle.py              create graph-aware research bundle
-  graph_context.py                retrieve relevant prior concepts
-  validate.py                     knowledge validation
-  validate_knowledge_deltas.py    curated-delta consistency checks
-  validate_bundles.py             research-bundle safety + prior-knowledge checks
-  validate_graph.py               concept/relation/evidence validation
-  build.py                        public explainer generator
-  build_previews.py               review-preview generator
-  build_library.py                library generator
-  build_graph.py                  public graph + learning-path generator
-  publish_reviewed.py             explicit review → published transition
-  retract_published.py            explicit published → review/archived transition
-explainers/                       generated published pages
-previews/                         generated review pages
-library/                          generated browsable collection
-knowledge/                        generated public concept graph
-tests/                            end-to-end acceptance fixtures
-```
-
-## Checks
-
-```bash
-python scripts/validate.py
-python scripts/validate_knowledge_deltas.py
-python scripts/validate_graph.py
-python scripts/validate_bundles.py
-python scripts/graph_context.py --self-test
-python scripts/scaffold_bundle.py --self-test
-python scripts/publish_reviewed.py --self-test
-python scripts/retract_published.py --self-test
-python -m unittest discover -s tests -p "test_*.py" -v
-python scripts/build.py
-python scripts/build_previews.py
-python scripts/build_library.py
-python scripts/build_graph.py
-```
-
-Core CI runs graph validation, Knowledge Delta validation, publication-lifecycle tests and prior-knowledge self-tests. Generated pages are also checked or synchronized by dedicated workflows so adding or retracting content cannot silently leave stale public output.
-
-## Reference cases
-
-The first published case uses the AI Engineer World's Fair 2026 talk **“Why Your Enterprise Tech Stack Isn't Ready for AI Agents — And What to Build Instead”** by Christopher Lovejoy and Saul Howard.
-
-Four additional real sources — Temporal documentation, Open Policy Agent, the ReAct paper and retrieval-practice research — are held in `review` and exercise different source adapters and visual structures. Their concepts may participate in machine-readable cumulative memory but remain withheld from the public graph until publication.
-
-These are reference cases only. The same contracts are designed for new tools, repositories, papers, custom architectures, productivity systems and other high-value sources.
+The committed graph may store stable public/review knowledge, but local personal beliefs, active goals, learning results and private source contents are protected by explicit boundary validators.
 
 ## Public surfaces
 
-When GitHub Pages is enabled from `main` / repository root:
+The repository already contains the static public surface:
 
 - `/` — product/method page;
+- `/walkthrough/` — golden proof path;
 - `/library/` — generated searchable explainer library;
-- `/knowledge/` — generated public concept graph + learning path;
+- `/knowledge/` — public concept graph and learning path;
+- `/knowledge/concepts/<id>/` — published-evidence concept pages;
 - `/explainers/<slug>/` — published explainers;
-- `/previews/<slug>/` — review-only noindex pages;
-- `/data/insights.json` and `/data/sources.json` — machine-readable knowledge/provenance;
-- `/data/knowledge-graph.json` — complete cumulative concept memory, including review-supported concepts.
+- `/previews/<slug>/` — review-only `noindex,nofollow` previews;
+- `/data/*.json` — machine-readable source/insight/graph contracts.
 
-See [`ROADMAP.md`](ROADMAP.md) for the next development loops.
+The intended Pages URL is:
+
+```text
+https://dkharlanau.github.io/signal-to-insight/
+```
+
+The deployment workflow is `.github/workflows/pages.yml`. The repository-level GitHub Pages setting must still be enabled for **GitHub Actions** before the workflow can deploy. Until that setting is enabled, the files and route contracts are ready but the Pages URL should not be treated as live.
+
+## Public proof path
+
+The first published case is based on the AI Engineer World's Fair 2026 talk **“Why Your Enterprise Tech Stack Isn't Ready for AI Agents — And What to Build Instead”** by Christopher Lovejoy and Saul Howard.
+
+Use the [Golden walkthrough](walkthrough/index.html) to see how the project turns that source into:
+
+```text
+provenance
+→ whole-source mental model
+→ Knowledge Delta
+→ Source Decision
+→ published visual explainer
+→ delayed reconstruction checkpoint
+```
+
+The walkthrough explicitly marks the delayed outcome as pending rather than inventing a result.
+
+## Repository map
+
+```text
+AGENTS.md                         agent operating contract
+config/                           research profiles and starter configuration
+data/
+  inbox.json                      source queue
+  sources.json                    canonical source registry
+  research-bundles/               whole-source maps + prior-knowledge snapshot
+  insights.json                   structured insights and publication status
+  knowledge-deltas.json           curated source-vs-prior changes
+  claim-evidence.json             important claims + provenance
+  prerequisite-maps.json          prerequisite resolution
+  learning-prompts.json           reconstruction + transfer prompts
+  source-decisions.json           evidence-backed source consumption decision
+  knowledge-graph.json            cumulative concepts + typed relations
+  cohorts/validation-20.json      frozen dogfood cohort evidence
+scripts/                          validators, builders, lifecycle and local loops
+explainers/                       generated published pages
+previews/                         generated review-only pages
+library/                          generated collection
+knowledge/                        generated public concept surfaces
+walkthrough/                      golden product proof path
+docs/                             architecture, visual grammar, cohort report
+```
+
+## Core checks
+
+```bash
+python sti.py validate
+python scripts/benchmark_retrieval.py
+python scripts/cohort_audit.py --check --check-report docs/COHORT_20_REPORT.md
+python scripts/build_sitemap.py --check
+python scripts/publish_reviewed.py --self-test
+python -m unittest discover -s tests -p "test_*.py" -v
+```
+
+See [`ROADMAP.md`](ROADMAP.md) and the GitHub backlog for the remaining validation-first loops.
 
 ---
 
-Maintained by [Dzmitryi Kharlanau](https://github.com/dkharlanau).
+MIT licensed. Maintained by [Dzmitryi Kharlanau](https://github.com/dkharlanau).

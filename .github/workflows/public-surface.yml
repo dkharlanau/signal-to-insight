@@ -1,0 +1,57 @@
+name: Validate public surface
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "README.md"
+      - "index.html"
+      - "walkthrough/**"
+      - "library/**"
+      - "knowledge/**"
+      - "explainers/**"
+      - "previews/**"
+      - "sitemap.xml"
+      - "scripts/build_sitemap.py"
+      - "scripts/validate_public_surface.py"
+      - ".github/workflows/pages.yml"
+      - ".github/workflows/public-surface.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "README.md"
+      - "index.html"
+      - "walkthrough/**"
+      - "library/**"
+      - "knowledge/**"
+      - "explainers/**"
+      - "previews/**"
+      - "sitemap.xml"
+      - "scripts/build_sitemap.py"
+      - "scripts/validate_public_surface.py"
+      - ".github/workflows/pages.yml"
+      - ".github/workflows/public-surface.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Verify sitemap is current
+        run: python scripts/build_sitemap.py --check
+
+      - name: Verify public and review routes
+        run: python scripts/validate_public_surface.py
+
+      - name: Compile public-surface validator
+        run: python -m py_compile scripts/validate_public_surface.py
