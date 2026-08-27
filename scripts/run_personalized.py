@@ -9,10 +9,18 @@ from __future__ import annotations
 
 import argparse
 import json
+import tempfile
 from pathlib import Path
 
 import run_source
-from personal_baseline import DEFAULT_STORE, load_store, select_context
+from personal_baseline import (
+    DEFAULT_STORE,
+    empty_store,
+    load_store,
+    select_context,
+    upsert_entry,
+    write_store,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 PRIVATE_CONTEXT_DIR = ROOT / ".local" / "run-context"
@@ -44,9 +52,67 @@ def write_private_context(item: dict, store_path: Path, limit: int) -> dict:
     }
 
 
+def self_test() -> int:
+    """Prove that private content stays in the gitignored sidecar, not manifest metadata."""
+    global PRIVATE_CONTEXT_DIR
+    local_root = ROOT / ".local"
+    local_root.mkdir(parents=True, exist_ok=True)
+    original_context_dir = PRIVATE_CONTEXT_DIR
+
+    with tempfile.TemporaryDirectory(dir=local_root) as tmp:
+        tmp_path = Path(tmp)
+        store_path = tmp_path / "personal-baseline.json"
+        PRIVATE_CONTEXT_DIR = tmp_path / "run-context"
+        try:
+            baseline = empty_store()
+            secret_concept = "Private fixture concept that must never enter a public manifest"
+            secret_note = "Private fixture note"
+            upsert_entry(
+                baseline,
+                secret_concept,
+                "partially_known",
+                "user_assertion",
+                note=secret_note,
+                tags=["fixture", "private"],
+            )
+            write_store(store_path, baseline)
+
+            item = {
+                "id": "intake-private-boundary-fixture",
+                "source_url": "https://example.com/private-boundary",
+                "source_type": "article",
+                "requested_focus": "fixture private concept",
+            }
+            metadata = write_private_context(item, store_path, limit=8)
+            sidecar = ROOT / metadata["private_sidecar"]
+            sidecar_text = sidecar.read_text(encoding="utf-8")
+            metadata_text = json.dumps(metadata, ensure_ascii=False, sort_keys=True)
+
+            if secret_concept not in sidecar_text or secret_note not in sidecar_text:
+                print("personalized run self-test failed: private sidecar lost selected context")
+                return 1
+            if secret_concept in metadata_text or secret_note in metadata_text:
+                print("personalized run self-test failed: private content leaked into manifest metadata")
+                return 1
+            if not metadata["private_sidecar"].startswith(".local/"):
+                print("personalized run self-test failed: sidecar is not under .local/")
+                return 1
+            if not metadata["baseline_fingerprint"] or metadata["baseline_revision"] != 1:
+                print("personalized run self-test failed: reproducibility metadata missing")
+                return 1
+            if metadata["privacy"] != "private_local_not_public_evidence":
+                print("personalized run self-test failed: privacy classification missing")
+                return 1
+        finally:
+            PRIVATE_CONTEXT_DIR = original_context_dir
+
+    print("personalized run self-test passed; private context stays in .local and only reproducibility metadata is exposed.")
+    return 0
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("source", help="Intake ID or http(s) source URL")
+    parser.add_argument("source", nargs="?", help="Intake ID or http(s) source URL")
     parser.add_argument(
         "--type",
         dest="source_type",
@@ -72,7 +138,13 @@ def main() -> int:
     parser.add_argument("--personal-limit", type=int, default=8)
     parser.add_argument("--no-checks", action="store_true")
     parser.add_argument("--json", action="store_true")
+    parser.add_argument("--self-test", action="store_true")
     args = parser.parse_args()
+
+    if args.self_test:
+        return self_test()
+    if not args.source:
+        parser.error("source URL or intake ID is required unless --self-test is used")
 
     focus = args.focus.strip() or None
     note = args.note.strip() or None
