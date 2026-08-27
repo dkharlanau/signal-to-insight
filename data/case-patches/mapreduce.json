@@ -1,0 +1,121 @@
+{
+  "patch_version": "1.0.0",
+  "intake_id": "intake-2026-08-27-research-mapreduce-simplified-data-processing-on-large-cl",
+  "intake_status": "review",
+  "updated_at": "2026-08-27",
+  "graph_version": "0.4.0",
+  "source": {
+    "id": "src-google-mapreduce-osdi-2004",
+    "type": "paper",
+    "title": "MapReduce: Simplified Data Processing on Large Clusters",
+    "canonical_url": "https://research.google/pubs/mapreduce-simplified-data-processing-on-large-clusters",
+    "creators": ["Jeffrey Dean", "Sanjay Ghemawat"],
+    "publisher": "Google / OSDI'04",
+    "event": "OSDI'04",
+    "published_at": null,
+    "event_date": null,
+    "captured_at": "2026-08-27",
+    "analyzed_at": "2026-08-27",
+    "date_note": "Published in OSDI'04 (2004), pp. 137–150; exact publication day is not asserted.",
+    "verification": [
+      {"title":"Official Google-hosted OSDI paper PDF","url":"https://storage.googleapis.com/gweb-research2023-media/pubtools/4449.pdf","accessed_at":"2026-08-27"}
+    ],
+    "derived_records": ["mapreduce-runtime-abstraction-boundary"]
+  },
+  "insight": {
+    "id": "mapreduce-runtime-abstraction-boundary",
+    "source_id": "src-google-mapreduce-osdi-2004",
+    "slug": "mapreduce-runtime-abstraction-boundary",
+    "status": "review",
+    "title": "MapReduce: let the program define the transformation and the runtime own distribution",
+    "one_liner": "MapReduce gains leverage by restricting user code to Map and Reduce while the runtime owns partitioning, scheduling, communication, locality and task recovery.",
+    "why_this_matters": "The transferable idea is an architecture boundary: a framework becomes powerful when the user declares only the domain computation and the runtime has enough structure to automate distributed execution reliably.",
+    "whole_source_map": {
+      "problem": "Straightforward large-data computations become dominated by distribution code when programmers must explicitly parallelize work, partition data, schedule machines, move intermediate data and recover from failures.",
+      "thesis": "Restrict the user program to Map and Reduce functions over key/value data so a runtime can automatically partition, schedule, move data and re-execute tasks across a cluster.",
+      "core_topics": ["Map/Reduce user interface", "automatic partitioning and scheduling", "master/worker execution", "task re-execution after failure", "data locality", "restricted-model trade-off"]
+    },
+    "derived_model": {
+      "problem": "Distributed execution mechanics can overwhelm otherwise simple data transformations.",
+      "mechanism": "Constrain user logic to Map and Reduce over key/value data, then let the runtime derive task partitions, placement, shuffle, scheduling and failure recovery.",
+      "result": "Programmers can express large-scale batch computations without writing most cluster-control code, while the runtime can optimize and recover because the computation has a predictable structure."
+    },
+    "coherence_review": {
+      "central_chain": [
+        "User code expresses the transformation as Map and Reduce.",
+        "The restricted interface exposes enough structure for the runtime to split and distribute work.",
+        "The runtime schedules workers and moves intermediate data without changing the user-level functions.",
+        "When workers fail, tasks can be reset and re-executed.",
+        "Locality-aware scheduling reduces network cost while preserving the same programming model."
+      ],
+      "prerequisites_complete": true,
+      "source_vs_enrichment_clear": true,
+      "open_gaps": [
+        "The 2004 Google implementation is historical context, not a current architecture prescription.",
+        "MapReduce does not cover low-latency streaming, interactive queries or arbitrary distributed coordination."
+      ],
+      "scores": {"coherence":5,"prerequisite_completeness":5,"evidence_confidence":5,"practical_leverage":5}
+    },
+    "visual_plan": {
+      "dominant": {
+        "type": "layers",
+        "title": "The abstraction boundary",
+        "nodes": [
+          {"label":"USER","title":"Map + Reduce","text":"Define the domain transformation over key/value records."},
+          {"label":"RUNTIME","title":"Partition + schedule + shuffle","text":"Derive distributed tasks, assign workers and move intermediate data."},
+          {"label":"RELIABILITY","title":"Re-execute + place near data","text":"Recover failed tasks and reduce network cost without changing the user program."}
+        ]
+      },
+      "supporting": ["sequence", "concept_grid", "examples", "limitations", "action_map", "source_map"],
+      "image": {"needed":false,"reason":"The paper's Figure 1 is useful verification, but the product mental model is clearer as a compact responsibility-layer diagram rather than reproducing a source figure."}
+    },
+    "concepts": [
+      {"name":"Restricted programming model","depth":"learn","why_needed":"The runtime can automate distribution precisely because user programs fit a constrained Map/Reduce structure."},
+      {"name":"Runtime-managed distribution","depth":"learn","why_needed":"Partitioning, scheduling and communication are deliberately moved out of application code."},
+      {"name":"Task re-execution fault recovery","depth":"learn","why_needed":"Worker failures are handled by rescheduling/re-executing tasks rather than forcing user code to coordinate machine recovery."},
+      {"name":"Data-locality scheduling","depth":"know","why_needed":"The runtime can place map work near input replicas to reduce network traffic."}
+    ],
+    "tool_map": [],
+    "examples": [
+      {"domain":"log aggregation","scenario":"Terabytes of records must be grouped and aggregated by key.","question":"Can the business transformation be expressed as Map/Reduce while the runtime owns partitioning and recovery?"},
+      {"domain":"framework design","scenario":"A team is building a distributed transformation engine.","question":"Which responsibilities can be removed from user code if the framework intentionally restricts the computation model?"}
+    ],
+    "limitations": [
+      "A restricted Map/Reduce interface cannot express every distributed algorithm naturally.",
+      "Task re-execution is safe only when the computation semantics tolerate replay; it is not a blanket guarantee for arbitrary external side effects.",
+      "The paper describes batch processing on a 2004 Google cluster and should not be read as a current systems benchmark.",
+      "Automatic runtime ownership reduces control as well as complexity."
+    ],
+    "action_map": {
+      "use_now": ["When designing a framework, separate domain transformation from distribution mechanics and ask which runtime responsibilities become automatable if the user interface is deliberately constrained."],
+      "try": ["Take one batch transformation and specify only its logical partition/aggregation functions, then list every execution concern a runtime could own."],
+      "learn": ["restricted programming models", "runtime scheduling", "task re-execution", "data locality"],
+      "build": ["A small local Map/Reduce-style executor that partitions records, runs map tasks, groups intermediate keys and retries failed tasks."],
+      "watch": ["Where modern agent/data frameworks gain reliability by narrowing user-defined execution semantics."],
+      "ignore_for_now": ["Treating the 2004 master/worker implementation or hardware details as the essence of the MapReduce abstraction."]
+    },
+    "connections": [
+      "durable execution: adjacent reliability goal but different unit/semantics; MapReduce re-executes batch tasks rather than persisting long-running workflow progress",
+      "idempotency under retry: relevant implementation concern for side effects, but not identical to MapReduce's functional task-reexecution model"
+    ],
+    "supporting_sources": [
+      {"title":"Google Research publication page","url":"https://research.google/pubs/mapreduce-simplified-data-processing-on-large-clusters","publisher":"Google Research","purpose":"official metadata and abstract describing the user/runtime responsibility split","accessed_at":"2026-08-27"},
+      {"title":"Official OSDI paper PDF","url":"https://storage.googleapis.com/gweb-research2023-media/pubtools/4449.pdf","publisher":"Google","purpose":"primary evidence for execution overview, fault tolerance, locality and conclusions","accessed_at":"2026-08-27"}
+    ],
+    "tags": ["mapreduce", "distributed-systems", "batch-processing", "abstraction", "scheduling", "fault-tolerance"],
+    "provenance": {"source_linked":true,"source_dates_recorded":true,"full_transcript_stored":false,"analysis_type":"direct official publication/PDF analysis focused on abstraction ownership","reviewed_at":"2026-08-27"}
+  },
+  "graph": {
+    "concepts": [
+      {"id":"restricted-programming-model","label":"Restricted programming model","summary":"A deliberately constrained user-facing computation model that gives a runtime enough structure to automate execution responsibilities.","domain":"software architecture","coverage":"explained","insight_ids":["mapreduce-runtime-abstraction-boundary"],"aliases":["constrained programming interface"],"tags":["abstraction","runtime","framework"]},
+      {"id":"runtime-managed-distribution","label":"Runtime-managed distribution","summary":"Moving partitioning, scheduling and inter-machine data movement from application code into a framework runtime.","domain":"distributed systems","coverage":"explained","insight_ids":["mapreduce-runtime-abstraction-boundary"],"aliases":["automatic distributed execution"],"tags":["scheduling","partitioning","runtime"]},
+      {"id":"task-reexecution-fault-recovery","label":"Task re-execution fault recovery","summary":"Recovering worker failure by rescheduling or re-running deterministic batch tasks instead of requiring application code to repair individual machines.","domain":"distributed systems","coverage":"explained","insight_ids":["mapreduce-runtime-abstraction-boundary"],"aliases":["task replay recovery"],"tags":["fault-tolerance","retry","workers"]},
+      {"id":"data-locality-scheduling","label":"Data-locality scheduling","summary":"Placing computation on or near machines that already hold its input data to reduce network transfer.","domain":"distributed systems","coverage":"explained","insight_ids":["mapreduce-runtime-abstraction-boundary"],"aliases":["compute-near-data scheduling"],"tags":["locality","scheduling","network"]}
+    ],
+    "relations": [
+      {"id":"rel-restricted-programming-model-enables-runtime-managed-distribution","from":"restricted-programming-model","to":"runtime-managed-distribution","type":"enables","rationale":"A predictable Map/Reduce structure gives the runtime enough information to partition and schedule work automatically.","evidence_insights":["mapreduce-runtime-abstraction-boundary"]},
+      {"id":"rel-runtime-managed-distribution-enables-task-reexecution-fault-recovery","from":"runtime-managed-distribution","to":"task-reexecution-fault-recovery","type":"enables","rationale":"Runtime ownership of task scheduling lets failed work be reset, reassigned and executed again without rewriting the user computation.","evidence_insights":["mapreduce-runtime-abstraction-boundary"]},
+      {"id":"rel-runtime-managed-distribution-enables-data-locality-scheduling","from":"runtime-managed-distribution","to":"data-locality-scheduling","type":"enables","rationale":"The scheduler can use input-location metadata to place map tasks near their data while preserving the same user-facing program.","evidence_insights":["mapreduce-runtime-abstraction-boundary"]}
+    ]
+  }
+}
