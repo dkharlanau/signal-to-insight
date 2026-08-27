@@ -5,23 +5,24 @@
   "source": {
     "type": "paper",
     "canonical_url": "https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-ai-rmf-10",
-    "title": null,
-    "creators": [],
-    "publisher": null,
-    "published_at": null,
+    "title": "Artificial Intelligence Risk Management Framework (AI RMF 1.0)",
+    "creators": ["Elham Tabassi"],
+    "publisher": "National Institute of Standards and Technology (NIST)",
+    "published_at": "2023-01-26",
     "event_date": null,
-    "version": null,
-    "language": null,
+    "version": "NIST AI 100-1 / AI RMF 1.0",
+    "language": "en",
     "duration": null,
-    "date_note": null
+    "date_note": "AI RMF 1.0 was published 2023-01-26. NIST states in 2026 that AI RMF 1.0 is being revised; this case analyzes the stable 1.0 framework and records the revision as a living follow-up rather than silently treating 1.0 as final."
   },
   "inspection": {
-    "method": "not inspected",
-    "full_content_used_ephemerally": false,
+    "method": "Direct inspection of the official AI RMF 1.0 publication/PDF, the NIST AI RMF Core pages, and the official Playbook/Manage material for operating-model and non-checklist boundaries.",
+    "full_content_used_ephemerally": true,
     "full_content_committed": false,
-    "confidence": "metadata_only",
+    "confidence": "direct",
     "gaps": [
-      "Source content has not been mapped yet."
+      "This case does not enumerate every category/subcategory or every trustworthy-AI characteristic in depth.",
+      "The 2026 revision of AI RMF 1.0 is in progress; revised framework semantics should be treated as a future re-analysis event."
     ]
   },
   "prior_knowledge": {
@@ -31,27 +32,120 @@
     "classification_required": true
   },
   "content_map": {
-    "problem": null,
-    "thesis": null,
-    "sections": [],
-    "concepts": [],
-    "mechanisms": [],
-    "tools": [],
-    "examples": [],
-    "claims": [],
-    "evidence": [],
-    "assumptions": [],
-    "limitations": [],
-    "open_questions": []
+    "problem": "Organizations need a practical way to reason about AI risks across technical, organizational and societal context without assuming one sector, one use case or one fixed list of controls.",
+    "thesis": "AI RMF 1.0 provides a voluntary, context-sensitive operating framework built around four functions—GOVERN, MAP, MEASURE and MANAGE—where governance is cross-cutting and the other functions are iterated and tailored rather than executed as a mandatory checklist.",
+    "sections": [
+      "Executive Summary / framework scope",
+      "Part 1: Framing Risk and trustworthy AI characteristics",
+      "§4 Effectiveness of the AI RMF",
+      "§5 AI RMF Core / Figure 5",
+      "§5.1 GOVERN",
+      "§5.2 MAP",
+      "§5.3 MEASURE",
+      "§5.4 MANAGE",
+      "NIST AI RMF Playbook boundary"
+    ],
+    "concepts": [
+      "AI RMF Core",
+      "cross-cutting governance",
+      "risk context mapping",
+      "risk measurement and monitoring",
+      "risk prioritization and response",
+      "voluntary/context-specific tailoring"
+    ],
+    "mechanisms": [
+      "GOVERN establishes policies, accountability, culture, roles and risk-tolerance structures that inform all other functions.",
+      "MAP recognizes the system context, intended purpose, affected actors and risks arising from that context.",
+      "MEASURE selects and applies qualitative, quantitative or mixed methods to assess, benchmark and monitor mapped risks and trustworthiness characteristics.",
+      "MANAGE prioritizes assessed risks, chooses responses, allocates resources and can produce explicit go/no-go or continue/decommission decisions.",
+      "Functions are continuously cross-referenced across the AI lifecycle rather than treated as a one-pass ordered workflow."
+    ],
+    "tools": [
+      "NIST AI RMF Playbook",
+      "AIRC AI RMF Core"
+    ],
+    "examples": [
+      "An organization maps who could be affected by an AI decision and the intended deployment context before choosing which fairness or performance measurements matter.",
+      "A measured risk can be accepted, mitigated, transferred or cause a deployment not to proceed depending on impact, likelihood, risk tolerance and available responses.",
+      "Governance defines who owns AI risk decisions and documentation instead of leaving risk assessment as an isolated model-testing activity."
+    ],
+    "claims": [
+      "AI RMF 1.0 is voluntary, rights-preserving, non-sector-specific and use-case agnostic.",
+      "The Core contains GOVERN, MAP, MEASURE and MANAGE, and GOVERN is designed as a cross-cutting function.",
+      "The functions are not a checklist or necessarily an ordered series of steps; risk management is continuous and iterative across the AI lifecycle.",
+      "MAP builds contextual knowledge and identifies risks related to that context.",
+      "MEASURE assesses and monitors identified risks using appropriate qualitative, quantitative or mixed methods.",
+      "MANAGE prioritizes and responds to risks and includes decisions about whether development or deployment should proceed.",
+      "The Playbook offers optional suggested actions and does not turn the framework into a universal technical-control catalog."
+    ],
+    "evidence": [
+      "NIST AI 100-1 publication metadata and abstract establish the 2023 release, voluntary scope and intended audience.",
+      "AI RMF 1.0 §5 and Figure 5 define the four functions and the cross-cutting governance model.",
+      "AIRC Core reproduces the framework's statement that actions are not a checklist and functions can be applied iteratively in context.",
+      "NIST Playbook states its suggestions are voluntary and neither a checklist nor a complete ordered process."
+    ],
+    "assumptions": [
+      "Organizations tailor categories, subcategories, measurements and responses to their own context and risk tolerance.",
+      "Risk management involves multidisciplinary and potentially external perspectives rather than only model engineering.",
+      "Specific technical controls, tests and metrics must be selected separately to achieve the framework outcomes."
+    ],
+    "limitations": [
+      "AI RMF is a voluntary framework and does not replace binding legal, regulatory, contractual or sector-specific obligations.",
+      "The framework defines outcomes and categories but does not prescribe one universal set of technical controls or metrics for every AI system.",
+      "The four functions should not be implemented as a rigid waterfall sequence; governance is cross-cutting and the process is iterative.",
+      "A framework-compliant process does not by itself prove that a deployed AI system is trustworthy or that residual risks are acceptable.",
+      "AI RMF 1.0 is being revised in 2026, so future framework changes require explicit re-analysis rather than silent reinterpretation."
+    ],
+    "open_questions": [
+      "Which technical control/evaluation catalogs best operationalize specific AI RMF outcomes for a concrete enterprise AI system?",
+      "How will the forthcoming revision change the 1.0 Core, trustworthiness characteristics or profile model?"
+    ]
   },
   "selection": {
     "requested_focus": "Understand the AI RMF operating model, its core functions and how risk management should shape practical AI system decisions; distinguish framework guidance from specific technical controls.",
-    "coherent_core": [],
-    "prerequisites": [],
-    "drop_notes": [],
-    "connections": []
+    "coherent_core": [
+      "GOVERN is the cross-cutting organizational risk-management substrate.",
+      "MAP establishes context and identifies risks that matter in that context.",
+      "MEASURE turns mapped risks into evidence through assessment, testing and monitoring.",
+      "MANAGE prioritizes risks and chooses responses, including go/no-go decisions.",
+      "The functions are iterative outcomes, not a mandatory four-step checklist or a ready-made controls catalog."
+    ],
+    "prerequisites": [
+      "difference between framework outcomes and implementation controls",
+      "risk context",
+      "risk measurement",
+      "risk response"
+    ],
+    "drop_notes": [
+      "Do not expand every AI RMF category/subcategory into a long compliance checklist in this first mental model.",
+      "Do not infer that one technical control automatically satisfies an entire function or trustworthiness characteristic.",
+      "Do not treat the 2026 revision-in-progress as evidence that AI RMF 1.0 outcomes have already changed."
+    ],
+    "connections": [
+      "Controlled execution, policy-as-code and observability may become implementation controls inside an AI risk program, but AI RMF itself does not assert those project-specific architectures.",
+      "The framework is a decision/governance layer over many possible AI technologies rather than a model architecture or agent runtime."
+    ]
   },
-  "verification_candidates": [],
-  "source_locators": [],
+  "verification_candidates": [
+    {
+      "question": "What concrete changes will NIST make in the revised AI RMF after the 2026 revision process?",
+      "reason": "The current NIST site explicitly says AI RMF 1.0 is being revised.",
+      "priority": "high"
+    },
+    {
+      "question": "Which AI RMF profiles or sector frameworks best map to enterprise AI-agent deployments?",
+      "reason": "Profiles are the bridge from use-case-agnostic outcomes to context-specific practice.",
+      "priority": "medium"
+    }
+  ],
+  "source_locators": [
+    {"label": "Framework scope and publication", "locator": "NIST publication page → Abstract / Published 2023-01-26"},
+    {"label": "Four Core functions", "locator": "AI RMF 1.0 §5 Core / Figure 5 (PDF p.20)"},
+    {"label": "GOVERN cross-cutting role", "locator": "AI RMF 1.0 §5.1 GOVERN (PDF pp.21–24)"},
+    {"label": "MAP contextual risk model", "locator": "AI RMF 1.0 §5.2 MAP"},
+    {"label": "MEASURE evidence model", "locator": "AI RMF 1.0 §5.3 MEASURE"},
+    {"label": "MANAGE prioritization and response", "locator": "AI RMF 1.0 §5.4 MANAGE"},
+    {"label": "Playbook non-checklist boundary", "locator": "NIST AI RMF Playbook → About / FAQs"}
+  ],
   "created_at": "2026-08-27"
 }
