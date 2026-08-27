@@ -89,7 +89,7 @@
     "visual_plan": {
       "dominant": {
         "type": "comparison",
-        "title": "One MVCC model, three snapshot contracts",
+        "title": "One MVCC model, two snapshot scopes",
         "nodes": [
           {
             "label": "READ COMMITTED",
@@ -97,14 +97,9 @@
             "text": "Each statement sees commits visible when that statement begins, so later statements in the same transaction can observe newer committed data."
           },
           {
-            "label": "REPEATABLE READ",
+            "label": "REPEATABLE READ / SERIALIZABLE",
             "title": "Stable transaction snapshot",
-            "text": "The transaction keeps one database view; conflicting updates committed after that view can force the transaction to abort and retry."
-          },
-          {
-            "label": "SERIALIZABLE",
-            "title": "Stable view + dependency checks",
-            "text": "PostgreSQL also tracks dangerous read/write dependencies and rejects a transaction when the concurrent result cannot match any serial order."
+            "text": "Both keep a transaction-wide view. Serializable additionally tracks dangerous read/write dependencies and can reject a transaction when the outcome cannot match a serial order."
           }
         ]
       },
@@ -118,7 +113,7 @@
       ],
       "image": {
         "needed": false,
-        "reason": "The main learning is how snapshot lifetime and failure behavior change across isolation levels; a comparison is more precise than a decorative or physical illustration."
+        "reason": "The main learning is the difference between statement-scoped and transaction-scoped visibility; Serializable's additional dependency checks are clearer as a boundary inside the stable-view side than as a third visual category."
       }
     },
     "concepts": [
