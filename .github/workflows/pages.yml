@@ -1,0 +1,64 @@
+name: Deploy Signal to Insight Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate public knowledge contracts
+        run: |
+          python scripts/validate.py
+          python scripts/validate_claim_evidence.py
+          python scripts/validate_knowledge_deltas.py
+          python scripts/validate_graph.py
+          python scripts/validate_syntheses.py
+          python scripts/validate_source_decisions.py
+
+      - name: Regenerate public and review surfaces
+        run: |
+          python scripts/build.py
+          python scripts/build_previews.py
+          python scripts/build_library.py
+          python scripts/build_graph.py
+          python scripts/build_syntheses.py
+          python scripts/build_sitemap.py
+
+      - name: Configure Pages metadata
+        uses: actions/configure-pages@v5
+
+      - name: Upload static site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
