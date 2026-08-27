@@ -1,0 +1,29 @@
+{
+  "version": "1.0.0",
+  "issue": 38,
+  "purpose": "Human review chain for the first intentionally curated public proof corpus. Selection is committed; approval decisions and notes remain local until a human explicitly publishes or records a disposition.",
+  "insight_candidates": [
+    "temporal-durable-execution-mental-model",
+    "open-policy-agent-decision-enforcement-model",
+    "react-reason-act-observe-loop"
+  ],
+  "synthesis_candidates": [
+    "production-agent-stack-beyond-model"
+  ],
+  "required_checks": [
+    "central_model",
+    "claim_provenance",
+    "limitations",
+    "knowledge_delta",
+    "source_decision",
+    "visual_usefulness"
+  ],
+  "guardrails": [
+    "The review kit never changes review to published automatically.",
+    "Approve requires all required checks and a non-empty human review note.",
+    "The synthesis publish command is unavailable until every source insight is actually published.",
+    "A local approve record is not publication provenance; the existing publish scripts remain the only publication transition.",
+    "Hold or do_not_publish dispositions require a note so intentional non-publication has an auditable local reason.",
+    "Review previews remain noindex,nofollow and are not added to public discovery surfaces by this plan."
+  ]
+}
