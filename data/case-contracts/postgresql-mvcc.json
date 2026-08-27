@@ -1,0 +1,50 @@
+{
+  "contract_version": "1.0.0",
+  "intake_id": "intake-2026-08-27-postgresql-mvcc-intro-html",
+  "insight_id": "postgresql-mvcc-snapshot-isolation",
+  "knowledge_delta": {
+    "insight_id": "postgresql-mvcc-snapshot-isolation",
+    "summary": "PostgreSQL adds a multiversion concurrency model with row-version visibility, MVCC snapshots and isolation-level boundaries. The existing SQLite WAL reader snapshot is suppressed as a different implementation mechanism rather than merged by shared snapshot vocabulary.",
+    "items": [
+      {"relationship": "new", "concept_id": "multiversion-concurrency-control", "label": "Multiversion Concurrency Control", "source_basis": "PostgreSQL maintains data consistency using a multiversion model so statements can see a database snapshot while concurrent updates create other versions.", "prior_basis": "The graph already contains workflow state and SQLite WAL storage concepts but no general multiversion database-concurrency mechanism.", "interpretation": "MVCC becomes a distinct concurrency model for separating read visibility from the latest in-place value and thereby reducing reader/writer lock contention.", "evidence_insights": []},
+      {"relationship": "new", "concept_id": "mvcc-snapshot", "label": "MVCC snapshot", "source_basis": "A PostgreSQL statement or transaction sees row versions through a snapshot whose lifetime depends on the isolation level.", "prior_basis": "SQLite WAL already has a reader end-mark snapshot, but that is tied to WAL commit position rather than PostgreSQL row-version visibility.", "interpretation": "The new snapshot concept is kept separate because the implementation mechanism and isolation semantics differ even though both stabilize what a reader can observe.", "evidence_insights": []},
+      {"relationship": "new", "concept_id": "transaction-isolation", "label": "Transaction isolation", "source_basis": "PostgreSQL isolation levels change which concurrent effects can be observed and when unsafe histories become waits or serialization failures.", "prior_basis": "No prior graph concept represented database isolation levels as the boundary around snapshot lifetime and concurrency anomalies.", "interpretation": "Isolation level becomes the correctness dial around MVCC: snapshot visibility is necessary but not sufficient to describe concurrent transaction behavior.", "evidence_insights": []}
+    ],
+    "suppressed_prior_matches": ["wal-reader-snapshot"]
+  },
+  "claim_evidence": {
+    "insight_id": "postgresql-mvcc-snapshot-isolation",
+    "claims": [
+      {"id": "postgresql-mvcc-snapshot-model", "text": "PostgreSQL uses Multiversion Concurrency Control so each SQL statement sees a snapshot/database version rather than an inconsistent mixture of concurrent updates.", "impact": "high", "origin": "source", "status": "supported", "evidence": [{"kind": "primary_source", "source_id": "src-postgresql-mvcc-docs-2026", "url": "https://www.postgresql.org/docs/current/mvcc-intro.html", "locator": "PostgreSQL 18 → 13.1 Introduction"}], "note": null},
+      {"id": "postgresql-mvcc-read-write-nonblocking", "text": "Under PostgreSQL MVCC, ordinary reads do not conflict with locks acquired for writing, so reading does not block writing and writing does not block reading, although explicit lock facilities remain available.", "impact": "high", "origin": "source", "status": "supported", "evidence": [{"kind": "primary_source", "source_id": "src-postgresql-mvcc-docs-2026", "url": "https://www.postgresql.org/docs/current/mvcc-intro.html", "locator": "PostgreSQL 18 → 13.1 Introduction"}], "note": null},
+      {"id": "postgresql-isolation-snapshot-lifetime", "text": "PostgreSQL Read Committed gives each SELECT a statement-start snapshot, while Repeatable Read keeps a transaction-stable snapshot and Serializable adds dependency monitoring that can abort transactions to prevent serialization anomalies.", "impact": "high", "origin": "verification", "status": "supported", "evidence": [{"kind": "verification", "source_id": "src-postgresql-mvcc-docs-2026", "url": "https://www.postgresql.org/docs/current/transaction-iso.html", "locator": "PostgreSQL 18 → 13.2.1 Read Committed; 13.2.2 Repeatable Read; 13.2.3 Serializable"}], "note": "The detailed isolation-level behavior comes from the linked official Transaction Isolation documentation, not from the short supplied introduction page."},
+      {"id": "postgresql-mvcc-not-sqlite-wal-snapshot", "text": "PostgreSQL MVCC snapshots and SQLite WAL reader end marks both give readers stable visibility boundaries, but they should not be merged as one mechanism: PostgreSQL selects visible row versions under transaction isolation while SQLite WAL fixes a reader's position in an append-oriented WAL.", "impact": "high", "origin": "project_interpretation", "status": "supported", "evidence": [{"kind": "primary_source", "source_id": "src-postgresql-mvcc-docs-2026", "url": "https://www.postgresql.org/docs/current/mvcc-intro.html", "locator": "PostgreSQL 18 → 13.1 Introduction"}, {"kind": "verification", "source_id": "src-postgresql-mvcc-docs-2026", "url": "https://www.postgresql.org/docs/current/transaction-iso.html", "locator": "PostgreSQL 18 → 13.2 Transaction Isolation"}, {"kind": "prior_insight", "insight_id": "sqlite-write-ahead-log-checkpointing", "locator": "SQLite WAL reader end-mark snapshot model"}], "note": "This scope distinction is project synthesis across two database sources; neither vendor documentation makes this cross-product comparison."}
+    ]
+  },
+  "prerequisite_map": {
+    "insight_id": "postgresql-mvcc-snapshot-isolation",
+    "summary": "The first PostgreSQL concurrency model needs three pieces: MVCC as the versioning mechanism, snapshots as visibility boundaries and transaction isolation as the rule set governing snapshot lifetime and remaining anomalies.",
+    "items": [
+      {"id": "postgresql-prereq-mvcc", "label": "Multiversion Concurrency Control", "concept_id": "multiversion-concurrency-control", "priority": "must_know_now", "prior_coverage": "absent", "state": "explained_here", "reason": "Without multiple row versions, the snapshot and reduced reader/writer contention model has no mechanism.", "resolution": {"kind": "explained_here", "insight_id": "postgresql-mvcc-snapshot-isolation", "target": null}},
+      {"id": "postgresql-prereq-snapshot", "label": "MVCC snapshot", "concept_id": "mvcc-snapshot", "priority": "must_know_now", "prior_coverage": "absent", "state": "explained_here", "reason": "A snapshot defines which row versions are visible and is the direct mental model behind consistent reads during concurrent changes.", "resolution": {"kind": "explained_here", "insight_id": "postgresql-mvcc-snapshot-isolation", "target": null}},
+      {"id": "postgresql-prereq-isolation", "label": "Transaction isolation", "concept_id": "transaction-isolation", "priority": "must_know_now", "prior_coverage": "absent", "state": "explained_here", "reason": "Snapshot visibility alone does not state which anomalies are allowed or when a transaction must wait, fail or retry.", "resolution": {"kind": "explained_here", "insight_id": "postgresql-mvcc-snapshot-isolation", "target": null}}
+    ]
+  },
+  "learning_prompt": {
+    "insight_id": "postgresql-mvcc-snapshot-isolation",
+    "retention_prompt": "Without looking back, reconstruct PostgreSQL MVCC: explain why multiple row versions reduce reader/writer contention, what an MVCC snapshot controls, how Read Committed and Repeatable Read differ in snapshot lifetime, and one conflict that MVCC still resolves with waiting, failure or explicit locking.",
+    "answer_key": {"problem_from": "whole_source_map.problem", "mechanism_from": "whole_source_map.thesis", "anchor_concept_ids": ["multiversion-concurrency-control", "mvcc-snapshot", "transaction-isolation"], "boundary_limitation_index": 0},
+    "transfer_prompt": {"prompt": "Two sessions read and update business data concurrently. Decide whether Read Committed, Repeatable Read or Serializable is the relevant starting point: what view must stay stable, which anomaly must be prevented, and what transaction-retry behavior must the application be prepared to handle?", "expected_concept_ids": ["multiversion-concurrency-control", "mvcc-snapshot", "transaction-isolation"]}
+  },
+  "source_decision": {
+    "insight_id": "postgresql-mvcc-snapshot-isolation",
+    "decision": "explainer_is_enough",
+    "rationale": "The supplied MVCC introduction is very short and the explainer preserves its complete snapshot/read-write contention model while adding clearly labeled official isolation-document verification. Reopen the PostgreSQL isolation documentation when choosing an isolation level for real code, but the original introduction is not required to retain the mental model.",
+    "novelty": {"level": "high", "reason": "MVCC introduces a new database-concurrency mechanism; the existing SQLite snapshot is explicitly rejected as a same-concept match."},
+    "source_quality": {"level": "high", "reason": "The primary and verification material are official PostgreSQL 18 documentation from the PostgreSQL Global Development Group."},
+    "relevance": {"level": "high", "reason": "Snapshot and isolation semantics are directly useful when reasoning about concurrent reads, updates and transactional business invariants."},
+    "practical_leverage": {"level": "high", "reason": "The model prevents the common mistake of equating MVCC with conflict-free concurrency and makes isolation/retry choices explicit."},
+    "compression_loss": {"level": "low", "reason": "The supplied introduction itself is compact; omitted internals such as tuple visibility and VACUUM are not necessary for the requested first mental model."},
+    "selected_parts": []
+  }
+}
