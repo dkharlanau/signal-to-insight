@@ -3,288 +3,103 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Signal to Insight — Personalized Source-to-Understanding Engine</title>
-  <meta name="description" content="Turn videos, papers, tools, repositories and other useful sources into coherent, personalized visual explanations with concepts, tools, actions, sources and dates.">
-  <meta name="theme-color" content="#f1f0e9">
+  <title>Signal to Insight — Evidence-backed source-to-understanding</title>
+  <meta name="description" content="Turn a source into a verified change in understanding: whole-source model, Knowledge Delta, Source Decision, visual explainer and reconstruction checkpoint.">
+  <meta name="theme-color" content="#f2efe7">
   <meta property="og:title" content="Signal to Insight">
-  <meta property="og:description" content="Give it a source. Get back a coherent mental model, useful tools and next actions.">
+  <meta property="og:description" content="Not another summarizer. A cumulative, evidence-backed source-to-understanding engine.">
   <meta property="og:type" content="website">
-  <link rel="stylesheet" href="styles.css">
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "Signal to Insight",
-    "description": "A personalized source-to-understanding engine for concepts, tools and systems.",
-    "author": {
-      "@type": "Person",
-      "name": "Dzmitryi Kharlanau",
-      "url": "https://github.com/dkharlanau"
-    }
-  }
-  </script>
+  <style>
+    :root{--paper:#f2efe7;--ink:#171717;--muted:#66635d;--line:#c8c2b5;--soft:#e7e1d5;--dark:#202326;--max:1180px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}a{color:inherit}.wrap{width:min(var(--max),calc(100% - 38px));margin:auto}
+    header{display:flex;justify-content:space-between;align-items:center;gap:24px;padding:26px 0;border-bottom:1px solid var(--line)}.brand{text-decoration:none;font-weight:850;letter-spacing:-.025em}.mark{display:inline-grid;place-items:center;width:36px;height:36px;border:1px solid var(--ink);font-size:12px;margin-right:10px}nav{display:flex;gap:20px;flex-wrap:wrap}nav a{text-decoration:none;font-size:12px;text-transform:uppercase;letter-spacing:.09em;font-weight:750}
+    .hero{padding:82px 0 58px}.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:var(--muted)}h1{font-size:clamp(54px,9vw,106px);line-height:.91;letter-spacing:-.07em;margin:16px 0 28px;max-width:1030px}h1 em,h2 em{font-family:Georgia,serif;font-weight:400}.lede{font-size:clamp(21px,3vw,31px);line-height:1.24;max-width:880px;color:#353431;margin:0}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:30px}.button{display:inline-block;padding:13px 17px;border:1px solid var(--ink);text-decoration:none;font-weight:800}.button.primary{background:var(--ink);color:var(--paper)}
+    .metrics{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);margin-top:58px}.metric{padding:22px;border-right:1px solid var(--line)}.metric:last-child{border-right:0}.metric strong{display:block;font-size:36px;letter-spacing:-.05em}.metric span{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+    section{padding:70px 0;border-bottom:1px solid var(--line)}h2{font-size:clamp(38px,6vw,70px);line-height:1;letter-spacing:-.052em;margin:10px 0 22px;max-width:970px}.section-lede{font-size:20px;max-width:790px;color:#3f3d38}
+    .loop{display:grid;grid-template-columns:repeat(6,1fr);margin-top:34px;border:1px solid var(--ink)}.loop div{padding:20px;border-right:1px solid var(--line);min-height:160px}.loop div:last-child{border-right:0}.loop small{display:block;color:var(--muted);font-weight:800;letter-spacing:.08em}.loop strong{display:block;font-size:18px;margin:10px 0}
+    .difference{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:34px}.card{border:1px solid var(--line);padding:28px;min-height:210px;background:rgba(255,255,255,.16)}.card small{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:800}.card h3{font-size:28px;letter-spacing:-.035em;margin:9px 0}.card p{margin-bottom:0}
+    .proof{display:grid;grid-template-columns:1.05fr .95fr;gap:14px;margin-top:34px}.proof-main{background:var(--dark);color:#f4f1e9;padding:34px}.proof-main h3{font-size:36px;line-height:1.05;letter-spacing:-.04em;margin:12px 0}.proof-side{border:1px solid var(--line);padding:30px}.proof-side ul{padding-left:20px}.proof-side li{margin:8px 0}
+    .status-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:34px}.status{border:1px solid var(--line);padding:26px}.status strong{font-size:21px;display:block;margin-bottom:12px}.status ul{padding-left:19px;margin:0}.status li{margin:7px 0}.status.pending{background:var(--soft)}
+    .boundary{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:30px}.boundary div{padding:30px;border:1px solid var(--line)}.boundary .dark{background:var(--dark);color:#f3f0e8}.boundary h3{font-size:27px;margin-top:0}.boundary ul{padding-left:20px}
+    footer{padding:34px 0 52px;color:var(--muted);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:13px}
+    @media(max-width:850px){header{align-items:flex-start;flex-direction:column}.metrics{grid-template-columns:repeat(2,1fr)}.metric:nth-child(2){border-right:0}.loop{grid-template-columns:repeat(2,1fr)}.loop div{border-bottom:1px solid var(--line)}.difference,.proof,.status-grid,.boundary{grid-template-columns:1fr}}@media(max-width:520px){.metrics{grid-template-columns:1fr}.metric{border-right:0;border-bottom:1px solid var(--line)}.loop{grid-template-columns:1fr}}
+  </style>
 </head>
 <body>
-  <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
-
-  <header class="site-header wrap">
-    <a class="brand" href="#top" aria-label="Signal to Insight home">
-      <span class="brand-mark">S→I</span>
-      <span>Signal to Insight</span>
-    </a>
-    <nav aria-label="Primary navigation">
-      <a href="#method">Engine</a>
-      <a href="#explainer">Case 001</a>
-      <a href="#actions">Action map</a>
-      <a href="data/sources.json">Sources</a>
-      <a href="data/insights.json">Data</a>
-    </nav>
+  <header class="wrap">
+    <a class="brand" href="./"><span class="mark">S→I</span>Signal to Insight</a>
+    <nav aria-label="Primary navigation"><a href="walkthrough/">Walkthrough</a><a href="library/">Library</a><a href="knowledge/">Knowledge</a><a href="docs/COHORT_20_REPORT.md">Evidence</a><a href="https://github.com/dkharlanau/signal-to-insight">GitHub</a></nav>
   </header>
 
-  <main id="top">
+  <main>
     <section class="hero wrap">
-      <p class="eyebrow">PERSONAL RESEARCH ENGINE / 0.2</p>
-      <h1>Give it a source.<br><em>Get back understanding.</em></h1>
-      <div class="hero-grid">
-        <p class="lede">Video, paper, article, tool, repository or unfamiliar system → a coherent visual model of what matters, what to learn, what to try and what to remember.</p>
-        <div class="signal-chain" aria-label="Source to understanding process">
-          <span>source</span><b>→</b><span>model</span><b>→</b><span>action</span>
-        </div>
-      </div>
-      <div class="source-types" aria-label="Supported source types">
-        <span>VIDEO</span><span>PAPER</span><span>ARTICLE</span><span>REPOSITORY</span><span>TOOL</span><span>DOCS</span><span>SYSTEM</span><span>PODCAST</span>
-      </div>
-    </section>
-
-    <section class="profile-band wrap" aria-labelledby="profileTitle">
-      <div>
-        <p class="kicker">THE PERSONALIZATION LAYER</p>
-        <h2 id="profileTitle">Not “summarize this.”<br><em>Figure out what I need from this.</em></h2>
-      </div>
-      <div class="profile-rules">
-        <p><strong>Keep</strong><span>Concepts, prerequisites, tools and examples required for a complete mental model.</span></p>
-        <p><strong>Research</strong><span>Missing context, official docs, counterpoints and useful adjacent systems.</span></p>
-        <p><strong>Drop</strong><span>Repetition, promotional framing and detail that changes neither understanding nor action.</span></p>
-        <p><strong>Never force</strong><span>A SAP or enterprise angle when another application explains the concept better.</span></p>
+      <p class="eyebrow">Evidence-backed source-to-understanding</p>
+      <h1>Turn a source into <em>a change in understanding.</em></h1>
+      <p class="lede">Signal to Insight maps the whole source, compares it with accumulated knowledge, shows what actually changed, tells you whether the original is still worth your time, and leaves a model you can later reconstruct.</p>
+      <div class="actions"><a class="button primary" href="walkthrough/">See the golden walkthrough →</a><a class="button" href="explainers/why-enterprise-ai-agents-fail-after-the-poc/">Open published explainer</a></div>
+      <div class="metrics" aria-label="Validation evidence">
+        <div class="metric"><strong>20</strong><span>real sources processed</span></div>
+        <div class="metric"><strong>5</strong><span>source types</span></div>
+        <div class="metric"><strong>20</strong><span>Source Decisions</span></div>
+        <div class="metric"><strong>1 / 19</strong><span>published / review</span></div>
       </div>
     </section>
 
-    <section id="method" class="method section wrap">
-      <div class="section-number">00</div>
-      <div>
-        <p class="kicker">THE ENGINE</p>
-        <h2>Compress the material.<br><em>Preserve the model.</em></h2>
-      </div>
-      <ol class="method-grid">
-        <li><span>01</span><strong>Capture</strong><p>Record canonical source, creator, publication/event date, capture date and analysis date.</p></li>
-        <li><span>02</span><strong>Map</strong><p>Understand the whole source before selecting highlights: problem, thesis, concepts, tools, examples and assumptions.</p></li>
-        <li><span>03</span><strong>Select</strong><p>Apply the personal research profile and keep the coherent core — including prerequisites needed to understand it.</p></li>
-        <li><span>04</span><strong>Enrich</strong><p>Verify important claims, open official documentation and add missing context or useful tool connections.</p></li>
-        <li><span>05</span><strong>Explain</strong><p>Build a visual landing page ending in use / try / learn / build / watch decisions.</p></li>
-      </ol>
-    </section>
-
-    <section class="quality section wrap">
-      <p class="eyebrow">QUALITY GATE</p>
-      <div class="quality-grid">
-        <h2>A page is finished when <em>the source is optional.</em></h2>
-        <div>
-          <p>Can I explain the topic end-to-end after reading the page?</p>
-          <p>Do I know which concepts and tools deserve deeper attention?</p>
-          <p>Do I understand what the source misses or oversimplifies?</p>
-          <p>Do I know what to use, try, learn, build, watch — or ignore?</p>
-        </div>
+    <section class="wrap" id="loop">
+      <p class="eyebrow">The product loop</p>
+      <h2>Not “save and summarize.” <em>Compile trusted knowledge.</em></h2>
+      <p class="section-lede">The durable asset is not a page. It is a cumulative model with provenance, stable concepts, explicit evidence boundaries and review state.</p>
+      <div class="loop">
+        <div><small>01</small><strong>Source</strong><p>Canonical URL, creator, dates and provenance.</p></div>
+        <div><small>02</small><strong>Whole-source map</strong><p>Problem, thesis, mechanisms, evidence and limitations before compression.</p></div>
+        <div><small>03</small><strong>Knowledge Delta</strong><p>New, reinforced, refined or contradicted knowledge — with noise suppressed.</p></div>
+        <div><small>04</small><strong>Source Decision</strong><p>Consume, skim, explainer-is-enough or skip-for-now.</p></div>
+        <div><small>05</small><strong>Explainer</strong><p>Visual, coherent and generated from structured reviewed knowledge.</p></div>
+        <div><small>06</small><strong>Reconstruct</strong><p>Test whether the mental model survives after reading.</p></div>
       </div>
     </section>
 
-    <article id="explainer" class="explainer section wrap">
-      <header class="explainer-head">
-        <div>
-          <p class="eyebrow">CASE / 001 · VIDEO → MENTAL MODEL</p>
-          <h2>Why enterprise AI agents fail <em>after</em> the POC</h2>
-        </div>
-        <a class="source-link" href="https://www.youtube.com/watch?v=mav15aW9lLM" target="_blank" rel="noreferrer">Original source ↗</a>
-      </header>
-
-      <div class="thesis-grid">
-        <p class="thesis">The useful idea is broader than “enterprise AI.” A model may be capable of doing the work while the <strong>execution system around it</strong> is incapable of controlling, explaining or replaying that work.</p>
-        <div class="meta-card">
-          <span>Source</span><strong>AI Engineer World's Fair 2026</strong>
-          <span>Speakers</span><strong>Christopher Lovejoy<br>Saul Howard</strong>
-          <span>Event date</span><strong>02 Jul 2026</strong>
-          <span>Analyzed</span><strong>26 Aug 2026</strong>
-          <span>Scope</span><strong>Architecture pattern, not SAP-specific</strong>
-        </div>
+    <section class="wrap" id="difference">
+      <p class="eyebrow">Why this is different</p>
+      <h2>Four outputs a normal summary <em>does not give you.</em></h2>
+      <div class="difference">
+        <article class="card"><small>Delta</small><h3>What changed?</h3><p>Every review-ready source is compared against existing concept memory. Attractive but irrelevant matches are recorded as noise instead of becoming fake graph edges.</p></article>
+        <article class="card"><small>Evidence</small><h3>Why believe it?</h3><p>Important claims carry source, verification or prior-insight evidence. Project interpretation is labeled separately from source-authored claims.</p></article>
+        <article class="card"><small>Decision</small><h3>Do I need the original?</h3><p>Source Decision is made only after whole-source mapping. `skim_selected_parts` locators must be backed by the same claim-evidence trace.</p></article>
+        <article class="card"><small>Retention</small><h3>Can I reconstruct it later?</h3><p>Each insight has authored reconstruction and transfer prompts. Real delayed scores remain a human benchmark rather than a generated confidence number.</p></article>
       </div>
+    </section>
 
-      <section class="contrast" aria-labelledby="contrastTitle">
-        <p class="kicker" id="contrastTitle">THE FALSE FINISH LINE</p>
-        <div class="contrast-grid">
-          <div class="contrast-card pale">
-            <span>CAPABILITY</span>
-            <h3>Model → Tool → Result</h3>
-            <p>The demo proves that the model can perform the task.</p>
-          </div>
-          <div class="arrow-block" aria-hidden="true">≠</div>
-          <div class="contrast-card dark">
-            <span>CONTROLLED EXECUTION</span>
-            <h3>Authority + State + Human + History + Replay</h3>
-            <p>The system proves that consequential work can be governed and reconstructed.</p>
-          </div>
-        </div>
-      </section>
-
-      <section id="principles" class="primitives" aria-labelledby="primitivesTitle">
-        <p class="kicker" id="primitivesTitle">THE COHERENT CORE · FOUR IDEAS THAT BELONG TOGETHER</p>
-
-        <div class="primitive">
-          <div class="primitive-id">01</div>
-          <div class="primitive-copy">
-            <h3>Execution history, not only logs</h3>
-            <p>Record enough state and evidence to reconstruct the request, authority, context, decision, action and verification later.</p>
-          </div>
-          <div class="mini-diagram ledger" aria-label="Execution history diagram">
-            <span>request</span><span>identity</span><span>context</span><span>decision</span><span>action</span><span>verify</span>
-          </div>
-        </div>
-
-        <div class="primitive">
-          <div class="primitive-id">02</div>
-          <div class="primitive-copy">
-            <h3>Separate execution from protected data</h3>
-            <p>Observability should not automatically grant broad access to the data used by the workflow. Keep references and protected objects separable.</p>
-          </div>
-          <div class="plane-diagram" aria-label="Separated execution and data planes diagram">
-            <div><small>EXECUTION</small><strong>event → object:v4</strong></div>
-            <i>↕ authorized reference</i>
-            <div><small>PROTECTED DATA</small><strong>object:v4</strong></div>
-          </div>
-        </div>
-
-        <div class="primitive">
-          <div class="primitive-id">03</div>
-          <div class="primitive-copy">
-            <h3>Task first. Executor second.</h3>
-            <p>Define the task independently from whether an AI or person performs it. Human handoff becomes a normal execution mode, not a parallel exception process.</p>
-          </div>
-          <div class="task-diagram" aria-label="Human and AI task equivalence">
-            <strong>approve_change(context)</strong>
-            <div><span>AI executor</span><span>Human executor</span></div>
-          </div>
-        </div>
-
-        <div class="primitive">
-          <div class="primitive-id">04</div>
-          <div class="primitive-copy">
-            <h3>Replay turns history into eval material</h3>
-            <p>When context can be reconstructed, the same case can be rerun with a changed model, prompt, policy or tool and compared against the prior result.</p>
-          </div>
-          <div class="replay-diagram" aria-label="Replay evaluation diagram">
-            <span>same case</span><b>→</b><span>old stack / A</span>
-            <span>same case</span><b>→</b><span>new stack / B</span>
-          </div>
-        </div>
-      </section>
-
-      <section class="application" aria-labelledby="applicationTitle">
-        <div>
-          <p class="kicker">MENTAL MODEL</p>
-          <h3 id="applicationTitle">Any consequential tool call</h3>
-          <p>Customer update, refund, infrastructure change, account action, healthcare workflow or SAP master-data update: the domain changes, but the production question is the same.</p>
-        </div>
-        <div class="flow" aria-label="Controlled agent execution flow">
-          <span>Request</span><b>↓</b>
-          <span>Identity + authority</span><b>↓</b>
-          <span>Context access</span><b>↓</b>
-          <span class="split">Task → AI / Human</span><b>↓</b>
-          <span>Tool / API action</span><b>↓</b>
-          <span>Verification + history</span><b>↓</b>
-          <span>Replay / evaluation</span>
-        </div>
-      </section>
-
-      <section class="tool-section" aria-labelledby="toolsTitle">
-        <p class="kicker">ADJACENT TOOLS TO LEARN</p>
-        <h3 id="toolsTitle">Turn the concept into a learning path.</h3>
-        <p class="section-note">These are project-added connections for learning; they are not presented as tools recommended by the speakers.</p>
-        <div class="tool-grid">
-          <a class="tool-card" href="https://docs.temporal.io/" target="_blank" rel="noreferrer">
-            <span>LEARN</span><strong>Temporal</strong><p>Durable workflows and recovery for long-running execution.</p><small>durable execution ↗</small>
-          </a>
-          <a class="tool-card" href="https://opentelemetry.io/docs/" target="_blank" rel="noreferrer">
-            <span>LEARN</span><strong>OpenTelemetry</strong><p>A standard model for traces, metrics and logs across distributed systems.</p><small>observability ↗</small>
-          </a>
-          <a class="tool-card" href="https://www.openpolicyagent.org/docs" target="_blank" rel="noreferrer">
-            <span>TRY</span><strong>Open Policy Agent</strong><p>A concrete way to separate policy decisions from application logic.</p><small>policy as code ↗</small>
-          </a>
-        </div>
-      </section>
-
-      <section class="critique" aria-labelledby="critiqueTitle">
-        <p class="kicker">WHAT THE HIGH-LEVEL MODEL DOESN'T SOLVE</p>
-        <h3 id="critiqueTitle">Useful primitives still leave real engineering.</h3>
-        <div class="critique-grid">
-          <p><strong>History</strong><br>Still needs identity evidence, component/policy versions, retention, event semantics and tamper resistance.</p>
-          <p><strong>Security</strong><br>Separating data and orchestration reduces exposure; it does not eliminate injection or exfiltration risk.</p>
-          <p><strong>Handoff</strong><br>Still needs ownership, locking, idempotency, approval authority, timeout and recovery rules.</p>
-        </div>
-      </section>
-
-      <section id="actions" class="action-section" aria-labelledby="actionTitle">
-        <p class="kicker">WHAT TO DO WITH THIS</p>
-        <h3 id="actionTitle">Understanding should end in a decision.</h3>
-        <div class="action-map">
-          <div><span>USE NOW</span><p>Judge agent readiness by whether consequential actions can be reconstructed and explained later.</p></div>
-          <div><span>TRY</span><p>Model one task as AI/human-executor independent; write one explicit policy rule outside app logic.</p></div>
-          <div><span>LEARN</span><p>Durable execution, event sourcing, OpenTelemetry concepts and policy-as-code.</p></div>
-          <div><span>BUILD</span><p>A minimal execution ledger: request → authority → context → executor → action → verification.</p></div>
-          <div><span>WATCH</span><p>Whether agent platforms converge on standard identity, state, handoff and replay layers.</p></div>
-        </div>
-      </section>
-
-      <footer class="takeaway">
-        <p class="kicker">THE DURABLE INSIGHT</p>
-        <blockquote>Don't judge an AI system only by whether the model can do the work. Judge whether the surrounding execution system lets the work be controlled, transferred, reconstructed and evaluated.</blockquote>
-      </footer>
-
-      <section class="source-ledger" aria-labelledby="sourcesTitle">
-        <p class="kicker">SOURCES + DATES</p>
-        <h3 id="sourcesTitle">Keep provenance visible.</h3>
-        <div class="source-row">
-          <span>PRIMARY</span>
-          <p><a href="https://www.youtube.com/watch?v=mav15aW9lLM" target="_blank" rel="noreferrer">Lovejoy & Howard — Why Your Enterprise Tech Stack Isn't Ready for AI Agents</a><br>AI Engineer World's Fair 2026 · event 02 Jul 2026 · analyzed 26 Aug 2026</p>
-        </div>
-        <div class="source-row">
-          <span>VERIFY</span>
-          <p><a href="https://ai.engineer/worldsfair/schedule" target="_blank" rel="noreferrer">AI Engineer World's Fair 2026 schedule</a><br>Used to verify session/event date · accessed 26 Aug 2026</p>
-        </div>
-        <div class="source-row">
-          <span>ENRICH</span>
-          <p><a href="https://docs.temporal.io/" target="_blank" rel="noreferrer">Temporal docs</a> · <a href="https://opentelemetry.io/docs/" target="_blank" rel="noreferrer">OpenTelemetry docs</a> · <a href="https://www.openpolicyagent.org/docs" target="_blank" rel="noreferrer">OPA docs</a><br>Adjacent learning/tool context · accessed 26 Aug 2026</p>
-        </div>
-      </section>
-    </article>
-
-    <section class="knowledge section wrap">
-      <div>
-        <p class="eyebrow">KNOWLEDGE LAYER</p>
-        <h2>Landing page outside.<br><em>Structured memory underneath.</em></h2>
+    <section class="wrap" id="proof">
+      <p class="eyebrow">Public proof</p>
+      <h2>One intentionally published case. <em>Nineteen remain review-only.</em></h2>
+      <p class="section-lede">Publication is a trust boundary, not a content-volume target. The 20-source cohort was used to expose failures in retrieval, evidence linking, public projection and parallel agent execution before expanding the platform.</p>
+      <div class="proof">
+        <div class="proof-main"><p class="eyebrow" style="color:#bfc1bf">Case 001 · published</p><h3>Why enterprise AI agents fail after the POC</h3><p>The case establishes the baseline controlled-execution and execution-history model. Later sources refine these concepts without rewriting the public evidence boundary.</p><a class="button" style="border-color:#f4f1e9;color:#f4f1e9" href="walkthrough/">Follow the complete proof path →</a></div>
+        <div class="proof-side"><strong>20-source cohort</strong><ul><li>7 documentation sources</li><li>4 repositories</li><li>4 papers</li><li>4 articles</li><li>1 video</li><li>20 Knowledge Deltas</li><li>20 Source Decisions</li><li>85 important claims at cohort freeze</li></ul><a class="button" href="docs/COHORT_20_REPORT.md">Read structural evidence</a></div>
       </div>
-      <p>Source metadata, dates, concepts, tools, limitations and action decisions are stored as data so future agents can connect new material to what has already been learned.</p>
-      <div class="button-stack">
-        <a class="button" href="data/insights.json">Open insights.json →</a>
-        <a class="button" href="data/sources.json">Open sources.json →</a>
-        <a class="button" href="config/research-profile.json">Research profile →</a>
+    </section>
+
+    <section class="wrap" id="status">
+      <p class="eyebrow">Current product boundary</p>
+      <h2>Know what works now — <em>and what is not yet proven.</em></h2>
+      <div class="status-grid">
+        <div class="status"><strong>Usable today</strong><ul><li>Intake + provenance</li><li>Whole-source bundles</li><li>Cumulative concept graph</li><li>Knowledge Delta + evidence</li><li>Prerequisite maps</li><li>Source Decision</li><li>Review/publish isolation</li><li>Private/local context</li></ul></div>
+        <div class="status"><strong>Requires a research agent</strong><ul><li>Inspect arbitrary external sources</li><li>Use browser/PDF/repository tools</li><li>Perform source-specific verification</li><li>Write normalized research artifacts</li></ul></div>
+        <div class="status pending"><strong>Human evidence pending</strong><ul><li>Delayed reconstruction benchmark #19</li><li>Curated publication review #38</li><li>Source Decision calibration #39</li><li>Repository-level Pages enablement #45</li></ul></div>
+      </div>
+    </section>
+
+    <section class="wrap" id="boundary">
+      <p class="eyebrow">Trust boundary</p>
+      <h2>Review knowledge may improve the model <em>without becoming public.</em></h2>
+      <div class="boundary">
+        <div><h3>Internal cumulative memory</h3><ul><li>Published + review-supported concepts</li><li>Prior retrieval for later research</li><li>Knowledge evolution and refinements</li><li>Explicit false-match suppression</li></ul></div>
+        <div class="dark"><h3>Public projection</h3><ul><li>Published evidence only</li><li>Human-confirmed publication</li><li>No review previews in sitemap</li><li>No silent leakage when a published concept receives a review refinement</li></ul></div>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer wrap">
-    <span>Signal to Insight</span>
-    <span>Built by <a href="https://github.com/dkharlanau">Dzmitryi Kharlanau</a></span>
-    <span>Source → model → action</span>
-  </footer>
-
-  <script src="app.js"></script>
+  <footer class="wrap"><span>Signal to Insight · MIT licensed</span><span><a href="walkthrough/">Walkthrough</a> · <a href="library/">Library</a> · <a href="knowledge/">Knowledge</a> · <a href="https://github.com/dkharlanau/signal-to-insight">GitHub</a></span></footer>
 </body>
 </html>
