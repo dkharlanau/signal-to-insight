@@ -40,6 +40,11 @@ jobs:
           python scripts/build_concepts.py --self-test
           python scripts/build_concepts.py --check
 
+      - name: Validate real-case visual extensions
+        run: |
+          python scripts/validate_visual_extensions.py
+          python scripts/validate_visual_extensions.py --self-test
+
       - name: Validate curated Knowledge Delta
         run: python scripts/validate_knowledge_deltas.py
 
@@ -130,6 +135,7 @@ jobs:
           node --check evidence.js
           node --check decision.js
           node --check concept-links.js
+          node --check visual-extensions.js
           node --check library.js
           node --check capture.js
           node capture.js --self-test
