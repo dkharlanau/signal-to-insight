@@ -25,6 +25,18 @@ if (document.body.classList.contains('generated-page')) {
   evidenceScript.src = '../../evidence.js';
   evidenceScript.async = true;
   document.head.appendChild(evidenceScript);
+
+  const decisionStyles = document.createElement('link');
+  decisionStyles.rel = 'stylesheet';
+  decisionStyles.href = '../../decision.css';
+  decisionStyles.dataset.sourceDecisionUi = 'true';
+  document.head.appendChild(decisionStyles);
+
+  const decisionScript = document.createElement('script');
+  decisionScript.src = '../../decision.js';
+  decisionScript.async = true;
+  decisionScript.dataset.sourceDecisionUi = 'true';
+  document.head.appendChild(decisionScript);
 }
 
 if (document.body.classList.contains('preview-page')) {
