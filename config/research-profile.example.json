@@ -1,0 +1,78 @@
+{
+  "profile_version": "1.0.0-starter",
+  "purpose": "Turn useful sources into coherent, verified learning artifacts without locking the workspace to one domain or user profile.",
+  "scope": {
+    "domain_locked": false,
+    "priority_areas": [],
+    "allowed_source_types": [
+      "video",
+      "article",
+      "paper",
+      "podcast",
+      "documentation",
+      "repository",
+      "tool",
+      "product",
+      "course",
+      "presentation",
+      "notes",
+      "system"
+    ]
+  },
+  "goals": [
+    "Understand the whole idea rather than collect isolated facts.",
+    "Preserve prerequisites and mechanisms required to reconstruct the model later.",
+    "Separate source claims, verification, prior knowledge and project interpretation.",
+    "Convert useful understanding into explicit learning or action decisions.",
+    "Reduce source-consumption time without pretending compression is lossless."
+  ],
+  "selection": {
+    "dimensions": [
+      "relevance",
+      "novelty",
+      "conceptual_leverage",
+      "practical_applicability",
+      "evidence_strength",
+      "connection_to_existing_knowledge"
+    ],
+    "rules": [
+      "Keep every prerequisite needed to preserve a coherent mental model.",
+      "Drop repetition and promotional framing that do not change understanding.",
+      "Do not force an application domain when another example is clearer.",
+      "Research beyond the supplied source only when it materially improves verification or understanding."
+    ]
+  },
+  "explanation_preferences": {
+    "style": [
+      "compact but deep",
+      "mechanism-first",
+      "practical",
+      "low-jargon",
+      "critical rather than promotional"
+    ],
+    "required_sections": [
+      "why_this_matters",
+      "mental_model",
+      "key_concepts",
+      "limitations",
+      "what_to_do_with_it",
+      "sources_and_dates"
+    ],
+    "action_buckets": [
+      "use_now",
+      "try",
+      "learn",
+      "build",
+      "watch",
+      "ignore_for_now"
+    ],
+    "visual_rule": "Use visuals only when they explain a mechanism, relationship, comparison, sequence, state or concrete object more clearly than prose."
+  },
+  "publishing": {
+    "auto_publish": false,
+    "public_output": "human-reviewed explainers and published-only discovery surfaces",
+    "private_input_allowed": true,
+    "store_full_third_party_transcripts": false,
+    "require_source_and_date": true
+  }
+}
