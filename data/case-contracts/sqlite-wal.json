@@ -48,7 +48,7 @@
     "selected_parts": [
       {"label": "How WAL Works", "locator": "Write-Ahead Logging → How WAL Works", "why": "Confirms the append-first commit inversion and commit-record boundary.", "claim_refs": ["sqlite-wal-append-commit"]},
       {"label": "Concurrency", "locator": "Write-Ahead Logging → Concurrency", "why": "Shows reader end marks, WAL page lookup, reader/writer coexistence and the one-writer limit.", "claim_refs": ["sqlite-wal-reader-concurrency"]},
-      {"label": "Checkpoint starvation", "locator": "Write-Ahead Logging → Avoiding Excessively Large WAL Files", "why": "Explains why overlapping long reads can prevent WAL reset and create file growth/performance problems.", "claim_refs": ["sqlite-wal-checkpoint-starvation"]}
+      {"label": "Checkpoint starvation", "locator": "Write-Ahead Logging → Checkpointing; Avoiding Excessively Large WAL Files", "why": "Explains why overlapping long reads can prevent WAL reset and create file growth/performance problems.", "claim_refs": ["sqlite-wal-checkpoint-starvation"]}
     ]
   }
 }
