@@ -8,7 +8,7 @@
     "id": "src-kubernetes-controllers-2026",
     "type": "documentation",
     "title": "Controllers",
-    "canonical_url": "https://kubernetes.io/docs/concepts/architecture/controller/",
+    "canonical_url": "https://kubernetes.io/docs/concepts/architecture/controller",
     "creators": ["Kubernetes documentation contributors"],
     "publisher": "Kubernetes",
     "event": null,
@@ -91,26 +91,10 @@
       }
     },
     "concepts": [
-      {
-        "name": "Reconciliation loop",
-        "depth": "learn",
-        "why_needed": "The controller is defined by repeated observation and convergence, not by executing a fixed sequence once."
-      },
-      {
-        "name": "Desired state",
-        "depth": "know",
-        "why_needed": "The resource spec gives the controller a declarative target that is separate from the current state of the world."
-      },
-      {
-        "name": "Current state",
-        "depth": "know",
-        "why_needed": "Controllers need feedback about reality; desired state alone cannot tell whether corrective work is needed."
-      },
-      {
-        "name": "Focused controller responsibility",
-        "depth": "learn",
-        "why_needed": "Kubernetes prefers many controllers managing particular aspects of state rather than one interlinked monolithic control loop."
-      }
+      {"name": "Reconciliation loop", "depth": "learn", "why_needed": "The controller is defined by repeated observation and convergence, not by executing a fixed sequence once."},
+      {"name": "Desired state", "depth": "know", "why_needed": "The resource spec gives the controller a declarative target that is separate from the current state of the world."},
+      {"name": "Current state", "depth": "know", "why_needed": "Controllers need feedback about reality; desired state alone cannot tell whether corrective work is needed."},
+      {"name": "Focused controller responsibility", "depth": "learn", "why_needed": "Kubernetes prefers many controllers managing particular aspects of state rather than one interlinked monolithic control loop."}
     ],
     "tool_map": [
       {
@@ -123,21 +107,9 @@
       }
     ],
     "examples": [
-      {
-        "domain": "Kubernetes Job",
-        "scenario": "A Job object declares that work should complete, while Pods are the resources that actually run the work.",
-        "question": "Can the Job controller keep creating or observing the required Pods until current state reflects the Job's desired outcome?"
-      },
-      {
-        "domain": "external infrastructure",
-        "scenario": "A controller manages something outside the cluster such as node capacity.",
-        "question": "Can it observe desired state from the API, change the external system, and then report/observe the resulting state without assuming the first external call is final?"
-      },
-      {
-        "domain": "business automation",
-        "scenario": "A record should exist in several systems, but one downstream copy can disappear or lag after an earlier successful run.",
-        "question": "Would expressing the target state and periodically reconciling observed state be safer than treating the original workflow run as permanent proof of correctness?"
-      }
+      {"domain": "Kubernetes Job", "scenario": "A Job object declares that work should complete, while Pods are the resources that actually run the work.", "question": "Can the Job controller keep creating or observing the required Pods until current state reflects the Job's desired outcome?"},
+      {"domain": "external infrastructure", "scenario": "A controller manages something outside the cluster such as node capacity.", "question": "Can it observe desired state from the API, change the external system, and then report/observe the resulting state without assuming the first external call is final?"},
+      {"domain": "business automation", "scenario": "A record should exist in several systems, but one downstream copy can disappear or lag after an earlier successful run.", "question": "Would expressing the target state and periodically reconciling observed state be safer than treating the original workflow run as permanent proof of correctness?"}
     ],
     "limitations": [
       "Reconciliation does not remove the need for safe repeated side effects; a controller can still cause duplicates or oscillation if its actions are not designed for repetition.",
@@ -146,28 +118,12 @@
       "The controller pattern is not the same as durable workflow execution: it focuses on continuously converging state, whereas a workflow engine may preserve the progress of a particular long-running execution."
     ],
     "action_map": {
-      "use_now": [
-        "When designing automation, distinguish a target condition that must remain true from a one-time sequence that merely attempted to create it.",
-        "For long-lived invariants, ask what observes drift after the original workflow finishes."
-      ],
-      "try": [
-        "Model one operational invariant as desired state + observed state + reconciliation action instead of a procedural retry script."
-      ],
-      "learn": [
-        "controller reconciliation",
-        "desired-state systems",
-        "safe repeated side effects",
-        "control-loop decomposition"
-      ],
-      "build": [
-        "A tiny reconciler that compares a declarative JSON target with observed state and emits only the corrective action required to close the delta."
-      ],
-      "watch": [
-        "How controller-runtime implementations handle retries, backoff, event coalescing and stale observations."
-      ],
-      "ignore_for_now": [
-        "Treating every business workflow as a Kubernetes-style controller; use reconciliation only where a persistent target state exists."
-      ]
+      "use_now": ["When designing automation, distinguish a target condition that must remain true from a one-time sequence that merely attempted to create it.", "For long-lived invariants, ask what observes drift after the original workflow finishes."],
+      "try": ["Model one operational invariant as desired state + observed state + reconciliation action instead of a procedural retry script."],
+      "learn": ["controller reconciliation", "desired-state systems", "safe repeated side effects", "control-loop decomposition"],
+      "build": ["A tiny reconciler that compares a declarative JSON target with observed state and emits only the corrective action required to close the delta."],
+      "watch": ["How controller-runtime implementations handle retries, backoff, event coalescing and stale observations."],
+      "ignore_for_now": ["Treating every business workflow as a Kubernetes-style controller; use reconciliation only where a persistent target state exists."]
     },
     "connections": [
       "durable execution: complementary but different — durable execution preserves progress of a workflow; reconciliation repeatedly converges a state invariant",
@@ -175,13 +131,7 @@
       "idempotency under retry: repeated reconciliation makes duplicate-safe side effects an important implementation concern"
     ],
     "supporting_sources": [
-      {
-        "title": "Kubernetes Controllers",
-        "url": "https://kubernetes.io/docs/concepts/architecture/controller/",
-        "publisher": "Kubernetes",
-        "purpose": "primary source for desired/current state, controller loop, API/direct control and controller decomposition",
-        "accessed_at": "2026-08-27"
-      }
+      {"title": "Kubernetes Controllers", "url": "https://kubernetes.io/docs/concepts/architecture/controller/", "publisher": "Kubernetes", "purpose": "primary source for desired/current state, controller loop, API/direct control and controller decomposition", "accessed_at": "2026-08-27"}
     ],
     "tags": ["kubernetes", "controllers", "reconciliation", "desired-state", "automation", "distributed-systems"],
     "provenance": {
@@ -194,54 +144,13 @@
   },
   "graph": {
     "concepts": [
-      {
-        "id": "reconciliation-loop",
-        "label": "Reconciliation loop",
-        "summary": "A continuing control loop that observes current state, compares it with desired state and performs bounded corrective actions to reduce the difference.",
-        "domain": "distributed systems",
-        "coverage": "explained",
-        "insight_ids": ["kubernetes-reconciliation-controller-loop"],
-        "aliases": ["controller reconciliation", "desired-state reconciliation"],
-        "tags": ["controllers", "desired-state", "automation", "convergence"]
-      },
-      {
-        "id": "desired-state",
-        "label": "Desired state",
-        "summary": "A declarative representation of what a managed system or resource should look like, kept separate from observed reality.",
-        "domain": "distributed systems",
-        "coverage": "explained",
-        "insight_ids": ["kubernetes-reconciliation-controller-loop"],
-        "aliases": ["target state"],
-        "tags": ["declarative", "controllers", "state"]
-      },
-      {
-        "id": "observed-state",
-        "label": "Observed state",
-        "summary": "The controller's current view of what is actually true, used as feedback for deciding whether corrective action is required.",
-        "domain": "distributed systems",
-        "coverage": "explained",
-        "insight_ids": ["kubernetes-reconciliation-controller-loop"],
-        "aliases": ["current state"],
-        "tags": ["controllers", "feedback", "state"]
-      }
+      {"id": "reconciliation-loop", "label": "Reconciliation loop", "summary": "A continuing control loop that observes current state, compares it with desired state and performs bounded corrective actions to reduce the difference.", "domain": "distributed systems", "coverage": "explained", "insight_ids": ["kubernetes-reconciliation-controller-loop"], "aliases": ["controller reconciliation", "desired-state reconciliation"], "tags": ["controllers", "desired-state", "automation", "convergence"]},
+      {"id": "desired-state", "label": "Desired state", "summary": "A declarative representation of what a managed system or resource should look like, kept separate from observed reality.", "domain": "distributed systems", "coverage": "explained", "insight_ids": ["kubernetes-reconciliation-controller-loop"], "aliases": ["target state"], "tags": ["declarative", "controllers", "state"]},
+      {"id": "observed-state", "label": "Observed state", "summary": "The controller's current view of what is actually true, used as feedback for deciding whether corrective action is required.", "domain": "distributed systems", "coverage": "explained", "insight_ids": ["kubernetes-reconciliation-controller-loop"], "aliases": ["current state"], "tags": ["controllers", "feedback", "state"]}
     ],
     "relations": [
-      {
-        "id": "rel-reconciliation-loop-depends-on-desired-state",
-        "from": "reconciliation-loop",
-        "to": "desired-state",
-        "type": "depends_on",
-        "rationale": "A controller needs an explicit target state in order to know what condition it should converge toward.",
-        "evidence_insights": ["kubernetes-reconciliation-controller-loop"]
-      },
-      {
-        "id": "rel-reconciliation-loop-depends-on-observed-state",
-        "from": "reconciliation-loop",
-        "to": "observed-state",
-        "type": "depends_on",
-        "rationale": "Reconciliation requires feedback about current reality so the controller can determine whether corrective work is necessary.",
-        "evidence_insights": ["kubernetes-reconciliation-controller-loop"]
-      }
+      {"id": "rel-reconciliation-loop-depends-on-desired-state", "from": "reconciliation-loop", "to": "desired-state", "type": "depends_on", "rationale": "A controller needs an explicit target state in order to know what condition it should converge toward.", "evidence_insights": ["kubernetes-reconciliation-controller-loop"]},
+      {"id": "rel-reconciliation-loop-depends-on-observed-state", "from": "reconciliation-loop", "to": "observed-state", "type": "depends_on", "rationale": "Reconciliation requires feedback about current reality so the controller can determine whether corrective work is necessary.", "evidence_insights": ["kubernetes-reconciliation-controller-loop"]}
     ]
   }
 }
