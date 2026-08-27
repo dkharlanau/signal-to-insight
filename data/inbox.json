@@ -99,6 +99,17 @@
       "source_id": null,
       "insight_id": null,
       "notes": "GitHub source intake issue #56. Dogfood cohort: data systems repository."
+    },
+    {
+      "id": "intake-2026-08-27-github-langgraph",
+      "source_url": "https://github.com/langchain-ai/langgraph",
+      "source_type": "repository",
+      "submitted_at": "2026-08-27",
+      "requested_focus": "Understand LangGraph's model for resilient agent orchestration, state, control flow and durable execution; compare the responsibilities with the existing ReAct/Temporal/controlled-execution model without forcing equivalence.",
+      "status": "queued",
+      "source_id": null,
+      "insight_id": null,
+      "notes": "GitHub source intake issue #57. Dogfood cohort: AI agent framework repository."
     }
   ]
 }
