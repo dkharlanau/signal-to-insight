@@ -1,0 +1,67 @@
+name: Sync reanalysis review previews
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "data/reanalysis-events.json"
+      - "data/source-revisions.json"
+      - "data/sources.json"
+      - "data/insights.json"
+      - "scripts/build_reanalysis.py"
+  pull_request:
+    branches: [main]
+    paths:
+      - "data/reanalysis-events.json"
+      - "data/source-revisions.json"
+      - "data/sources.json"
+      - "data/insights.json"
+      - "scripts/build_reanalysis.py"
+
+permissions:
+  contents: write
+
+jobs:
+  previews:
+    if: github.actor != 'github-actions[bot]' || github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || 'main' }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate reanalysis boundary
+        run: |
+          python scripts/validate_freshness.py
+          python scripts/build_reanalysis.py --self-test
+
+      - name: Rebuild reanalysis review previews
+        run: python scripts/build_reanalysis.py
+
+      - name: Verify previews on pull requests
+        if: github.event_name == 'pull_request'
+        run: |
+          if [ -n "$(git status --porcelain -- previews/reanalysis)" ]; then
+            git status --short -- previews/reanalysis
+            echo "Generated reanalysis previews are missing or stale."
+            exit 1
+          fi
+
+      - name: Commit synced previews on main
+        if: github.event_name == 'push'
+        run: |
+          if [ -z "$(git status --porcelain -- previews/reanalysis)" ]; then
+            echo "Reanalysis previews already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add previews/reanalysis
+          git commit -m "build: sync reanalysis review previews"
+          git push origin HEAD:main
