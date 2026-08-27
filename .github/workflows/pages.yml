@@ -42,6 +42,7 @@ jobs:
           python scripts/build_library.py
           python scripts/build_graph.py
           python scripts/build_syntheses.py
+          python scripts/build_concepts.py
           python scripts/build_sitemap.py
 
       - name: Configure Pages metadata
