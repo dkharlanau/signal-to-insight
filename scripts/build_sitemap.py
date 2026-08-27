@@ -10,6 +10,8 @@ import sys
 from datetime import date
 from pathlib import Path
 
+from build_concepts import build_records
+
 ROOT = Path(__file__).resolve().parents[1]
 INSIGHTS = ROOT / "data" / "insights.json"
 TARGET = ROOT / "sitemap.xml"
@@ -39,6 +41,7 @@ def render() -> str:
     data = load(INSIGHTS)
     published = [item for item in data.get("insights", []) if item.get("status") == "published"]
     published.sort(key=lambda item: item.get("slug", ""))
+    concepts = build_records()
     today = date.today().isoformat()
 
     blocks = [
@@ -55,6 +58,28 @@ def render() -> str:
                 lastmod,
                 "monthly",
                 "0.9",
+            )
+        )
+
+    for concept in concepts:
+        # Concept pages are generated only from published evidence + meaningful graph
+        # relations, so they are safe to expose as normal discoverable routes.
+        supporting_dates = []
+        for insight_id in concept.get("supporting_insight_ids", []):
+            insight = next((item for item in published if item.get("id") == insight_id), None)
+            if insight:
+                supporting_dates.append(
+                    insight.get("provenance", {}).get("publication_review", {}).get("approved_at")
+                    or insight.get("provenance", {}).get("reviewed_at")
+                    or today
+                )
+        lastmod = max(supporting_dates) if supporting_dates else today
+        blocks.append(
+            url_block(
+                f"{BASE}/knowledge/concepts/{concept['id']}/",
+                lastmod,
+                "monthly",
+                "0.7",
             )
         )
 
