@@ -1,0 +1,77 @@
+{
+  "cohort_version": "1.0.0",
+  "cohort_id": "validation-20",
+  "purpose": "Validation-first dogfood cohort used to expose source-processing, cumulative-knowledge and reliability failure modes before further platform expansion.",
+  "members": [
+    "intake-2026-08-26-ai-engineer-enterprise-stack-agents",
+    "intake-2026-08-26-temporal-docs",
+    "intake-2026-08-26-github-opa",
+    "intake-2026-08-26-arxiv-2210-03629",
+    "intake-2026-08-26-psychologicalscience-j-1467-9280-2006-01693-x",
+    "intake-2026-08-27-kubernetes-controller",
+    "intake-2026-08-27-sqlite-wal-html",
+    "intake-2026-08-27-postgresql-mvcc-intro-html",
+    "intake-2026-08-27-github-duckdb",
+    "intake-2026-08-27-github-langgraph",
+    "intake-2026-08-27-docs-optimize",
+    "intake-2026-08-27-nist-artificial-intelligence-risk-management-framewor",
+    "intake-2026-08-27-arxiv-1706-03762",
+    "intake-2026-08-27-research-mapreduce-simplified-data-processing-on-large-cl",
+    "intake-2026-08-27-martinfowler-idempotent-receiver-html",
+    "intake-2026-08-27-github-pydantic-ai",
+    "intake-2026-08-27-developer-purpose",
+    "intake-2026-08-27-opentelemetry-traces",
+    "intake-2026-08-27-sre-monitoring-distributed-systems",
+    "intake-2026-08-27-12factor-processes"
+  ],
+  "observed_failure_modes": [
+    {
+      "id": "retrieval-semantic-precision-recall",
+      "observation": "Prior retrieval produced attractive but irrelevant cross-layer matches for Kubernetes and SQLite, while the SRE monitoring query missed the broader existing observability model.",
+      "evidence": ["Kubernetes prior-match classification", "SQLite WAL suppressed history matches", "SRE observability recall miss"],
+      "resolution": "Cohort-derived retrieval benchmark probes plus query-relevant bridge expansion; PR #94.",
+      "status": "resolved_with_regression"
+    },
+    {
+      "id": "evidence-boundary-mismatch",
+      "observation": "Draft review records occasionally referenced concepts, prerequisite explainers or skim locators that were not evidenced by the current source boundary.",
+      "evidence": ["Kubernetes transfer concept mismatch", "Idempotent Receiver review-only prerequisite", "SQLite Source Decision locator mismatch"],
+      "resolution": "Existing semantic validators blocked materialization; authored records were corrected rather than weakening the gates.",
+      "status": "resolved_by_contract"
+    },
+    {
+      "id": "mixed-public-review-evidence",
+      "observation": "A concept that began with published evidence later accumulated review-only refinements, requiring the public projection to remain frozen on reviewed public evidence.",
+      "evidence": ["observability refined by OpenTelemetry and Google SRE"],
+      "resolution": "Materializer freezes the pre-review published concept projection before adding the first review evidence; main commit 48b6ab4.",
+      "status": "resolved_by_contract"
+    },
+    {
+      "id": "stale-pr-materialization-diff",
+      "observation": "Parallel agent loops advanced main after a case branch was created, causing two-point diff logic to misclassify main-only patches as changes owned by a stale PR.",
+      "evidence": ["Terraform cohort PR attempted to materialize a main-only MapReduce patch"],
+      "resolution": "Pull-request materialization now uses merge-base/triple-dot diff with added/modified filters; PR #86.",
+      "status": "resolved_with_ci_fix"
+    },
+    {
+      "id": "visual-primitive-overreach",
+      "observation": "A PostgreSQL isolation model tried to use a two-sided comparison primitive for three isolation levels.",
+      "evidence": ["PostgreSQL MVCC comparison validator failure"],
+      "resolution": "Kept the visual grammar small and changed the case to a sequence instead of expanding the DSL for one source.",
+      "status": "resolved_by_content_change"
+    },
+    {
+      "id": "publication-self-test-order-dependence",
+      "observation": "Publication self-test assumed the first review insight was publishable and failed once cumulative review evidence made that assumption invalid.",
+      "evidence": ["mixed evidence publication self-test failure after Idempotent Receiver"],
+      "resolution": "Self-test now searches for a valid positive dry-run candidate while retaining fail-closed publication rules; PR #74.",
+      "status": "resolved_with_test_fix"
+    }
+  ],
+  "human_evidence_gaps": [
+    "Per-run elapsed work, manual interventions and subjective utility remain private in .local dogfood records and were not fabricated for this structural audit.",
+    "Delayed reconstruction and transfer outcomes require a real human delay and remain tracked by issue #19.",
+    "Source Decision calibration against full-source consumption requires actual consumption checks and remains tracked by issue #39.",
+    "Publication of the curated proof corpus requires explicit human review and remains tracked by issue #38."
+  ]
+}

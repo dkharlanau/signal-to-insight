@@ -1,0 +1,62 @@
+name: Validate 20-source cohort
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "data/cohorts/**.json"
+      - "data/inbox.json"
+      - "data/sources.json"
+      - "data/insights.json"
+      - "data/knowledge-graph.json"
+      - "data/knowledge-deltas.json"
+      - "data/claim-evidence.json"
+      - "data/prerequisite-maps.json"
+      - "data/learning-prompts.json"
+      - "data/source-decisions.json"
+      - "data/research-bundles/**.json"
+      - "data/case-patches/**.json"
+      - "data/case-contracts/**.json"
+      - "scripts/cohort_audit.py"
+      - "docs/COHORT_20_REPORT.md"
+      - ".github/workflows/cohort-audit.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "data/cohorts/**.json"
+      - "data/inbox.json"
+      - "data/sources.json"
+      - "data/insights.json"
+      - "data/knowledge-graph.json"
+      - "data/knowledge-deltas.json"
+      - "data/claim-evidence.json"
+      - "data/prerequisite-maps.json"
+      - "data/learning-prompts.json"
+      - "data/source-decisions.json"
+      - "data/research-bundles/**.json"
+      - "data/case-patches/**.json"
+      - "data/case-contracts/**.json"
+      - "scripts/cohort_audit.py"
+      - "docs/COHORT_20_REPORT.md"
+      - ".github/workflows/cohort-audit.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Audit frozen validation cohort
+        run: python scripts/cohort_audit.py --check --check-report docs/COHORT_20_REPORT.md
+
+      - name: Compile cohort audit
+        run: python -m py_compile scripts/cohort_audit.py
