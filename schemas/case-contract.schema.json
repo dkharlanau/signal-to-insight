@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dkharlanau.github.io/signal-to-insight/schemas/case-contract.schema.json",
+  "title": "Signal to Insight companion review contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version",
+    "intake_id",
+    "insight_id",
+    "knowledge_delta",
+    "claim_evidence",
+    "prerequisite_map",
+    "learning_prompt",
+    "source_decision"
+  ],
+  "properties": {
+    "contract_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "intake_id": {"type": "string", "pattern": "^intake-[a-z0-9-]+$"},
+    "insight_id": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+    "knowledge_delta": {"type": "object"},
+    "claim_evidence": {"type": "object"},
+    "prerequisite_map": {"type": "object"},
+    "learning_prompt": {"type": "object"},
+    "source_decision": {"type": "object"}
+  }
+}
