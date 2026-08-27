@@ -1,0 +1,57 @@
+name: Validate human benchmark kit
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "data/human-validation-plan.json"
+      - "data/inbox.json"
+      - "data/insights.json"
+      - "data/learning-prompts.json"
+      - "data/source-decisions.json"
+      - "previews/**"
+      - "explainers/**"
+      - "scripts/human_validation.py"
+      - "scripts/learning_utility.py"
+      - "scripts/source_decision_benchmark.py"
+      - "docs/HUMAN_VALIDATION.md"
+      - ".github/workflows/human-validation.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "data/human-validation-plan.json"
+      - "data/inbox.json"
+      - "data/insights.json"
+      - "data/learning-prompts.json"
+      - "data/source-decisions.json"
+      - "previews/**"
+      - "explainers/**"
+      - "scripts/human_validation.py"
+      - "scripts/learning_utility.py"
+      - "scripts/source_decision_benchmark.py"
+      - "docs/HUMAN_VALIDATION.md"
+      - ".github/workflows/human-validation.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate fixed balanced samples
+        run: python scripts/human_validation.py validate-plan
+
+      - name: Test local-only human evidence workflow
+        run: python scripts/human_validation.py self-test
+
+      - name: Compile validation runner
+        run: python -m py_compile scripts/human_validation.py
