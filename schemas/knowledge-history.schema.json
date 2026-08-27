@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dkharlanau.github.io/signal-to-insight/schemas/knowledge-history.schema.json",
+  "title": "Signal to Insight knowledge evolution history",
+  "type": "object",
+  "required": ["history_version", "entities"],
+  "properties": {
+    "history_version": {"type": "string"},
+    "entities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["entity_type", "entity_id", "active_state_id", "public_state_id", "states", "transitions", "observations"],
+        "properties": {
+          "entity_type": {"enum": ["concept", "relation"]},
+          "entity_id": {"type": "string", "minLength": 1},
+          "active_state_id": {"type": "string", "minLength": 1},
+          "public_state_id": {"type": ["string", "null"]},
+          "states": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["id", "effective_at", "review_status", "snapshot", "evidence", "note"],
+              "properties": {
+                "id": {"type": "string", "pattern": "^state-[a-z0-9-]+$"},
+                "effective_at": {"type": "string", "format": "date"},
+                "review_status": {"enum": ["reviewed", "working"]},
+                "snapshot": {
+                  "type": "object",
+                  "properties": {
+                    "summary": {"type": "string"},
+                    "domain": {"type": "string"},
+                    "coverage": {"enum": ["introduced", "explained", "applied"]},
+                    "from": {"type": "string"},
+                    "to": {"type": "string"},
+                    "type": {"enum": ["depends_on", "enables", "realized_by", "refines", "related_to"]},
+                    "rationale": {"type": "string"}
+                  },
+                  "additionalProperties": false
+                },
+                "evidence": {"$ref": "#/$defs/evidence"},
+                "note": {"type": "string"}
+              },
+              "additionalProperties": false
+            }
+          },
+          "transitions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["id", "from_state_id", "to_state_id", "kind", "effective_at", "rationale", "evidence"],
+              "properties": {
+                "id": {"type": "string", "pattern": "^transition-[a-z0-9-]+$"},
+                "from_state_id": {"type": "string"},
+                "to_state_id": {"type": "string"},
+                "kind": {"enum": ["refined", "narrowed", "contradicted", "superseded", "restored_reconsidered"]},
+                "effective_at": {"type": "string", "format": "date"},
+                "rationale": {"type": "string", "minLength": 1},
+                "evidence": {"$ref": "#/$defs/evidence"}
+              },
+              "additionalProperties": false
+            }
+          },
+          "observations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["id", "at", "kind", "rationale", "evidence"],
+              "properties": {
+                "id": {"type": "string", "pattern": "^observation-[a-z0-9-]+$"},
+                "at": {"type": "string", "format": "date"},
+                "kind": {"enum": ["reinforced", "refined", "narrowed", "contradicted", "superseded", "restored_reconsidered"]},
+                "rationale": {"type": "string", "minLength": 1},
+                "evidence": {"$ref": "#/$defs/evidence"}
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "$defs": {
+    "evidence": {
+      "type": "object",
+      "required": ["insight_ids", "knowledge_review_ids", "reanalysis_event_ids", "independence"],
+      "properties": {
+        "insight_ids": {"type": "array", "items": {"type": "string"}},
+        "knowledge_review_ids": {"type": "array", "items": {"type": "string"}},
+        "reanalysis_event_ids": {"type": "array", "items": {"type": "string"}},
+        "independence": {"enum": ["independent", "source_revision", "mixed"]}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
