@@ -113,6 +113,7 @@
   },
   "graph": {
     "concepts": [
+      {"id": "observability", "insight_ids": ["opentelemetry-distributed-trace-causality"]},
       {"id": "distributed-trace", "label": "Distributed trace", "summary": "A correlated telemetry view of distributed work assembled from spans sharing trace identity, hierarchy and causal associations across boundaries.", "domain": "observability", "coverage": "explained", "insight_ids": ["opentelemetry-distributed-trace-causality"], "aliases": ["trace"], "tags": ["tracing", "observability", "distributed-systems"]},
       {"id": "telemetry-span", "label": "Telemetry span", "summary": "A timed unit of observed work carrying span identity, parent context, attributes, events, links and status within distributed tracing.", "domain": "observability", "coverage": "explained", "insight_ids": ["opentelemetry-distributed-trace-causality"], "aliases": ["span"], "tags": ["tracing", "operation", "telemetry"]},
       {"id": "trace-context-propagation", "label": "Trace context propagation", "summary": "Serializing and carrying trace/span identity across process and network boundaries so downstream spans can join the same distributed causal view.", "domain": "observability", "coverage": "explained", "insight_ids": ["opentelemetry-distributed-trace-causality"], "aliases": ["distributed context propagation"], "tags": ["context", "propagation", "tracing"]},
