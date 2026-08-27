@@ -165,6 +165,17 @@
       "source_id": null,
       "insight_id": null,
       "notes": "GitHub source intake issue #62. Dogfood cohort: distributed systems pattern article."
+    },
+    {
+      "id": "intake-2026-08-27-github-pydantic-ai",
+      "source_url": "https://github.com/pydantic/pydantic-ai",
+      "source_type": "repository",
+      "submitted_at": "2026-08-27",
+      "requested_focus": "Understand Pydantic AI's typed agent-loop model, dependency/context handling, tool execution and evaluation surface; compare responsibilities with existing agent-loop and production-control concepts without treating framework features as universal architecture.",
+      "status": "queued",
+      "source_id": null,
+      "insight_id": null,
+      "notes": "GitHub source intake issue #63. Dogfood cohort: AI framework repository."
     }
   ]
 }
