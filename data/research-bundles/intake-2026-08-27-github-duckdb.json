@@ -1,27 +1,28 @@
 {
   "bundle_version": "1.1.0",
   "intake_id": "intake-2026-08-27-github-duckdb",
-  "source_id": null,
+  "source_id": "src-duckdb-repository-2026",
   "source": {
     "type": "repository",
     "canonical_url": "https://github.com/duckdb/duckdb",
-    "title": null,
-    "creators": [],
-    "publisher": null,
+    "title": "DuckDB",
+    "creators": ["DuckDB project"],
+    "publisher": "DuckDB Foundation / DuckDB project",
     "published_at": null,
     "event_date": null,
     "version": null,
-    "language": null,
+    "language": "en",
     "duration": null,
-    "date_note": null
+    "date_note": "Living repository and documentation inspected on 2026-08-27; no single publication date is asserted."
   },
   "inspection": {
-    "method": "not inspected",
-    "full_content_used_ephemerally": false,
+    "method": "Direct inspection of the official DuckDB GitHub repository README and official DuckDB documentation for deployment/concurrency boundaries.",
+    "full_content_used_ephemerally": true,
     "full_content_committed": false,
-    "confidence": "metadata_only",
+    "confidence": "direct",
     "gaps": [
-      "Source content has not been mapped yet."
+      "This case focuses on the in-process composition model, not DuckDB's vectorized execution internals or storage engine implementation.",
+      "DuckDB's newer multi-process/client-server options are evolving; the core insight here remains the architectural leverage of embedding analytics directly in an application process."
     ]
   },
   "prior_knowledge": {
@@ -32,102 +33,128 @@
         "concept_id": "protected-data-separation",
         "label": "Protected data separation",
         "coverage": "introduced",
-        "evidence_insights": [
-          {
-            "id": "enterprise-agents-production-substrate",
-            "status": "published",
-            "title": "Why enterprise AI agents fail after the POC"
-          }
-        ],
-        "relationship_to_source": "unclassified"
+        "evidence_insights": [{"id": "enterprise-agents-production-substrate", "status": "published", "title": "Why enterprise AI agents fail after the POC"}],
+        "relationship_to_source": "not_relevant"
       },
       {
         "concept_id": "worker-process",
         "label": "Worker Process",
         "coverage": "explained",
-        "evidence_insights": [
-          {
-            "id": "temporal-durable-execution-mental-model",
-            "status": "review",
-            "title": "Temporal: the mental model behind durable execution"
-          }
-        ],
-        "relationship_to_source": "unclassified"
+        "evidence_insights": [{"id": "temporal-durable-execution-mental-model", "status": "review", "title": "Temporal: the mental model behind durable execution"}],
+        "relationship_to_source": "not_relevant"
       },
       {
         "concept_id": "controlled-execution",
         "label": "Controlled execution",
         "coverage": "explained",
-        "evidence_insights": [
-          {
-            "id": "enterprise-agents-production-substrate",
-            "status": "published",
-            "title": "Why enterprise AI agents fail after the POC"
-          },
-          {
-            "id": "open-policy-agent-decision-enforcement-model",
-            "status": "review",
-            "title": "Open Policy Agent: separate policy decisions from enforcement"
-          },
-          {
-            "id": "react-reason-act-observe-loop",
-            "status": "review",
-            "title": "ReAct: reason, act, observe — then update the plan"
-          }
-        ],
-        "relationship_to_source": "unclassified"
+        "evidence_insights": [{"id": "enterprise-agents-production-substrate", "status": "published", "title": "Why enterprise AI agents fail after the POC"}],
+        "relationship_to_source": "not_relevant"
       },
       {
         "concept_id": "activity-execution",
         "label": "Activity Execution",
         "coverage": "explained",
-        "evidence_insights": [
-          {
-            "id": "temporal-durable-execution-mental-model",
-            "status": "review",
-            "title": "Temporal: the mental model behind durable execution"
-          }
-        ],
-        "relationship_to_source": "unclassified"
+        "evidence_insights": [{"id": "temporal-durable-execution-mental-model", "status": "review", "title": "Temporal: the mental model behind durable execution"}],
+        "relationship_to_source": "not_relevant"
       },
       {
         "concept_id": "task-queue",
         "label": "Task Queue",
         "coverage": "explained",
-        "evidence_insights": [
-          {
-            "id": "temporal-durable-execution-mental-model",
-            "status": "review",
-            "title": "Temporal: the mental model behind durable execution"
-          }
-        ],
-        "relationship_to_source": "unclassified"
+        "evidence_insights": [{"id": "temporal-durable-execution-mental-model", "status": "review", "title": "Temporal: the mental model behind durable execution"}],
+        "relationship_to_source": "not_relevant"
       }
     ],
     "classification_required": true
   },
   "content_map": {
-    "problem": null,
-    "thesis": null,
-    "sections": [],
-    "concepts": [],
-    "mechanisms": [],
-    "tools": [],
-    "examples": [],
-    "claims": [],
-    "evidence": [],
-    "assumptions": [],
-    "limitations": [],
-    "open_questions": []
+    "problem": "Analytical work inside scripts, notebooks and applications often pays integration cost to move data into a separate database service before SQL can be useful.",
+    "thesis": "DuckDB puts an analytical SQL database inside the host process so applications can query local or object-storage data directly through native language clients without requiring a separate database server for the common embedded workflow.",
+    "sections": [
+      "Repository purpose and in-process positioning",
+      "Native clients and application embedding",
+      "Direct CSV and Parquet querying",
+      "Single-process concurrency model and limits",
+      "Boundary with client/server databases"
+    ],
+    "concepts": [
+      "in-process analytical database",
+      "embedded query engine",
+      "direct file querying",
+      "process-local database state",
+      "client/server database boundary"
+    ],
+    "mechanisms": [
+      "DuckDB runs inside the same process as the calling application rather than requiring a separate server process for its normal embedded use.",
+      "Native clients let Python, R, Java, Wasm and other environments invoke the engine directly.",
+      "CSV and Parquet files can be queried directly from SQL, reducing the need for an explicit import step for many analytical workflows.",
+      "The core read/write concurrency model is process-centered; this is a deliberate trade-off rather than a universal replacement for multi-client transactional servers."
+    ],
+    "tools": ["DuckDB CLI", "DuckDB Python client", "DuckDB R client", "DuckDB Wasm", "DuckDB extensions"],
+    "examples": [
+      "A Python data pipeline can query Parquet directly with SQL without provisioning a remote analytical database.",
+      "A desktop or embedded application can ship analytical SQL capability as a library inside the application process.",
+      "A multi-service transactional application with many independent writers may still fit a client/server database better than the core embedded model."
+    ],
+    "claims": [
+      "DuckDB describes itself as a high-performance analytical in-process database system.",
+      "DuckDB provides native clients for multiple programming languages and integrates with data tools such as pandas and dplyr.",
+      "DuckDB can query CSV and Parquet files directly from SQL.",
+      "DuckDB's core writable concurrency model is optimized around one process, which marks an important boundary with traditional multi-client database-server deployments."
+    ],
+    "evidence": [
+      "Official GitHub README inspected on 2026-08-27.",
+      "Official DuckDB concurrency documentation inspected on 2026-08-27."
+    ],
+    "assumptions": [
+      "The workload is analytical rather than dominated by many tiny concurrent OLTP transactions.",
+      "Embedding the database in the application process reduces operational or data-movement friction for the target workflow.",
+      "The application can accept the lifecycle and concurrency implications of a process-local engine."
+    ],
+    "limitations": [
+      "In-process deployment reduces service boundaries but also couples database lifecycle and resource use more closely to the host process.",
+      "The core embedded model is not automatically the right fit for many independent processes performing concurrent writes to one database.",
+      "Direct file querying does not remove data-governance, consistency or data-quality requirements.",
+      "Using DuckDB does not by itself make an analytical workflow reproducible, governed or observable."
+    ],
+    "open_questions": [
+      "Which local data-processing utilities become materially simpler when SQL execution is embedded instead of provisioned as a service?",
+      "Where does a DuckDB-based tool need an explicit boundary before scaling into a shared multi-user service?"
+    ]
   },
   "selection": {
     "requested_focus": "Understand the architectural value of an in-process analytical database, how this changes data-tool composition, and where the model differs from client/server databases.",
-    "coherent_core": [],
-    "prerequisites": [],
-    "drop_notes": [],
-    "connections": []
+    "coherent_core": [
+      "In-process is the architectural boundary: the analytical engine lives in the application process.",
+      "Native clients and direct file querying make SQL a composable library capability rather than necessarily a remote service.",
+      "That composition reduces setup and data-movement friction for analytical tools.",
+      "The trade-off is that process-local lifecycle and concurrency assumptions differ from a general shared client/server database."
+    ],
+    "prerequisites": [
+      "difference between in-process and client/server software",
+      "analytical versus transactional workloads",
+      "basic database concurrency expectations"
+    ],
+    "drop_notes": [
+      "Vectorized execution internals are outside this source-focused architectural model.",
+      "Benchmark claims are excluded because the product value here is composition, not a speed ranking.",
+      "Quack/DuckLake evolution is noted only as a boundary update, not as the core mental model."
+    ],
+    "connections": [
+      "PostgreSQL MVCC is not the same concept: PostgreSQL's snapshot/concurrency model belongs to a shared database server, while this case is about embedding an analytical engine in a host process.",
+      "SQLite is an adjacent embedded-database comparison, but DuckDB's primary design center is analytical SQL/OLAP rather than general-purpose application transactions."
+    ]
   },
-  "verification_candidates": [],
-  "source_locators": [],
+  "verification_candidates": [
+    {
+      "question": "Which current DuckDB mechanisms support multi-process write scenarios beyond the classic single-writer-process model?",
+      "reason": "The ecosystem is evolving; this matters for the client/server boundary but should not blur the core in-process model.",
+      "priority": "medium"
+    }
+  ],
+  "source_locators": [
+    {"label": "DuckDB repository README", "locator": "https://github.com/duckdb/duckdb#readme"},
+    {"label": "DuckDB concurrency documentation", "locator": "https://duckdb.org/docs/current/connect/concurrency"}
+  ],
   "created_at": "2026-08-27"
 }
