@@ -14,6 +14,8 @@ ROOT = Path(__file__).resolve().parents[1]
 PATCHES = ROOT / "data" / "case-patches"
 INBOX = ROOT / "data" / "inbox.json"
 BUNDLES = ROOT / "data" / "research-bundles"
+GRAPH = ROOT / "data" / "knowledge-graph.json"
+INSIGHTS = ROOT / "data" / "insights.json"
 
 SLUG = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 SEMVER = re.compile(r"^[0-9]+\.[0-9]+\.[0-9]+$")
@@ -21,6 +23,8 @@ COVERAGE = {"introduced", "explained", "applied"}
 RELATION_TYPES = {"depends_on", "enables", "realized_by", "refines", "related_to"}
 FULL_CONCEPT_KEYS = {"id", "label", "summary", "domain", "coverage", "insight_ids", "aliases", "tags"}
 REFERENCE_CONCEPT_KEYS = {"id", "insight_ids"}
+FROZEN_PUBLIC_REFERENCE_KEYS = {"id", "insight_ids", "public"}
+PUBLIC_CONCEPT_KEYS = {"summary", "coverage", "evidence_insights"}
 RELATION_KEYS = {"id", "from", "to", "type", "rationale", "evidence_insights"}
 TOP_KEYS = {"patch_version", "intake_id", "intake_status", "updated_at", "graph_version", "source", "insight", "graph"}
 
@@ -46,10 +50,69 @@ def valid_date(value: object) -> bool:
         return False
 
 
+def validate_frozen_public_reference(
+    concept: dict,
+    existing: dict | None,
+    published_ids: set[str],
+    current_insight_id: object,
+    where: str,
+) -> list[str]:
+    """Validate an explicit public snapshot without letting review content rewrite it.
+
+    A review case may be the first item that turns a previously published-only concept into a
+    mixed published/review concept. At that moment the case is allowed to freeze the existing
+    published summary/coverage and published evidence as an explicit public projection. It may
+    not invent a new public summary, include the review insight, or change an existing override.
+    """
+    errors: list[str] = []
+    if existing is None:
+        return [f"{where}.public: frozen public projection is only allowed for an existing concept"]
+    if set(concept) != FROZEN_PUBLIC_REFERENCE_KEYS:
+        errors.append(f"{where}: public projection is only allowed on a reference-only concept patch")
+        return errors
+
+    override = concept.get("public")
+    if not isinstance(override, dict) or set(override) != PUBLIC_CONCEPT_KEYS:
+        errors.append(f"{where}.public: expected exactly {sorted(PUBLIC_CONCEPT_KEYS)}")
+        return errors
+
+    existing_public = existing.get("public")
+    if existing_public is not None and existing_public != override:
+        errors.append(f"{where}.public: review patch may not change an existing public projection")
+
+    if override.get("summary") != existing.get("summary"):
+        errors.append(f"{where}.public.summary: must freeze the existing pre-review concept summary")
+    if override.get("coverage") != existing.get("coverage"):
+        errors.append(f"{where}.public.coverage: must freeze the existing pre-review concept coverage")
+
+    evidence = override.get("evidence_insights")
+    if not isinstance(evidence, list) or not evidence:
+        errors.append(f"{where}.public.evidence_insights: expected non-empty list")
+        return errors
+    if len(set(evidence)) != len(evidence):
+        errors.append(f"{where}.public.evidence_insights: duplicates are not allowed")
+    existing_links = set(existing.get("insight_ids", []))
+    if any(item_id not in existing_links for item_id in evidence):
+        errors.append(f"{where}.public.evidence_insights: must reference only pre-existing concept evidence")
+    if any(item_id not in published_ids for item_id in evidence):
+        errors.append(f"{where}.public.evidence_insights: all frozen public evidence must already be published")
+    if current_insight_id in evidence:
+        errors.append(f"{where}.public.evidence_insights: current review insight may not enter public projection")
+    return errors
+
+
 def main() -> int:
     errors: list[str] = []
     inbox_data = load(INBOX)
     inbox = {item.get("id"): item for item in inbox_data.get("items", []) if isinstance(item, dict)}
+    current_graph = load(GRAPH)
+    current_concepts = {item.get("id"): item for item in current_graph.get("concepts", []) if isinstance(item, dict)}
+    current_insights = load(INSIGHTS)
+    published_ids = {
+        item.get("id")
+        for item in current_insights.get("insights", [])
+        if isinstance(item, dict) and item.get("status") == "published"
+    }
     files = sorted(PATCHES.glob("*.json")) if PATCHES.exists() else []
 
     for path in files:
@@ -77,7 +140,6 @@ def main() -> int:
         if not valid_date(patch.get("updated_at")):
             errors.append(f"{rel}.updated_at: expected ISO date")
 
-        # Publication is deliberately outside the case-patch contract.
         if patch.get("intake_status") != "review":
             errors.append(f"{rel}.intake_status: must be 'review'; case patches cannot publish")
 
@@ -143,12 +205,12 @@ def main() -> int:
             if not isinstance(concept, dict):
                 errors.append(f"{where}: expected object")
                 continue
-            if "public" in concept:
-                errors.append(f"{where}: review case patches may not mutate public projection")
             keys = set(concept)
-            if keys != REFERENCE_CONCEPT_KEYS and keys != FULL_CONCEPT_KEYS:
+            allowed_keys = {frozenset(REFERENCE_CONCEPT_KEYS), frozenset(FULL_CONCEPT_KEYS), frozenset(FROZEN_PUBLIC_REFERENCE_KEYS)}
+            if frozenset(keys) not in allowed_keys:
                 errors.append(
-                    f"{where}: expected reference-only keys {sorted(REFERENCE_CONCEPT_KEYS)} "
+                    f"{where}: expected reference-only keys {sorted(REFERENCE_CONCEPT_KEYS)}, "
+                    f"frozen-public reference keys {sorted(FROZEN_PUBLIC_REFERENCE_KEYS)}, "
                     f"or full concept keys {sorted(FULL_CONCEPT_KEYS)}"
                 )
             concept_id = concept.get("id")
@@ -163,7 +225,18 @@ def main() -> int:
                 errors.append(f"{where}.insight_ids: must contain current insight id")
             elif len(set(linked)) != len(linked):
                 errors.append(f"{where}.insight_ids: duplicates are not allowed")
-            if keys == FULL_CONCEPT_KEYS:
+
+            if "public" in concept:
+                errors.extend(
+                    validate_frozen_public_reference(
+                        concept,
+                        current_concepts.get(concept_id),
+                        published_ids,
+                        insight_id,
+                        where,
+                    )
+                )
+            elif keys == FULL_CONCEPT_KEYS:
                 if concept.get("coverage") not in COVERAGE:
                     errors.append(f"{where}.coverage: invalid value")
                 if not isinstance(concept.get("summary"), str) or len(concept.get("summary", "").strip()) < 10:
@@ -180,7 +253,7 @@ def main() -> int:
                 errors.append(f"{where}: expected object")
                 continue
             if "public" in relation:
-                errors.append(f"{where}: review case patches may not mutate public projection")
+                errors.append(f"{where}: review case patches may not mutate public relation projection")
             if set(relation) != RELATION_KEYS:
                 errors.append(f"{where}: relation keys must equal {sorted(RELATION_KEYS)}")
             relation_id = relation.get("id")
@@ -200,7 +273,6 @@ def main() -> int:
             if not isinstance(relation.get("rationale"), str) or len(relation.get("rationale", "").strip()) < 10:
                 errors.append(f"{where}.rationale: expected meaningful explanation")
 
-        # A review patch cannot bypass the prior-knowledge classification gate.
         bundle_path = BUNDLES / f"{intake_id}.json"
         if bundle_path.exists():
             try:
