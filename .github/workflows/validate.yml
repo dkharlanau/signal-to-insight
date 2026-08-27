@@ -78,6 +78,15 @@ jobs:
       - name: Test Source Decision calibration store
         run: python scripts/source_decision_benchmark.py self-test
 
+      - name: Test action-to-outcome evidence loop
+        run: python scripts/action_outcomes.py self-test
+
+      - name: Test knowledge evolution timeline
+        run: python scripts/knowledge_history.py --self-test
+
+      - name: Test next-research target derivation
+        run: python scripts/next_research.py --self-test
+
       - name: Test explicit publication lifecycle boundaries
         run: |
           python scripts/publish_reviewed.py --self-test
