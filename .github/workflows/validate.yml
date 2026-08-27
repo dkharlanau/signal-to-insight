@@ -64,8 +64,17 @@ jobs:
       - name: Test one-command source orchestration
         run: python scripts/run_source.py --self-test
 
+      - name: Test private personal knowledge baseline
+        run: python scripts/personal_baseline.py self-test
+
       - name: Test learning utility local loop
         run: python scripts/learning_utility.py self-test
+
+      - name: Test dogfood cohort evidence store
+        run: python scripts/dogfood.py self-test
+
+      - name: Test Source Decision calibration store
+        run: python scripts/source_decision_benchmark.py self-test
 
       - name: Test explicit publication lifecycle boundaries
         run: |
@@ -80,6 +89,8 @@ jobs:
           node --check app.js
           node --check evidence.js
           node --check library.js
+          node --check capture.js
+          node capture.js --self-test
 
       - name: Run pipeline acceptance tests
         run: python -m unittest discover -s tests -p "test_*.py" -v
