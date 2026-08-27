@@ -88,6 +88,17 @@
       "source_id": null,
       "insight_id": null,
       "notes": "GitHub source intake issue #55. Dogfood cohort: database/concurrency documentation."
+    },
+    {
+      "id": "intake-2026-08-27-github-duckdb",
+      "source_url": "https://github.com/duckdb/duckdb",
+      "source_type": "repository",
+      "submitted_at": "2026-08-27",
+      "requested_focus": "Understand the architectural value of an in-process analytical database, how this changes data-tool composition, and where the model differs from client/server databases.",
+      "status": "queued",
+      "source_id": null,
+      "insight_id": null,
+      "notes": "GitHub source intake issue #56. Dogfood cohort: data systems repository."
     }
   ]
 }
