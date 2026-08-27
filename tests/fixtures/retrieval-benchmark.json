@@ -66,9 +66,9 @@
       "query": "what monitoring should tell operators black box white box signals alerting boundaries telemetry volume operational noise",
       "limit": 5,
       "required": ["observability"],
-      "acceptable": ["distributed-trace", "telemetry-span", "trace-context-propagation", "span-link"],
+      "acceptable": ["white-box-monitoring", "black-box-monitoring", "actionable-alerting", "symptom-cause-monitoring"],
       "forbidden": ["execution-history", "event-history", "controlled-execution", "open-policy-agent"],
-      "min_precision": 0.4,
+      "min_precision": 0.8,
       "classification_probe": "cohort-recall-regression"
     },
     {
