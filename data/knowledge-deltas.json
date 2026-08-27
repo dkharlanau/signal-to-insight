@@ -772,6 +772,56 @@
         "controlled-execution",
         "activity-execution"
       ]
+    },
+    {
+      "insight_id": "opentelemetry-distributed-trace-causality",
+      "summary": "OpenTelemetry refines the project's broad observability concept into a concrete causal telemetry model: spans share trace identity, context propagation carries correlation across boundaries, and links preserve asynchronous causality without turning telemetry into an authoritative execution ledger.",
+      "items": [
+        {
+          "relationship": "refines",
+          "concept_id": "observability",
+          "label": "Observability",
+          "source_basis": "OpenTelemetry traces assemble distributed operations from spans connected by trace identity, hierarchy, propagated context and causal links.",
+          "prior_basis": "The enterprise-agent case introduced observability only as structured telemetry around consequential execution, without a detailed distributed tracing mechanism.",
+          "interpretation": "The source makes observability operational at the trace layer while preserving the earlier boundary that telemetry is not automatically the authoritative record of business execution.",
+          "evidence_insights": [
+            "enterprise-agents-production-substrate"
+          ]
+        },
+        {
+          "relationship": "new",
+          "concept_id": "distributed-trace",
+          "label": "Distributed trace",
+          "source_basis": "Spans sharing a trace ID and parent relationships are assembled into one distributed view of observed work across components.",
+          "prior_basis": "The graph had a broad observability concept but no explicit end-to-end causal trace structure.",
+          "interpretation": "A trace becomes the reusable diagnostic structure for reconstructing an observed distributed path rather than a generic collection of logs.",
+          "evidence_insights": []
+        },
+        {
+          "relationship": "new",
+          "concept_id": "trace-context-propagation",
+          "label": "Trace context propagation",
+          "source_basis": "Trace and span identity are propagated across process/network boundaries so downstream spans can remain correlated with upstream work.",
+          "prior_basis": "No prior graph concept modeled transport of tracing identity across distributed boundaries.",
+          "interpretation": "Propagation is the mechanism that turns local spans into a distributed causal view instead of disconnected component telemetry.",
+          "evidence_insights": []
+        },
+        {
+          "relationship": "new",
+          "concept_id": "span-link",
+          "label": "Span link",
+          "source_basis": "OpenTelemetry links spans when operations are causally associated but do not fit a normal parent-child relationship, especially for asynchronous work.",
+          "prior_basis": "The graph had no tracing-specific representation for asynchronous causal association outside a direct tree hierarchy.",
+          "interpretation": "Links prevent asynchronous work from being forced into misleading synchronous parent-child semantics.",
+          "evidence_insights": []
+        }
+      ],
+      "suppressed_prior_matches": [
+        "controlled-execution",
+        "execution-history",
+        "open-policy-agent",
+        "durable-execution"
+      ]
     }
   ]
 }

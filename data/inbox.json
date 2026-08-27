@@ -194,9 +194,9 @@
       "source_type": "documentation",
       "submitted_at": "2026-08-27",
       "requested_focus": "Understand traces as a causal model of distributed work: spans, parent/child relationships, context propagation, links and what observability can reconstruct versus what business execution evidence must record separately.",
-      "status": "queued",
-      "source_id": null,
-      "insight_id": null,
+      "status": "review",
+      "source_id": "src-opentelemetry-traces-2026",
+      "insight_id": "opentelemetry-distributed-trace-causality",
       "notes": "GitHub source intake issue #65. Dogfood cohort: observability documentation."
     },
     {

@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>[PREVIEW] OpenTelemetry traces: reconstruct observed causality, not business truth — Signal to Insight</title>
+  <meta name="description" content="OpenTelemetry correlates timed spans through trace identity, propagated context, hierarchy and links so distributed work can be reconstructed diagnostically across service boundaries.">
+  <meta property="og:title" content="OpenTelemetry traces: reconstruct observed causality, not business truth">
+  <meta property="og:description" content="OpenTelemetry correlates timed spans through trace identity, propagated context, hierarchy and links so distributed work can be reconstructed diagnostically across service boundaries.">
+  <meta property="og:type" content="article">
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="generated-page preview-page">
+  <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+  <header class="site-header wrap">
+    <a class="brand" href="../../"><span class="brand-mark">S→I</span><span>Signal to Insight</span></a>
+    <nav aria-label="Explainer navigation">
+      <a href="#delta">Delta</a><a href="#model">Model</a><a href="#concepts">Concepts</a><a href="#tools">Tools</a><a href="#actions">Actions</a><a href="#sources">Sources</a>
+    </nav>
+  </header>
+
+  <div class="preview-banner">REVIEW PREVIEW · NOT INDEXED · NOT PUBLISHED</div>
+  <main>
+    <section class="detail-hero wrap">
+      <a class="back-link" href="../../">← Research engine</a>
+      <p class="eyebrow">EXPLAINER · review</p>
+      <h1>OpenTelemetry traces: reconstruct observed causality, not business truth</h1>
+      <div class="detail-lede">
+        <p>OpenTelemetry correlates timed spans through trace identity, propagated context, hierarchy and links so distributed work can be reconstructed diagnostically across service boundaries.</p>
+        <dl class="detail-meta">
+          <div><dt>Original source</dt><dd><a href="https://opentelemetry.io/docs/concepts/signals/traces" target="_blank" rel="noreferrer">Traces ↗</a></dd></div>
+          <div><dt>Creator</dt><dd>OpenTelemetry documentation contributors</dd></div>
+          <div><dt>Source status</dt><dd>living source · accessed 2026-08-27</dd></div>
+          <div><dt>Captured</dt><dd>2026-08-27</dd></div>
+          <div><dt>Analyzed</dt><dd>2026-08-27</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="detail-section wrap">
+      <p class="kicker">WHY THIS MATTERS</p>
+      <p class="big-statement">A trace is more than a list of logs: it carries correlation and causal structure across processes. But that structure is telemetry, not an automatic execution ledger. The distinction matters when observability data is used to debug work versus prove authorization, side effects or durable business outcomes.</p>
+    </section>
+
+    <section id="delta" class="detail-section wrap knowledge-delta-section">
+      <p class="kicker">KNOWLEDGE DELTA</p>
+      <h2>What this source changes in the existing model.</h2>
+      <p class="big-statement">OpenTelemetry refines the project&#x27;s broad observability concept into a concrete causal telemetry model: spans share trace identity, context propagation carries correlation across boundaries, and links preserve asynchronous causality without turning telemetry into an authoritative execution ledger.</p>
+      <div class="concept-grid"><article class="concept-card delta-card">
+          <span>Refines</span>
+          <h3>Observability</h3>
+          <p><strong>Source says:</strong> OpenTelemetry traces assemble distributed operations from spans connected by trace identity, hierarchy, propagated context and causal links.</p>
+          <p><strong>Previously:</strong> The enterprise-agent case introduced observability only as structured telemetry around consequential execution, without a detailed distributed tracing mechanism.</p>
+          <p><strong>Project interpretation:</strong> The source makes observability operational at the trace layer while preserving the earlier boundary that telemetry is not automatically the authoritative record of business execution.</p>
+          <small>Prior evidence: <a href="../../explainers/why-enterprise-ai-agents-fail-after-the-poc/">Why enterprise AI agents fail after the POC</a></small>
+        </article><article class="concept-card delta-card">
+          <span>New</span>
+          <h3>Distributed trace</h3>
+          <p><strong>Source says:</strong> Spans sharing a trace ID and parent relationships are assembled into one distributed view of observed work across components.</p>
+          <p><strong>Previously:</strong> The graph had a broad observability concept but no explicit end-to-end causal trace structure.</p>
+          <p><strong>Project interpretation:</strong> A trace becomes the reusable diagnostic structure for reconstructing an observed distributed path rather than a generic collection of logs.</p>
+          <small>Prior evidence: <span class="delta-baseline">No prior project evidence — baseline/new knowledge.</span></small>
+        </article><article class="concept-card delta-card">
+          <span>New</span>
+          <h3>Trace context propagation</h3>
+          <p><strong>Source says:</strong> Trace and span identity are propagated across process/network boundaries so downstream spans can remain correlated with upstream work.</p>
+          <p><strong>Previously:</strong> No prior graph concept modeled transport of tracing identity across distributed boundaries.</p>
+          <p><strong>Project interpretation:</strong> Propagation is the mechanism that turns local spans into a distributed causal view instead of disconnected component telemetry.</p>
+          <small>Prior evidence: <span class="delta-baseline">No prior project evidence — baseline/new knowledge.</span></small>
+        </article><article class="concept-card delta-card">
+          <span>New</span>
+          <h3>Span link</h3>
+          <p><strong>Source says:</strong> OpenTelemetry links spans when operations are causally associated but do not fit a normal parent-child relationship, especially for asynchronous work.</p>
+          <p><strong>Previously:</strong> The graph had no tracing-specific representation for asynchronous causal association outside a direct tree hierarchy.</p>
+          <p><strong>Project interpretation:</strong> Links prevent asynchronous work from being forced into misleading synchronous parent-child semantics.</p>
+          <small>Prior evidence: <span class="delta-baseline">No prior project evidence — baseline/new knowledge.</span></small>
+        </article></div>
+      <p class="section-note"><strong>Noise rejected:</strong> prior concepts retrieved but deliberately classified as not relevant: controlled-execution, execution-history, open-policy-agent, durable-execution.</p>
+    </section>
+
+    <section id="model" class="detail-section wrap">
+      <p class="kicker">MENTAL MODEL</p>
+      <div class="visual-sequence" aria-label="Causality survives the service boundary"><article>
+          <span>01 · Start</span>
+          <h3>Root span</h3>
+          <p>A request begins with a trace ID and root span describing the first observed operation.</p>
+        </article><article>
+          <span>02 · Propagate</span>
+          <h3>Carry trace context</h3>
+          <p>Trace/span context crosses the network boundary with the downstream request.</p>
+        </article><article>
+          <span>03 · Continue</span>
+          <h3>Child span</h3>
+          <p>The downstream service creates a new span in the same trace and records the parent relationship.</p>
+        </article><article>
+          <span>04 · Decouple</span>
+          <h3>Async span link</h3>
+          <p>Queued work that starts later can be causally associated through a link even when direct nesting is inappropriate.</p>
+        </article></div>
+      <div class="core-map">
+        <div><span>Source problem</span><p>Distributed operations cross service/process boundaries, making isolated component logs insufficient for reconstructing the observed end-to-end path and causal relationships.</p></div>
+        <div><span>Source thesis</span><p>Represent operations as spans, propagate trace/span context across boundaries, assemble parent-child hierarchy under shared trace identity, and use span links for causal relationships that do not fit normal nesting.</p></div>
+        <div><span>Core topics</span><ul><li>distributed trace</li><li>span</li><li>trace ID and span ID</li><li>parent-child hierarchy</li><li>context propagation</li><li>span events and attributes</li><li>span links</li><li>producer/consumer async work</li><li>telemetry versus authoritative execution evidence</li></ul></div>
+      </div>
+    </section>
+
+    <section id="concepts" class="detail-section wrap">
+      <p class="kicker">CONCEPTS TO KNOW</p>
+      <h2>Learn only the prerequisites that preserve the model.</h2>
+      <div class="concept-grid"><article class="concept-card">
+          <span>learn</span>
+          <h3>Distributed trace</h3>
+          <p>The trace is the correlated end-to-end telemetry structure assembled from spans across boundaries.</p>
+        </article><article class="concept-card">
+          <span>learn</span>
+          <h3>Span</h3>
+          <p>A span is the timed unit of observed work from which a trace is constructed.</p>
+        </article><article class="concept-card">
+          <span>learn</span>
+          <h3>Trace context propagation</h3>
+          <p>Propagation carries trace identity across service/process boundaries so downstream work remains part of the same causal view.</p>
+        </article><article class="concept-card">
+          <span>learn</span>
+          <h3>Span link</h3>
+          <p>Links express causal association for async operations that do not fit a normal parent-child lifetime.</p>
+        </article></div>
+    </section>
+
+    <section id="tools" class="detail-section wrap">
+      <p class="kicker">TOOLS / SYSTEMS</p>
+      <h2>Concrete systems worth knowing.</h2>
+      <p class="section-note">Tool connections may be project enrichment rather than recommendations from the original source. Each card states the relationship.</p>
+      <div class="tool-grid"><a class="tool-card" href="https://opentelemetry.io/docs/languages/" target="_blank" rel="noreferrer">
+          <span>try</span>
+          <strong>OpenTelemetry SDK</strong>
+          <p>Creates and propagates spans in application code once the conceptual trace model is clear.</p>
+          <small>instrumentation runtime · Source-native implementation surface for tracing.</small>
+        </a><a class="tool-card" href="https://opentelemetry.io/docs/collector/" target="_blank" rel="noreferrer">
+          <span>learn</span>
+          <strong>OpenTelemetry Collector</strong>
+          <p>Receives/processes/exports trace telemetry without making the application depend directly on one backend.</p>
+          <small>telemetry pipeline · Source-native telemetry pipeline component.</small>
+        </a></div>
+    </section>
+
+    <section class="detail-section wrap">
+      <p class="kicker">EXAMPLES</p>
+      <div class="example-grid"><article class="example-card">
+          <span>synchronous request</span>
+          <h3>A frontend calls a catalog service and then a payment service.</h3>
+          <p>Does propagated trace context let the downstream spans join one hierarchy that explains where latency and failure occurred?</p>
+        </article><article class="example-card">
+          <span>asynchronous work</span>
+          <h3>A request enqueues a job that is processed minutes later by another consumer.</h3>
+          <p>Should the later work be represented with a span link rather than pretending it has a normal synchronous parent-child lifetime?</p>
+        </article><article class="example-card">
+          <span>business execution evidence</span>
+          <h3>A trace shows a successful span for updating a customer record.</h3>
+          <p>What separate evidence proves who authorized the change, which version actually committed and what the authoritative system now stores?</p>
+        </article></div>
+    </section>
+
+    <section class="detail-section wrap limitation-section">
+      <p class="kicker">WHERE THE MODEL BREAKS</p>
+      <h2>Useful does not mean sufficient.</h2>
+      <ol class="limitation-list"><li>Missing instrumentation, sampling or exporter loss can create gaps, so a trace should not automatically be treated as complete execution history.</li><li>Span status and attributes describe telemetry observations; they do not by themselves prove authorization, idempotent side effects or durable business truth.</li><li>Parent-child hierarchy is tree-shaped and cannot represent every async causal relationship; links are required for some producer/consumer flows.</li><li>Trace attributes can carry sensitive or high-cardinality data and need explicit governance rather than indiscriminate capture.</li></ol>
+    </section>
+
+    <section id="actions" class="detail-section wrap">
+      <p class="kicker">PERSONAL ACTION MAP</p>
+      <h2>Convert understanding into a decision.</h2>
+      <div class="action-grid"><article class="action-card action-use_now">
+          <span>Use now</span>
+          <ul><li>When designing observability, distinguish correlation/diagnosis evidence from authoritative business execution evidence.</li><li>For asynchronous boundaries, explicitly decide whether causal association belongs in parent-child context or a span link.</li></ul>
+        </article><article class="action-card action-try">
+          <span>Try</span>
+          <ul><li>Instrument a two-service request, inspect trace/span IDs and parent relationships, then add one queued operation and compare direct parenting with a span-link model.</li></ul>
+        </article><article class="action-card action-learn">
+          <span>Learn</span>
+          <ul><li>context propagation</li><li>span links</li><li>sampling</li><li>semantic conventions</li><li>trace-log correlation</li></ul>
+        </article><article class="action-card action-build">
+          <span>Build</span>
+          <ul><li>A small request + queue demo showing one synchronous trace path and one asynchronously linked follow-up operation.</li></ul>
+        </article><article class="action-card action-watch">
+          <span>Watch</span>
+          <ul><li>Sampling/export policy when trace data is used for incident reconstruction rather than only performance analysis.</li></ul>
+        </article><article class="action-card action-ignore_for_now">
+          <span>Ignore for now</span>
+          <ul><li>Treating successful spans as a substitute for system-of-record audit or business-state verification.</li></ul>
+        </article></div>
+    </section>
+
+    <section id="sources" class="detail-section wrap source-section">
+      <p class="kicker">SOURCES + DATES</p>
+      <div class="source-grid">
+        <div>
+          <h3>Primary source</h3>
+          <a href="https://opentelemetry.io/docs/concepts/signals/traces" target="_blank" rel="noreferrer">Traces ↗</a>
+          <p>OpenTelemetry documentation contributors · Source status: living source · accessed 2026-08-27</p>
+          <p>Living OpenTelemetry documentation inspected on 2026-08-27; page reports last modification on 2026-01-14.</p>
+        </div>
+        <div>
+          <h3>Verification / enrichment</h3>
+          <ul class="supporting-sources"><li>
+          <a href="https://opentelemetry.io/docs/concepts/signals/traces" target="_blank" rel="noreferrer">OpenTelemetry Traces</a>
+          <span>primary source for spans, trace hierarchy, context, links and span kinds · accessed 2026-08-27</span>
+        </li><li>
+          <a href="https://opentelemetry.io/docs/concepts/context-propagation/" target="_blank" rel="noreferrer">OpenTelemetry Context propagation</a>
+          <span>source-linked depth for how trace context crosses process/network boundaries · accessed 2026-08-27</span>
+        </li></ul>
+        </div>
+      </div>
+      <p class="provenance-note">Analyzed 2026-08-27. Full third-party transcript is not stored. Source claims and project enrichment are kept distinguishable.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer wrap">
+    <span>Signal to Insight</span><span>Explainer: opentelemetry-distributed-trace-causality</span><span>Reviewed 2026-08-27</span>
+  </footer>
+  <script src="../../app.js"></script>
+</body>
+</html>

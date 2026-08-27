@@ -598,6 +598,37 @@
       "derived_records": [
         "twelve-factor-stateless-process-boundary"
       ]
+    },
+    {
+      "id": "src-opentelemetry-traces-2026",
+      "type": "documentation",
+      "title": "Traces",
+      "canonical_url": "https://opentelemetry.io/docs/concepts/signals/traces",
+      "creators": [
+        "OpenTelemetry documentation contributors"
+      ],
+      "publisher": "OpenTelemetry / CNCF",
+      "event": null,
+      "published_at": null,
+      "event_date": null,
+      "captured_at": "2026-08-27",
+      "analyzed_at": "2026-08-27",
+      "date_note": "Living OpenTelemetry documentation inspected on 2026-08-27; page reports last modification on 2026-01-14.",
+      "verification": [
+        {
+          "title": "OpenTelemetry Traces",
+          "url": "https://opentelemetry.io/docs/concepts/signals/traces",
+          "accessed_at": "2026-08-27"
+        },
+        {
+          "title": "OpenTelemetry Context propagation",
+          "url": "https://opentelemetry.io/docs/concepts/context-propagation/",
+          "accessed_at": "2026-08-27"
+        }
+      ],
+      "derived_records": [
+        "opentelemetry-distributed-trace-causality"
+      ]
     }
   ]
 }

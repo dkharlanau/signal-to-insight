@@ -1004,6 +1004,68 @@
           }
         }
       ]
+    },
+    {
+      "insight_id": "opentelemetry-distributed-trace-causality",
+      "summary": "The first useful tracing model needs three tightly connected concepts: a distributed trace as the overall causal view, spans as its observed work units, and context propagation as the mechanism that preserves correlation across boundaries; span links add asynchronous depth next.",
+      "items": [
+        {
+          "id": "otel-prereq-trace",
+          "label": "Distributed trace",
+          "concept_id": "distributed-trace",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "The trace is the end-to-end structure being reconstructed from distributed telemetry.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "opentelemetry-distributed-trace-causality",
+            "target": null
+          }
+        },
+        {
+          "id": "otel-prereq-span",
+          "label": "Telemetry span",
+          "concept_id": "telemetry-span",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "A trace is composed from spans, so the unit of observed work must be clear before hierarchy and timing make sense.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "opentelemetry-distributed-trace-causality",
+            "target": null
+          }
+        },
+        {
+          "id": "otel-prereq-propagation",
+          "label": "Trace context propagation",
+          "concept_id": "trace-context-propagation",
+          "priority": "must_know_now",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "Without propagation, spans created in downstream processes cannot reliably remain part of the same distributed trace.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "opentelemetry-distributed-trace-causality",
+            "target": null
+          }
+        },
+        {
+          "id": "otel-prereq-link",
+          "label": "Span link",
+          "concept_id": "span-link",
+          "priority": "learn_next",
+          "prior_coverage": "absent",
+          "state": "explained_here",
+          "reason": "Links become important once queued or asynchronous work no longer fits a direct parent-child lifetime.",
+          "resolution": {
+            "kind": "explained_here",
+            "insight_id": "opentelemetry-distributed-trace-causality",
+            "target": null
+          }
+        }
+      ]
     }
   ]
 }

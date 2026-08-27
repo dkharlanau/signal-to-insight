@@ -1409,6 +1409,80 @@
           "note": "The source establishes disposable process-local state; compatibility with Temporal-style external durable workflow state is project synthesis and should not be read as a source claim."
         }
       ]
+    },
+    {
+      "insight_id": "opentelemetry-distributed-trace-causality",
+      "claims": [
+        {
+          "id": "otel-trace-span-hierarchy",
+          "text": "OpenTelemetry represents a distributed trace as spans correlated by trace identity, with parent relationships used to reconstruct nested observed operations across the traced path.",
+          "impact": "high",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-opentelemetry-traces-2026",
+              "url": "https://opentelemetry.io/docs/concepts/signals/traces",
+              "locator": "Traces → example trace and shared trace_id / parent_id hierarchy"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "otel-context-propagation-correlates-spans",
+          "text": "Trace context propagation carries tracing identity across service or process boundaries so downstream spans can be correlated with the originating distributed operation.",
+          "impact": "high",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-opentelemetry-traces-2026",
+              "url": "https://opentelemetry.io/docs/concepts/signals/traces",
+              "locator": "Traces → Context Propagation"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "otel-span-links-async-causality",
+          "text": "Span links can record causal association between operations when asynchronous work does not fit a normal direct parent-child span relationship.",
+          "impact": "medium",
+          "origin": "source",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-opentelemetry-traces-2026",
+              "url": "https://opentelemetry.io/docs/concepts/signals/traces",
+              "locator": "Traces → Span Links"
+            }
+          ],
+          "note": null
+        },
+        {
+          "id": "otel-trace-not-authoritative-ledger",
+          "text": "A distributed trace is diagnostic telemetry for observed causality, not by itself an authoritative ledger proving authorization, complete side effects or durable business-state outcomes.",
+          "impact": "high",
+          "origin": "project_interpretation",
+          "status": "supported",
+          "evidence": [
+            {
+              "kind": "primary_source",
+              "source_id": "src-opentelemetry-traces-2026",
+              "url": "https://opentelemetry.io/docs/concepts/signals/traces",
+              "locator": "Traces → Spans; Span Context; Span Links"
+            },
+            {
+              "kind": "prior_insight",
+              "insight_id": "enterprise-agents-production-substrate",
+              "locator": "Execution history as reconstructable evidence of consequential work"
+            }
+          ],
+          "note": "OpenTelemetry defines telemetry correlation semantics, while the distinction from authoritative execution evidence is project synthesis using the existing controlled-execution/execution-history model."
+        }
+      ]
     }
   ]
 }

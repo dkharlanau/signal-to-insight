@@ -772,6 +772,57 @@
         "reason": "The source itself is compact and contains no large implementation sections that must be preserved for the requested mental model."
       },
       "selected_parts": []
+    },
+    {
+      "insight_id": "opentelemetry-distributed-trace-causality",
+      "decision": "skim_selected_parts",
+      "rationale": "The explainer is sufficient for the tracing mental model, but the official page is worth opening at three precise sections when implementing or reviewing distributed telemetry: trace hierarchy, context propagation and span links. Those sections preserve the exact correlation semantics without requiring the whole documentation site.",
+      "novelty": {
+        "level": "high",
+        "reason": "The source turns an existing broad observability concept into a concrete distributed causal model and adds new propagation/link semantics."
+      },
+      "source_quality": {
+        "level": "high",
+        "reason": "The primary source is current official OpenTelemetry documentation for the tracing concepts being modeled."
+      },
+      "relevance": {
+        "level": "high",
+        "reason": "Distributed tracing is directly useful for diagnosing cross-service integrations, agents, workflows and asynchronous systems."
+      },
+      "practical_leverage": {
+        "level": "high",
+        "reason": "The model changes instrumentation and incident-analysis decisions by making trace identity, propagation and async causal links explicit."
+      },
+      "compression_loss": {
+        "level": "medium",
+        "reason": "The explainer omits SDK/export/sampling implementation detail that matters when deploying tracing or reasoning about completeness."
+      },
+      "selected_parts": [
+        {
+          "label": "Trace hierarchy",
+          "locator": "Traces → example trace and shared trace_id / parent_id hierarchy",
+          "why": "Shows how spans are correlated into one distributed trace rather than read as isolated events.",
+          "claim_refs": [
+            "otel-trace-span-hierarchy"
+          ]
+        },
+        {
+          "label": "Context propagation",
+          "locator": "Traces → Context Propagation",
+          "why": "Defines how trace identity survives service and process boundaries.",
+          "claim_refs": [
+            "otel-context-propagation-correlates-spans"
+          ]
+        },
+        {
+          "label": "Span links",
+          "locator": "Traces → Span Links",
+          "why": "Shows the causal-link mechanism for asynchronous work that should not be forced into direct parent-child nesting.",
+          "claim_refs": [
+            "otel-span-links-async-causality"
+          ]
+        }
+      ]
     }
   ]
 }

@@ -142,14 +142,22 @@
       "domain": "operations",
       "coverage": "introduced",
       "insight_ids": [
-        "enterprise-agents-production-substrate"
+        "enterprise-agents-production-substrate",
+        "opentelemetry-distributed-trace-causality"
       ],
       "aliases": [],
       "tags": [
         "telemetry",
         "operations",
         "execution"
-      ]
+      ],
+      "public": {
+        "summary": "Structured traces, metrics and logs that make distributed execution inspectable without becoming the source of business truth itself.",
+        "coverage": "introduced",
+        "evidence_insights": [
+          "enterprise-agents-production-substrate"
+        ]
+      }
     },
     {
       "id": "durable-execution",
@@ -1301,6 +1309,78 @@
         "process",
         "local-state"
       ]
+    },
+    {
+      "id": "distributed-trace",
+      "label": "Distributed trace",
+      "summary": "A correlated telemetry view of distributed work assembled from spans sharing trace identity, hierarchy and causal associations across boundaries.",
+      "domain": "observability",
+      "coverage": "explained",
+      "insight_ids": [
+        "opentelemetry-distributed-trace-causality"
+      ],
+      "aliases": [
+        "trace"
+      ],
+      "tags": [
+        "tracing",
+        "observability",
+        "distributed-systems"
+      ]
+    },
+    {
+      "id": "telemetry-span",
+      "label": "Telemetry span",
+      "summary": "A timed unit of observed work carrying span identity, parent context, attributes, events, links and status within distributed tracing.",
+      "domain": "observability",
+      "coverage": "explained",
+      "insight_ids": [
+        "opentelemetry-distributed-trace-causality"
+      ],
+      "aliases": [
+        "span"
+      ],
+      "tags": [
+        "tracing",
+        "operation",
+        "telemetry"
+      ]
+    },
+    {
+      "id": "trace-context-propagation",
+      "label": "Trace context propagation",
+      "summary": "Serializing and carrying trace/span identity across process and network boundaries so downstream spans can join the same distributed causal view.",
+      "domain": "observability",
+      "coverage": "explained",
+      "insight_ids": [
+        "opentelemetry-distributed-trace-causality"
+      ],
+      "aliases": [
+        "distributed context propagation"
+      ],
+      "tags": [
+        "context",
+        "propagation",
+        "tracing"
+      ]
+    },
+    {
+      "id": "span-link",
+      "label": "Span link",
+      "summary": "A tracing association that records causal relationship between spans when direct parent-child hierarchy is not appropriate, especially for asynchronous work.",
+      "domain": "observability",
+      "coverage": "explained",
+      "insight_ids": [
+        "opentelemetry-distributed-trace-causality"
+      ],
+      "aliases": [
+        "trace link"
+      ],
+      "tags": [
+        "tracing",
+        "causality",
+        "async"
+      ]
     }
   ],
   "relations": [
@@ -1920,6 +2000,36 @@
       "rationale": "Statelessness permits temporary process-local working data when its loss is safe and no future request or job depends on it.",
       "evidence_insights": [
         "twelve-factor-stateless-process-boundary"
+      ]
+    },
+    {
+      "id": "rel-distributed-trace-depends-on-telemetry-span",
+      "from": "distributed-trace",
+      "to": "telemetry-span",
+      "type": "depends_on",
+      "rationale": "A distributed trace is assembled from the spans that represent the observed operations in the traced path.",
+      "evidence_insights": [
+        "opentelemetry-distributed-trace-causality"
+      ]
+    },
+    {
+      "id": "rel-distributed-trace-depends-on-trace-context-propagation",
+      "from": "distributed-trace",
+      "to": "trace-context-propagation",
+      "type": "depends_on",
+      "rationale": "Distributed service boundaries require trace context to cross processes so downstream spans retain correlation with the original trace.",
+      "evidence_insights": [
+        "opentelemetry-distributed-trace-causality"
+      ]
+    },
+    {
+      "id": "rel-span-link-related-to-distributed-trace",
+      "from": "span-link",
+      "to": "distributed-trace",
+      "type": "related_to",
+      "rationale": "Span links preserve causal associations across async operations or trace boundaries where a normal parent-child hierarchy cannot express the relationship cleanly.",
+      "evidence_insights": [
+        "opentelemetry-distributed-trace-causality"
       ]
     }
   ]

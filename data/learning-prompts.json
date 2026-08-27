@@ -400,6 +400,29 @@
           "ephemeral-process-state"
         ]
       }
+    },
+    {
+      "insight_id": "opentelemetry-distributed-trace-causality",
+      "retention_prompt": "Without looking back, reconstruct how OpenTelemetry tracing follows one distributed operation: define a span, explain how trace and parent identity organize spans, state what context propagation changes at a service boundary, explain when a span link is preferable to direct parenting, and name one thing a successful trace still does not prove.",
+      "answer_key": {
+        "problem_from": "whole_source_map.problem",
+        "mechanism_from": "whole_source_map.thesis",
+        "anchor_concept_ids": [
+          "distributed-trace",
+          "telemetry-span",
+          "trace-context-propagation",
+          "span-link"
+        ],
+        "boundary_limitation_index": 0
+      },
+      "transfer_prompt": {
+        "prompt": "A web request calls two services and enqueues a job processed later. Sketch the tracing structure that preserves the synchronous path and the queued causal relationship, then state what this telemetry can reconstruct without claiming it is the authoritative business ledger.",
+        "expected_concept_ids": [
+          "distributed-trace",
+          "trace-context-propagation",
+          "span-link"
+        ]
+      }
     }
   ]
 }
