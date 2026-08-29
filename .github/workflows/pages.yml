@@ -1,11 +1,11 @@
 name: Deploy Signal to Insight Pages
 
+# Repository-level Pages enablement cannot be created by this GitHub Actions token.
+# Keep deployment manual so ordinary product commits never fail because of a setting
+# outside the repository. Enable Pages with GitHub Actions as source once in Settings,
+# then run this workflow.
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - ".github/workflows/pages.yml"
 
 permissions:
   contents: read
@@ -49,10 +49,8 @@ jobs:
       - name: Verify deployable static routes and review privacy
         run: python scripts/validate_public_surface.py
 
-      - name: Configure or enable Pages
+      - name: Configure Pages
         uses: actions/configure-pages@v5
-        with:
-          enablement: true
 
       - name: Upload static site
         uses: actions/upload-pages-artifact@v4
