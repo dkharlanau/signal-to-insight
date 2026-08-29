@@ -1,10 +1,11 @@
 name: Deploy Signal to Insight Pages
 
-# Pages is a repository-level setting. Keep this workflow manual until Pages is enabled
-# with GitHub Actions as the source. Once that setting exists, this workflow can deploy
-# the already-validated static root without changing the knowledge/publication model.
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/pages.yml"
 
 permissions:
   contents: read
@@ -48,11 +49,13 @@ jobs:
       - name: Verify deployable static routes and review privacy
         run: python scripts/validate_public_surface.py
 
-      - name: Configure Pages metadata
+      - name: Configure or enable Pages
         uses: actions/configure-pages@v5
+        with:
+          enablement: true
 
       - name: Upload static site
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: .
 
