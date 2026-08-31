@@ -261,6 +261,17 @@ def render_page(record: dict) -> str:
       <div class="card-grid">{related}</div>
     </section>''' if related else ""
     tags = "".join(f"<span>{e(tag)}</span>" for tag in record["tags"])
+    defined_term_ld = json.dumps(
+        {
+            "@context": "https://schema.org",
+            "@type": "DefinedTerm",
+            "name": record["label"],
+            "description": record["summary"],
+            "url": record["canonical"],
+            "inDefinedTermSet": f"{SITE_BASE}/knowledge/",
+        },
+        ensure_ascii=False,
+    ).replace("</", "<\\/")
     return f'''<!doctype html>
 <html lang="en">
 <head>
@@ -273,7 +284,7 @@ def render_page(record: dict) -> str:
   <meta property="og:type" content="article">
   <link rel="canonical" href="{e(record['canonical'])}">
   <link rel="stylesheet" href="../../../styles.css">
-  <script type="application/ld+json">{json.dumps({"@context":"https://schema.org","@type":"DefinedTerm","name":record['label'],"description":record['summary'],"url":record['canonical'],"inDefinedTermSet":f"{SITE_BASE}/knowledge/"}, ensure_ascii=False).replace('</','<\\/')}</script>
+  <script type="application/ld+json">{defined_term_ld}</script>
   <style>
     body{{background:#f3f0e9;color:#111}}.wrap{{width:min(1080px,calc(100% - 36px));margin:auto}}header{{padding:34px 0;border-bottom:1px solid #aaa69c;display:flex;justify-content:space-between;gap:20px}}header a{{color:inherit;font-weight:700}}
     main{{padding-bottom:90px}}.hero{{padding:88px 0 58px;border-bottom:1px solid #aaa69c}}.meta{{font:700 10px ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#5f5b55}}h1{{font-size:clamp(48px,9vw,96px);line-height:.9;letter-spacing:-.06em;margin:.12em 0 .28em;max-width:10ch}}.lede{{font-size:20px;line-height:1.55;max-width:780px}}

@@ -1,10 +1,8 @@
 name: Deploy Signal to Insight Pages
 
-# Repository-level Pages enablement cannot be created by this GitHub Actions token.
-# Keep deployment manual so ordinary product commits never fail because of a setting
-# outside the repository. Enable Pages with GitHub Actions as source once in Settings,
-# then run this workflow.
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
 
 permissions:

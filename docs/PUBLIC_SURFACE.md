@@ -1,6 +1,8 @@
 # Public surface and repository settings
 
-The static product surface is committed and validated in-repository. GitHub repository metadata and Pages enablement are repository-level settings and are intentionally listed separately from code so their state cannot be confused with a successful build.
+The static product surface is committed, validated in-repository, and deployed through
+GitHub Pages. Repository metadata and Pages configuration remain repository-level settings,
+so this document records both the intended state and the evidence required to call it live.
 
 ## Intended repository metadata
 
@@ -30,11 +32,11 @@ local-first
 static-site
 ```
 
-The homepage value should be set only together with Pages enablement so GitHub does not advertise a dead route.
+The homepage is set to the live Pages route.
 
 ## Pages setting
 
-The intended Pages configuration is:
+The active Pages configuration is:
 
 ```text
 Settings → Pages → Build and deployment → Source: GitHub Actions
@@ -48,7 +50,11 @@ Settings → Pages → Build and deployment → Source: GitHub Actions
 4. Pages artifact upload;
 5. deployment to the `github-pages` environment.
 
-The workflow remains `workflow_dispatch` while the repository-level Pages setting is disabled. After Pages is enabled and the first manual deployment is verified, switching deployment to `push` on `main` can be considered separately.
+The repository uses GitHub Actions as its Pages source. The workflow runs on changes to
+`main` and also supports an explicit manual run for recovery or verification. A successful
+workflow is necessary but not sufficient evidence: the root, walkthrough, library,
+knowledge graph, published explainer, machine-readable files, and review-preview privacy
+must also be checked on the live site.
 
 ## Expected public routes
 

@@ -1,5 +1,10 @@
 # Signal to Insight
 
+[![Validate knowledge contracts](https://github.com/dkharlanau/signal-to-insight/actions/workflows/validate.yml/badge.svg)](https://github.com/dkharlanau/signal-to-insight/actions/workflows/validate.yml)
+[![Deploy Pages](https://github.com/dkharlanau/signal-to-insight/actions/workflows/pages.yml/badge.svg)](https://github.com/dkharlanau/signal-to-insight/actions/workflows/pages.yml)
+
+[Live knowledge site](https://dkharlanau.github.io/signal-to-insight/) · [Golden walkthrough](https://dkharlanau.github.io/signal-to-insight/walkthrough/) · [Knowledge graph](https://dkharlanau.github.io/signal-to-insight/knowledge/)
+
 **An evidence-backed source-to-understanding engine with cumulative concept memory.**
 
 Give it a useful source — video, article, paper, documentation, repository, tool or system — and turn it into a coherent mental model of what is worth understanding, what changed relative to prior knowledge, whether the original is still worth your time, and what to learn or try next.
@@ -93,7 +98,6 @@ These are deliberately not represented as solved:
 - **Curated public proof corpus (#38):** review cases stay private-to-review until a person explicitly approves publication.
 - **Source Decision calibration (#39):** deterministic decision contracts exist; trustworthiness must still be tested against real full-source consumption.
 - **Dogfood utility metrics (#40):** structural 20-source cohort is complete; subjective utility, elapsed work and human learning measurements remain private/human evidence.
-- **GitHub Pages (#45):** the static site and deployment workflow are ready, but the repository-level Pages setting is not currently enabled.
 
 ## 20-source validation cohort
 
@@ -189,6 +193,9 @@ The prompt is implemented. A real delayed score is **not** claimed until the hum
 
 ## Start a source
 
+Requirements: Python 3.9 or newer. The core pipeline uses the standard library and does
+not require a package installation.
+
 Using the repo-local CLI:
 
 ```bash
@@ -236,13 +243,16 @@ The repository already contains the static public surface:
 - `/previews/<slug>/` — review-only `noindex,nofollow` previews;
 - `/data/*.json` — machine-readable source/insight/graph contracts.
 
-The intended Pages URL is:
+The live Pages URL is:
 
 ```text
 https://dkharlanau.github.io/signal-to-insight/
 ```
 
-The deployment workflow is `.github/workflows/pages.yml`. The repository-level GitHub Pages setting must still be enabled for **GitHub Actions** before the workflow can deploy. Until that setting is enabled, the files and route contracts are ready but the Pages URL should not be treated as live.
+The repository uses GitHub Actions as its Pages source. `.github/workflows/pages.yml`
+validates the knowledge contracts, regenerates the deterministic surfaces, checks public
+routes and review privacy, and deploys after changes reach `main`. Review previews remain
+`noindex,nofollow` and are excluded from the sitemap and public discovery bundle.
 
 ## Public proof path
 

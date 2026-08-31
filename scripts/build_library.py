@@ -81,6 +81,7 @@ def render() -> str:
             for item in published
         ]
     }
+    collection_ld_json = json.dumps(collection_ld, ensure_ascii=False).replace("</", "<\\/")
 
     return f'''<!doctype html>
 <html lang="en">
@@ -92,7 +93,7 @@ def render() -> str:
   <link rel="canonical" href="{SITE_BASE}/library/">
   <link rel="stylesheet" href="../styles.css">
   <link rel="stylesheet" href="../library.css">
-  <script type="application/ld+json">{json.dumps(collection_ld, ensure_ascii=False).replace('</', '<\\/')}</script>
+  <script type="application/ld+json">{collection_ld_json}</script>
 </head>
 <body class="library-page">
   <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>

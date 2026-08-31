@@ -32,7 +32,9 @@ def main() -> int:
     for required in (
         "Golden walkthrough",
         "20-source cohort report",
-        "GitHub Pages setting",
+        "Live knowledge site",
+        "https://dkharlanau.github.io/signal-to-insight/",
+        "noindex,nofollow",
         "delayed reconstruction",
         "Source Decision",
     ):
@@ -104,6 +106,9 @@ def main() -> int:
         for action in ("actions/configure-pages@", "actions/upload-pages-artifact@", "actions/deploy-pages@"):
             if action not in workflow:
                 errors.append(f"Pages workflow missing deployment action: {action}")
+        for trigger in ("push:", "branches: [main]", "workflow_dispatch:"):
+            if trigger not in workflow:
+                errors.append(f"Pages workflow missing publication trigger: {trigger}")
 
     if errors:
         print(f"Public surface validation failed with {len(errors)} error(s):")
