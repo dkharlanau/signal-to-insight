@@ -157,17 +157,16 @@ def main() -> int:
                 ("validate_graph.py", []),
                 ("validate_bundles.py", []),
                 ("validate_private_boundary.py", []),
-                (
-                    "evidence_handoff.py",
-                    [
-                        "export",
-                        "enterprise-agents-production-substrate",
-                        "--output",
-                        "examples/research-evidence-handoff/enterprise-agents-production-substrate.json",
-                        "--check",
-                    ],
-                ),
             ]
+            handoff_examples = ROOT / "examples" / "research-evidence-handoff"
+            if handoff_examples.exists():
+                for packet in sorted(handoff_examples.glob("*.json")):
+                    core.append(
+                        (
+                            "evidence_handoff.py",
+                            ["validate", packet.relative_to(ROOT).as_posix()],
+                        )
+                    )
             if not args.all:
                 return run_many(core)
             extended = [
