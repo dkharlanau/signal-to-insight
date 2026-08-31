@@ -10,12 +10,16 @@ Explainer library: https://dkharlanau.github.io/signal-to-insight/library/
 Public knowledge graph: https://dkharlanau.github.io/signal-to-insight/knowledge/
 Published concept index: https://dkharlanau.github.io/signal-to-insight/knowledge/concepts/index.json
 Published knowledge history: https://dkharlanau.github.io/signal-to-insight/knowledge/history.json
+Research evidence handoff schema: https://dkharlanau.github.io/signal-to-insight/contracts/research-evidence-handoff.schema.json
+Research evidence handoff documentation: https://github.com/dkharlanau/signal-to-insight/blob/main/docs/PORTABLE_EVIDENCE_HANDOFF.md
 
 ## Product contract
 
 Signal to Insight is not a generic summarizer. Public material is intentionally human-reviewed. Review previews, private/local context and unpublished insight records are excluded from this discovery bundle.
 
 Core loop: source → whole-source map → prior-knowledge comparison → verification → mental model → Knowledge Delta → source decision → review → published explainer.
+
+A published insight can be exported as a digest-protected research evidence handoff. The packet is external research context only: it requires human review and cannot authorize execution or stand in for production incident evidence.
 
 ## Published explainers
 

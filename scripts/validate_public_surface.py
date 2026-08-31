@@ -23,6 +23,7 @@ def main() -> int:
         "walkthrough": ROOT / "walkthrough" / "index.html",
         "library": ROOT / "library" / "index.html",
         "knowledge": ROOT / "knowledge" / "index.html",
+        "research evidence handoff schema": ROOT / "contracts" / "research-evidence-handoff.schema.json",
     }
     for label, path in required_routes.items():
         if not path.exists():
@@ -37,6 +38,7 @@ def main() -> int:
         "noindex,nofollow",
         "delayed reconstruction",
         "Source Decision",
+        "research evidence handoff",
     ):
         if required.lower() not in readme.lower():
             errors.append(f"README is missing public-surface proof text: {required!r}")

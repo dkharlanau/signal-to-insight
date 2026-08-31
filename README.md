@@ -242,6 +242,9 @@ The repository already contains the static public surface:
 - `/explainers/<slug>/` — published explainers;
 - `/previews/<slug>/` — review-only `noindex,nofollow` previews;
 - `/data/*.json` — machine-readable source/insight/graph contracts.
+- `/contracts/research-evidence-handoff.schema.json` — portable public research-evidence contract.
+
+Published insights can cross into a separate review workflow as a deterministic, digest-protected [research evidence handoff](docs/PORTABLE_EVIDENCE_HANDOFF.md). The packet remains external research context: it cannot authorize execution or represent production incident evidence.
 
 The live Pages URL is:
 
@@ -310,6 +313,17 @@ python -m unittest discover -s tests -p "test_*.py" -v
 
 See [`ROADMAP.md`](ROADMAP.md) and the GitHub backlog for the remaining validation-first loops.
 
----
+## Related projects
 
-MIT licensed. Maintained by [Dzmitryi Kharlanau](https://github.com/dkharlanau).
+- [SAP Agentic Operations](https://github.com/dkharlanau/sap-agentic-operations) validates this project's portable evidence handoff and can render a human review card without treating research as operational authority.
+- [dkharlanau-datasets](https://github.com/dkharlanau/dkharlanau-datasets) provides citable public records that may be considered as source material; each record still needs normal provenance and verification review before use.
+- [Agent-Ready Web Profile](https://github.com/dkharlanau/agent-ready-web-profile) explores machine-readable discovery and interoperability for public knowledge surfaces; it is not a runtime dependency of Signal to Insight.
+
+MIT licensed. See [`LICENSE`](LICENSE).
+
+## About the author
+
+Created and maintained by **Dzmitryi Kharlanau**, an SAP consultant and system analyst working across enterprise architecture, data, integration, operations, and practical AI.
+
+- [Website and knowledge base](https://dkharlanau.github.io/)
+- [LinkedIn](https://www.linkedin.com/in/dkharlanau/)

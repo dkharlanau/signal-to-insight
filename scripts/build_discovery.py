@@ -18,6 +18,8 @@ LLMS = ROOT / "llms.txt"
 DISCOVERY = ROOT / "discovery.json"
 SITE_BASE = "https://dkharlanau.github.io/signal-to-insight"
 REPO_URL = "https://github.com/dkharlanau/signal-to-insight"
+HANDOFF_SCHEMA = SITE_BASE + "/contracts/research-evidence-handoff.schema.json"
+HANDOFF_DOCS = REPO_URL + "/blob/main/docs/PORTABLE_EVIDENCE_HANDOFF.md"
 
 
 def load(path: Path) -> dict:
@@ -73,6 +75,11 @@ def discovery_payload(records: list[dict]) -> dict:
         "atom": SITE_BASE + "/atom.xml",
         "concept_index": SITE_BASE + "/knowledge/concepts/index.json",
         "knowledge_history": SITE_BASE + "/knowledge/history.json",
+        "research_evidence_handoff": {
+            "schema": HANDOFF_SCHEMA,
+            "documentation": HANDOFF_DOCS,
+            "trust_level": "external_research_context",
+        },
         "records": records,
     }
 
@@ -126,12 +133,16 @@ def render_llms(records: list[dict]) -> str:
         f"Public knowledge graph: {SITE_BASE}/knowledge/",
         f"Published concept index: {SITE_BASE}/knowledge/concepts/index.json",
         f"Published knowledge history: {SITE_BASE}/knowledge/history.json",
+        f"Research evidence handoff schema: {HANDOFF_SCHEMA}",
+        f"Research evidence handoff documentation: {HANDOFF_DOCS}",
         "",
         "## Product contract",
         "",
         "Signal to Insight is not a generic summarizer. Public material is intentionally human-reviewed. Review previews, private/local context and unpublished insight records are excluded from this discovery bundle.",
         "",
         "Core loop: source → whole-source map → prior-knowledge comparison → verification → mental model → Knowledge Delta → source decision → review → published explainer.",
+        "",
+        "A published insight can be exported as a digest-protected research evidence handoff. The packet is external research context only: it requires human review and cannot authorize execution or stand in for production incident evidence.",
         "",
         "## Published explainers",
         "",

@@ -71,6 +71,11 @@ jobs:
       - name: Validate claim-level evidence trace
         run: python scripts/validate_claim_evidence.py
 
+      - name: Validate portable research evidence handoff
+        run: |
+          python sti.py handoff export enterprise-agents-production-substrate --output examples/research-evidence-handoff/enterprise-agents-production-substrate.json --check
+          python sti.py handoff validate examples/research-evidence-handoff/enterprise-agents-production-substrate.json
+
       - name: Validate contradiction and refinement reviews
         run: |
           python scripts/validate_knowledge_reviews.py

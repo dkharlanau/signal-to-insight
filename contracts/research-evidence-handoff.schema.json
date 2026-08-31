@@ -1,0 +1,123 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dkharlanau.github.io/signal-to-insight/contracts/research-evidence-handoff.schema.json",
+  "title": "Research Evidence Handoff",
+  "description": "A compact, public-only evidence packet for moving a reviewed insight into a separate human review or control-design workflow.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "schema_version",
+    "packet_id",
+    "producer",
+    "exported_from",
+    "source",
+    "claims",
+    "operational_boundary",
+    "integrity"
+  ],
+  "properties": {
+    "schema": {
+      "const": "https://dkharlanau.github.io/signal-to-insight/contracts/research-evidence-handoff.schema.json"
+    },
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "packet_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "producer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "repository"],
+      "properties": {
+        "name": {"const": "Signal to Insight"},
+        "repository": {"const": "https://github.com/dkharlanau/signal-to-insight"}
+      }
+    },
+    "exported_from": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["insight_id", "status", "title", "one_liner", "public_url", "reviewed_at", "tags"],
+      "properties": {
+        "insight_id": {"type": "string", "minLength": 1},
+        "status": {"const": "published"},
+        "title": {"type": "string", "minLength": 1},
+        "one_liner": {"type": "string", "minLength": 1},
+        "public_url": {"type": "string", "format": "uri"},
+        "reviewed_at": {"type": "string", "format": "date"},
+        "tags": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "title", "canonical_url", "creators", "publisher", "published_at", "event_date", "captured_at", "analyzed_at"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "type": {"type": "string", "minLength": 1},
+        "title": {"type": "string", "minLength": 1},
+        "canonical_url": {"type": "string", "format": "uri"},
+        "creators": {"type": "array", "items": {"type": "string"}},
+        "publisher": {"type": ["string", "null"]},
+        "published_at": {"type": ["string", "null"]},
+        "event_date": {"type": ["string", "null"]},
+        "captured_at": {"type": ["string", "null"]},
+        "analyzed_at": {"type": ["string", "null"]}
+      }
+    },
+    "claims": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "text", "impact", "origin", "status", "evidence", "note"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "text": {"type": "string", "minLength": 1},
+          "impact": {"enum": ["high", "medium", "low"]},
+          "origin": {"enum": ["source", "verification", "project_interpretation", "prior_knowledge"]},
+          "status": {"enum": ["supported", "uncertain", "unresolved"]},
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind", "source_id", "url", "locator"],
+              "properties": {
+                "kind": {"type": "string", "minLength": 1},
+                "source_id": {"type": ["string", "null"]},
+                "url": {"type": "string", "format": "uri"},
+                "locator": {"type": "string", "minLength": 1}
+              }
+            }
+          },
+          "note": {"type": ["string", "null"]}
+        }
+      }
+    },
+    "operational_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["trust_level", "requires_human_review", "permitted_uses", "prohibited_uses"],
+      "properties": {
+        "trust_level": {"const": "external_research_context"},
+        "requires_human_review": {"const": true},
+        "permitted_uses": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+        "prohibited_uses": {"type": "array", "items": {"type": "string"}, "minItems": 1}
+      }
+    },
+    "integrity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "canonicalization", "digest"],
+      "properties": {
+        "algorithm": {"const": "sha256"},
+        "canonicalization": {"const": "UTF-8 JSON with lexicographically sorted object keys and compact separators"},
+        "digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

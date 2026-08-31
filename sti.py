@@ -73,6 +73,17 @@ def main() -> int:
     evidence = sub.add_parser("evidence", help="Plan the next real human/private validation evidence")
     evidence.add_argument("--json", action="store_true")
 
+    handoff = sub.add_parser("handoff", help="Export or validate a public-only research evidence handoff")
+    handoff_sub = handoff.add_subparsers(dest="handoff_command", required=True)
+    handoff_export = handoff_sub.add_parser("export", help="Export one published insight")
+    handoff_export.add_argument("insight_id")
+    handoff_export.add_argument("--output", required=True)
+    handoff_export.add_argument("--force", action="store_true")
+    handoff_export.add_argument("--check", action="store_true")
+    handoff_validate = handoff_sub.add_parser("validate", help="Validate a packet and its digest")
+    handoff_validate.add_argument("packet")
+    handoff_validate.add_argument("--json", action="store_true")
+
     validate = sub.add_parser("validate", help="Run deterministic core repository validation")
     validate.add_argument("--all", action="store_true", help="Also run extended evidence/freshness/history validators and acceptance tests")
 
@@ -127,12 +138,35 @@ def main() -> int:
             forwarded = ["--json"] if args.json else []
             return run_script("evidence_plan.py", forwarded)
 
+        if args.command == "handoff":
+            if args.handoff_command == "export":
+                forwarded = ["export", args.insight_id, "--output", args.output]
+                if args.force:
+                    forwarded.append("--force")
+                if args.check:
+                    forwarded.append("--check")
+                return run_script("evidence_handoff.py", forwarded)
+            forwarded = ["validate", args.packet]
+            if args.json:
+                forwarded.append("--json")
+            return run_script("evidence_handoff.py", forwarded)
+
         if args.command == "validate":
             core = [
                 ("validate.py", []),
                 ("validate_graph.py", []),
                 ("validate_bundles.py", []),
                 ("validate_private_boundary.py", []),
+                (
+                    "evidence_handoff.py",
+                    [
+                        "export",
+                        "enterprise-agents-production-substrate",
+                        "--output",
+                        "examples/research-evidence-handoff/enterprise-agents-production-substrate.json",
+                        "--check",
+                    ],
+                ),
             ]
             if not args.all:
                 return run_many(core)
