@@ -8,7 +8,7 @@
   "knowledge_history": "https://dkharlanau.github.io/signal-to-insight/knowledge/history.json",
   "research_evidence_handoff": {
     "schema": "https://dkharlanau.github.io/signal-to-insight/contracts/research-evidence-handoff.schema.json",
-    "documentation": "https://github.com/dkharlanau/signal-to-insight/blob/main/docs/PORTABLE_EVIDENCE_HANDOFF.md",
+    "documentation": "https://dkharlanau.github.io/signal-to-insight/docs/research-evidence-handoff/",
     "trust_level": "external_research_context"
   },
   "records": [

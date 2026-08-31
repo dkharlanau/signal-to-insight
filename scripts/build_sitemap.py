@@ -20,7 +20,7 @@ BASE = "https://dkharlanau.github.io/signal-to-insight"
 # here: that makes an unchanged repository fail `--check` every new calendar day.
 # This baseline is the last intentional structural revision of the public surface;
 # dated published evidence can move individual routes forward independently.
-PUBLIC_SURFACE_BASELINE = "2026-08-27"
+PUBLIC_SURFACE_BASELINE = "2026-08-31"
 
 
 def load(path: Path) -> dict:
@@ -62,6 +62,7 @@ def render() -> str:
         url_block(f"{BASE}/walkthrough/", PUBLIC_SURFACE_BASELINE, "monthly", "0.95"),
         url_block(f"{BASE}/library/", PUBLIC_SURFACE_BASELINE, "weekly", "0.9"),
         url_block(f"{BASE}/knowledge/", PUBLIC_SURFACE_BASELINE, "weekly", "0.9"),
+        url_block(f"{BASE}/docs/research-evidence-handoff/", PUBLIC_SURFACE_BASELINE, "monthly", "0.8"),
     ]
     for insight in published:
         blocks.append(

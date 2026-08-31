@@ -24,6 +24,7 @@ def main() -> int:
         "library": ROOT / "library" / "index.html",
         "knowledge": ROOT / "knowledge" / "index.html",
         "research evidence handoff schema": ROOT / "contracts" / "research-evidence-handoff.schema.json",
+        "research evidence handoff guide": ROOT / "docs" / "research-evidence-handoff" / "index.html",
     }
     for label, path in required_routes.items():
         if not path.exists():
@@ -48,6 +49,17 @@ def main() -> int:
         errors.append("root product page does not identify Signal to Insight")
     if 'name="robots" content="noindex' in root_html.lower():
         errors.append("root public page must not be noindex")
+
+    handoff_guide = read(required_routes["research evidence handoff guide"]) if required_routes["research evidence handoff guide"].exists() else ""
+    for required in (
+        "external_research_context",
+        "Human review is required",
+        "cannot authorize execution",
+        "SAP Agentic Operations",
+        "research-evidence-handoff.schema.json",
+    ):
+        if required.lower() not in handoff_guide.lower():
+            errors.append(f"research evidence handoff guide is missing boundary text: {required!r}")
 
     walkthrough = read(required_routes["walkthrough"]) if required_routes["walkthrough"].exists() else ""
     walkthrough_requirements = (
@@ -94,6 +106,7 @@ def main() -> int:
         "https://dkharlanau.github.io/signal-to-insight/walkthrough/",
         "https://dkharlanau.github.io/signal-to-insight/library/",
         "https://dkharlanau.github.io/signal-to-insight/knowledge/",
+        "https://dkharlanau.github.io/signal-to-insight/docs/research-evidence-handoff/",
     ):
         if f"<loc>{route}</loc>" not in sitemap:
             errors.append(f"sitemap missing intended public route: {route}")

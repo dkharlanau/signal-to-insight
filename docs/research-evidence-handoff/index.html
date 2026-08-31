@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Portable research evidence handoff — Signal to Insight</title>
+  <meta name="description" content="Export reviewed Signal to Insight claims as a digest-protected, non-operational evidence packet for human review and control design.">
+  <link rel="canonical" href="https://dkharlanau.github.io/signal-to-insight/docs/research-evidence-handoff/">
+  <style>
+    :root{--paper:#f2efe7;--ink:#171717;--muted:#66635d;--line:#c8c2b5;--soft:#e7e1d5;--dark:#202326;--max:900px}
+    *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.65 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}a{color:inherit;text-underline-offset:3px}.wrap{width:min(var(--max),calc(100% - 36px));margin:auto}
+    header{display:flex;justify-content:space-between;gap:24px;align-items:center;padding:24px 0;border-bottom:1px solid var(--line)}header a{font-weight:800;text-decoration:none}nav{display:flex;gap:18px;flex-wrap:wrap}nav a{font-size:12px;text-transform:uppercase;letter-spacing:.08em}
+    main{padding:64px 0 80px}.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:var(--muted)}h1{font-size:clamp(44px,8vw,78px);line-height:.96;letter-spacing:-.055em;margin:12px 0 24px}h2{font-size:30px;line-height:1.15;letter-spacing:-.03em;margin:52px 0 14px}.lede{font-size:22px;line-height:1.4;max-width:780px}.boundary{background:var(--dark);color:#f4f1e9;padding:28px;margin:34px 0}.boundary strong{display:block;font-size:22px;margin-bottom:8px}pre{overflow:auto;background:#ded8cc;border:1px solid var(--line);padding:18px;font-size:14px}code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}p code,li code{background:var(--soft);padding:.12em .32em}li{margin:8px 0}.columns{display:grid;grid-template-columns:1fr 1fr;gap:16px}.card{border:1px solid var(--line);padding:22px}.card h3{margin-top:0}footer{padding:28px 0 48px;border-top:1px solid var(--line);color:var(--muted);font-size:13px;display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap}@media(max-width:650px){header{align-items:flex-start;flex-direction:column}.columns{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <header class="wrap">
+    <a href="../../">Signal to Insight</a>
+    <nav aria-label="Documentation navigation"><a href="../../walkthrough/">Walkthrough</a><a href="../../library/">Library</a><a href="../../knowledge/">Knowledge</a><a href="https://github.com/dkharlanau/signal-to-insight">GitHub</a></nav>
+  </header>
+  <main class="wrap">
+    <p class="eyebrow">Portable contract · version 1.0.0</p>
+    <h1>Research evidence, without operational authority.</h1>
+    <p class="lede">Export one reviewed, published insight as a compact JSON packet for a separate human review or control-design workflow. The packet preserves provenance and claim-level support without carrying transcripts, private overlays or review-only material.</p>
+
+    <div class="boundary">
+      <strong>Fail-closed boundary</strong>
+      Trust level is <code>external_research_context</code>. Human review is required. The packet cannot authorize execution, prove that a production incident occurred or change policy automatically.
+    </div>
+
+    <h2>Export and validate</h2>
+    <pre><code>python sti.py handoff export \
+  enterprise-agents-production-substrate \
+  --output /tmp/enterprise-agent-evidence.json
+
+python sti.py handoff validate \
+  /tmp/enterprise-agent-evidence.json</code></pre>
+    <p>Only <code>status=published</code> insights can cross this boundary. Validation checks the known schema and version, required operational restrictions, absence of raw-source fields and the SHA-256 digest over the canonical payload.</p>
+    <p>The digest detects mutation. It is not a digital signature and does not establish who transported the file.</p>
+
+    <h2>What crosses the boundary</h2>
+    <div class="columns">
+      <section class="card">
+        <h3>Included</h3>
+        <ul><li>Public insight identity and link</li><li>Source title and canonical URL</li><li>Claim origin and support status</li><li>Claim-level evidence links</li><li>Explicit operational restrictions</li></ul>
+      </section>
+      <section class="card">
+        <h3>Excluded</h3>
+        <ul><li>Transcripts and copied article text</li><li>PDF or raw-source dumps</li><li>Private and local overlays</li><li>Draft or review-only insights</li><li>Capabilities, approvals or execution rights</li></ul>
+      </section>
+    </div>
+
+    <h2>Use with SAP Agentic Operations</h2>
+    <pre><code>sao research validate /tmp/enterprise-agent-evidence.json
+sao research review /tmp/enterprise-agent-evidence.json \
+  --output /tmp/enterprise-agent-review.md</code></pre>
+    <p>SAP Agentic Operations consumes the same v1 contract as external research context. Its review card preserves claim origin and source links, repeats the non-operational boundary, and does not merge research claims into an Evidence Pack.</p>
+
+    <h2>Contract and reproducibility</h2>
+    <ul>
+      <li><a href="../../contracts/research-evidence-handoff.schema.json">Machine-readable JSON Schema</a></li>
+      <li><a href="../../examples/research-evidence-handoff/enterprise-agents-production-substrate.json">Deterministic reference packet</a></li>
+      <li><a href="../PORTABLE_EVIDENCE_HANDOFF.md">Markdown source documentation</a></li>
+      <li><a href="https://dkharlanau.github.io/sap-agentic-operations/docs/RESEARCH-EVIDENCE-HANDOFF.html">Consumer documentation</a></li>
+    </ul>
+    <pre><code>python sti.py handoff export \
+  enterprise-agents-production-substrate \
+  --output examples/research-evidence-handoff/enterprise-agents-production-substrate.json \
+  --check</code></pre>
+    <p>If the published insight, source provenance or claim evidence changes, regenerate the packet intentionally and review the diff before publication. Consumers reject an unknown schema or major version.</p>
+  </main>
+  <footer class="wrap"><span>Signal to Insight · MIT licensed</span><span><a href="https://dkharlanau.github.io/">Dzmitryi Kharlanau</a> · <a href="https://www.linkedin.com/in/dkharlanau/">LinkedIn</a></span></footer>
+</body>
+</html>

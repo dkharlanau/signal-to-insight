@@ -11,7 +11,7 @@ Public knowledge graph: https://dkharlanau.github.io/signal-to-insight/knowledge
 Published concept index: https://dkharlanau.github.io/signal-to-insight/knowledge/concepts/index.json
 Published knowledge history: https://dkharlanau.github.io/signal-to-insight/knowledge/history.json
 Research evidence handoff schema: https://dkharlanau.github.io/signal-to-insight/contracts/research-evidence-handoff.schema.json
-Research evidence handoff documentation: https://github.com/dkharlanau/signal-to-insight/blob/main/docs/PORTABLE_EVIDENCE_HANDOFF.md
+Research evidence handoff documentation: https://dkharlanau.github.io/signal-to-insight/docs/research-evidence-handoff/
 
 ## Product contract
 

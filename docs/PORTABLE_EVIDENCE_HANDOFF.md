@@ -1,5 +1,7 @@
 # Portable research evidence handoff
 
+The [public HTML guide](https://dkharlanau.github.io/signal-to-insight/docs/research-evidence-handoff/) provides the same contract in the GitHub Pages documentation surface.
+
 Signal to Insight can export a reviewed, published insight as a compact JSON packet for a separate human review or control-design workflow.
 
 This is a boundary-preserving handoff, not a generic data dump. It contains the public insight identity, source provenance, claim-level evidence and an explicit operational trust boundary. It never contains a transcript, copied article, PDF text, private overlay or review-only insight.

@@ -19,7 +19,7 @@ DISCOVERY = ROOT / "discovery.json"
 SITE_BASE = "https://dkharlanau.github.io/signal-to-insight"
 REPO_URL = "https://github.com/dkharlanau/signal-to-insight"
 HANDOFF_SCHEMA = SITE_BASE + "/contracts/research-evidence-handoff.schema.json"
-HANDOFF_DOCS = REPO_URL + "/blob/main/docs/PORTABLE_EVIDENCE_HANDOFF.md"
+HANDOFF_DOCS = SITE_BASE + "/docs/research-evidence-handoff/"
 
 
 def load(path: Path) -> dict:

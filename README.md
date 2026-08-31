@@ -244,7 +244,7 @@ The repository already contains the static public surface:
 - `/data/*.json` — machine-readable source/insight/graph contracts.
 - `/contracts/research-evidence-handoff.schema.json` — portable public research-evidence contract.
 
-Published insights can cross into a separate review workflow as a deterministic, digest-protected [research evidence handoff](docs/PORTABLE_EVIDENCE_HANDOFF.md). The packet remains external research context: it cannot authorize execution or represent production incident evidence.
+Published insights can cross into a separate review workflow as a deterministic, digest-protected [research evidence handoff](https://dkharlanau.github.io/signal-to-insight/docs/research-evidence-handoff/). The packet remains external research context: it cannot authorize execution or represent production incident evidence. The [Markdown source](docs/PORTABLE_EVIDENCE_HANDOFF.md) is kept in the repository for review.
 
 The live Pages URL is:
 
