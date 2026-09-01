@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0",
+  "dimensions": {"width": 1280, "height": 640},
+  "track": "SAP and practical AI",
+  "title": "Signal to Insight",
+  "subtitle": "Turn reviewed sources into cumulative, provenance-aware understanding.",
+  "repository": "signal-to-insight",
+  "author": "Dzmitryi Kharlanau",
+  "motif": "insight",
+  "background": "#f2efe7",
+  "ink": "#171717",
+  "muted": "#66635d",
+  "accent": "#d35d33",
+  "panel": "#ffffff",
+  "generated_by": "dkharlanau.github.io/scripts/render_repository_social_preview.py",
+  "claim_boundary": "Reviewed research purpose only; external evidence does not authorize operational action."
+}
