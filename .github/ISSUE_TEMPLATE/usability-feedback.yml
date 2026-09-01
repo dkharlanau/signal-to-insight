@@ -1,0 +1,49 @@
+name: External usability feedback
+description: Report a privacy-safe 15-minute first-use session for Signal to Insight.
+title: "Usability: "
+labels:
+  - usability
+body:
+  - type: markdown
+    attributes:
+      value: Do not include private reading history, personal profile data, unpublished notes, full third-party text, confidential URLs, or proprietary sources.
+  - type: input
+    id: release
+    attributes:
+      label: Release or commit tested
+      placeholder: v0.1.0
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Operating system and Python version
+    validations:
+      required: true
+  - type: dropdown
+    id: completed
+    attributes:
+      label: Completed within 15 minutes
+      options:
+        - "Yes"
+        - "No"
+    validations:
+      required: true
+  - type: textarea
+    id: blocker
+    attributes:
+      label: First blocker or confusing step
+    validations:
+      required: true
+  - type: textarea
+    id: boundary
+    attributes:
+      label: How did you understand validation versus human learning evidence?
+    validations:
+      required: true
+  - type: textarea
+    id: improvement
+    attributes:
+      label: Most useful improvement
+    validations:
+      required: true

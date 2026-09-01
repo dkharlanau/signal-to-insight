@@ -7,6 +7,8 @@
 
 **An evidence-backed source-to-understanding engine with cumulative concept memory.**
 
+Current source release: **v0.1.0**.
+
 Give it a useful source — video, article, paper, documentation, repository, tool or system — and turn it into a coherent mental model of what is worth understanding, what changed relative to prior knowledge, whether the original is still worth your time, and what to learn or try next.
 
 Signal to Insight is **not a generic summarizer**. The durable output is a versioned knowledge model with provenance, evidence boundaries and review state — not a pile of disconnected summaries.
@@ -312,6 +314,15 @@ python -m unittest discover -s tests -p "test_*.py" -v
 ```
 
 See [`ROADMAP.md`](ROADMAP.md) and the GitHub backlog for the remaining validation-first loops.
+
+## Release resources
+
+- [v0.1.0 release notes](release/v0.1.0.md)
+- [release and compatibility policy](docs/RELEASES.md)
+- [golden quickstart](docs/GOLDEN_QUICKSTART_RELEASE.md)
+- [15-minute external usability test](docs/USABILITY_TEST_15_MIN.md)
+- [contributing and privacy-safe feedback](CONTRIBUTING.md)
+- [changelog](CHANGELOG.md)
 
 ## Related projects
 
