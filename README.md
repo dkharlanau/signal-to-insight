@@ -7,13 +7,21 @@
 
 **An evidence-backed source-to-understanding engine with cumulative concept memory.**
 
-Current source release: **v0.1.0**.
+Current source release: **v0.1.1**.
 
 Give it a useful source — video, article, paper, documentation, repository, tool or system — and turn it into a coherent mental model of what is worth understanding, what changed relative to prior knowledge, whether the original is still worth your time, and what to learn or try next.
 
 Signal to Insight is **not a generic summarizer**. The durable output is a versioned knowledge model with provenance, evidence boundaries and review state — not a pile of disconnected summaries.
 
-**Start here:** [Golden walkthrough](walkthrough/index.html) — one complete published proof path from source → whole-source model → Knowledge Delta → Source Decision → explainer → delayed-reconstruction checkpoint.
+## 30-second proof
+
+```bash
+python scripts/validate_public_surface.py
+```
+
+Expected result: `Public surface validation passed: 6 primary routes, 1 published explainer(s), 19 protected review preview(s).`
+
+[Open the public golden walkthrough](https://dkharlanau.github.io/signal-to-insight/walkthrough/) to inspect the validated path from source provenance through Knowledge Delta and Source Decision to the published explainer and pending reconstruction checkpoint. This proof validates the committed public surface and review isolation; it does not process a new source, measure learning, or establish external adoption.
 
 **Validation evidence:** [20-source cohort report](docs/COHORT_20_REPORT.md) — 20 real sources across five source types, with structural coverage and dogfood failures recorded rather than hidden.
 
@@ -317,7 +325,7 @@ See [`ROADMAP.md`](ROADMAP.md) and the GitHub backlog for the remaining validati
 
 ## Release resources
 
-- [v0.1.0 release notes](release/v0.1.0.md)
+- [v0.1.1 release notes](release/v0.1.1.md)
 - [release and compatibility policy](docs/RELEASES.md)
 - [golden quickstart](docs/GOLDEN_QUICKSTART_RELEASE.md)
 - [15-minute external usability test](docs/USABILITY_TEST_15_MIN.md)

@@ -2,6 +2,21 @@
 
 All notable public source-release changes are recorded here. Versions follow Semantic Versioning.
 
+## [0.1.1] - 2026-09-01
+
+### Added
+
+- A copy-paste 30-second proof for the released public walkthrough and review-isolation boundary.
+
+### Changed
+
+- README release navigation now identifies the v0.1.1 documentation patch.
+
+### Boundaries
+
+- No source, insight, schema, lifecycle, generated knowledge surface, or publication state changed.
+- The proof validates committed public routes; it does not claim human learning or external adoption evidence.
+
 ## [0.1.0] - 2026-09-01
 
 ### Added
@@ -20,3 +35,4 @@ All notable public source-release changes are recorded here. Versions follow Sem
 - External research tooling is required for source capture/verification; the repository is not a universal browser, transcription, PDF, or LLM runtime.
 
 [0.1.0]: https://github.com/dkharlanau/signal-to-insight/releases/tag/v0.1.0
+[0.1.1]: https://github.com/dkharlanau/signal-to-insight/releases/tag/v0.1.1

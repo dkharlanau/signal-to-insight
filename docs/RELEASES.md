@@ -20,4 +20,4 @@ GitHub Releases attach a deterministic source archive and `SHA256SUMS` built fro
 - External extraction/research agents are provider-independent collaborators, not part of the deterministic core.
 - Delayed reconstruction, transfer, subjective utility, and external usability remain human evidence gaps unless real sessions are recorded.
 
-See the [golden quickstart](GOLDEN_QUICKSTART_RELEASE.md) and [v0.1.0 release notes](../release/v0.1.0.md).
+See the [golden quickstart](GOLDEN_QUICKSTART_RELEASE.md) and [v0.1.1 release notes](../release/v0.1.1.md).
