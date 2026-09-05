@@ -50,6 +50,10 @@ jobs:
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
+      - name: Add consent-aware portfolio analytics
+
+        run: node scripts/inject-portfolio-analytics.mjs .
+
       - name: Upload static site
         uses: actions/upload-pages-artifact@v4
         with:
