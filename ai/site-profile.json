@@ -1,0 +1,15 @@
+{
+  "$schema": "https://raw.githubusercontent.com/dkharlanau/agent-ready-web-profile/v0.1.0/schema/site-profile.schema.json",
+  "profileVersion": "0.1",
+  "id": "signal-to-insight",
+  "name": "Signal to Insight",
+  "canonicalUrl": "https://dkharlanau.github.io/signal-to-insight/",
+  "description": "Turn a selected source into a verified, personalized, coherent mental model and merge reusable concepts into cumulative knowledge memory.",
+  "languages": [
+    "en"
+  ],
+  "trust": {
+    "provenance": "https://github.com/dkharlanau/signal-to-insight/blob/main/README.md",
+    "license": "https://github.com/dkharlanau/signal-to-insight/blob/main/LICENSE"
+  }
+}
