@@ -1,21 +1,14 @@
-MIT License
+PROJECT LICENSE NOTICE
 
-Copyright (c) 2026 Dzmitryi Kharlanau
+Copyright 2026 Dzmitryi Kharlanau.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+Software and implementation assets in this repository are licensed under the PolyForm Strict License 1.0.0, incorporated here by reference:
+https://polyformproject.org/licenses/strict/1.0.0
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+Under PolyForm Strict, noncommercial use is permitted, but redistribution and creation of modified or derivative versions are not permitted except as allowed by law or by separate written permission from the copyright holder.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+Project-authored non-software content, datasets, text, images, design assets, and documentation are All Rights Reserved unless a file explicitly states different terms.
+
+Third-party material remains subject to its own license or rights.
+
+This change applies from this revision onward and does not revoke rights already granted for earlier revisions under any prior license.
